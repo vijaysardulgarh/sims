@@ -599,7 +599,7 @@ class Student(models.Model):
             # Iterate through each subject to categorize as optional or compulsory
             for subject in subject_list:
                 subject_type, subject_name = subject.split(':')
-                if subject_type.strip().startswith(('Compulsory','Optional','Language','NSQF',',Additional')):
+                if subject_type.strip().startswith(('Optional','Language','NSQF',',Additional')):
                     optional_subjects.append(subject_name.strip())  # Append to optional subjects list
                 #elif subject_type.strip().lower() == 'compulsory':
                    # compulsory_subjects.append(subject_name.strip())  # Append to compulsory subjects list
