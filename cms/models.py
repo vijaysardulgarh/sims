@@ -568,13 +568,7 @@ class Student(models.Model):
     guardian_full_name_aadhar = models.CharField(max_length=255, blank=True, null=True)
     guardian_aadhaar_number = models.CharField(max_length=20, blank=True, null=True)
     family_annual_income = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
-    state = models.CharField(max_length=255, blank=True, null=True)
-    district = models.CharField(max_length=255, blank=True, null=True)
-    block = models.CharField(max_length=100, blank=True, null=True)
-    sub_district = models.CharField(max_length=100, blank=True, null=True)
-    city_village_town = models.CharField(max_length=100, blank=True, null=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    postal_code = models.CharField(max_length=20, blank=True, null=True)
+ 
     father_mobile = models.CharField(max_length=20, blank=True, null=True)
     mother_mobile = models.CharField(max_length=20, blank=True, null=True)
     guardian_mobile = models.CharField(max_length=20, blank=True, null=True)
@@ -586,7 +580,7 @@ class Student(models.Model):
     category = models.CharField(max_length=100, blank=True, null=True)
     disability = models.CharField(max_length=255,blank=True, null=True)
     disorder = models.CharField(max_length=100, blank=True, null=True)
-    subjects_opted = models.CharField(max_length=255, blank=True, null=True)
+   
     subjects = models.TextField(blank=True, null=True) 
     bpl_certificate_issuing_authority= models.CharField(max_length=255,blank=True, null=True)
 
@@ -605,7 +599,7 @@ class Student(models.Model):
             # Iterate through each subject to categorize as optional or compulsory
             for subject in subject_list:
                 subject_type, subject_name = subject.split(':')
-                if subject_type.strip().startswith('Optional'):
+                if subject_type.strip().startswith(('Optional','Language','NSQF',',Additional')):
                     optional_subjects.append(subject_name.strip())  # Append to optional subjects list
                 #elif subject_type.strip().lower() == 'compulsory':
                    # compulsory_subjects.append(subject_name.strip())  # Append to compulsory subjects list

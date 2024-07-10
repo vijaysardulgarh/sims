@@ -125,13 +125,7 @@ class StudentResource(resources.ModelResource):
     guardian_full_name_aadhar = fields.Field(attribute='guardian_full_name_aadhar',column_name="Guardian's Full Name as on Aadhar Card")
     guardian_aadhaar_number = fields.Field(attribute='guardian_aadhaar_number',column_name="Guardian's Aadhar Nummber")
     family_annual_income = fields.Field(attribute='family_annual_income',column_name='Family Annual Income')
-    state = fields.Field(attribute='state',column_name='State')
-    district = fields.Field(attribute='district',column_name='District')
-    block = fields.Field(attribute='block',column_name='CD Block')
-    sub_district = fields.Field(attribute='sub_district',column_name='Sub-district/Tehsil')
-    city_village_town = fields.Field(attribute='city_village_town',column_name='City/Village/Town')
-    address = fields.Field(attribute='address',column_name='Adress Line 1')
-    postal_code = fields.Field(attribute='postal_code',column_name='Postalcode')
+   
     guardian_mobile = fields.Field(attribute='mother_mobile', column_name="Guardian's Mobile No")
     caste = fields.Field(attribute='caste_name', column_name='Caste Name')
     bpl_certificate_issuing_authority=fields.Field(attribute='bpl_certificate_issuing_authority',column_name='BPL Certificate Issuing Authority')
@@ -139,7 +133,7 @@ class StudentResource(resources.ModelResource):
     class Meta:
         model = Student
         #exclude = ('id',)
-        fields = ('srn', 'stream','school_code', 'school_name', 'admission_date', 'class', 'stream', 'section', 'roll_number', 'admission_number','admission_date','title', 'excel_full_name_aadhar', 'name_in_local_language', 'date_of_birth', 'gender', 'aadhaar_number', 'eid_number', 'domicile_of_haryana', 'nationality', 'excel_birth_country', 'birth_state', 'birth_district', 'birth_sub_district', 'birth_city_village_town','subjects_opted','subjects') 
+        fields = ('srn', 'stream','school_code', 'school_name', 'admission_date', 'class', 'stream', 'section', 'roll_number', 'admission_number','admission_date','title', 'excel_full_name_aadhar', 'name_in_local_language', 'date_of_birth', 'gender', 'aadhaar_number','subjects_opted','subjects') 
         import_id_fields = ['srn']
         export_order = ('srn','stream','studentclass','section','roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar','date_of_birth','gender','aadhaar_number','category','admission_number','father_mobile','subjects')
         #widgets = {
