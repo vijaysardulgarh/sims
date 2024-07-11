@@ -135,7 +135,7 @@ class StudentResource(resources.ModelResource):
         #exclude = ('id',)
         fields = ('srn', 'stream','school_code', 'school_name', 'admission_date', 'class', 'stream', 'section', 'roll_number', 'admission_number','admission_date','title', 'excel_full_name_aadhar', 'name_in_local_language', 'date_of_birth', 'gender', 'aadhaar_number','subjects') 
         import_id_fields = ['srn']
-        export_order = ('srn','stream','studentclass','section','roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar','date_of_birth','gender','aadhaar_number','category','admission_number','father_mobile','subjects')
+        export_order = ('stream','srn','studentclass','section','roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar','date_of_birth','gender','aadhaar_number','father_aadhaar_number','mother_aadhaar_number','category','admission_number','admission_date','father_mobile','subjects')
         #widgets = {
         #    'admission_date': {'format': '%d/%m/%Y'},  # Format for date fields
         #    'date_of_birth': {'format': '%d/%m/%Y'},  # Format for date fields
