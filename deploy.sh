@@ -26,16 +26,7 @@ else
 fi
 
 
-# Check if the database file exists
-if [ ! -f "$DATABASE_FILE" ]; then
-    echo "Error: Database file '$DATABASE_FILE' not found."
-    exit 1
-fi
 
-# Change the permissions of the database file
-chmod 664 "$DATABASE_FILE"
-
-echo "Permissions of '$DATABASE_FILE' have been changed successfully."
 
 
 
@@ -49,6 +40,22 @@ source $PROJECT_DIR/venv/bin/activate
 # Install project dependencies
 echo "Installing project dependencies"
 pip install -r $PROJECT_DIR/requirements.txt
+
+
+# Check if the database file exists
+if [ ! -f "$DATABASE_FILE" ]; then
+    echo "Error: Database file '$DATABASE_FILE' not found."
+    exit 1
+fi
+
+# Change the permissions of the database file
+sudo chown $USER:$USER $DATABASE_FILE
+sudo chmod 664 $DATABASE_FILE
+
+echo "Permissions of '$DATABASE_FILE' have been changed successfully."
+
+
+python $PROJECT_DIR/manage.py collectstatic
 
 # Install Gunicorn
 echo "Installing Gunicorn"
@@ -112,7 +119,7 @@ cat << EOF | sudo tee $NGINX_CONFIG_DIR/$DOMAIN
 server {
     listen 80;
     listen [::]:80;
-    server_name DOMAIN IP ;
+    server_name $DOMAIN www.$DOMAIN $IP ;
 
     location = /favicon.ico { access_log off; log_not_found off; }
 
@@ -125,7 +132,7 @@ server {
     }
 
     location /static/ {
-        alias $PROJECT_DIR/static/;
+        root /var/www/sims;
     }
 
     location /media/ {
@@ -156,4 +163,9 @@ sudo systemctl restart $PROJECT_NAME.gunicorn
 echo "Restarting Nginx"
 sudo systemctl restart nginx
 
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d $DOMAIN -d www.$DOMAIN
+sudo chown -R $USER:$USER $PROJECT_NAME
+
 echo "Deployment completed successfully!"
+
