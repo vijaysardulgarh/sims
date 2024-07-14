@@ -155,8 +155,7 @@ def subject_strength(request):
             'school_name':school_name
         }
             return render(request, 'subject_strength.html', context)
-
-    else:
+   else:
         school_names = Student.objects.values_list('school_name', flat=True).distinct()
         context = {'school_names': school_names}
         return render(request, 'school_subject_strength.html',context)    
