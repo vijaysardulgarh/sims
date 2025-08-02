@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Variables
-DOMAIN="vijaykumar.fun"
-IP="34.131.63.47"
+DOMAIN="vijaysardulgarh.com"
+IP="34.131.65.194"
 USER="vijaysardulgarh"
 PROJECT_NAME="sims"
 GITHUB_REPO="https://github.com/vijaysardulgarh/sims.git"
