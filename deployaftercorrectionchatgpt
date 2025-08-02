@@ -1,0 +1,96 @@
+#!/bin/bash -e
+
+# Optional: Enable logging
+LOGFILE="/var/log/deploy_$(date +%F).log"
+exec > >(tee -a "$LOGFILE") 2>&1
+
+# Variables
+DOMAIN="vijaysardulgarh.com"
+IP="34.131.65.194"
+USER="vijaysardulgarh"
+PROJECT_NAME="sims"
+GITHUB_REPO="https://github.com/vijaysardulgarh/sims.git"
+NGINX_CONFIG_DIR="/etc/nginx/sites-available"
+NGINX_SITES_ENABLED_DIR="/etc/nginx/sites-enabled"
+PROJECT_DIR="/home/$USER/$PROJECT_NAME"
+SOCKET_FILE="/run/$PROJECT_NAME.gunicorn.sock"
+NGINX_SOCKET_FILE="/etc/systemd/system/$PROJECT_NAME.gunicorn.socket"
+NGINX_SERVICE_FILE="/etc/systemd/system/$PROJECT_NAME.gunicorn.service"
+GUNICORN_BIN="$PROJECT_DIR/venv/bin/gunicorn"
+GUNICORN_WSGI="school.wsgi:application"
+DATABASE_FILE="$PROJECT_DIR/db.sqlite3"
+
+echo "Cloning or pulling project from GitHub"
+if [ -d "$PROJECT_DIR" ]; then
+    cd $PROJECT_DIR
+    if [ -d ".git" ]; then
+        git pull origin main
+    else
+        echo "Warning: $PROJECT_DIR exists but is not a git repository. Skipping pull."
+    fi
+else
+    git clone $GITHUB_REPO $PROJECT_DIR
+    cd $PROJECT_DIR
+fi
+
+echo "Creating virtual environment"
+python3 -m venv $PROJECT_DIR/venv
+
+echo "Activating virtual environment"
+source $PROJECT_DIR/venv/bin/activate
+
+echo "Installing project dependencies"
+if [ -f "$PROJECT_DIR/requirements.txt" ]; then
+    pip install -r $PROJECT_DIR/requirements.txt
+else
+    echo "Error: requirements.txt not found at $PROJECT_DIR"
+    exit 1
+fi
+
+if [ ! -f "$DATABASE_FILE" ]; then
+    echo "Error: Database file '$DATABASE_FILE' not found."
+    exit 1
+fi
+
+sudo chown $USER:$USER $DATABASE_FILE
+sudo chmod 664 $DATABASE_FILE
+echo "Permissions of '$DATABASE_FILE' have been changed successfully."
+
+if [ -f "$PROJECT_DIR/manage.py" ]; then
+    python $PROJECT_DIR/manage.py collectstatic --noinput
+else
+    echo "Error: manage.py not found in $PROJECT_DIR"
+    exit 1
+fi
+
+echo "Installing Gunicorn"
+pip install gunicorn
+
+deactivate
+
+echo "Reloading systemd daemon"
+sudo systemctl daemon-reload
+
+echo "Creating Nginx socket file"
+cat << EOF | sudo tee $NGINX_SOCKET_FILE
+[Unit]
+Description="$PROJECT_NAME.gunicorn socket"
+
+[Socket]
+ListenStream=$SOCKET_FILE
+
+[Install]
+WantedBy=sockets.target
+EOF
+
+echo "Creating Nginx service file"
+cat << EOF | sudo tee $NGINX_SERVICE_FILE
+[Unit]
+Description=$PROJECT_NAME.gunicorn daemon
+Requires=$PROJECT_NAME.gunicorn.socket
+After=network.target
+
+[Service]
+User=$USER
+Group=$USER
+WorkingDirectory=$PROJ
