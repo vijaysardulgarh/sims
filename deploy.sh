@@ -26,8 +26,9 @@ else
 fi
 
 
-
-
+# Uncomment given code while installing from base
+# sudo apt update
+# sudo apt install git
 
 
 # Create virtual environment
