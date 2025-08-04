@@ -6,15 +6,15 @@ STEP 1: Generate SSH Key
 
 STEP 2: Add Public Key to GCP VM
 
-Go to Google Cloud Console → Compute Engine → VM Instances
-
-Click your VM (vijaysardulgarh)
-
-Click Edit
-
-Scroll to "SSH Keys"
-
-Paste the output of:
+    Go to Google Cloud Console → Compute Engine → VM Instances
+    
+    Click your VM (vijaysardulgarh)
+    
+    Click Edit
+    
+    Scroll to "SSH Keys"
+    
+    Paste the output of:
 
     cat ~/.ssh/gcp_key.pub
 
