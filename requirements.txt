@@ -1,6 +1,7 @@
 pip
 setuptools
 wheel
+tablib==3.5.0
 asgiref
 defusedxml
 diff-match-patch
