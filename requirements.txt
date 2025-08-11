@@ -14,7 +14,6 @@ openpyxl
 pillow
 PyYAML
 sqlparse
-tablib
 tzdata
 xlrd
 xlwt
