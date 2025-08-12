@@ -52,8 +52,7 @@ def student_strength(request):
             scfemale=Count('srn', filter=Q(gender='Female',category__in=['SC', 'Scheduled Caste'])), 
             bcamale=Count('srn', filter=Q(gender='Male',category='BC-A')),  
             bcafemale=Count('srn', filter=Q(gender='Female',category='BC-A')),
-            bcbmale=Count('srn', filter=Q(gender='Male')),  
-
+            bcbmale=Count('srn', filter=Q(gender='Male',category='BC-B')),  
             bcbfemale=Count('srn', filter=Q(gender='Female',category='BC-B')),
             genmale=Count('srn', filter=Q(gender='Male',category__in=['GEN', 'General'])),  
             genfemale=Count('srn', filter=Q(gender='Female',category__in=['GEN', 'General'])),
@@ -280,6 +279,7 @@ def staff (request):
     return render(request,"staff_members.html",{'staff_members':staff_members})
     
     
+
 
 
 
