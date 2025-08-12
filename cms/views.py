@@ -4,7 +4,7 @@ from .models import Staff,Student,Class,Subject,TimeSlot
 # Create your views here.
 import itertools
 
-from django.db.models import Count, Q,Case, When.Sum, IntegerField
+from django.db.models import Count, Q,Case, When
 from cms.utils import generate_timetable
 
 def timetable_view(request):
@@ -54,8 +54,8 @@ def student_strength(request):
             bcafemale=Count('srn', filter=Q(gender='Female',category='BC-A')),
             bcbmale=Count('srn', filter=Q(gender='Male',category='BC-B')),  
             bcbfemale=Count('srn', filter=Q(gender='Female',category='BC-B')),
-            genmale=Count('srn', filter=Q(gender='Male',category__in=['GEN', 'General'])),  
-            genfemale=Count('srn', filter=Q(gender='Female',category__in=['GEN', 'General'])),
+            genmale=Count('srn', filter=Q(gender='Male',category='GEN')),  
+            genfemale=Count('srn', filter=Q(gender='Female',category='GEN')),
             totalmale=Count('srn', filter=Q(gender='Male')),  
             totalfemale=Count('srn', filter=Q(gender='Female')),
             total=Count('srn'),
@@ -279,8 +279,3 @@ def staff (request):
     return render(request,"staff_members.html",{'staff_members':staff_members})
     
     
-
-
-
-
-
