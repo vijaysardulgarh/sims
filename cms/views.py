@@ -46,7 +46,7 @@ def student_strength(request):
             
             }
 
-            student_strength = Student.objects.filter(school_name=school_name).values('studentclass', 'section',).annotate(
+            student_strength = Student.objects.filter(school_name=school_name).values('studentclass', 'section','stream').annotate(
         
             scmale=Count('srn', filter=Q(gender='Male',category__in=['SC', 'Scheduled Caste'])),  
             scfemale=Count('srn', filter=Q(gender='Female',category__in=['SC', 'Scheduled Caste'])), 
@@ -279,3 +279,4 @@ def staff (request):
     return render(request,"staff_members.html",{'staff_members':staff_members})
     
     
+
