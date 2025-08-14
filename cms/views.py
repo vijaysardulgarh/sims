@@ -251,7 +251,8 @@ def index(request):
         'school_name': school_name,
         'stats_lower': stats_lower,
         'stats_upper': stats_upper,
-        'staff_stats': staff_stats
+        'staff_stats': staff_stats,
+        'sanctioned_posts_data': sanctioned_posts_data
     }
 
     return render(request, 'index.html', context)
@@ -266,6 +267,7 @@ def staff (request):
     return render(request,"staff_members.html",{'staff_members':staff_members})
     
     
+
 
 
 
