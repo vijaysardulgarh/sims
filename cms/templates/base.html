@@ -1,8 +1,6 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{% endblock %}</title>
@@ -10,48 +8,47 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
 </head>
 
 <body>
-
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">School Information Management System (SIMS)</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+              aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'about.html' %}">About Us</a>
+            <a class="nav-link" href="{% url 'about' %}">About Us</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'contact.html' %}">Contact</a>
+            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Committee</a>
+            <a class="nav-link" href="{% url 'index' %}">Committee</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Nodal Officer</a>
+            <a class="nav-link" href="{% url 'index' %}">Nodal Officer</a>
           </li>
-
-          <li class="nav-item">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Statistics</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" 
+               data-bs-toggle="dropdown" aria-expanded="false">Statistics</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'student_strength' %}">Student Wise Strength</a></li>
               <li><a class="dropdown-item" href="{% url 'subject_strength' %}">Subject Wise Strength</a></li>
               <li><a class="dropdown-item" href="#">Staff Wise Strength</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
-          </li> 
-
+          </li>
         </ul>
+
         <button type="button" class="btn btn-primary position-relative">
           Notifications
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -59,47 +56,69 @@
             <span class="visually-hidden">unread messages</span>
           </span>
         </button>
-
-
       </div>
     </div>
   </nav>
 
-  <div class="container text-center">
+  <!-- Main Layout -->
+  <div class="container my-4">
     <div class="row">
-      <div class="col">
-        <div class="container">
-          {% block content %}
-          {% endblock content%}
+      <!-- Main Content -->
+      <div class="col-md-8">
+        {% block content %}{% endblock %}
+      </div>
+
+      <!-- Sidebar Stats, News, SMC -->
+      <div class="col-md-4">
+        {% block stats %}{% endblock %}
+
+        <!-- News Section -->
+        <div class="card my-3 shadow-sm">
+          <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">Latest News</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            {% for news_item in latest_news %}
+              <li class="list-group-item">{{ news_item.title }}</li>
+            {% empty %}
+              <li class="list-group-item text-muted">No news available</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- SMC Members -->
+        <div class="card my-3 shadow-sm">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0">SMC Members</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            {% for member in smc_members %}
+              <li class="list-group-item">
+                <strong>{{ member.name }}</strong><br>
+                <small class="text-muted">{{ member.role }}</small>
+              </li>
+            {% empty %}
+              <li class="list-group-item text-muted">No members listed</li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
-      <div class="col">
-
-        {% block stats %}
-
-        {% endblock %}
-
-      </div>
-
     </div>
   </div>
 
-
-
-  <footer class="site-footer bg-dark text-light">
+  <!-- Footer -->
+  <footer class="site-footer bg-dark text-light mt-4">
     <div class="container">
-      <div class="row">
-        <div class="col-md-4 col-sm-12">
+      <div class="row py-4">
+        <div class="col-md-4">
           <h4>Subscribe to Newsletter</h4>
-          <p>Stay updated with the latest news and events by subscribing to our newsletter.</p>
-          <form class="form-inline justify-content-center">
-            <div class="form-group">
-              <input type="email" class="form-control" id="email" placeholder="Enter your email">
-            </div>
-            <button type="submit" class="btn btn-primary ml-2">Subscribe</button>
+          <p>Stay updated with the latest news and events.</p>
+          <form>
+            <input type="email" class="form-control mb-2" placeholder="Enter your email">
+            <button type="submit" class="btn btn-primary w-100">Subscribe</button>
           </form>
         </div>
-        <div class="col-md-4 col-sm-12">
+        <div class="col-md-4">
           <h4>Contact Us</h4>
           <address>
             Arora Basti, Ward No. 11<br>
@@ -108,44 +127,25 @@
             Email: vijaysardulgarh@gmail.com
           </address>
         </div>
-        <div class="col-md-4 col-sm-12">
+        <div class="col-md-4">
           <h4>Quick Links</h4>
-          <ul class="list-unstyled footer-links">
-            <li><a href="https://www.cbseacademic.nic.in/curriculum_2025.html">CBSE Syllabus</a></li>
-            <li><a href="https://mis.oneschoolsuite.com/">MIS Portal</a></li>
-            <li><a href="https://reports.avsarhry.in/">Avsar Portal</a></li>
-            <li><a href="https://udiseplus.gov.in/moe_udise/#/login">UDISE Profile & Facilities</a></li>
-            <li><a href="https://udiseplus.gov.in/udiseteacher/">UDISE Teacher Module</a></li>
-            <li><a href="https://sdms.udiseplus.gov.in/p1/v1/login?state-id=106">UDISE Students Module</a></li>
+          <ul class="list-unstyled">
+            <li><a href="https://www.cbseacademic.nic.in/curriculum_2025.html" class="text-light">CBSE Syllabus</a></li>
+            <li><a href="#" class="text-light">MIS Portal</a></li>
+            <li><a href="#" class="text-light">Avsar Portal</a></li>
+            <li><a href="#" class="text-light">Admissions</a></li>
+            <li><a href="#" class="text-light">News & Events</a></li>
+            <li><a href="#" class="text-light">Contact</a></li>
           </ul>
         </div>
       </div>
       <hr class="bg-light">
-      <div class="row">
-        <div class="col-md-12 col-sm-12">
-          <p class="text-center">Follow Us: <a href="https://www.facebook.com/vijaysardulgarh">Facebook</a> | <a href="https://x.com/vijaysardulgarh">Twitter</a> | <a
-              href="https://www.instagram.com/vijaysardulgarh/">Instagram</a></p>
-        </div>
-      </div>
-      <hr class="bg-light">
-      <div class="row">
-        <div class="col-md-12 col-sm-12">
-          <p class="text-center">&copy; 2024 SIMS. All rights reserved.</p>
-        </div>
-      </div>
+      <p class="text-center mb-0">&copy; 2024 SIMS. All rights reserved.</p>
     </div>
   </footer>
-
-
-
-
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
 </body>
-
 </html>
-
-
-
