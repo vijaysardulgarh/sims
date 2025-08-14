@@ -297,7 +297,16 @@ class TimetableAdmin(ImportExportModelAdmin,admin.ModelAdmin):
         return obj.teachers.name
     
     resource_class=TimetableResource        
-    
+class SMCMemberAdmin(admin.ModelAdmin):
+    list_display = ('name', 'position', 'gender', 'category', 'contact_number', 'email', 'photo_tag')
+
+    def photo_tag(self, obj):
+        if obj.photo:
+            return format_html('<img src="{}" width="50" height="50" style="object-fit:cover;border-radius:4px;"/>', obj.photo.url)
+        return "-"
+    photo_tag.short_description = 'Photo'
+
+
 #admin.site.register(User)  
 admin.site.register(School)
 admin.site.register(Affiliation)
@@ -327,7 +336,8 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(Topper)
 admin.site.register(Book)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
-admin.site.register(SMCMember)
+admin.site.register(SMCMember,SMCMemberAdmin)
+
 
 
 
