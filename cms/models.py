@@ -642,10 +642,51 @@ class Book(models.Model):
     def __str__(self):
         return self.title   
           
+class SMCMember(models.Model):
+    POSITION_CHOICES = [
+        ('President', 'President'),
+        ('Vice President', 'Vice President'),
+        ('Parent/Guardian Member', 'Parent/Guardian Member'),
+        ('Member', 'Member'),
+        ('Member Secretary', 'Member Secretary'),
+        ('Teacher/Student Member', 'Teacher/Student Member'),
+        ('Trained Education Scholar Member', 'Trained Education Scholar Member'),
+    ]
 
+    GENDER_CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
+    ]
+
+    CATEGORY_CHOICES = [
+        ('GEN', 'General'),
+        ('SC', 'Scheduled Caste'),
+        ('BC-A', 'Backward Class - A'),
+        ('BC-B', 'Backward Class - B'),
+        ('EWS', 'Economically Weaker Section'),
+        ('OTHER', 'Other'),
+    ]
+
+    name = models.CharField(max_length=100)
+    position = models.CharField(max_length=50, choices=POSITION_CHOICES)
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, blank=True, null=True)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, blank=True, null=True)
+    contact_number = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    photo = models.ImageField(upload_to='smc_photos/', blank=True, null=True)
+    remarks = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.position}"
+
+    class Meta:
+        verbose_name_plural = "SMC Members"
+        ordering = ['position']
 
 
   
 
 
       
+
