@@ -5,31 +5,9 @@
 {% block content %}
 <div class="container my-4">
 
-    <!-- Staff List -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Our Staff</h4>
-        </div>
-        {% if staff_members %}
-        <ul class="list-group list-group-flush">
-            {% for staff_member in staff_members %}
-            <li class="list-group-item d-flex align-items-center">
-                <img src="https://picsum.photos/64/64" class="rounded-circle me-3" width="64" height="64" alt="Staff photo">
-                <div>
-                    <strong>{{ staff_member.name }}</strong><br>
-                    <small class="text-muted">{{ staff_member.designation }}</small>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <div class="card-body text-muted fst-italic">
-            No staff members found.
-        </div>
-        {% endif %}
-    </div>
 
-    <!-- Row 1: Student Statistics (6th–8th) & Teacher Statistics -->
+
+    <!-- Row 1: Student & Teacher Statistics -->
     <div class="row g-4">
         <div class="col-md-6">
             <div class="card shadow-sm">
@@ -52,32 +30,6 @@
                 </ul>
             </div>
         </div>
-
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">Teacher Statistics</h5>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">SC Male: <span class="badge text-bg-success">{{ sc_male_teachers_count }}</span></li>
-                    <li class="list-group-item">SC Female: <span class="badge text-bg-success">{{ sc_female_teachers_count }}</span></li>
-                    <li class="list-group-item">Total SC: <span class="badge text-bg-dark">{{ total_sc_teachers_count }}</span></li>
-                    <li class="list-group-item">BCA Male: <span class="badge text-bg-success">{{ bca_male_teachers_count }}</span></li>
-                    <li class="list-group-item">BCA Female: <span class="badge text-bg-success">{{ bca_female_teachers_count }}</span></li>
-                    <li class="list-group-item">Total BCA: <span class="badge text-bg-dark">{{ total_bca_teachers_count }}</span></li>
-                    <li class="list-group-item">BCB Male: <span class="badge text-bg-success">{{ bcb_male_teachers_count }}</span></li>
-                    <li class="list-group-item">BCB Female: <span class="badge text-bg-success">{{ bcb_female_teachers_count }}</span></li>
-                    <li class="list-group-item">Total BCB: <span class="badge text-bg-dark">{{ total_bcb_teachers_count }}</span></li>
-                    <li class="list-group-item">General Male: <span class="badge text-bg-success">{{ gen_male_teachers_count }}</span></li>
-                    <li class="list-group-item">General Female: <span class="badge text-bg-success">{{ gen_female_teachers_count }}</span></li>
-                    <li class="list-group-item">Total General: <span class="badge text-bg-dark">{{ total_gen_teachers_count }}</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Row 2: Student Statistics (9th–12th) -->
-    <div class="row g-4 mt-4">
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header bg-success text-white">
@@ -99,15 +51,17 @@
                 </ul>
             </div>
         </div>
+
     </div>
+
+
 
     <!-- Sanctioned Posts -->
     {% for group_name, group_data in staff_stats.items %}
     <div class="card shadow-sm mb-4 mt-4">
         <div class="card-header bg-warning text-dark">
             <h5 class="mb-0">
-                Sanctioned Posts 
-                {% if group_name == '6th_to_8th' %}(6th to 8th){% else %}(9th to 12th){% endif %}
+                Sanctioned Posts {% if group_name == '6th_to_8th' %}(6th to 8th){% else %}(9th to 12th){% endif %}
             </h5>
         </div>
         <div class="table-responsive">
@@ -141,6 +95,118 @@
     </div>
     {% endfor %}
 
+    <!-- Teaching Staff -->
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Our Staff</h2>
+        <div class="row g-4">
+            
+            <!-- Teaching Staff -->
+            <div class="col-lg-6 col-md-12">
+                <h4 class="text-primary">Teaching Staff</h4>
+                <table class="table table-bordered table-striped text-center align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>Qualification</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for staff in teaching_staff %}
+                        <tr>
+                            <td>
+                                {% if staff.profile_picture %}
+                                    <img src="{{ staff.profile_picture.url }}" class="staff-photo rounded-circle border" alt="{{ staff.name }}">
+                                {% else %}
+                                    <div class="staff-placeholder rounded-circle">
+                                        <span>No Photo</span>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ staff.name }}</td>
+                            <td>{{ staff.designation|default:"-" }}</td>
+                            <td>{{ staff.qualification|default:"-" }}</td>
+                            <td>{{ staff.mobile_number|default:"-" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No teaching staff found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    
+            <!-- Non-Teaching Staff -->
+            <div class="col-lg-6 col-md-12">
+                <h4 class="text-success">Non-Teaching Staff</h4>
+                <table class="table table-bordered table-striped text-center align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>Qualification</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for staff in non_teaching_staff %}
+                        <tr>
+                            <td>
+                                {% if staff.profile_picture %}
+                                    <img src="{{ staff.profile_picture.url }}" class="staff-photo rounded-circle border" alt="{{ staff.name }}">
+                                {% else %}
+                                    <div class="staff-placeholder rounded-circle">
+                                        <span>No Photo</span>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ staff.name }}</td>
+                            <td>{{ staff.designation|default:"-" }}</td>
+                            <td>{{ staff.qualification|default:"-" }}</td>
+                            <td>{{ staff.mobile_number|default:"-" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No non-teaching staff found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    
+        </div>
+    </div>
+    
+    <!-- Custom styles -->
+    <style>
+        .staff-photo {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+        }
+        .staff-placeholder {
+            width: 60px;
+            height: 60px;
+            background-color: #f8f9fa;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        @media (max-width: 768px) {
+            .table {
+                font-size: 14px;
+            }
+        }
+    </style>
+   
     <!-- News Section -->
     <div class="card shadow-sm mb-4 mt-4">
         <div class="card-header bg-dark text-white">
@@ -161,36 +227,163 @@
         {% endif %}
     </div>
 
-    <!-- SMC Members -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-secondary text-white">
-            <h5 class="mb-0">SMC Members</h5>
+
+
+
+    <div class="row mt-4">
+        <!-- Academic News -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Academic News</h5>
+                </div>
+                {% if academic_news %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for news in academic_news %}
+                            <tr>
+                                <td>
+                                    {% if news.image %}
+                                        <img src="{{ news.image.url }}" alt="{{ news.title }}" class="img-thumbnail me-2" style="width:40px; height:40px; object-fit:cover;">
+                                    {% endif %}
+                                    <strong>{{ news.title }}</strong>
+                                </td>
+                                <td>{{ news.date_published|date:"d M Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="card-body text-muted fst-italic">No academic news available.</div>
+                {% endif %}
+            </div>
         </div>
-        {% if smc_members %}
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover mb-0 align-middle">
-                <thead class="table-light">
+    
+        <!-- Events -->
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Events</h5>
+                </div>
+                {% if event_news %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for news in event_news %}
+                            <tr>
+                                <td>
+                                    {% if news.image %}
+                                        <img src="{{ news.image.url }}" alt="{{ news.title }}" class="img-thumbnail me-2" style="width:40px; height:40px; object-fit:cover;">
+                                    {% endif %}
+                                    <strong>{{ news.title }}</strong>
+                                </td>
+                                <td>{{ news.date_published|date:"d M Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="card-body text-muted fst-italic">No events available.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+<!-- SMC Members -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">School Management Committee</h2>
+    <div class="row g-4">
+
+        <div class="col-12">
+            <h4 class="text-primary">SMC Members</h4>
+            <table class="table table-bordered table-striped text-center align-middle">
+                <thead class="table-dark">
                     <tr>
+                        <th>Photo</th>
                         <th>Name</th>
-                        <th>Designation</th>
+                        <th>Position</th>
+                        <th>Gender</th>
+                        <th>Category</th>
                         <th>Contact</th>
+                        <th>Email</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for member in smc_members %}
+                    {% for member in smcmembers %}
                     <tr>
+                        <td>
+                            {% if member.photo %}
+                                <img src="{{ member.photo.url }}" class="member-photo rounded-circle border" alt="{{ member.name }}">
+                            {% else %}
+                                <div class="member-placeholder rounded-circle">
+                                    <span>No Photo</span>
+                                </div>
+                            {% endif %}
+                        </td>
                         <td>{{ member.name }}</td>
-                        <td>{{ member.designation }}</td>
-                        <td>{{ member.contact }}</td>
+                        <td>{{ member.position }}</td>
+                        <td>{{ member.gender|default:"-" }}</td>
+                        <td>{{ member.category|default:"-" }}</td>
+                        <td>{{ member.contact_number|default:"-" }}</td>
+                        <td>{{ member.email|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">No SMC members found.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        {% else %}
-        <div class="card-body text-muted fst-italic">No SMC members found.</div>
-        {% endif %}
+
     </div>
+</div>
+
+<!-- Custom styles -->
+<style>
+    .member-photo {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+    }
+    .member-placeholder {
+        width: 60px;
+        height: 60px;
+        background-color: #f8f9fa;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        text-align: center;
+        border: 1px solid #dee2e6;
+    }
+    @media (max-width: 768px) {
+        .table {
+            font-size: 14px;
+        }
+    }
+</style>
 
 </div>
 {% endblock %}
