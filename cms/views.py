@@ -196,80 +196,30 @@ def index (request):
         genmale=Count('srn', filter=Q(gender='Male', category='GEN')),
         genfemale=Count('srn', filter=Q(gender='Female', category='GEN')),
     )
+    teaching_staff = Staff.objects.filter(staff_role='Teaching').order_by('designation', 'name')
+    
+    # Non-Teaching staff grouped by designation
+    non_teaching_staff = Staff.objects.filter(staff_role='Non-Teaching').order_by('designation', 'name')
+    
+    academic_news = News.objects.filter(category__iexact='Academics')[:10]
+    event_news = News.objects.filter(category__iexact='Events')[:10]
+
+
+    smcmembers = SMCMember.objects.all()
+
+
 
     context = {
         'stats_lower': stats_lower,
         'stats_upper': stats_upper,
-        'school_name': school_name
+        'school_name': school_name,
+        'teaching_staff': teaching_staff,
+        'non_teaching_staff': non_teaching_staff,
+        'academic_news': academic_news,
+        'event_news': event_news,
+        'smcmembers': smcmembers
     }
     return render(request, 'index.html', context)
-
-        # staff_members=Staff.objects.all
-
-        # sc_Male_count = Student.objects.filter(category='SC', gender='Male').count()
-        # sc_Female_count = Student.objects.filter(category='SC', gender='Female').count()
-        # total_sc_students_count = Student.objects.filter(category='SC').count()
-
-        # bca_Male_count = Student.objects.filter(category='BCA', gender='Male').count()
-        # bca_Female_count = Student.objects.filter(category='BCA', gender='Female').count()
-        # total_bca_students_count = Student.objects.filter(category='BCA').count()
-
-        # bcb_Male_count = Student.objects.filter(category='BCB', gender='Male').count()
-        # bcb_Female_count = Student.objects.filter(category='BCB', gender='Female').count()
-        # total_bcb_students_count = Student.objects.filter(category='BCB').count()
-
-        # gen_Male_count = Student.objects.filter(category='General', gender='Male').count()
-        # gen_Female_count = Student.objects.filter(category='General', gender='Female').count()
-        # total_gen_students_count = Student.objects.filter(category='General').count()
-
-        # sc_male_teachers_count = Staff.objects.filter(category='SC', gender='Male').count()
-        # sc_female_teachers_count = Staff.objects.filter(category='SC', gender='Female').count()
-        # total_sc_teachers_count = Staff.objects.filter(category='SC').count()
-
-        # bca_male_teachers_count = Staff.objects.filter(category='BC-A', gender='Male').count()
-        # bca_female_teachers_count = Staff.objects.filter(category='BC-A', gender='Female').count()
-        # total_bca_teachers_count = Staff.objects.filter(category='BC-A').count()
-
-        # bcb_male_teachers_count = Staff.objects.filter(category='BC-B', gender='Male').count()
-        # bcb_female_teachers_count = Staff.objects.filter(category='BC-B', gender='Female').count()
-        # total_bcb_teachers_count = Staff.objects.filter(category='BC-B').count()
-
-        # gen_male_teachers_count = Staff.objects.filter(category='GEN', gender='Male').count()
-        # gen_female_teachers_count = Staff.objects.filter(category='GEN', gender='Female').count()
-        # total_gen_teachers_count = Staff.objects.filter(category='GEN').count()
-
-        # context = {
-        #     'staff_members':staff_members,
-        #     'sc_Male_count': sc_Male_count,
-        #     'sc_Female_count': sc_Female_count,
-        #     'total_sc_students_count': total_sc_students_count,
-        #     'bca_Male_count': bca_Male_count,
-        #     'bca_Female_count': bca_Female_count,
-        #     'total_bca_students_count': total_bca_students_count,
-        #     'bcb_Male_count': bcb_Male_count,
-        #     'bcb_Female_count': bcb_Female_count,
-        #     'total_bcb_students_count': total_bcb_students_count,
-        #     'gen_Male_count': gen_Male_count,
-        #     'gen_Female_count': gen_Female_count,
-        #     'total_gen_students_count': total_gen_students_count,
-        #     'sc_male_teachers_count': sc_male_teachers_count,
-        #     'sc_female_teachers_count': sc_female_teachers_count,
-        #     'total_sc_teachers_count': total_sc_teachers_count,
-        #     'bca_male_teachers_count': bca_male_teachers_count,
-        #     'bca_female_teachers_count': bca_female_teachers_count,
-        #     'total_bca_teachers_count': total_bca_teachers_count,
-        #     'bcb_male_teachers_count': bcb_male_teachers_count,
-        #     'bcb_female_teachers_count': bcb_female_teachers_count,
-        #     'total_bcb_teachers_count': total_bcb_teachers_count,
-        #     'gen_male_teachers_count': gen_male_teachers_count,
-        #     'gen_female_teachers_count': gen_female_teachers_count,
-        #     'total_gen_teachers_count': total_gen_teachers_count,
-        # }
-
-
-
-        # return render(request, 'index.html', context)
-
 
 def student_strength1(request):
     # Fetch all distinct class names
@@ -322,4 +272,5 @@ def staff (request):
     return render(request,"staff_members.html",{'staff_members':staff_members})
     
     
+
 
