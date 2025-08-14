@@ -78,30 +78,52 @@
             <h5 class="mb-0">Latest News</h5>
           </div>
           <ul class="list-group list-group-flush">
-            {% for news_item in latest_news %}
-              <li class="list-group-item">{{ news_item.title }}</li>
+            {% for news in academic_news %}
+              <li class="list-group-item">{{ news.title }}</li>
             {% empty %}
               <li class="list-group-item text-muted">No news available</li>
             {% endfor %}
           </ul>
         </div>
 
-        <!-- SMC Members -->
         <div class="card my-3 shadow-sm">
           <div class="card-header bg-info text-white">
             <h5 class="mb-0">SMC Members</h5>
           </div>
           <ul class="list-group list-group-flush">
-            {% for member in smc_members %}
+            {% for member in smcmembers %}
               <li class="list-group-item">
                 <strong>{{ member.name }}</strong><br>
-                <small class="text-muted">{{ member.role }}</small>
+                <small class="text-muted">{{ member.position }}</small>
+                <small class="text-muted">{{ member.contact_number }}</small>
               </li>
             {% empty %}
               <li class="list-group-item text-muted">No members listed</li>
             {% endfor %}
           </ul>
         </div>
+
+                <!-- Teaching Staff -->
+        <div class="card my-3 shadow-sm">
+          <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Staff Members</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            {% for staff in teaching_staff %}
+              <li class="list-group-item">
+                <strong>{{ staff.name }}</strong><br>
+                <small class="text-muted">{{ staff.designation }}</small>
+                <small class="text-muted">{{ staff.qualification }}</small>
+                <!-- <small class="text-muted">{{ staff.qualification }}</small> -->
+                <small class="text-muted">{{ staff.mobile_number }}</small>
+              </li>
+            {% empty %}
+              <li class="list-group-item text-muted">No members listed</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        
       </div>
     </div>
   </div>
@@ -149,3 +171,4 @@
     crossorigin="anonymous"></script>
 </body>
 </html>
+
