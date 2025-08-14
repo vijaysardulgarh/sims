@@ -127,7 +127,7 @@
                         <td>{{ row.vacant_after_regular }}</td>
                         <td>{{ row.working_guest }}</td>
                         <td>{{ row.working_hkrnl }}</td>
-                        <td>{{ row.net_vacancy }}</td>
+                        <td {% if row.net_vacancy > 0 %} class="text-danger fw-bold" {% endif %}>{{ row.net_vacancy }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
