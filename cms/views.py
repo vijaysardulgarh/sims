@@ -1,7 +1,7 @@
 
 from django.shortcuts import render
 from . import views
-from .models import Staff,Student,Class,Subject,TimeSlot
+from .models import Staff,Student,Class,Subject,TimeSlot,News,SMCMember
 # Create your views here.
 import itertools
 
@@ -272,5 +272,6 @@ def staff (request):
     return render(request,"staff_members.html",{'staff_members':staff_members})
     
     
+
 
 
