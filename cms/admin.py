@@ -34,6 +34,7 @@ from .models import TimetableEntry
 from .models import Student
 from .models import Topper
 from .models import Book
+from .models import SMCMembers
 import logging
 
  
@@ -326,6 +327,8 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(Topper)
 admin.site.register(Book)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
+admin.site.register(SMCMember)
+
 
 
 
