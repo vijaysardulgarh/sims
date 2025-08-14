@@ -1,114 +1,140 @@
-{%extends 'base.html'%}
+{% extends 'base.html' %}
 
-{% block title %} {% endblock title %}
-
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<div class="container my-4">
 
-
-
+    <!-- Staff List -->
     {% if staff_members %}
-
-        <ul class="w3-ul w3-card-4">
-            <h2>Our Staff</h2>
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Our Staff</h4>
+        </div>
+        <ul class="list-group list-group-flush">
             {% for staff_member in staff_members %}
-                <li class="w3-bar">
-                    <span onclick="this.parentElement.style.display='none'"
-                    class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
-                    <img src="https://picsum.photos/64/64" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-                     <div class="w3-bar-item">
-                        <span class="w3-large">{{ staff_members.name }}</span><br>
-                        <span>{{ staff_members.designation }}</span>
-                    </div>
-                </li>
-    {% endfor %}
+            <li class="list-group-item d-flex align-items-center">
+                <img src="https://picsum.photos/64/64" class="rounded-circle me-3" width="64" height="64" alt="Staff photo">
+                <div>
+                    <strong>{{ staff_member.name }}</strong><br>
+                    <small class="text-muted">{{ staff_member.designation }}</small>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 
-</ul>
-{% endif %}
-{% endblock content%}
-
-{% block stats %}
-
-
-
-
-
-
-
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Student Statistics: 6th to 8th</h5>
-                <ul class="list-group">
-                    <li class="list-group-item">SC Boys: <span class="text-primary">{{ stats_lower.scmale }}</span></li>
-                    <li class="list-group-item">SC Girls: <span class="text-primary">{{ stats_lower.scfemale }}</span></li>
-                    <li class="list-group-item">Total SC Students: <span class="text-primary">{{ stats_lower.scmale|add:stats_lower.scfemale }}</span></li>
-
-                    <li class="list-group-item">BCA Boys: <span class="text-primary">{{ stats_lower.bcamale }}</span></li>
-                    <li class="list-group-item">BCA Girls: <span class="text-primary">{{ stats_lower.bcafemale }}</span></li>
-                    <li class="list-group-item">Total BCA Students: <span class="text-primary">{{ stats_lower.bcamale|add:stats_lower.bcafemale }}</span></li>
-
-                    <li class="list-group-item">BCB Boys: <span class="text-primary">{{ stats_lower.bcbmale }}</span></li>
-                    <li class="list-group-item">BCB Girls: <span class="text-primary">{{ stats_lower.bcbfemale }}</span></li>
-                    <li class="list-group-item">Total BCB Students: <span class="text-primary">{{ stats_lower.bcbmale|add:stats_lower.bcbfemale }}</span></li>
-
-                    <li class="list-group-item">General Boys: <span class="text-primary">{{ stats_lower.genmale }}</span></li>
-                    <li class="list-group-item">General Girls: <span class="text-primary">{{ stats_lower.genfemale }}</span></li>
-                    <li class="list-group-item">Total General Students: <span class="text-primary">{{ stats_lower.genmale|add:stats_lower.genfemale }}</span></li>
+    <!-- Student Statistics -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Student Statistics: 6th to 8th</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">SC Boys: <span class="badge bg-primary">{{ stats_lower.scmale }}</span></li>
+                    <li class="list-group-item">SC Girls: <span class="badge bg-primary">{{ stats_lower.scfemale }}</span></li>
+                    <li class="list-group-item">Total SC: <span class="badge bg-secondary">{{ stats_lower.scmale|add:stats_lower.scfemale }}</span></li>
+                    <li class="list-group-item">BCA Boys: <span class="badge bg-primary">{{ stats_lower.bcamale }}</span></li>
+                    <li class="list-group-item">BCA Girls: <span class="badge bg-primary">{{ stats_lower.bcafemale }}</span></li>
+                    <li class="list-group-item">Total BCA: <span class="badge bg-secondary">{{ stats_lower.bcamale|add:stats_lower.bcafemale }}</span></li>
+                    <li class="list-group-item">BCB Boys: <span class="badge bg-primary">{{ stats_lower.bcbmale }}</span></li>
+                    <li class="list-group-item">BCB Girls: <span class="badge bg-primary">{{ stats_lower.bcbfemale }}</span></li>
+                    <li class="list-group-item">Total BCB: <span class="badge bg-secondary">{{ stats_lower.bcbmale|add:stats_lower.bcbfemale }}</span></li>
+                    <li class="list-group-item">General Boys: <span class="badge bg-primary">{{ stats_lower.genmale }}</span></li>
+                    <li class="list-group-item">General Girls: <span class="badge bg-primary">{{ stats_lower.genfemale }}</span></li>
+                    <li class="list-group-item">Total General: <span class="badge bg-secondary">{{ stats_lower.genmale|add:stats_lower.genfemale }}</span></li>
                 </ul>
             </div>
         </div>
-    </div>
-</div>
-
-
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Student Statistics: 9th to 12th</h5>
-                <ul class="list-group">
-                    <li class="list-group-item">SC Boys: <span class="text-primary">{{ stats_upper.scmale }}</span></li>
-                    <li class="list-group-item">SC Girls: <span class="text-primary">{{ stats_upper.scfemale }}</span></li>
-                    <li class="list-group-item">Total SC Students: <span class="text-primary">{{ stats_upper.scmale|add:stats_upper.scfemale }}</span></li>
-
-                    <li class="list-group-item">BCA Boys: <span class="text-primary">{{ stats_upper.bcamale }}</span></li>
-                    <li class="list-group-item">BCA Girls: <span class="text-primary">{{ stats_upper.bcafemale }}</span></li>
-                    <li class="list-group-item">Total BCA Students: <span class="text-primary">{{ stats_upper.bcamale|add:stats_upper.bcafemale }}</span></li>
-
-                    <li class="list-group-item">BCB Boys: <span class="text-primary">{{ stats_upper.bcbmale }}</span></li>
-                    <li class="list-group-item">BCB Girls: <span class="text-primary">{{ stats_upper.bcbfemale }}</span></li>
-                    <li class="list-group-item">Total BCB Students: <span class="text-primary">{{ stats_upper.bcbmale|add:stats_upper.bcbfemale }}</span></li>
-
-                    <li class="list-group-item">General Boys: <span class="text-primary">{{ stats_upper.genmale }}</span></li>
-                    <li class="list-group-item">General Girls: <span class="text-primary">{{ stats_upper.genfemale }}</span></li>
-                    <li class="list-group-item">Total General Students: <span class="text-primary">{{ stats_upper.genmale|add:stats_upper.genfemale }}</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Teacher Statistics</h5>
-                    <ul class="list-group">
-                        <li class="list-group-item">SC Male Teachers: <span class="badge badge-success">{{ sc_male_teachers_count }}</span></li>
-                        <li class="list-group-item">SC Female Teachers: <span class="badge badge-success">{{ sc_female_teachers_count }}</span></li>
-                        <li class="list-group-item">Total SC Teachers: <span class="badge badge-success">{{ total_sc_teachers_count }}</span></li>
-                        <li class="list-group-item">BCA Male Teachers: <span class="badge badge-success">{{ bca_male_teachers_count }}</span></li>
-                        <li class="list-group-item">BCA Female Teachers: <span class="badge badge-success">{{ bca_female_teachers_count }}</span></li>
-                        <li class="list-group-item">Total BCA Teachers: <span class="badge badge-success">{{ total_bca_teachers_count }}</span></li>
-                        <li class="list-group-item">BCB Male Teachers: <span class="badge badge-success">{{ bcb_male_teachers_count }}</span></li>
-                        <li class="list-group-item">BCB Female Teachers: <span class="badge badge-success">{{ bcb_female_teachers_count }}</span></li>
-                        <li class="list-group-item">Total BCB Teachers: <span class="badge badge-success">{{ total_bcb_teachers_count }}</span></li>
-                        <li class="list-group-item">General Male Teachers: <span class="badge badge-success">{{ gen_male_teachers_count }}</span></li>
-                        <li class="list-group-item">General Female Teachers: <span class="badge badge-success">{{ gen_female_teachers_count }}</span></li>
-                        <li class="list-group-item">Total General Teachers: <span class="badge badge-success">{{ total_gen_teachers_count }}</span></li>
-                    </ul>
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Student Statistics: 9th to 12th</h5>
                 </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">SC Boys: <span class="badge bg-primary">{{ stats_upper.scmale }}</span></li>
+                    <li class="list-group-item">SC Girls: <span class="badge bg-primary">{{ stats_upper.scfemale }}</span></li>
+                    <li class="list-group-item">Total SC: <span class="badge bg-secondary">{{ stats_upper.scmale|add:stats_upper.scfemale }}</span></li>
+                    <li class="list-group-item">BCA Boys: <span class="badge bg-primary">{{ stats_upper.bcamale }}</span></li>
+                    <li class="list-group-item">BCA Girls: <span class="badge bg-primary">{{ stats_upper.bcafemale }}</span></li>
+                    <li class="list-group-item">Total BCA: <span class="badge bg-secondary">{{ stats_upper.bcamale|add:stats_upper.bcafemale }}</span></li>
+                    <li class="list-group-item">BCB Boys: <span class="badge bg-primary">{{ stats_upper.bcbmale }}</span></li>
+                    <li class="list-group-item">BCB Girls: <span class="badge bg-primary">{{ stats_upper.bcbfemale }}</span></li>
+                    <li class="list-group-item">Total BCB: <span class="badge bg-secondary">{{ stats_upper.bcbmale|add:stats_upper.bcbfemale }}</span></li>
+                    <li class="list-group-item">General Boys: <span class="badge bg-primary">{{ stats_upper.genmale }}</span></li>
+                    <li class="list-group-item">General Girls: <span class="badge bg-primary">{{ stats_upper.genfemale }}</span></li>
+                    <li class="list-group-item">Total General: <span class="badge bg-secondary">{{ stats_upper.genmale|add:stats_upper.genfemale }}</span></li>
+                </ul>
             </div>
         </div>
     </div>
-{% endblock %}
 
+    <!-- Teacher Statistics -->
+    <div class="card shadow-sm my-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Teacher Statistics</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">SC Male: <span class="badge bg-success">{{ sc_male_teachers_count }}</span></li>
+            <li class="list-group-item">SC Female: <span class="badge bg-success">{{ sc_female_teachers_count }}</span></li>
+            <li class="list-group-item">Total SC: <span class="badge bg-dark">{{ total_sc_teachers_count }}</span></li>
+            <li class="list-group-item">BCA Male: <span class="badge bg-success">{{ bca_male_teachers_count }}</span></li>
+            <li class="list-group-item">BCA Female: <span class="badge bg-success">{{ bca_female_teachers_count }}</span></li>
+            <li class="list-group-item">Total BCA: <span class="badge bg-dark">{{ total_bca_teachers_count }}</span></li>
+            <li class="list-group-item">BCB Male: <span class="badge bg-success">{{ bcb_male_teachers_count }}</span></li>
+            <li class="list-group-item">BCB Female: <span class="badge bg-success">{{ bcb_female_teachers_count }}</span></li>
+            <li class="list-group-item">Total BCB: <span class="badge bg-dark">{{ total_bcb_teachers_count }}</span></li>
+            <li class="list-group-item">General Male: <span class="badge bg-success">{{ gen_male_teachers_count }}</span></li>
+            <li class="list-group-item">General Female: <span class="badge bg-success">{{ gen_female_teachers_count }}</span></li>
+            <li class="list-group-item">Total General: <span class="badge bg-dark">{{ total_gen_teachers_count }}</span></li>
+        </ul>
+    </div>
+
+    <!-- Sanctioned Posts -->
+    {% for group_name, group_data in staff_stats.items %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">
+                {% if group_name == '6th_to_8th' %}
+                    Sanctioned Posts (6th to 8th)
+                {% else %}
+                    Sanctioned Posts (9th to 12th)
+                {% endif %}
+            </h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Designation</th>
+                        <th>Sanctioned</th>
+                        <th>Working Regular</th>
+                        <th>Vacant After Regular</th>
+                        <th>Guest</th>
+                        <th>HKRNL</th>
+                        <th>Net Vacancy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in group_data %}
+                    <tr>
+                        <td>{{ row.designation }}</td>
+                        <td>{{ row.sanctioned }}</td>
+                        <td>{{ row.working_regular }}</td>
+                        <td>{{ row.vacant_after_regular }}</td>
+                        <td>{{ row.working_guest }}</td>
+                        <td>{{ row.working_hkrnl }}</td>
+                        <td>{{ row.net_vacancy }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
