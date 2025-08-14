@@ -160,11 +160,12 @@ def subject_strength(request):
         context = {'school_names': school_names}
         return render(request, 'school_subject_strength.html',context)    
     
-def index (request):
-     
+def index(request):
     school_name = 'PM Shri Government Senior Secondary School Nagpur'
 
-    # Classes 6th to 8th
+    # --------------------
+    # Student stats 6th–8th
+    # --------------------
     lower_classes = ['Sixth', 'Seventh', 'Eighth']
     stats_lower = Student.objects.filter(
         school_name=school_name,
@@ -180,7 +181,9 @@ def index (request):
         genfemale=Count('srn', filter=Q(gender='Female', category='GEN')),
     )
 
-    # Classes 9th to 12th
+    # --------------------
+    # Student stats 9th–12th
+    # --------------------
     upper_classes = ['Nineth', 'Tenth', 'Eleventh', 'Twelfth']
     stats_upper = Student.objects.filter(
         school_name=school_name,
@@ -196,12 +199,68 @@ def index (request):
         genfemale=Count('srn', filter=Q(gender='Female', category='GEN')),
     )
 
+    # --------------------
+    # Sanctioned post data
+    # --------------------
+    sanctioned_posts_data = {
+        'PGT English': 1,
+        'PGT Maths': 1,
+        'PGT Science': 1,
+        'TGT English': 2,
+        'TGT Maths': 1,
+        'TGT Science': 1,
+    }
+
+    ranges = {
+        '6th_to_8th': Q(class_assigned__in=['Sixth', 'Seventh', 'Eighth']),
+        '9th_to_12th': Q(class_assigned__in=['Nineth', 'Tenth', 'Eleventh', 'Twelfth']),
+    }
+
+    staff_stats = {}
+    for group_name, condition in ranges.items():
+        group_stats = []
+        for designation, sanctioned in sanctioned_posts_data.items():
+            # Assign sanctioned posts only to correct group
+            if "PGT" in designation and group_name == "6th_to_8th":
+                sanctioned = 0
+            elif "TGT" in designation and group_name == "9th_to_12th":
+                sanctioned = 0
+
+            working_regular = Staff.objects.filter(condition, designation=designation, staff_type='Regular').count()
+            working_guest = Staff.objects.filter(condition, designation=designation, staff_type='Guest').count()
+            working_hkrnl = Staff.objects.filter(condition, designation=designation, staff_type='HKRNL').count()
+
+            vacant_after_regular = sanctioned - working_regular
+            net_vacancy = sanctioned - (working_regular + working_guest + working_hkrnl)
+
+            group_stats.append({
+                'designation': designation,
+                'sanctioned': sanctioned,
+                'working_regular': working_regular,
+                'vacant_after_regular': vacant_after_regular,
+                'working_guest': working_guest,
+                'working_hkrnl': working_hkrnl,
+                'net_vacancy': net_vacancy,
+            })
+        staff_stats[group_name] = group_stats
+
+    # --------------------
+    # Single context + return
+    # --------------------
     context = {
+        'school_name': school_name,
         'stats_lower': stats_lower,
         'stats_upper': stats_upper,
-        'school_name': school_name
+        'staff_stats': staff_stats
     }
+
     return render(request, 'index.html', context)
+
+
+
+
+
+
 
         # staff_members=Staff.objects.all
 
@@ -321,4 +380,5 @@ def staff (request):
     return render(request,"staff_members.html",{'staff_members':staff_members})
     
     
+
 
