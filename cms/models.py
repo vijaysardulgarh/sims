@@ -696,3 +696,4 @@ class SMCMember(models.Model):
       
 
 
+
