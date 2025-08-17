@@ -289,120 +289,7 @@
 
 
 
-
-        <!-- Teaching Staff -->
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Our Staff</h2>
-        <div class="row g-4">
             
-            <!-- Teaching Staff -->
-            <div class="col-lg-6 col-md-12">
-                <h4 class="text-primary">Teaching Staff</h4>
-                <table class="table table-bordered table-striped text-center align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Photo</th>
-                            <th>Name</th>
-                            <th>Designation</th>
-                            <th>Qualification</th>
-                            <th>Contact</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for staff in teaching_staff %}
-                        <tr>
-                            <td>
-                                {% if staff.profile_picture %}
-                                    <img src="{{ staff.profile_picture.url }}" class="staff-photo rounded-circle border" alt="{{ staff.name }}">
-                                {% else %}
-                                    <div class="staff-placeholder rounded-circle">
-                                        <span>No Photo</span>
-                                    </div>
-                                {% endif %}
-                            </td>
-                            <td>{{ staff.name }}</td>
-                            <td>{{ staff.designation|default:"-" }}</td>
-                            <td>{{ staff.qualification|default:"-" }}</td>
-                            <td>{{ staff.mobile_number|default:"-" }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5">No teaching staff found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="row g-4">
-            <!-- Non-Teaching Staff -->
-            <div class="col-lg-6 col-md-12">
-                <h4 class="text-success">Non-Teaching Staff</h4>
-                <table class="table table-bordered table-striped text-center align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Photo</th>
-                            <th>Name</th>
-                            <th>Designation</th>
-                            <th>Qualification</th>
-                            <th>Contact</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for staff in non_teaching_staff %}
-                        <tr>
-                            <td>
-                                {% if staff.profile_picture %}
-                                    <img src="{{ staff.profile_picture.url }}" class="staff-photo rounded-circle border" alt="{{ staff.name }}">
-                                {% else %}
-                                    <div class="staff-placeholder rounded-circle">
-                                        <span>No Photo</span>
-                                    </div>
-                                {% endif %}
-                            </td>
-                            <td>{{ staff.name }}</td>
-                            <td>{{ staff.designation|default:"-" }}</td>
-                            <td>{{ staff.qualification|default:"-" }}</td>
-                            <td>{{ staff.mobile_number|default:"-" }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5">No non-teaching staff found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-    
-        </div>
-    </div>
-    
-    <!-- Custom styles -->
-    <style>
-        .staff-photo {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-        }
-        .staff-placeholder {
-            width: 60px;
-            height: 60px;
-            background-color: #f8f9fa;
-            color: #6c757d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            text-align: center;
-            border: 1px solid #dee2e6;
-        }
-        @media (max-width: 768px) {
-            .table {
-                font-size: 14px;
-            }
-        }
-    </style>
-    </div>
 
 
 
@@ -413,4 +300,5 @@
 
 </div>
 {% endblock %}
+
 
