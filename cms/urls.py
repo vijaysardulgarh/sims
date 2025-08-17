@@ -10,6 +10,8 @@ urlpatterns = [
     path('subject_strength',views.subject_strength,name='subject_strength'),
     #path('school_subject_strength',views.student_strength,name='school_subject_strength'),
     path('timetable/', timetable_view, name='timetable'),
+    path("staff/<str:role>/", views.staff_by_role, name="staff_by_role"),
   
 ]
+
 
