@@ -70,10 +70,10 @@
           <a class="nav-link dropdown-toggle" href="#" id="staffDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">Staff</a>
           <ul class="dropdown-menu" aria-labelledby="staffDropdown">
-            <li><a class="dropdown-item" href="#">Administration Staff</a></li>
-            <li><a class="dropdown-item" href="#">Teaching Staff</a></li>
-            <li><a class="dropdown-item" href="#">Non-Teaching Staff</a></li>
-            <li><a class="dropdown-item" href="#">Support Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Administrative' %}">Administration Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Teaching' %}">Teaching Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Non Teaching' %}">Non-Teaching Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Support' %}">Support Staff</a></li>
           </ul>
         </li>
 
@@ -333,6 +333,7 @@
     crossorigin="anonymous"></script>
 </body>
 </html>
+
 
 
 
