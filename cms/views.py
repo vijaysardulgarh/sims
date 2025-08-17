@@ -271,7 +271,10 @@ def staff (request):
     staff_members=Staff.objects.all()
     return render(request,"staff_members.html",{'staff_members':staff_members})
     
-    
+def document_detail(request, school_id):
+    school = get_object_or_404(School, pk=school_id)
+    documents = school.documents.all()
+    return render(request, "document_detail.html", {"school": school, "documents": documents})    
 
 
 # Staff listing by role
@@ -281,4 +284,5 @@ def staff_by_role(request, role):
         "role": role,
         "staff_list": staff_list,
     })
+
 
