@@ -2,7 +2,7 @@ from django.db import models
 from django import forms
 from django.utils import timezone
 import datetime
-import json
+import json,os
 #from django.contrib.auth.models import AbstractUser
 
 
@@ -89,13 +89,18 @@ class Event(models.Model):
         return self.title
     
 
+def school_document_path(instance, filename):
+    # Save files under documents/<school_name>/<filename>
+    return os.path.join("documents", instance.school.name.replace(" ", "_"), filename)
+
 class Document(models.Model):
-    name = models.CharField(max_length=255)
-    file = models.FileField(upload_to='documents/')
+    school = models.ForeignKey('School', on_delete=models.CASCADE, related_name="documents",null=True, blank=True)
+    title = models.CharField(max_length=255)
+    file = models.FileField(upload_to=school_document_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name 
+        return f"{self.title} - {self.school.name}"
               
 class News(models.Model):
     title = models.CharField(max_length=255)
@@ -689,4 +694,5 @@ class SMCMember(models.Model):
 
 
       
+
 
