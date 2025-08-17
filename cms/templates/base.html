@@ -152,6 +152,103 @@
           </ul>
         </div>
 
+<!-- Student Statistics -->
+<div class="card my-3 shadow-sm">
+  <div class="card-header bg-warning text-dark">
+    <h5 class="mb-0">Student : 6th to 8th</h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <strong>
+        <a href="#" class="text-decoration-none">
+          SC
+        </a>
+      </strong><br>
+      <small class="text-muted">Boys: {{ stats_lower.scmale }}, Girls: {{ stats_lower.scfemale }}, 
+        Total: {{ stats_lower.scmale|add:stats_lower.scfemale }}</small>
+    </li>
+    <li class="list-group-item">
+      <strong>
+        <a href="#" class="text-decoration-none">
+          BCA
+        </a>
+      </strong><br>
+      <small class="text-muted">Boys: {{ stats_lower.bcamale }}, Girls: {{ stats_lower.bcafemale }}, 
+        Total: {{ stats_lower.bcamale|add:stats_lower.bcafemale }}</small>
+    </li>
+    <li class="list-group-item">
+      <strong>
+        <a href="#" class="text-decoration-none">
+          BCB
+        </a>
+      </strong><br>
+      <small class="text-muted">Boys: {{ stats_lower.bcbmale }}, Girls: {{ stats_lower.bcbfemale }}, 
+        Total: {{ stats_lower.bcbmale|add:stats_lower.bcbfemale }}</small>
+    </li>
+    <li class="list-group-item">
+      <strong>
+        <a href="#" class="text-decoration-none">
+          General
+        </a>
+      </strong><br>
+      <small class="text-muted">Boys: {{ stats_lower.genmale }}, Girls: {{ stats_lower.genfemale }}, 
+        Total: {{ stats_lower.genmale|add:stats_lower.genfemale }}</small>
+    </li>
+  </ul>
+</div>
+
+<div class="card my-3 shadow-sm">
+  <div class="card-header bg-warning text-dark">
+    <h5 class="mb-0">Student : 9th to 12th</h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <strong>
+        <a href="#" class="text-decoration-none">
+          SC
+        </a>
+      </strong><br>
+      <small class="text-muted">Boys: {{ stats_upper.scmale }}, Girls: {{ stats_upper.scfemale }}, 
+        Total: {{ stats_upper.scmale|add:stats_upper.scfemale }}</small>
+    </li>
+    <li class="list-group-item">
+      <strong>
+        <a href="#" class="text-decoration-none">
+          BCA
+        </a>
+      </strong><br>
+      <small class="text-muted">Boys: {{ stats_upper.bcamale }}, Girls: {{ stats_upper.bcafemale }}, 
+        Total: {{ stats_upper.bcamale|add:stats_upper.bcafemale }}</small>
+    </li>
+    <li class="list-group-item">
+      <strong>
+        <a href="#" class="text-decoration-none">
+          BCB
+        </a>
+      </strong><br>
+      <small class="text-muted">Boys: {{ stats_upper.bcbmale }}, Girls: {{ stats_upper.bcbfemale }}, 
+        Total: {{ stats_upper.bcbmale|add:stats_upper.bcbfemale }}</small>
+    </li>
+    <li class="list-group-item">
+      <strong>
+        <a href="#" class="text-decoration-none">
+          General
+        </a>
+      </strong><br>
+      <small class="text-muted">Boys: {{ stats_upper.genmale }}, Girls: {{ stats_upper.genfemale }}, 
+        Total: {{ stats_upper.genmale|add:stats_upper.genfemale }}</small>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+        
         <div class="card my-3 shadow-sm">
           <div class="card-header bg-info text-white">
             <h5 class="mb-0">SMC Members</h5>
@@ -236,6 +333,7 @@
     crossorigin="anonymous"></script>
 </body>
 </html>
+
 
 
 
