@@ -1,7 +1,7 @@
-
+from django.shortcuts import render,get_object_or_404
 from django.shortcuts import render
 from . import views
-from .models import Staff,Student,Class,Subject,TimeSlot,News,SMCMember
+from .models import Staff,Student,Class,Subject,TimeSlot,News,SMCMember,School
 # Create your views here.
 import itertools
 
@@ -284,5 +284,6 @@ def staff_by_role(request, role):
         "role": role,
         "staff_list": staff_list,
     })
+
 
 
