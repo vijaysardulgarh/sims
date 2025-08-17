@@ -274,4 +274,11 @@ def staff (request):
     
 
 
+# Staff listing by role
+def staff_by_role(request, role):
+    staff_list = Staff.objects.filter(staff_role=role).order_by("name")
+    return render(request, "staff_by_role.html", {
+        "role": role,
+        "staff_list": staff_list,
+    })
 
