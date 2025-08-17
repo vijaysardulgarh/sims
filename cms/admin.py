@@ -306,14 +306,17 @@ class SMCMemberAdmin(admin.ModelAdmin):
         return "-"
     photo_tag.short_description = 'Photo'
 
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = ("title", "school", "uploaded_at")
+    search_fields = ("title", "school__name")
 
+admin.site.register(Document,DocumentAdmin)
 #admin.site.register(User)  
 admin.site.register(School)
 admin.site.register(Affiliation)
 admin.site.register(Facility)
 admin.site.register(Nodal)
 admin.site.register(Event)
-admin.site.register(Document)
 admin.site.register(News)
 admin.site.register(ExtracurricularActivity)
 admin.site.register(Committee)
@@ -337,6 +340,7 @@ admin.site.register(Topper)
 admin.site.register(Book)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
 admin.site.register(SMCMember,SMCMemberAdmin)
+
 
 
 
