@@ -164,7 +164,7 @@
           SC
         </a>
       </strong><br>
-      <small class="text-muted">Boys: <span class="badge text-bg-primary">{{ stats_lower.scmale }}</span>, Girls: <span class="badge text-bg-primary">{{ stats_lower.scfemale }}</span>, 
+      <small class="text-muted">Boys: {{ stats_lower.scmale }}, Girls: {{ stats_lower.scfemale }}, 
         Total: <span class="badge text-bg-primary">{{ stats_lower.scmale|add:stats_lower.scfemale }}</span></small>
     </li>
     <li class="list-group-item">
@@ -173,7 +173,7 @@
           BCA
         </a>
       </strong><br>
-      <small class="text-muted">Boys: <span class="badge text-bg-primary">{{ stats_lower.bcamale }}</span>, Girls: <span class="badge text-bg-primary">{{ stats_lower.bcafemale }}</span>, 
+      <small class="text-muted">Boys: <{{ stats_lower.bcamale }}, Girls: {{ stats_lower.bcafemale }}, 
         Total: <span class="badge text-bg-primary">{{ stats_lower.bcamale|add:stats_lower.bcafemale }}</span></small>
     </li>
     <li class="list-group-item">
@@ -182,7 +182,7 @@
           BCB
         </a>
       </strong><br>
-      <small class="text-muted">Boys: <span class="badge text-bg-primary">{{ stats_lower.bcbmale }}</span>, Girls: <span class="badge text-bg-primary">{{ stats_lower.bcbfemale }}</span>, 
+      <small class="text-muted">Boys: {{ stats_lower.bcbmale }}, Girls: {{ stats_lower.bcbfemale }}, 
         Total: <span class="badge text-bg-primary">{{ stats_lower.bcbmale|add:stats_lower.bcbfemale }}</span></small>
     </li>
     <li class="list-group-item">
@@ -191,7 +191,7 @@
           General
         </a>
       </strong><br>
-      <small class="text-muted">Boys: <span class="badge text-bg-primary">{{ stats_lower.genmale }}</span>, Girls: <span class="badge text-bg-primary">{{ stats_lower.genfemale }}</span>, 
+      <small class="text-muted">Boys: {{ stats_lower.genmale }}, Girls: {{ stats_lower.genfemale }}, 
         Total: <span class="badge text-bg-primary">{{ stats_lower.genmale|add:stats_lower.genfemale }}</span></small>
     </li>
   </ul>
@@ -333,6 +333,7 @@
     crossorigin="anonymous"></script>
 </body>
 </html>
+
 
 
 
