@@ -20,7 +20,10 @@ urlpatterns = [
 ]
 
 
-
 if settings.DEBUG:
+    # Serve media files
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Serve static files (including admin CSS/JS)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 
