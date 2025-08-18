@@ -105,8 +105,8 @@ EOF
 # Enable and start Gunicorn socket and service
 echo "Enabling and starting Gunicorn socket and service"
 sudo systemctl enable $PROJECT_NAME.gunicorn.socket
-sudo systemctl enable $PROJECT_NAME.gunicorn.service
 sudo systemctl start $PROJECT_NAME.gunicorn.socket
+sudo systemctl enable $PROJECT_NAME.gunicorn.service
 sudo systemctl start $PROJECT_NAME.gunicorn.service
 
 # Reload systemd daemon
