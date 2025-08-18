@@ -6,15 +6,21 @@ IP="34.131.65.194"
 USER="vijaysardulgarh"
 PROJECT_NAME="sims"
 GITHUB_REPO="https://github.com/vijaysardulgarh/sims.git"
-NGINX_CONFIG_DIR="/etc/nginx/sites-available"
-NGINX_SITES_ENABLED_DIR="/etc/nginx/sites-enabled"
+
+# Directories
 PROJECT_DIR="/home/$USER/$PROJECT_NAME"
 SOCKET_FILE="/run/$PROJECT_NAME.gunicorn.sock"
 NGINX_SOCKET_FILE="/etc/systemd/system/$PROJECT_NAME.gunicorn.socket"
 NGINX_SERVICE_FILE="/etc/systemd/system/$PROJECT_NAME.gunicorn.service"
+NGINX_CONFIG_DIR="/etc/nginx/sites-available"
+NGINX_SITES_ENABLED_DIR="/etc/nginx/sites-enabled"
 GUNICORN_BIN="$PROJECT_DIR/venv/bin/gunicorn"
+
+# Adjust if your Django app is not 'school'
 GUNICORN_WSGI="school.wsgi:application"  # Replace with your project's WSGI module
 DATABASE_FILE="$PROJECT_DIR/db.sqlite3"
+
+echo "===== Deploying $PROJECT_NAME ====="
 
 # Clone or pull project from GitHub
 echo "Cloning or pulling project from GitHub"
