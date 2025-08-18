@@ -121,7 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Define a separate directory for collected static files.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_collected')  # Define a separate directory for collected static files.
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles')  # Specify additional directories for static files.
@@ -134,6 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'documents')
+
 
 
 
