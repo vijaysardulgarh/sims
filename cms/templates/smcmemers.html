@@ -1,0 +1,75 @@
+<!-- SMC Members -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">School Management Committee</h2>
+    <div class="row g-4">
+
+        <div class="col-12">
+            <h4 class="text-primary">SMC Members</h4>
+            <table class="table table-bordered table-striped text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Gender</th>
+                        <th>Category</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in smcmembers %}
+                    <tr>
+                        <td>
+                            {% if member.photo %}
+                                <img src="{{ member.photo.url }}" class="member-photo rounded-circle border" alt="{{ member.name }}">
+                            {% else %}
+                                <div class="member-placeholder rounded-circle">
+                                    <span>No Photo</span>
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>{{ member.name }}</td>
+                        <td>{{ member.position }}</td>
+                        <td>{{ member.gender|default:"-" }}</td>
+                        <td>{{ member.category|default:"-" }}</td>
+                        <td>{{ member.contact_number|default:"-" }}</td>
+                        <td>{{ member.email|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">No SMC members found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- Custom styles -->
+<style>
+    .member-photo {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+    }
+    .member-placeholder {
+        width: 60px;
+        height: 60px;
+        background-color: #f8f9fa;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        text-align: center;
+        border: 1px solid #dee2e6;
+    }
+    @media (max-width: 768px) {
+        .table {
+            font-size: 14px;
+        }
+    }
+</style>
