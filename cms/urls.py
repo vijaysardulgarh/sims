@@ -11,6 +11,7 @@ urlpatterns = [
     path('contact',views.about,name='contact'),
     #path('staff_members',views.staff,name='staff_members'),
     path('student_strength',views.student_strength,name='student_strength'),
+    path('smc_members',views.smc_members,name='smc_members'),
     path('subject_strength',views.subject_strength,name='subject_strength'),
     #path('school_subject_strength',views.student_strength,name='school_subject_strength'),
     path('timetable/', timetable_view, name='timetable'),
@@ -22,3 +23,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
