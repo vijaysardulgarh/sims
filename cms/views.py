@@ -177,8 +177,8 @@ def index (request):
         bcafemale=Count('srn', filter=Q(gender='Female', category='BC-A')),
         bcbmale=Count('srn', filter=Q(gender='Male', category='BC-B')),
         bcbfemale=Count('srn', filter=Q(gender='Female', category='BC-B')),
-        genmale=Count('srn', filter=Q(gender='Male', category='GEN')),
-        genfemale=Count('srn', filter=Q(gender='Female', category='GEN')),
+        genmale=Count('srn', filter=Q(gender='Male', category__in=['GEN', 'General'])),
+        genfemale=Count('srn', filter=Q(gender='Female', category__in=['GEN', 'General'])),
     )
 
     # Classes 9th to 12th
@@ -193,8 +193,8 @@ def index (request):
         bcafemale=Count('srn', filter=Q(gender='Female', category='BC-A')),
         bcbmale=Count('srn', filter=Q(gender='Male', category='BC-B')),
         bcbfemale=Count('srn', filter=Q(gender='Female', category='BC-B')),
-        genmale=Count('srn', filter=Q(gender='Male', category='GEN')),
-        genfemale=Count('srn', filter=Q(gender='Female', category='GEN')),
+        genmale=Count('srn', filter=Q(gender='Male', category__in=['GEN', 'General'])),
+        genfemale=Count('srn', filter=Q(gender='Female', category__in=['GEN', 'General'])),
     )
     teaching_staff = Staff.objects.filter(staff_role='Teaching').order_by('designation', 'name')
     
@@ -284,6 +284,7 @@ def staff_by_role(request, role):
         "role": role,
         "staff_list": staff_list,
     })
+
 
 
 
