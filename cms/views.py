@@ -263,6 +263,13 @@ def student_strength1(request):
     return render(request, 'student_strength.html', context)
 
 
+def smc_members (request):
+    smcmembers = SMCMember.objects.all()
+        context = {
+        'smcmembers': smcmembers
+    }
+    return render(request,"smc_members.html",{context})
+
 def about (request):
     
     return render(request,"about.html",{})
@@ -284,6 +291,7 @@ def staff_by_role(request, role):
         "role": role,
         "staff_list": staff_list,
     })
+
 
 
 
