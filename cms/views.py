@@ -1,5 +1,4 @@
 from django.shortcuts import render,get_object_or_404
-from django.shortcuts import render
 from . import views
 from .models import Staff,Student,Class,Subject,TimeSlot,News,SMCMember,School
 # Create your views here.
@@ -205,21 +204,13 @@ def index (request):
     event_news = News.objects.filter(category__iexact='Events')[:10]
 
 
+def smc_members(request):
     smcmembers = SMCMember.objects.all()
-
-
-
     context = {
-        'stats_lower': stats_lower,
-        'stats_upper': stats_upper,
-        'school_name': school_name,
-        'teaching_staff': teaching_staff,
-        'non_teaching_staff': non_teaching_staff,
-        'academic_news': academic_news,
-        'event_news': event_news,
         'smcmembers': smcmembers
     }
-    return render(request, 'index.html', context)
+    return render(request, "smc_members.html", context)
+
 
 def student_strength1(request):
     # Fetch all distinct class names
@@ -291,6 +282,7 @@ def staff_by_role(request, role):
         "role": role,
         "staff_list": staff_list,
     })
+
 
 
 
