@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ nodal.role }} - {{ nodal.school.name }}</h2>
+
+<p><strong>Responsibilities:</strong><br> {{ nodal.responsibilities|linebreaks }}</p>
+
+<p><strong>Bio:</strong><br> {{ nodal.bio|linebreaks }}</p>
+
+<p><strong>Staff Members:</strong></p>
+<ul>
+  {% for person in nodal.staff.all %}
+    <li>{{ person.name }} ({{ person.designation }})</li>
+  {% empty %}
+    <li>No staff assigned.</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'school:nodal_list' %}">← Back to list</a>
+{% endblock %}

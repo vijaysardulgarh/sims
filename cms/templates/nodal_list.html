@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Nodal Officers</h2>
+<ul>
+  {% for nodal in nodals %}
+    <li>
+      <strong>{{ nodal.role }}</strong> - {{ nodal.school.name }} <br>
+      Staff: 
+      {% for person in nodal.staff.all %}
+        {{ person.name }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+      <br>
+      <a href="{% url 'school:nodal_detail' nodal.pk %}">View Details</a>
+    </li>
+  {% empty %}
+    <li>No nodal officers assigned yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
