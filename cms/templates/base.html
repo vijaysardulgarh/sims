@@ -40,11 +40,10 @@
           <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">About Us</a>
           <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
-            <li><a class="dropdown-item" href="#">History / Vision / Mission</a></li>
-            <li><a class="dropdown-item" href="#">Principal’s Message</a></li>
-            <li><a class="dropdown-item" href="#">Governing Body</a></li>
-            <li><a class="dropdown-item" href="{% url 'smc_members' %}">School Management Committee (SMC)</a></li>
-            <li><a class="dropdown-item" href="#">Nodal Officer</a></li>
+            <li><a class="dropdown-item" href="{% url 'about' %}">History / Vision / Mission</a></li>
+            <li><a class="dropdown-item" href="{% url 'principal_message' %}">Principal’s Message</a></li>
+            <li><a class="dropdown-item" href="{% url 'smc_members' %}">School Management Committee</a></li>
+            <li><a class="dropdown-item" href="{% url 'nodal_detail' 1 %}">Nodal Officer</a></li>
             <li><a class="dropdown-item" href="#">Affiliation Status</a></li>
             <li><a class="dropdown-item" href="#">Infrastructure</a></li>
           </ul>
@@ -348,6 +347,7 @@
     crossorigin="anonymous"></script>
 </body>
 </html>
+
 
 
 
