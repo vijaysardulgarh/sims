@@ -175,6 +175,21 @@ def about(request):
     return render(request, "about.html")
 
 
+def nodal_officer(request):
+    return render(request, 'nodal_officer.html')
+
+def nodal_list(request):
+    nodals = Nodal.objects.select_related("school").prefetch_related("staff").all()
+    return render(request, "nodal_list.html", {"nodals": nodals})
+
+def nodal_detail(request, pk):
+    nodal = get_object_or_404(Nodal.objects.select_related("school").prefetch_related("staff"), pk=pk)
+    return render(request, "nodal_detail.html", {"nodal": nodal})
+
+def affiliation_status(request):
+    return render(request, 'affiliation.html')
+
+
 def staff(request):
     staff_members = Staff.objects.all()
     return render(request, "staff_members.html", {'staff_members': staff_members})
@@ -189,3 +204,4 @@ def document_detail(request, school_id):
 def staff_by_role(request, role):
     staff_list = Staff.objects.filter(staff_role=role).order_by("name")
     return render(request, "staff_by_role.html", {"role": role, "staff_list": staff_list})
+
