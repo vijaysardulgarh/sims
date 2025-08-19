@@ -16,6 +16,10 @@ urlpatterns = [
     #path('school_subject_strength',views.student_strength,name='school_subject_strength'),
     path('timetable/', timetable_view, name='timetable'),
     path("staff/<str:role>/", views.staff_by_role, name="staff_by_role"),
+    path('nodal_detail/', views.nodal_officer, name='nodal_officer'),
+    path("nodals/", views.nodal_list, name="nodal_list"),
+    path("nodals/<int:pk>/", views.nodal_detail, name="nodal_detail"),
+    path('affiliation/', views.affiliation_status, name='affiliation'),
   
 ]
 
@@ -25,5 +29,6 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     # Serve static files (including admin CSS/JS)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 
 
