@@ -47,11 +47,11 @@ pip install -r $PROJECT_DIR/requirements.txt
 
 # Run migrations
 echo "Running migrations..."
-python $PROJECT_DIR/manage.py migrate --noinput
+python3 $PROJECT_DIR/manage.py migrate --noinput
 
 # Collect static files
 echo "Collecting static files..."
-python $PROJECT_DIR/manage.py collectstatic --noinput
+python3 $PROJECT_DIR/manage.py collectstatic --noinput
 
 # Ensure database file permissions (if SQLite)
 if [ -f "$DATABASE_FILE" ]; then
