@@ -69,13 +69,59 @@ class Facility(models.Model):
         verbose_name_plural = 'Facilities'
 
 class Nodal(models.Model):
-    name = models.ForeignKey('Staff', on_delete=models.SET_NULL, null=True, related_name='nodal')
-    role = models.CharField(max_length=100)
+    ROLE_CHOICES = [
+        # Academic & Curriculum
+      
+        ('exam_nodal', 'Examination Nodal Officer'),
+
+        
+        # Student Support & Welfare
+        ('discipline_nodal', 'Discipline Nodal Officer'),
+        ('health_safety', 'Health & Safety Nodal'),
+        ('counseling_nodal', 'Counseling & Guidance Nodal'),
+        ('anti_bullying', 'Anti-Bullying / Child Protection Nodal'),
+        ('cwsn', 'CWSN Nodal'),
+        ('scholarship_nodal', 'Scholarship Nodal'),
+
+        # ICT & Innovation
+        ('ict_nodal', 'ICT / Smart Class Nodal'),
+        ('digital_learning', 'Digital Learning Nodal'),
+        ('library_nodal', 'Library Nodal'),
+        ('innovation_nodal', 'Innovation & ATL Nodal'),
+
+        # Co-curricular & Cultural
+        ('sports_nodal', 'Sports Nodal Officer'),
+        ('art_culture', 'Art & Culture Nodal'),
+        ('music_dance', 'Music & Dance Nodal'),
+        ('literary_coord', 'Literary / Debate Nodal'),
+     
+
+        # Govt. Schemes & Committees
+        ('middaymeal', 'Mid-Day Meal Nodal'),
+        ('rti_nodal', 'RTI Nodal Officer'),
+        ('smc_coord', 'School Management Committee Nodal'),
+        ('pocso_nodal', 'POCSO / Child Safety Nodal'),
+        ('ecoclub_nodal', 'Eco Club / Environment Nodal'),
+        ('swachhta_nodal', 'Swachhta Abhiyan Nodal'),
+
+        # Community & External
+
+        ('career_guidance', 'Career Guidance Nodal'),
+        
+        # Admin & Infrastructure
+        ('transport_nodal', 'Transport Nodal Officer'),
+        ('porperty', 'Property Register Nodal'),
+        ('procurement', 'Procurement / Stores Nodal'),
+    ]
+
+    school = models.ForeignKey('School', on_delete=models.CASCADE, related_name='nodal_officers')
+    staff = models.ManyToManyField('Staff', related_name='nodal_roles')
+    role = models.CharField(max_length=100, choices=ROLE_CHOICES)
     responsibilities = models.TextField(blank=True)
     bio = models.TextField(blank=True)
-    
+
     def __str__(self):
-        return self.name.name if self.name else ""
+        return f"{self.get_role_display()} - {self.school.name}"
     
 
 class Event(models.Model):
@@ -694,6 +740,7 @@ class SMCMember(models.Model):
 
 
       
+
 
 
 
