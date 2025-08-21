@@ -1,145 +1,28 @@
+{% load static %}
+{% load custom_tags %}
 <!doctype html>
 <html lang="en">
+
 <head>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{% endblock %}</title>
 
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Optional W3CSS (if you want) -->
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 </head>
 
 <body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-warning text-dark shadow-sm">
-  <div class="container-fluid">
-    <!-- Logo / School Name -->
-    <a class="navbar-brand fw-bold" href="{% url 'index' %}">
-      🏫 School Information Management System (SIMS)
-    </a>
 
-    <!-- Mobile Toggle -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#schoolNavbar" aria-controls="schoolNavbar"
-      aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <!-- Navbar -->
+  {% include 'partials/navbar.html' %}
 
-    <!-- Navbar Items -->
-    <div class="collapse navbar-collapse" id="schoolNavbar">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-
-        <!-- Home -->
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
-        </li>
-
-        <!-- About Us -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">About Us</a>
-          <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
-            <li><a class="dropdown-item" href="{% url 'about' %}">History / Vision / Mission</a></li>
-            <li><a class="dropdown-item" href="{% url 'principal_message' %}">Principal’s Message</a></li>
-            <li><a class="dropdown-item" href="{% url 'smc_members' %}">School Management Committee</a></li>
-            <li><a class="dropdown-item" href="{% url 'nodal_detail' 1 %}">Nodal Officer</a></li>
-            <li><a class="dropdown-item" href="#">Affiliation Status</a></li>
-            <li><a class="dropdown-item" href="#">Infrastructure</a></li>
-          </ul>
-        </li>
-
-        <!-- Academics -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="academicsDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Academics</a>
-          <ul class="dropdown-menu" aria-labelledby="academicsDropdown">
-            <li><a class="dropdown-item" href="#">Subjects Offered</a></li>
-            <li><a class="dropdown-item" href="#">Curriculum</a></li>
-            <li><a class="dropdown-item" href="#">Syllabus</a></li>
-            <li><a class="dropdown-item" href="#">Examinations & Results</a></li>
-            <li><a class="dropdown-item" href="#">Academic Calendar</a></li>
-            <li><a class="dropdown-item" href="#">Time Table</a></li>
-            <li><a class="dropdown-item" href="#">Downloads</a></li>
-          </ul>
-        </li>
-
-        <!-- Staff -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="staffDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Staff</a>
-          <ul class="dropdown-menu" aria-labelledby="staffDropdown">
-            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Administrative' %}">Administration Staff</a></li>
-            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Teaching' %}">Teaching Staff</a></li>
-            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Non Teaching' %}">Non-Teaching Staff</a></li>
-            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Support' %}">Support Staff</a></li>
-          </ul>
-        </li>
-
-        <!-- Students -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="studentsDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Students</a>
-          <ul class="dropdown-menu" aria-labelledby="studentsDropdown">
-            <li><a class="dropdown-item" href="#">Achievements</a></li>
-            <li><a class="dropdown-item" href="#">Board Results / Toppers</a></li>
-            <li><a class="dropdown-item" href="#">Sports & Cultural Achievements</a></li>
-            <li><a class="dropdown-item" href="#">Gallery</a></li>
-            <li><a class="dropdown-item" href="#">Notices</a></li>
-            <li><a class="dropdown-item" href="#">Events</a></li>
-          </ul>
-        </li>
-
-        <!-- Admissions -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="admissionsDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Admissions</a>
-          <ul class="dropdown-menu" aria-labelledby="admissionsDropdown">
-            <li><a class="dropdown-item" href="#">Admission Procedure</a></li>
-            <li><a class="dropdown-item" href="#">Admission Form</a></li>
-            <li><a class="dropdown-item" href="#">Prospectus</a></li>
-            <li><a class="dropdown-item" href="#">Fee Structure</a></li>
-            <li><a class="dropdown-item" href="#">FAQ</a></li>
-          </ul>
-        </li>
-
-        <!-- Mandatory Info -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="mandatoryDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Mandatory Info</a>
-          <ul class="dropdown-menu" aria-labelledby="mandatoryDropdown">
-            <li><a class="dropdown-item" href="#">Mandatory Disclosure</a></li>
-            <li><a class="dropdown-item" href="#">School Safety Committee</a></li>
-            <li><a class="dropdown-item" href="#">Grievance Redressal</a></li>
-            <li><a class="dropdown-item" href="#">Internal Complaint Committee</a></li>
-          </ul>
-        </li>
-
-        <!-- Statistics -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="statisticsDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Statistics</a>
-          <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
-            <li><a class="dropdown-item" href="{% url 'student_strength' %}">Staff Vacancy</a></li>
-            <li><a class="dropdown-item" href="{% url 'student_strength' %}">Student Category Wise</a></li>
-            <li><a class="dropdown-item" href="{% url 'subject_strength' %}">Student Subject Wise</a></li>
-          </ul>
-        </li>
-
-        <!-- Contact -->
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
-        </li>
-
-      </ul>
-    </div>
-  </div>
-</nav>
-
-
-
-
-  
   <!-- Main Layout -->
   <div class="container my-4">
     <div class="row">
@@ -147,215 +30,20 @@
       <div class="col-md-8">
         {% block content %}{% endblock %}
       </div>
-
-      <!-- Sidebar Stats, News, SMC -->
+      <!-- Sidebar -->
       <div class="col-md-4">
-        {% block stats %}{% endblock %}
-
-        <!-- News Section -->
-        <div class="card my-3 shadow-sm">
-          <div class="card-header bg-warning text-dark">
-            <h5 class="mb-0">Latest News</h5>
-          </div>
-          <ul class="list-group list-group-flush">
-            {% for news in academic_news %}
-              <li class="list-group-item">{{ news.title }}</li>
-            {% empty %}
-              <li class="list-group-item text-muted">No news available</li>
-            {% endfor %}
-          </ul>
-        </div>
-
-<!-- Student Statistics -->
-<div class="card my-3 shadow-sm">
-  <div class="card-header bg-warning text-dark">
-    <h5 class="mb-0">Student : 6th to 8th</h5>
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-      <strong>
-        <a href="#" class="text-decoration-none">
-          SC
-        </a>
-      </strong><br>
-      <small class="text-muted">Boys: {{ stats_lower.scmale }}, Girls: {{ stats_lower.scfemale }}, 
-        Total: <span class="badge text-bg-primary">{{ stats_lower.scmale|add:stats_lower.scfemale }}</span></small>
-    </li>
-    <li class="list-group-item">
-      <strong>
-        <a href="#" class="text-decoration-none">
-          BCA
-        </a>
-      </strong><br>
-      <small class="text-muted">Boys: <{{ stats_lower.bcamale }}, Girls: {{ stats_lower.bcafemale }}, 
-        Total: <span class="badge text-bg-primary">{{ stats_lower.bcamale|add:stats_lower.bcafemale }}</span></small>
-    </li>
-    <li class="list-group-item">
-      <strong>
-        <a href="#" class="text-decoration-none">
-          BCB
-        </a>
-      </strong><br>
-      <small class="text-muted">Boys: {{ stats_lower.bcbmale }}, Girls: {{ stats_lower.bcbfemale }}, 
-        Total: <span class="badge text-bg-primary">{{ stats_lower.bcbmale|add:stats_lower.bcbfemale }}</span></small>
-    </li>
-    <li class="list-group-item">
-      <strong>
-        <a href="#" class="text-decoration-none">
-          General
-        </a>
-      </strong><br>
-      <small class="text-muted">Boys: {{ stats_lower.genmale }}, Girls: {{ stats_lower.genfemale }}, 
-        Total: <span class="badge text-bg-primary">{{ stats_lower.genmale|add:stats_lower.genfemale }}</span></small>
-    </li>
-  </ul>
-</div>
-
-<div class="card my-3 shadow-sm">
-  <div class="card-header bg-warning text-dark">
-    <h5 class="mb-0">Student : 9th to 12th</h5>
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-      <strong>
-        <a href="#" class="text-decoration-none">
-          SC
-        </a>
-      </strong><br>
-      <small class="text-muted">Boys: {{ stats_upper.scmale }}, Girls: {{ stats_upper.scfemale }}, 
-        Total: {{ stats_upper.scmale|add:stats_upper.scfemale }}</small>
-    </li>
-    <li class="list-group-item">
-      <strong>
-        <a href="#" class="text-decoration-none">
-          BCA
-        </a>
-      </strong><br>
-      <small class="text-muted">Boys: {{ stats_upper.bcamale }}, Girls: {{ stats_upper.bcafemale }}, 
-        Total: {{ stats_upper.bcamale|add:stats_upper.bcafemale }}</small>
-    </li>
-    <li class="list-group-item">
-      <strong>
-        <a href="#" class="text-decoration-none">
-          BCB
-        </a>
-      </strong><br>
-      <small class="text-muted">Boys: {{ stats_upper.bcbmale }}, Girls: {{ stats_upper.bcbfemale }}, 
-        Total: {{ stats_upper.bcbmale|add:stats_upper.bcbfemale }}</small>
-    </li>
-    <li class="list-group-item">
-      <strong>
-        <a href="#" class="text-decoration-none">
-          General
-        </a>
-      </strong><br>
-      <small class="text-muted">Boys: {{ stats_upper.genmale }}, Girls: {{ stats_upper.genfemale }}, 
-        Total: {{ stats_upper.genmale|add:stats_upper.genfemale }}</small>
-    </li>
-  </ul>
-</div>
-
-
-
-
-
-
-
-
-        
-        <div class="card my-3 shadow-sm">
-          <div class="card-header bg-info text-white">
-            <h5 class="mb-0">SMC Members</h5>
-          </div>
-          <ul class="list-group list-group-flush">
-            {% for member in smcmembers %}
-              <li class="list-group-item">
-                <strong>{{ member.name }}</strong><br>
-                <small class="text-muted">{{ member.position }}</small>
-                <small class="text-muted">{{ member.contact_number }}</small>
-              </li>
-            {% empty %}
-              <li class="list-group-item text-muted">No members listed</li>
-            {% endfor %}
-          </ul>
-        </div>
-
-                <!-- Teaching Staff -->
-        <div class="card my-3 shadow-sm">
-          <div class="card-header bg-info text-white">
-            <h5 class="mb-0">Staff Members</h5>
-          </div>
-          <ul class="list-group list-group-flush">
-            {% for staff in teaching_staff %}
-              <li class="list-group-item">
-                <strong>{{ staff.name }}</strong><br>
-                <small class="text-muted">{{ staff.designation }}</small>
-                <!-- <small class="text-muted">{{ staff.qualification }}</small> -->
-                <small class="text-muted">{{ staff.mobile_number }}</small>
-              </li>
-            {% empty %}
-              <li class="list-group-item text-muted">No members listed</li>
-            {% endfor %}
-          </ul>
-        </div>
-
-        
+        {% show_sidebar %}
       </div>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="site-footer bg-dark text-light mt-4">
-    <div class="container">
-      <div class="row py-4">
-        <div class="col-md-4">
-          <h4>Subscribe to Newsletter</h4>
-          <p>Stay updated with the latest news and events.</p>
-          <form>
-            <input type="email" class="form-control mb-2" placeholder="Enter your email">
-            <button type="submit" class="btn btn-primary w-100">Subscribe</button>
-          </form>
-        </div>
-        <div class="col-md-4">
-          <h4>Contact Us</h4>
-          <address>
-            Arora Basti, Ward No. 11<br>
-            Sardulgarh, Punjab, 151507<br>
-            Phone: (+91) 99882-14808<br>
-            Email: vijaysardulgarh@gmail.com
-          </address>
-        </div>
-        <div class="col-md-4">
-          <h4>Quick Links</h4>
-          <ul class="list-unstyled">
-            <li><a href="https://www.cbseacademic.nic.in/curriculum_2025.html" class="text-light">CBSE Syllabus</a></li>
-            <li><a href="#" class="text-light">MIS Portal</a></li>
-            <li><a href="#" class="text-light">Avsar Portal</a></li>
-            <li><a href="#" class="text-light">Admissions</a></li>
-            <li><a href="#" class="text-light">News & Events</a></li>
-            <li><a href="#" class="text-light">Contact</a></li>
-          </ul>
-        </div>
-      </div>
-      <hr class="bg-light">
-      <p class="text-center mb-0">&copy; 2024 SIMS. All rights reserved.</p>
-    </div>
-  </footer>
+  {% include "partials/footer.html" %}
 
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
 </body>
+
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
