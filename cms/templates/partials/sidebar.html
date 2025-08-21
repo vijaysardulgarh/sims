@@ -1,0 +1,114 @@
+
+<!-- News Section -->
+<div class="card my-3 shadow-sm">
+    <div class="card-header bg-warning text-dark">
+      <h5 class="mb-0">Latest News</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for news in academic_news %}
+        <li class="list-group-item">{{ news.title }}</li>
+      {% empty %}
+        <li class="list-group-item text-muted">No news available</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+
+<!-- Student Statistics: 6th to 8th -->
+<div class="card my-3 shadow-sm">
+    <div class="card-header bg-warning text-dark">
+      <h5 class="mb-0">Student : 6th to 8th</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <strong><a href="#" class="text-decoration-none">SC</a></strong><br>
+        <small class="text-muted">Boys: {{ stats_lower.scmale }}, Girls: {{ stats_lower.scfemale }}, 
+          Total: <span class="badge text-bg-primary">{{ stats_lower.scmale|add:stats_lower.scfemale }}</span>
+        </small>
+      </li>
+      <li class="list-group-item">
+        <strong><a href="#" class="text-decoration-none">BCA</a></strong><br>
+        <small class="text-muted">Boys: {{ stats_lower.bcamale }}, Girls: {{ stats_lower.bcafemale }}, 
+          Total: <span class="badge text-bg-primary">{{ stats_lower.bcamale|add:stats_lower.bcafemale }}</span>
+        </small>
+      </li>
+      <li class="list-group-item">
+        <strong><a href="#" class="text-decoration-none">BCB</a></strong><br>
+        <small class="text-muted">Boys: {{ stats_lower.bcbmale }}, Girls: {{ stats_lower.bcbfemale }}, 
+          Total: <span class="badge text-bg-primary">{{ stats_lower.bcbmale|add:stats_lower.bcbfemale }}</span>
+        </small>
+      </li>
+      <li class="list-group-item">
+        <strong><a href="#" class="text-decoration-none">Gen</a></strong><br>
+        <small class="text-muted">Boys: {{ stats_lower.genmale }}, Girls: {{ stats_lower.genfemale }}, 
+          Total: <span class="badge text-bg-primary">{{ stats_lower.genmale|add:stats_lower.genfemale }}</span>
+        </small>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Student Statistics: 9th to 12th -->
+  <div class="card my-3 shadow-sm">
+    <div class="card-header bg-warning text-dark">
+      <h5 class="mb-0">Student : 9th to 12th</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <strong><a href="#" class="text-decoration-none">SC</a></strong><br>
+        <small class="text-muted">Boys: {{ stats_upper.scmale }}, Girls: {{ stats_upper.scfemale }}, 
+          Total: {{ stats_upper.scmale|add:stats_upper.scfemale }}</small>
+      </li>
+      <li class="list-group-item">
+        <strong><a href="#" class="text-decoration-none">BCA</a></strong><br>
+        <small class="text-muted">Boys: {{ stats_upper.bcamale }}, Girls: {{ stats_upper.bcafemale }}, 
+          Total: {{ stats_upper.bcamale|add:stats_upper.bcafemale }}</small>
+      </li>
+      <li class="list-group-item">
+        <strong><a href="#" class="text-decoration-none">BCB</a></strong><br>
+        <small class="text-muted">Boys: {{ stats_upper.bcbmale }}, Girls: {{ stats_upper.bcbfemale }}, 
+          Total: {{ stats_upper.bcbmale|add:stats_upper.bcbfemale }}</small>
+      </li>
+      <li class="list-group-item">
+        <strong><a href="#" class="text-decoration-none">Gen</a></strong><br>
+        <small class="text-muted">Boys: {{ stats_upper.genmale }}, Girls: {{ stats_upper.genfemale }}, 
+          Total: {{ stats_upper.genmale|add:stats_upper.genfemale }}</small>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- SMC Members -->
+  <div class="card my-3 shadow-sm">
+    <div class="card-header bg-info text-white">
+      <h5 class="mb-0">SMC Members</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for member in smcmembers %}
+        <li class="list-group-item">
+          <strong>{{ member.name }}</strong><br>
+          <small class="text-muted">{{ member.position }}</small><br>
+          <small class="text-muted">{{ member.contact_number }}</small>
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">No members listed</li>
+      {% endfor %}
+    </ul>
+  </div>
+  
+  <!-- Teaching Staff -->
+  <div class="card my-3 shadow-sm">
+    <div class="card-header bg-info text-white">
+      <h5 class="mb-0">Staff Members</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for staff in teaching_staff %}
+        <li class="list-group-item">
+          <strong>{{ staff.name }}</strong><br>
+          <small class="text-muted">{{ staff.designation }}</small><br>
+          <small class="text-muted">{{ staff.mobile_number }}</small>
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">No members listed</li>
+      {% endfor %}
+    </ul>
+  </div>
+  

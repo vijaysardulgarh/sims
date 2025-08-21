@@ -1,0 +1,124 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-warning text-dark shadow-sm">
+  <div class="container-fluid">
+    <!-- Logo / School Name -->
+    <a class="navbar-brand fw-bold" href="{% url 'index' %}">
+      🏫 School Information Management System (SIMS)
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#schoolNavbar" aria-controls="schoolNavbar"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Items -->
+    <div class="collapse navbar-collapse" id="schoolNavbar">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        <!-- Home -->
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+        </li>
+
+        <!-- About Us -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">About Us</a>
+          <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
+            <li><a class="dropdown-item" href="{% url 'about' %}">History / Vision / Mission</a></li>
+            <li><a class="dropdown-item" href="{% url 'principal_message' %}">Principal’s Message</a></li>
+            <li><a class="dropdown-item" href="{% url 'smc_members' %}">School Management Committee</a></li>
+            <li><a class="dropdown-item" href="{% url 'nodal_detail' 1 %}">Nodal Officer</a></li>
+            <li><a class="dropdown-item" href="#">Affiliation Status</a></li>
+            <li><a class="dropdown-item" href="#">Infrastructure</a></li>
+          </ul>
+        </li>
+
+        <!-- Academics -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="academicsDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Academics</a>
+          <ul class="dropdown-menu" aria-labelledby="academicsDropdown">
+            <li><a class="dropdown-item" href="{% url 'subjects' %}">Subjects Offered</a></li>
+            <li><a class="dropdown-item" href="{% url 'curriculum' %}">Curriculum</a></li>
+            <li><a class="dropdown-item" href="#">Syllabus</a></li>
+            <li><a class="dropdown-item" href="#">Examinations & Results</a></li>
+            <li><a class="dropdown-item" href="#">Academic Calendar</a></li>
+            <li><a class="dropdown-item" href="#">Time Table</a></li>
+            <li><a class="dropdown-item" href="#">Downloads</a></li>
+          </ul>
+        </li>
+
+        <!-- Staff -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="staffDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Staff</a>
+          <ul class="dropdown-menu" aria-labelledby="staffDropdown">
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Administrative' %}">Administration Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Teaching' %}">Teaching Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Non Teaching' %}">Non-Teaching Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Support' %}">Support Staff</a></li>
+          </ul>
+        </li>
+
+        <!-- Students -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="studentsDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Students</a>
+          <ul class="dropdown-menu" aria-labelledby="studentsDropdown">
+            <li><a class="dropdown-item" href="#">Achievements</a></li>
+            <li><a class="dropdown-item" href="#">Board Results / Toppers</a></li>
+            <li><a class="dropdown-item" href="#">Sports & Cultural Achievements</a></li>
+            <li><a class="dropdown-item" href="#">Gallery</a></li>
+            <li><a class="dropdown-item" href="#">Notices</a></li>
+            <li><a class="dropdown-item" href="#">Events</a></li>
+          </ul>
+        </li>
+
+        <!-- Admissions -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="admissionsDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Admissions</a>
+          <ul class="dropdown-menu" aria-labelledby="admissionsDropdown">
+            <li><a class="dropdown-item" href="#">Admission Procedure</a></li>
+            <li><a class="dropdown-item" href="#">Admission Form</a></li>
+            <li><a class="dropdown-item" href="#">Prospectus</a></li>
+            <li><a class="dropdown-item" href="#">Fee Structure</a></li>
+            <li><a class="dropdown-item" href="#">FAQ</a></li>
+          </ul>
+        </li>
+
+        <!-- Mandatory Info -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="mandatoryDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Mandatory Info</a>
+          <ul class="dropdown-menu" aria-labelledby="mandatoryDropdown">
+            <li><a class="dropdown-item" href="#">Mandatory Disclosure</a></li>
+            <li><a class="dropdown-item" href="#">School Safety Committee</a></li>
+            <li><a class="dropdown-item" href="#">Grievance Redressal</a></li>
+            <li><a class="dropdown-item" href="#">Internal Complaint Committee</a></li>
+          </ul>
+        </li>
+
+        <!-- Statistics -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="statisticsDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Statistics</a>
+          <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
+            <li><a class="dropdown-item" href="{% url 'student_strength' %}">Staff Vacancy</a></li>
+            <li><a class="dropdown-item" href="{% url 'student_strength' %}">Student Category Wise</a></li>
+            <li><a class="dropdown-item" href="{% url 'subject_strength' %}">Student Subject Wise</a></li>
+          </ul>
+        </li>
+
+        <!-- Contact -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
