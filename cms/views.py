@@ -318,33 +318,31 @@ def staff_summary(request):
             .select_related("subject")
         )
 
-        staff_counts = (
-            Staff.objects.filter(school=school)
-            .values("subject_id", "gender", "employment_type")
-            .annotate(total=Count("id"))
-        )
-
-        # Convert to lookup dict
-        staff_lookup = {}
-        for entry in staff_counts:
-            key = (entry["subject_id"], entry["employment_type"], entry["gender"])
-            staff_lookup[key] = entry["total"]
-
         summary_data = []
         for sp in sanctioned_posts:
-            subject_id = sp.subject_id
+            staff_queryset = Staff.objects.filter(school=school)
 
-            # Get counts from lookup (default 0)
-            regular = sum(staff_lookup.get((subject_id, "Regular", g), 0) for g in ["Male", "Female"])
-            guest   = sum(staff_lookup.get((subject_id, "Guest", g), 0) for g in ["Male", "Female"])
-            hkrnl   = sum(staff_lookup.get((subject_id, "HKRNL", g), 0) for g in ["Male", "Female"])
+            # Use subject_id instead of object comparison
+            if sp.subject_id:
+                staff_queryset = staff_queryset.filter(subject_id=sp.subject_id)
 
-            male    = sum(staff_lookup.get((subject_id, et, "Male"), 0) for et in ["Regular", "Guest", "HKRNL"])
-            female  = sum(staff_lookup.get((subject_id, et, "Female"), 0) for et in ["Regular", "Guest", "HKRNL"])
-
+            # Safe total posts
             total_posts = sp.total_posts or 0
+
+            # Case-insensitive filter for employment_type
+            regular = staff_queryset.filter(employment_type__iexact="Regular").count()
+            guest   = staff_queryset.filter(employment_type__iexact="Guest").count()
+            hkrnl   = staff_queryset.filter(employment_type__iexact="HKRNL").count()
+
+            male    = staff_queryset.filter(gender__iexact="Male").count()
+            female  = staff_queryset.filter(gender__iexact="Female").count()
+
             vacant_regular = max(total_posts - regular, 0)
             net_vacancy = max(total_posts - (regular + guest + hkrnl), 0)
+
+            # Debug print (optional: remove later)
+            print(f"[DEBUG] {sp.get_post_type_display()} - {sp.designation} ({sp.subject})")
+            print("Matched Staff:", list(staff_queryset.values("name", "employment_type", "gender")))
 
             summary_data.append({
                 "post_type": sp.get_post_type_display(),
@@ -361,3 +359,4 @@ def staff_summary(request):
 
     context = {"summary_data": summary_data, "school": school}
     return render(request, "staff_summary.html", context)
+
