@@ -584,7 +584,7 @@ class Staff(models.Model):
     qualification = models.CharField(max_length=255, null=True, blank=True)
     subject = models.ForeignKey('Subject', on_delete=models.SET_NULL, related_name='staff_subject', null=True, blank=True)
 
-    email = models.EmailField(unique=True, null=True, blank=True, help_text="Unique if provided")
+    email = models.EmailField(null=True, blank=True, help_text="Unique if provided")
     mobile_number = models.CharField(max_length=15, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='staff_profile/', null=True, blank=True)
 
@@ -950,4 +950,5 @@ class SanctionedPost(models.Model):
         return f"{self.school} - {self.get_post_type_display()} {self.designation or ''} ({self.total_posts})"
 
       
+
 
