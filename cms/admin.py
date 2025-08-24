@@ -5,12 +5,13 @@ from import_export.admin import ImportExportModelAdmin
 from import_export import resources, fields
 from import_export.widgets import DateWidget, BooleanWidget,ForeignKeyWidget
 import datetime
+from django.utils.html import format_html
 #from import_export.widgets import DateWidget
 #from .models import User
 from .models import School
 from .models import Affiliation
 from .models import Facility
-from .models import Nodal
+#from .models import Nodal
 from .models import Event
 from .models import Document
 from .models import News
@@ -33,8 +34,8 @@ from .models import DailyTimeSlot,TimeSlot,TeacherSubjectAssignment
 from .models import TimetableEntry
 from .models import Student
 from .models import Topper
-from .models import Book
-from .models import SMCMember
+from .models import Book,Infrastructure,SanctionedPost
+from .models import SMCMember,AboutSchool,Principal,Association,AssociationType,AssociationRole,StaffAssociationRoleAssignment
 import logging
 
  
@@ -89,7 +90,7 @@ class StaffResource(resources.ModelResource):
             return None  # Or provide a default value
         
 class StaffAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    list_display =("employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","email","mobile_number","teaching_subject_1","staff_role","employment_type","designation")
+    list_display =("employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","email","mobile_number","staff_role","employment_type","designation")
     resource_class=StaffResource
 
 class StudentResource(resources.ModelResource):
@@ -126,7 +127,13 @@ class StudentResource(resources.ModelResource):
     guardian_full_name_aadhar = fields.Field(attribute='guardian_full_name_aadhar',column_name="Guardian's Full Name as on Aadhar Card")
     guardian_aadhaar_number = fields.Field(attribute='guardian_aadhaar_number',column_name="Guardian's Aadhar Nummber")
     family_annual_income = fields.Field(attribute='family_annual_income',column_name='Family Annual Income')
-   
+    state = fields.Field(attribute='state',column_name='State')
+    district = fields.Field(attribute='district',column_name='District')
+    block = fields.Field(attribute='block',column_name='CD Block')
+    sub_district = fields.Field(attribute='sub_district',column_name='Sub-district/Tehsil')
+    city_village_town = fields.Field(attribute='city_village_town',column_name='City/Village/Town')
+    address = fields.Field(attribute='address',column_name='Adress Line 1')
+    postal_code = fields.Field(attribute='postal_code',column_name='Postalcode')
     guardian_mobile = fields.Field(attribute='mother_mobile', column_name="Guardian's Mobile No")
     caste = fields.Field(attribute='caste_name', column_name='Caste Name')
     bpl_certificate_issuing_authority=fields.Field(attribute='bpl_certificate_issuing_authority',column_name='BPL Certificate Issuing Authority')
@@ -134,9 +141,9 @@ class StudentResource(resources.ModelResource):
     class Meta:
         model = Student
         #exclude = ('id',)
-        fields = ('srn', 'stream','school_code', 'school_name', 'admission_date', 'studentclass','section', 'roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar', 'admission_number','admission_date','title', 'excel_full_name_aadhar', 'name_in_local_language', 'date_of_birth', 'gender', 'aadhaar_number','subjects_opted','subjects','category') 
+        fields = ('srn', 'stream','school_code', 'school_name', 'admission_date', 'class', 'stream', 'section', 'roll_number', 'admission_number','admission_date','title', 'excel_full_name_aadhar', 'name_in_local_language', 'date_of_birth', 'gender', 'aadhaar_number', 'eid_number', 'domicile_of_haryana', 'nationality', 'excel_birth_country', 'birth_state', 'birth_district', 'birth_sub_district', 'birth_city_village_town','subjects_opted','subjects') 
         import_id_fields = ['srn']
-        export_order = ('stream','srn','studentclass','section','roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar','date_of_birth','gender','aadhaar_number','father_aadhaar_number','mother_aadhaar_number','category','admission_number','admission_date','father_mobile','subjects')
+        export_order = ('srn','stream','studentclass','section','roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar','date_of_birth','gender','aadhaar_number','category','admission_number','father_mobile','subjects')
         #widgets = {
         #    'admission_date': {'format': '%d/%m/%Y'},  # Format for date fields
         #    'date_of_birth': {'format': '%d/%m/%Y'},  # Format for date fields
@@ -180,7 +187,7 @@ class StudentResource(resources.ModelResource):
 class StudentAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     
     resource_class=StudentResource
-    list_display=('srn','stream','studentclass','section','roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar','date_of_birth','gender','aadhaar_number','category','admission_number','father_mobile','subjects')
+    list_display=('srn','stream','studentclass','section','roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar','date_of_birth','gender','aadhaar_number','category','admission_number','father_mobile','subjects_opted','subjects')
 
     
     
@@ -296,9 +303,53 @@ class TimetableAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     def teacher_name(self, obj):
         return obj.teachers.name
     
-    resource_class=TimetableResource        
-class SMCMemberAdmin(admin.ModelAdmin):
-    list_display = ('name', 'position', 'gender', 'category', 'contact_number', 'email', 'photo_tag')
+    resource_class=TimetableResource   
+
+class SMCMemberResource(resources.ModelResource):
+    school = fields.Field(
+        attribute='school',
+        column_name='School',
+        widget=ForeignKeyWidget(School, field='name')
+    )
+    name = fields.Field(attribute='name', column_name='Member Name')
+    position = fields.Field(attribute='position', column_name='Position')
+    gender = fields.Field(attribute='gender', column_name='Gender')
+    category = fields.Field(attribute='category', column_name='Category')
+    contact_number = fields.Field(attribute='contact_number', column_name='Contact Number')
+    email = fields.Field(attribute='email', column_name='Email')
+    remarks = fields.Field(attribute='remarks', column_name='Remarks')
+
+    class Meta:
+        model = SMCMember
+        fields = (
+            "id",
+            "school",
+            "name",
+            "position",
+            "gender",
+            "category",
+            "contact_number",
+            "email",
+            "remarks",
+        )
+        export_order = (
+            "id",
+            "school",
+            "name",
+            "position",
+            "gender",
+            "category",
+            "contact_number",
+            "email",
+            "remarks",
+        )
+    
+class SMCMemberAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('name', 'position', 'gender', 'category', 'contact_number', 'email', "school",'photo_tag')
+
+    list_filter = ("position", "gender", "category", "school")
+    search_fields = ("name", "email", "contact_number")
+    resource_class = SMCMemberResource
 
     def photo_tag(self, obj):
         if obj.photo:
@@ -306,16 +357,301 @@ class SMCMemberAdmin(admin.ModelAdmin):
         return "-"
     photo_tag.short_description = 'Photo'
 
+
+class SanctionedPostResource(resources.ModelResource):
+    school = fields.Field(
+        attribute='school',
+        column_name='School',
+        widget=ForeignKeyWidget(School, field='name')
+    )
+    subject = fields.Field(
+        attribute='subject',
+        column_name='Subject',
+        widget=ForeignKeyWidget(Subject, field='name')
+    )
+
+    post_type = fields.Field(attribute='post_type', column_name='Post Type')
+    designation = fields.Field(attribute='designation', column_name='Designation')
+    total_posts = fields.Field(attribute='total_posts', column_name='Total Posts')
+
+    class Meta:
+        model = SanctionedPost
+        fields = (
+            "id",
+            "school",
+            "post_type",
+            "designation",
+            "subject",
+            "total_posts",
+        )
+        export_order = (
+            "id",
+            "school",
+            "post_type",
+            "designation",
+            "subject",
+            "total_posts",
+        )
+
+
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ("title", "school", "uploaded_at")
     search_fields = ("title", "school__name")
 
+class StaffAssociationRoleAssignmentInline(admin.TabularInline):
+    model = StaffAssociationRoleAssignment
+    extra = 1   # number of empty forms displayed
+    autocomplete_fields = ["role", "staff"]  # improves usability if you have many records
+    show_change_link = True
+
+
+# @admin.register(Staff)
+# class StaffAdmin(admin.ModelAdmin):
+#     list_display = ("name", "employee_id", "school", "designation", "staff_role")
+#     list_filter = ("school", "staff_role", "employment_type", "category")
+#     search_fields = ("name", "employee_id", "email", "mobile_number")
+#     inlines = [StaffAssociationRoleAssignmentInline]   # ✅ roles inline inside staff profile
+
+class AssociationTypeResource(resources.ModelResource):
+    name = fields.Field(attribute="name", column_name="Type")
+
+    class Meta:
+        model = AssociationType
+        fields = ("id", "name")
+        export_order = ("id", "name")
+
+
+class AssociationResource(resources.ModelResource):
+    type = fields.Field(
+        attribute="type",
+        column_name="Type",
+        widget=ForeignKeyWidget(AssociationType, field="name"),
+    )
+    school = fields.Field(
+        attribute="school",
+        column_name="School",
+        widget=ForeignKeyWidget(School, field="name"),
+    )
+
+    class Meta:
+        model = Association
+        fields = ("id", "name", "type", "school")
+        export_order = ("id", "name", "type", "school")
+
+
+class AssociationRoleResource(resources.ModelResource):
+    association = fields.Field(
+        attribute="association",
+        column_name="Association",
+        widget=ForeignKeyWidget(Association, field="name"),
+    )
+
+    class Meta:
+        model = AssociationRole
+        fields = ("id", "title", "responsibilities", "association")
+        export_order = ("id", "title", "responsibilities", "association")
+
+
+class StaffAssociationRoleAssignmentResource(resources.ModelResource):
+    staff = fields.Field(
+        attribute="staff",
+        column_name="Staff",
+        widget=ForeignKeyWidget(Staff, field="name"),
+    )
+    role = fields.Field(
+        attribute="role",
+        column_name="Role",
+        widget=ForeignKeyWidget(AssociationRole, field="title"),
+    )
+
+    class Meta:
+        model = StaffAssociationRoleAssignment
+        fields = ("id", "staff", "role", "assigned_on")
+        export_order = ("id", "staff", "role", "assigned_on")
+
+@admin.register(AssociationType)
+class AssociationTypeAdmin(ImportExportModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
+    resource_class = AssociationTypeResource
+
+
+@admin.register(Association)
+class AssociationAdmin(ImportExportModelAdmin):
+    list_display = ("name", "type", "school")
+    list_filter = ("type", "school")
+    search_fields = ("name", "school__name")
+    resource_class = AssociationResource
+
+
+@admin.register(AssociationRole)
+class AssociationRoleAdmin(ImportExportModelAdmin):
+    list_display = ("title", "association")
+    list_filter = ("association",)
+    search_fields = ("title", "association__name")
+    resource_class = AssociationRoleResource
+
+
+@admin.register(StaffAssociationRoleAssignment)
+class StaffAssociationRoleAssignmentAdmin(ImportExportModelAdmin):
+    list_display = ("staff", "role", "assigned_on")
+    list_filter = ("role__association__type", "role__association__school")
+    search_fields = ("staff__name", "role__title", "role__association__name")
+    resource_class = StaffAssociationRoleAssignmentResource
+
+
+class InfrastructureResource(resources.ModelResource):
+    school = fields.Field(
+        attribute="school",
+        column_name="School",
+        widget=ForeignKeyWidget(School, field="name"),
+    )
+    title = fields.Field(attribute="title", column_name="Title")
+    description = fields.Field(attribute="description", column_name="Description")
+    category = fields.Field(attribute="category", column_name="Category")
+
+    class Meta:
+        model = Infrastructure
+        fields = ("id", "school", "title", "description", "category")
+        export_order = ("id", "school", "title", "description", "category")    
+
+@admin.register(Infrastructure)
+class InfrastructureAdmin(ImportExportModelAdmin):
+    list_display = ("title", "school", "category", "photo_tag")
+    list_filter = ("category", "school")
+    search_fields = ("title", "school__name", "description")
+    resource_class = InfrastructureResource
+
+    def photo_tag(self, obj):
+        if obj.photo:
+            return format_html(
+                '<img src="{}" width="70" height="50" style="object-fit:cover;border-radius:4px;"/>',
+                obj.photo.url,
+            )
+        return "-"
+    photo_tag.short_description = "Photo"
+
+@admin.register(SanctionedPost)
+class SanctionedPostAdmin(ImportExportModelAdmin):
+    list_display = (
+        "school",
+        "post_type",
+        "designation",
+        "subject",
+        "total_posts",
+    )
+    list_filter = ("school", "post_type", "subject")
+    search_fields = ("designation", "subject__name", "school__name")
+    resource_class = SanctionedPostResource
+
+
+class AboutSchoolResource(resources.ModelResource):
+    school = fields.Field(
+        attribute="school",
+        column_name="School",
+        widget=ForeignKeyWidget(School, field="name"),
+    )
+
+    class Meta:
+        model = AboutSchool
+        fields = ("id", "school", "history", "vision", "mission")
+        export_order = ("id", "school", "history", "vision", "mission")
+
+
+class PrincipalResource(resources.ModelResource):
+    school = fields.Field(
+        attribute="school",
+        column_name="School",
+        widget=ForeignKeyWidget(School, field="name"),
+    )
+
+    class Meta:
+        model = Principal
+        fields = ("id", "school", "name", "message")
+        export_order = ("id", "school", "name", "message")
+
+
+class AffiliationResource(resources.ModelResource):
+    school = fields.Field(
+        attribute="school",
+        column_name="School",
+        widget=ForeignKeyWidget(School, field="name"),
+    )
+
+    class Meta:
+        model = Affiliation
+        fields = ("id", "school", "name", "description")
+        export_order = ("id", "school", "name", "description")
+
+
+@admin.register(AboutSchool)
+class AboutSchoolAdmin(ImportExportModelAdmin):
+    list_display = ("school", "short_history", "short_vision", "short_mission")
+    search_fields = ("school__name", "history", "vision", "mission")
+    resource_class = AboutSchoolResource
+
+    def short_history(self, obj):
+        return (obj.history[:50] + "...") if obj.history else "-"
+    short_history.short_description = "History"
+
+    def short_vision(self, obj):
+        return (obj.vision[:50] + "...") if obj.vision else "-"
+    short_vision.short_description = "Vision"
+
+    def short_mission(self, obj):
+        return (obj.mission[:50] + "...") if obj.mission else "-"
+    short_mission.short_description = "Mission"
+
+
+@admin.register(Principal)
+class PrincipalAdmin(ImportExportModelAdmin):
+    list_display = ("name", "school", "photo_tag", "short_message")
+    search_fields = ("name", "school__name", "message")
+    resource_class = PrincipalResource
+
+    def photo_tag(self, obj):
+        if obj.photo:
+            return format_html(
+                '<img src="{}" width="60" height="60" style="object-fit:cover;border-radius:50%;"/>',
+                obj.photo.url,
+            )
+        return "-"
+    photo_tag.short_description = "Photo"
+
+    def short_message(self, obj):
+        return (obj.message[:60] + "...") if obj.message else "-"
+    short_message.short_description = "Message"
+
+
+@admin.register(Affiliation)
+class AffiliationAdmin(ImportExportModelAdmin):
+    list_display = ("name", "school", "short_description")
+    search_fields = ("name", "school__name", "description")
+    resource_class = AffiliationResource
+
+    def short_description(self, obj):
+        return (obj.description[:60] + "...") if obj.description else "-"
+    short_description.short_description = "Description"
+
+
+class SubjectResource(resources.ModelResource):
+    class Meta:
+        model = Subject
+        fields = ("id", "name")
+        export_order = ("id", "name")
+
+@admin.register(Subject)
+class SubjectAdmin(ImportExportModelAdmin):
+    list_display = ("id", "name")
+    search_fields = ("name",)
+    resource_class = SubjectResource        
+
 admin.site.register(Document,DocumentAdmin)
 #admin.site.register(User)  
-admin.site.register(School)
-admin.site.register(Affiliation)
+
+
 admin.site.register(Facility)
-admin.site.register(Nodal)
+#admin.site.register(Nodal)
 admin.site.register(Event)
 admin.site.register(News)
 admin.site.register(ExtracurricularActivity)
@@ -326,7 +662,7 @@ admin.site.register(Department)
 admin.site.register(Stream)
 admin.site.register(Class)
 admin.site.register(Section)
-admin.site.register(Subject)
+# admin.site.register(Subject)
 admin.site.register(Staff,StaffAdmin)
 admin.site.register(Classroom)
 admin.site.register(ClassIncharge)
@@ -338,17 +674,7 @@ admin.site.register(TimetableEntry,TimetableEntryAdmin)
 admin.site.register(Student,StudentAdmin)
 admin.site.register(Topper)
 admin.site.register(Book)
-admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
 admin.site.register(SMCMember,SMCMemberAdmin)
-
-
-
-
-
-
-
-
-
-
+admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
 
 
