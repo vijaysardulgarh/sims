@@ -310,52 +310,52 @@ def staff_summary(request):
     school = get_current_school(request)
 
     if not school:
-        sanctioned_posts = []
-        summary_data = []
-    else:
-        sanctioned_posts = (
-            SanctionedPost.objects.filter(school=school)
-            .select_related("subject")
-        )
+        return render(request, "staff_summary.html", {"summary_data": [], "school": None})
 
-        summary_data = []
-        for sp in sanctioned_posts:
-            staff_queryset = Staff.objects.filter(school=school)
+    sanctioned_posts = (
+        SanctionedPost.objects.filter(school=school)
+        .select_related("subject")
+    )
 
-            # Use subject_id instead of object comparison
-            if sp.subject_id:
-                staff_queryset = staff_queryset.filter(subject_id=sp.subject_id)
+    summary_data = []
 
-            # Safe total posts
-            total_posts = sp.total_posts or 0
+    for sp in sanctioned_posts:
+        staff_queryset = Staff.objects.filter(school=school)
 
-            # Case-insensitive filter for employment_type
-            regular = staff_queryset.filter(employment_type__iexact="Regular").count()
-            guest   = staff_queryset.filter(employment_type__iexact="Guest").count()
-            hkrnl   = staff_queryset.filter(employment_type__iexact="HKRNL").count()
+        # Filter staff by subject (if the sanctioned post has a subject)
+        if sp.subject:
+            staff_queryset = staff_queryset.filter(subject=sp.subject)
 
-            male    = staff_queryset.filter(gender__iexact="Male").count()
-            female  = staff_queryset.filter(gender__iexact="Female").count()
+        # Count employment types
+        counts = {
+            et[0]: staff_queryset.filter(employment_type=et[0]).count()
+            for et in Staff.EMPLOYMENT_TYPE_CHOICES
+        }
 
-            vacant_regular = max(total_posts - regular, 0)
-            net_vacancy = max(total_posts - (regular + guest + hkrnl), 0)
+        # Gender counts
+        male = staff_queryset.filter(gender="Male").count()
+        female = staff_queryset.filter(gender="Female").count()
 
-            # Debug print (optional: remove later)
-            print(f"[DEBUG] {sp.get_post_type_display()} - {sp.designation} ({sp.subject})")
-            print("Matched Staff:", list(staff_queryset.values("name", "employment_type", "gender")))
+        # Vacancy calculation
+        vacant_regular = max(sp.total_posts - counts.get("Regular", 0), 0)
+        net_vacancy = max(sp.total_posts - sum(counts.values()), 0)
 
-            summary_data.append({
-                "post_type": sp.get_post_type_display(),
-                "designation": sp.designation or (sp.subject.name if sp.subject else ""),
-                "sanction_post": total_posts,
-                "regular_working": regular,
-                "vacant_regular_only": vacant_regular,
-                "guest_working": guest,
-                "hkrnl_working": hkrnl,
-                "net_vacancy": net_vacancy,
-                "male_working": male,
-                "female_working": female,
-            })
+        summary_data.append({
+            "post_type": sp.get_post_type_display(),
+            "designation": sp.designation or (sp.subject.name if sp.subject else ""),
+            "sanction_post": sp.total_posts,
+            "regular_working": counts.get("Regular", 0),
+            "guest_working": counts.get("Guest", 0),
+            "hkrnl_working": counts.get("HKRNL", 0),
+            "ssa_working": counts.get("SSA", 0),
+            "nsqf_working": counts.get("NSQF", 0),
+            "mdm_working": counts.get("MDMWorker", 0),
+            "other_working": counts.get("Other", 0),
+            "vacant_regular_only": vacant_regular,
+            "net_vacancy": net_vacancy,
+            "male_working": male,
+            "female_working": female,
+        })
 
     context = {"summary_data": summary_data, "school": school}
     return render(request, "staff_summary.html", context)
