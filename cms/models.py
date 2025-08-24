@@ -900,9 +900,12 @@ class Infrastructure(models.Model):
         ("labs", "Laboratories"),
         ("library", "Library"),
         ("sports", "Sports Facilities"),
+        ("activities", "Co-curricular & Activity Rooms"),
+        ("admin", "Administrative Block"),
+        ("student_welfare", "Student Welfare Facilities"),
         ("transport", "Transport"),
         ("hostel", "Hostel"),
-        ("other", "Other"),
+        ("other", "Other Facilities"),
     ]
 
     school = models.ForeignKey(
@@ -947,3 +950,4 @@ class SanctionedPost(models.Model):
         return f"{self.school} - {self.get_post_type_display()} {self.designation or ''} ({self.total_posts})"
 
       
+
