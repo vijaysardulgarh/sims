@@ -30,9 +30,9 @@
             <li><a class="dropdown-item" href="{% url 'about' %}">History / Vision / Mission</a></li>
             <li><a class="dropdown-item" href="{% url 'principal_message' %}">Principal’s Message</a></li>
             <li><a class="dropdown-item" href="{% url 'smc_members' %}">School Management Committee</a></li>
-            <li><a class="dropdown-item" href="{% url 'nodal_detail' 1 %}">Nodal Officer</a></li>
-            <li><a class="dropdown-item" href="#">Affiliation Status</a></li>
-            <li><a class="dropdown-item" href="#">Infrastructure</a></li>
+            <li><a class="dropdown-item" href="{% url 'nodal' %}">Nodal Officer</a></li>
+            <li><a class="dropdown-item" href="{% url 'affiliation_status' %}">Affiliation Status</a></li>
+            <li><a class="dropdown-item" href="{% url 'infrastructure' %}">Infrastructure</a></li>
           </ul>
         </li>
 
@@ -95,10 +95,15 @@
           <a class="nav-link dropdown-toggle" href="#" id="mandatoryDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">Mandatory Info</a>
           <ul class="dropdown-menu" aria-labelledby="mandatoryDropdown">
-            <li><a class="dropdown-item" href="#">Mandatory Disclosure</a></li>
-            <li><a class="dropdown-item" href="#">School Safety Committee</a></li>
-            <li><a class="dropdown-item" href="#">Grievance Redressal</a></li>
-            <li><a class="dropdown-item" href="#">Internal Complaint Committee</a></li>
+            {% for committee in menu_committees %}
+              <li>
+                <a class="dropdown-item" href="{% url 'committee_detail' committee.id %}">
+                  {{ committee.name }}
+                </a>
+              </li>
+            {% empty %}
+              <li><span class="dropdown-item text-muted">No Committees</span></li>
+            {% endfor %}
           </ul>
         </li>
 
@@ -107,7 +112,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="statisticsDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">Statistics</a>
           <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
-            <li><a class="dropdown-item" href="{% url 'student_strength' %}">Staff Vacancy</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_summary' %}">Staff Vacancy</a></li>
             <li><a class="dropdown-item" href="{% url 'student_strength' %}">Student Category Wise</a></li>
             <li><a class="dropdown-item" href="{% url 'subject_strength' %}">Student Subject Wise</a></li>
           </ul>
