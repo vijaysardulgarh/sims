@@ -311,41 +311,53 @@ def staff_summary(request):
 
     if not school:
         sanctioned_posts = []
+        summary_data = []
     else:
-        sanctioned_posts = SanctionedPost.objects.filter(
-            school=school
-        ).select_related("subject")
+        sanctioned_posts = (
+            SanctionedPost.objects.filter(school=school)
+            .select_related("subject")
+        )
 
-    summary_data = []
+        staff_counts = (
+            Staff.objects.filter(school=school)
+            .values("subject_id", "gender", "employment_type")
+            .annotate(total=Count("id"))
+        )
 
-    for sp in sanctioned_posts:
-        staff_queryset = Staff.objects.filter(school=school)
+        # Convert to lookup dict
+        staff_lookup = {}
+        for entry in staff_counts:
+            key = (entry["subject_id"], entry["employment_type"], entry["gender"])
+            staff_lookup[key] = entry["total"]
 
-        # Filter staff by subject if applicable
-        if sp.subject:
-            staff_queryset = staff_queryset.filter(subject=sp.subject)
+        summary_data = []
+        for sp in sanctioned_posts:
+            subject_id = sp.subject_id
 
-        regular = staff_queryset.filter(employment_type="Regular").count()
-        guest = staff_queryset.filter(employment_type="Guest").count()
-        hkrnl = staff_queryset.filter(employment_type="HKRNL").count()
-        male = staff_queryset.filter(gender="Male").count()
-        female = staff_queryset.filter(gender="Female").count()
+            # Get counts from lookup (default 0)
+            regular = sum(staff_lookup.get((subject_id, "Regular", g), 0) for g in ["Male", "Female"])
+            guest   = sum(staff_lookup.get((subject_id, "Guest", g), 0) for g in ["Male", "Female"])
+            hkrnl   = sum(staff_lookup.get((subject_id, "HKRNL", g), 0) for g in ["Male", "Female"])
 
-        vacant_regular = max(sp.total_posts - regular, 0)
-        net_vacancy = max(sp.total_posts - (regular + guest + hkrnl), 0)
+            male    = sum(staff_lookup.get((subject_id, et, "Male"), 0) for et in ["Regular", "Guest", "HKRNL"])
+            female  = sum(staff_lookup.get((subject_id, et, "Female"), 0) for et in ["Regular", "Guest", "HKRNL"])
 
-        summary_data.append({
-            "post_type": sp.get_post_type_display(),
-            "designation": sp.designation or (sp.subject.name if sp.subject else ""),
-            "sanction_post": sp.total_posts,
-            "regular_working": regular,
-            "vacant_regular_only": vacant_regular,
-            "guest_working": guest,
-            "hkrnl_working": hkrnl,
-            "net_vacancy": net_vacancy,
-            "male_working": male,
-            "female_working": female,
-        })
+            total_posts = sp.total_posts or 0
+            vacant_regular = max(total_posts - regular, 0)
+            net_vacancy = max(total_posts - (regular + guest + hkrnl), 0)
+
+            summary_data.append({
+                "post_type": sp.get_post_type_display(),
+                "designation": sp.designation or (sp.subject.name if sp.subject else ""),
+                "sanction_post": total_posts,
+                "regular_working": regular,
+                "vacant_regular_only": vacant_regular,
+                "guest_working": guest,
+                "hkrnl_working": hkrnl,
+                "net_vacancy": net_vacancy,
+                "male_working": male,
+                "female_working": female,
+            })
 
     context = {"summary_data": summary_data, "school": school}
     return render(request, "staff_summary.html", context)
