@@ -646,6 +646,34 @@ class SubjectAdmin(ImportExportModelAdmin):
     search_fields = ("name",)
     resource_class = SubjectResource        
 
+# Step 1: Define resource
+class SchoolResource(resources.ModelResource):
+    class Meta:
+        model = School
+        fields = (
+            "id",
+            "name",
+            "address",
+            "website",
+            "email",
+            "phone_number",
+            "logo",
+            "accreditation",
+            "established_date",
+            "motto",
+            "social_media_links",
+        )
+        export_order = fields  # keep same order when exporting
+
+# Step 2: Register with ImportExportModelAdmin
+@admin.register(School)
+class SchoolAdmin(ImportExportModelAdmin):
+    resource_class = SchoolResource
+    list_display = ("name", "email", "phone_number", "established_date")
+    search_fields = ("name", "email", "phone_number")
+    list_filter = ("established_date", "accreditation")
+
+
 admin.site.register(Document,DocumentAdmin)
 #admin.site.register(User)  
 
@@ -676,5 +704,6 @@ admin.site.register(Topper)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
+
 
 
