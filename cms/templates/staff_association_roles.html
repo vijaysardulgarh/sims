@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Associations & Roles{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Staff Associations & Roles</h2>
+    
+    <table class="table table-bordered table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Staff Name</th>
+                <th>Employee ID</th>
+                <th>School</th>
+                <th>Association</th>
+                <th>Association Type</th>
+                <th>Role</th>
+                <th>Assigned On</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in staff_members %}
+                {% if staff.association_roles.all %}
+                    {% for assignment in staff.association_roles.all %}
+                        <tr>
+                            <td>{{ staff.name }}</td>
+                            <td>{{ staff.employee_id }}</td>
+                            <td>{{ staff.school.name }}</td>
+                            <td>{{ assignment.role.association.name }}</td>
+                            <td>{{ assignment.role.association.type.name }}</td>
+                            <td>{{ assignment.role.title }}</td>
+                            <td>{{ assignment.assigned_on }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td>{{ staff.name }}</td>
+                        <td>{{ staff.employee_id }}</td>
+                        <td>{{ staff.school.name }}</td>
+                        <td colspan="4" class="text-center text-muted">
+                            No associations assigned
+                        </td>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No staff role assignments found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

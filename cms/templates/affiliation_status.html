@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Affiliation Status</h1>
+<table border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>School</th>
+            <th>Affiliation Name</th>
+            <th>Description</th>
+            <th>View</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for affiliation in affiliations %}
+        <tr>
+            <td>{{ affiliation.school.name }}</td>
+            <td>{{ affiliation.name }}</td>
+            <td>{{ affiliation.description|default:"-" }}</td>
+            <td><a href="{% url 'affiliation_detail' affiliation.pk %}">View</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No affiliations found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -5,9 +5,38 @@
 {% block content %}
 <div class="container my-4">
 
+<!-- School Selection -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Select School</h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <select name="school" class="form-select" required>
+                        <option value="">-- Choose a School --</option>
+                        {% for school in schools %}
+                        <option value="{{ school.id }}" {% if selected_school and school.id == selected_school.id %}selected{% endif %}>
+                            {{ school.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-light">Select</button>
+                </div>
+                {% if selected_school %}
+                <div class="col-md-4 text-end">
+                    <small class="text-muted">Current School: <strong>{{ selected_school.name }}</strong></small>
+                </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
 
-
-    
 
     <!-- Sanctioned Posts -->
     {% for group_name, group_data in staff_stats.items %}
@@ -48,8 +77,6 @@
     </div>
     {% endfor %}
 
-    
-   
     <!-- News Section -->
     <div class="card shadow-sm mb-4 mt-4">
         <div class="card-header bg-success text-white">
@@ -69,9 +96,6 @@
         <div class="card-body text-muted fst-italic">No news or announcements available.</div>
         {% endif %}
     </div>
-
-
-
 
     <div class="row mt-4">
         <!-- Academic News -->
@@ -109,7 +133,7 @@
                 {% endif %}
             </div>
         </div>
-    
+
         <!-- Events -->
         <div class="col-md-6">
             <div class="card shadow-sm mb-4">
@@ -146,14 +170,5 @@
             </div>
         </div>
     </div>
-
-    
-
 </div>
 {% endblock %}
-
-
-
-
-
-

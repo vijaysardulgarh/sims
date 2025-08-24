@@ -1,0 +1,27 @@
+<!-- templates/infrastructure.html -->
+{% extends "base.html" %}
+{% block title %}Infrastructure - {{ school.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">{{ school.name }} Infrastructure</h2>
+    <div class="row">
+        {% for item in infrastructures %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-lg rounded-3">
+                {% if item.photo %}
+                    <img src="{{ item.photo.url }}" class="card-img-top" alt="{{ item.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                    <p class="text-muted">{{ item.get_category_display }}</p>
+                    <p class="card-text">{{ item.description|truncatewords:25 }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">No infrastructure data available for this school.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

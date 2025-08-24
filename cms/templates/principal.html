@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center rounded-top-4 py-3">
+                    <h2 class="mb-0">Message from the Principal</h2>
+                </div>
+                <div class="card-body p-5 text-center">
+                    {% if message %}
+                        <div class="d-flex flex-column align-items-center">
+                            {% if message.photo %}
+                                <img src="{{ message.photo.url }}" 
+                                     class="img-fluid rounded-circle shadow-sm border border-3 border-primary" 
+                                     width="160" height="160" 
+                                     alt="Principal Photo">
+                            {% else %}
+                                <img src="{% static 'images/default-principal.png' %}" 
+                                     class="img-fluid rounded-circle shadow-sm border border-3 border-primary" 
+                                     width="160" height="160" 
+                                     alt="Default Principal Photo">
+                            {% endif %}
+                            <h3 class="mt-4 text-primary fw-bold">{{ message.name }}</h3>
+                        </div>
+                        <p class="mt-4 text-justify fs-5" style="line-height: 1.8;">
+                            {{ message.message }}
+                        </p>
+                    {% else %}
+                        <p class="fs-5 text-muted">No message available right now.</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-light text-center rounded-bottom-4 py-3">
+                    <small class="text-muted">Committed to nurturing young minds with knowledge and values</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

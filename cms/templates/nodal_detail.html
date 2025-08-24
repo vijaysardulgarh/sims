@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Nodal Officers - {{ school.name }}</h2>
+<ul class="list-group">
+  {% for nodal in nodals %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span><strong>{{ nodal.role }}</strong> - {{ nodal.name }}</span>
+      <span>{{ nodal.responsibilities }}</span>
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'school:nodal_detail' nodal.pk %}">View</a>
+    </li>
+  {% empty %}
+    <li class="list-group-item">No nodal officers assigned for {{ school.name }} yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

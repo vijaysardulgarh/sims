@@ -1,70 +1,130 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teachers - PM SHRI Government Senior Secondary School Nagpur</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"
-    <style>
-
-    </style>
-</head>
-
-<body>
-
-    {% if teachers %}
-    <table class="table table-bordered table-hover table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Subject</th>
-                <th>Bio</th>
-                <th>Image</th>
-                <th>Date of Birth</th>
-                <th>Joining Date</th>
-                <th>Retirement Date</th>
-                <th>Gender</th>
-                <th>Category</th>
-                <th>Father's Name</th>
-                <th>Mother's Name</th>
-                <th>Spouse</th>
-            </tr>
-        </thead>
-        <tbody class="striker">
-            {% for teacher in teachers %}
-            <tr>
-                <td>{{ teacher.first_name }}</td>
-                <td>{{ teacher.last_name }}</td>
-                <td>{{ teacher.email }}</td>
-                <td>{{ teacher.phone_number }}</td>
-                <td>{{ teacher.subject }}</td>
-                <td>{{ teacher.bio }}</td>
-                <td>{{ teacher.image }}</td>
-                <td>{{ teacher.date_of_birth }}</td>
-                <td>{{ teacher.joining_date }}</td>
-                <td>{{ teacher.retirement_date }}</td>
-                <td>{{ teacher.gender }}</td>
-                <td>{{ teacher.category }}</td>
-                <td>{{ teacher.father_name }}</td>
-                <td>{{ teacher.mother_name }}</td>
-                <td>{{ teacher.spouse }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-    <!-- Bootstrap JS and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-
-</html>
+<!-- School Website Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container-fluid">
+      <!-- Logo / School Name -->
+      <a class="navbar-brand fw-bold" href="/">🏫 My School</a>
+  
+      <!-- Mobile Menu Button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#schoolNavbar" aria-controls="schoolNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <!-- Navbar Items -->
+      <div class="collapse navbar-collapse" id="schoolNavbar">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+  
+          <!-- About Us -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              About Us
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
+              <li><a class="dropdown-item" href="#">History / Vision / Mission</a></li>
+              <li><a class="dropdown-item" href="#">Principal’s Message</a></li>
+              <li><a class="dropdown-item" href="#">Management / Governing Body</a></li>
+              <li><a class="dropdown-item" href="#">School Management Committee</a></li>
+              <li><a class="dropdown-item" href="#">Affiliation Status</a></li>
+              <li><a class="dropdown-item" href="#">Infrastructure</a></li>
+            </ul>
+          </li>
+  
+          <!-- Academics -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="academicsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Academics
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="academicsDropdown">
+              <li><a class="dropdown-item" href="#">Subjects Offered</a></li>
+              <li><a class="dropdown-item" href="#">Curriculum</a></li>
+              <li><a class="dropdown-item" href="#">Syllabus</a></li>
+              <li><a class="dropdown-item" href="#">Examinations & Results</a></li>
+              <li><a class="dropdown-item" href="#">Academic Calendar</a></li>
+              <li><a class="dropdown-item" href="#">Time Table</a></li> <!-- ✅ Added -->
+              <li><a class="dropdown-item" href="#">Downloads</a></li>
+            </ul>
+          </li>
+  
+          <!-- Staff -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="staffDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Staff
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="staffDropdown">
+              <li><a class="dropdown-item" href="#">Administration Staff</a></li>
+              <li><a class="dropdown-item" href="#">Teaching Staff</a></li>
+              <li><a class="dropdown-item" href="#">Non-Teaching Staff</a></li>
+              <li><a class="dropdown-item" href="#">Support Staff</a></li>
+            </ul>
+          </li>
+  
+          <!-- Achievements -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="achievementsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Achievements
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="achievementsDropdown">
+              <li><a class="dropdown-item" href="#">Board Results / Toppers</a></li>
+              <li><a class="dropdown-item" href="#">Awards & Recognitions</a></li>
+              <li><a class="dropdown-item" href="#">Sports & Cultural Achievements</a></li>
+            </ul>
+          </li>
+  
+          <!-- Gallery -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="galleryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Gallery
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="galleryDropdown">
+              <li><a class="dropdown-item" href="#">Photos</a></li>
+              <li><a class="dropdown-item" href="#">Videos</a></li>
+            </ul>
+          </li>
+  
+          <!-- Committees -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="committeeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Committees
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="committeeDropdown">
+              <li><a class="dropdown-item" href="#">Academic Committee</a></li>
+              <li><a class="dropdown-item" href="#">School Safety Committee</a></li>
+              <li><a class="dropdown-item" href="#">Discipline Committee</a></li>
+              <li><a class="dropdown-item" href="#">Grievance Redressal Committee</a></li>
+              <li><a class="dropdown-item" href="#">Internal Complaint Committee</a></li>
+            </ul>
+          </li>
+  
+          <!-- Mandatory Disclosure -->
+          <li class="nav-item">
+            <a class="nav-link" href="#">Mandatory Disclosure</a>
+          </li>
+  
+          <!-- Admissions -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="admissionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Admissions
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="admissionDropdown">
+              <li><a class="dropdown-item" href="#">Admission Procedure</a></li>
+              <li><a class="dropdown-item" href="#">Admission Form</a></li>
+              <li><a class="dropdown-item" href="#">Prospectus</a></li>
+              <li><a class="dropdown-item" href="#">Fee Structure</a></li>
+              <li><a class="dropdown-item" href="#">FAQ</a></li>
+            </ul>
+          </li>
+  
+          <!-- Notices & News -->
+          <li class="nav-item">
+            <a class="nav-link" href="#">Notices</a>
+          </li>
+  
+          <!-- Contact Us -->
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact Us</a>
+          </li>
+  
+        </ul>
+      </div>
+    </div>
+  </nav>
+  

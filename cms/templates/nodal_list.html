@@ -1,20 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Nodal Officers</h2>
-<ul>
-  {% for nodal in nodals %}
-    <li>
-      <strong>{{ nodal.role }}</strong> - {{ nodal.school.name }} <br>
-      Staff: 
-      {% for person in nodal.staff.all %}
-        {{ person.name }}{% if not forloop.last %}, {% endif %}
-      {% endfor %}
-      <br>
-      <a href="{% url 'school:nodal_detail' nodal.pk %}">View Details</a>
-    </li>
-  {% empty %}
-    <li>No nodal officers assigned yet.</li>
-  {% endfor %}
-</ul>
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4">Nodal Officers</h2>
+
+    <div class="row">
+        {% for nodal in nodals %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary">{{ nodal.name }}</h4>
+                        <h6 class="text-muted mb-2">{{ nodal.role }}</h6>
+                        <p><strong>School:</strong> {{ nodal.school.name }}</p>
+
+                        {% if nodal.responsibilities %}
+                            <p><strong>Responsibilities:</strong> {{ nodal.responsibilities }}</p>
+                        {% endif %}
+
+                        {% if nodal.staff.all %}
+                            <p><strong>Staff Members:</strong><br>
+                                {% for person in nodal.staff.all %}
+                                    {{ person.name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+
+                        <a href="{% url 'school:nodal_detail' nodal.pk %}" class="btn btn-sm btn-outline-primary mt-2">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">No nodal officers assigned yet.</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
+
