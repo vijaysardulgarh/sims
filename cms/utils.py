@@ -1,6 +1,7 @@
 from datetime import timedelta
 from random import shuffle
-
+from django.shortcuts import redirect, get_object_or_404
+from .models import School
 def calculate_duration(start_time, end_time):
     return (end_time - start_time).seconds / 3600  # Convert duration to hours
 
@@ -472,3 +473,12 @@ def generate_timetable(classes, subjects, teachers, time_slots, total_duration):
                         break
 
     return timetable
+
+
+def get_current_school(request):
+    school_id = request.session.get("school_id")
+    if not school_id:
+        return None
+    return get_object_or_404(School, id=school_id)
+
+
