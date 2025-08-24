@@ -61,15 +61,15 @@ class StaffResource(resources.ModelResource):
     subject = fields.Field(attribute='subject',column_name='Subject',widget=ForeignKeyWidget(Subject, field='name'))
     email = fields.Field(attribute='email',column_name='Email ID')
     mobile_number = fields.Field(attribute='mobile_number',column_name='Mobile Number')
-    teaching_subject_1 = fields.Field(attribute='teaching_subject_1',column_name='Teaching Subject 1',widget=ForeignKeyWidget(Subject, field='name'))
-    teaching_subject_2 = fields.Field(attribute='teaching_subject_1',column_name='Teaching Subject 2',widget=ForeignKeyWidget(Subject, field='name'))
+    # teaching_subject_1 = fields.Field(attribute='teaching_subject_1',column_name='Teaching Subject 1',widget=ForeignKeyWidget(Subject, field='name'))
+    # teaching_subject_2 = fields.Field(attribute='teaching_subject_1',column_name='Teaching Subject 2',widget=ForeignKeyWidget(Subject, field='name'))
     staff_role = fields.Field(attribute='staff_role',column_name='Staff Role')
     employment_type = fields.Field(attribute='employment_type',column_name='Employment Type')
     designation = fields.Field(attribute='designation',column_name='Designation')
 
     class Meta:
         model = Staff
-        fields=('id',"employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","teaching_subject_1","teaching_subject_2","email","mobile_number","subject","staff_role","employment_type","designation")
+        fields=('id',"employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","email","mobile_number","subject","staff_role","employment_type","designation")
 
     def before_import_row(self, row, **kwargs):
         try:
