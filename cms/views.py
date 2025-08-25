@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Q, Case, When
 from .utils import get_current_school
 from .models import (
-    Staff, Student, Class, Subject, TimeSlot,
+    Staff, Student, Class, Subject,
     News, SMCMember, Committee, School,
     AboutSchool, Principal, Affiliation,StaffAssociationRoleAssignment, Association,Infrastructure,SanctionedPost
    
@@ -359,4 +359,5 @@ def staff_summary(request):
 
     context = {"summary_data": summary_data, "school": school}
     return render(request, "staff_summary.html", context)
+
 
