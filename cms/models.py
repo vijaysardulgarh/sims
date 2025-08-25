@@ -439,11 +439,11 @@ class SMCMember(models.Model):
     POSITION_CHOICES = [
         ('President', 'President'),
         ('Vice President', 'Vice President'),
+        ('Member Secretary', 'Member Secretary'),
+        ('Trained Education Scholar Member', 'Trained Education Scholar Member'),
+        ('Teacher/Student Member', 'Teacher/Student Member'),
         ('Parent/Guardian Member', 'Parent/Guardian Member'),
         ('Member', 'Member'),
-        ('Member Secretary', 'Member Secretary'),
-        ('Teacher/Student Member', 'Teacher/Student Member'),
-        ('Trained Education Scholar Member', 'Trained Education Scholar Member'),
     ]
 
     GENDER_CHOICES = [
@@ -470,12 +470,16 @@ class SMCMember(models.Model):
     photo = models.ImageField(upload_to='smc_photos/', blank=True, null=True)
     remarks = models.TextField(blank=True, null=True)
 
+    # 🔹 New priority field
+    priority = models.PositiveIntegerField(default=0, help_text="Lower number = higher priority")
+
     def __str__(self):
         return f"{self.name} - {self.position}"
 
     class Meta:
         verbose_name_plural = "SMC Members"
-        ordering = ['position']
+        ordering = ['priority', 'position', 'name']
+
 
 class Subject(models.Model):
     NONE = 'None'
@@ -609,12 +613,15 @@ class Staff(models.Model):
 
     bio = models.TextField(blank=True)
 
+    # 🔹 New Priority Field
+    priority = models.PositiveIntegerField(default=0, help_text="Lower number = higher priority")
+
     def __str__(self):
         return f"{self.name} ({self.employee_id})"
 
     class Meta:
         verbose_name_plural = "Staff"
-        ordering = ["school", "staff_role", "employment_type", "name"]
+        ordering = ["priority", "school", "staff_role", "employment_type", "name"]
 
 
 class Classroom(models.Model):
@@ -635,53 +642,17 @@ class ClassIncharge(models.Model):
     
 class TimetableSlot(models.Model):
     
-    SEASON_CHOICES = (
-        ('winter', 'winter'),
-        ('summer', 'Summer'),
-        ('other', 'Other'),
-        # Add more semesters as needed
-    )
-    season = models.CharField(max_length=10, choices=SEASON_CHOICES)
-
     period = models.IntegerField(null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.period}-{self.day} - {self.start_time} - {self.end_time}"
+        return f"{self.period} - {self.start_time} - {self.end_time}"
     
 
 
-class TimeSlot(models.Model):
-    time = models.TimeField()
 
-    def __str__(self):
-        return str(self.time)
     
-class DailyTimeSlot(models.Model):
-    
-    day_choices = (
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
-        ('Sunday', 'Sunday'),
-    )
-    #period = models.IntegerField(null=True, blank=True)
-    day = models.CharField(max_length=10, choices=day_choices,null=True, blank=True)
-    start_time = models.ForeignKey(TimeSlot, on_delete=models.CASCADE, related_name='start_time')
-    end_time = models.ForeignKey(TimeSlot, on_delete=models.CASCADE, related_name='end_time')
-    
-
-    def __str__(self):
-        return f"{self.day} - {self.start_time} - {self.end_time}"
-    
-    class Meta:
-        verbose_name = "Daily Time Slot"
-        verbose_name_plural = "Daily Time Slots"
-
 
 class TeacherSubjectAssignment(models.Model):
 
@@ -924,9 +895,10 @@ class SanctionedPost(models.Model):
     POST_TYPE_CHOICES = [
         ('TGT', 'TGT (6th–8th)'),
         ('PGT', 'PGT (9th–12th)'),
-        ('NT', 'Non-Teaching'),
+        ('Non-Teaching', 'Non-Teaching'),
+
     ]
-    post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES)
+    post_type = models.CharField(max_length=20, choices=POST_TYPE_CHOICES)
 
     designation = models.CharField(max_length=50, null=True, blank=True)  # e.g., PGT English, TGT Punjabi, Clerk
     subject = models.ForeignKey(
@@ -942,6 +914,3 @@ class SanctionedPost(models.Model):
         return f"{self.school} - {self.get_post_type_display()} {self.designation or ''} ({self.total_posts})"
 
       
-
-
-
