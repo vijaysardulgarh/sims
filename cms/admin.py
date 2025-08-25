@@ -30,7 +30,7 @@ from .models import ClassIncharge
 from .models import Timetable
 from .models import Day
 from .models import TimetableSlot
-from .models import DailyTimeSlot,TimeSlot,TeacherSubjectAssignment
+from .models import TeacherSubjectAssignment
 from .models import TimetableEntry
 from .models import Student
 from .models import Topper
@@ -55,7 +55,7 @@ class StaffResource(resources.ModelResource):
     category = fields.Field(attribute='category',column_name='Category')
     date_of_birth = fields.Field(attribute='date_of_birth',column_name='Date of Birth')
     joining_date = fields.Field(attribute='joining_date',column_name='Date of Joining School/Office')
-    current__joining_date = fields.Field(attribute='current_joining_date',column_name='Date of Joining School/Office')
+    current_joining_date = fields.Field(attribute='current_joining_date',column_name='Date of Joining School/Office')
     retirement_date = fields.Field(attribute='retirement_date',column_name='Retirement Date')
     qualification= fields.Field(attribute='qualification',column_name='Qualification')
     subject = fields.Field(attribute='subject',column_name='Subject',widget=ForeignKeyWidget(Subject, field='name'))
@@ -66,7 +66,7 @@ class StaffResource(resources.ModelResource):
     staff_role = fields.Field(attribute='staff_role',column_name='Staff Role')
     employment_type = fields.Field(attribute='employment_type',column_name='Employment Type')
     designation = fields.Field(attribute='designation',column_name='Designation')
-
+    priority = fields.Field(attribute='priority', column_name='Priority') 
     class Meta:
         model = Staff
         fields=('id',"employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","email","mobile_number","subject","staff_role","employment_type","designation")
@@ -89,9 +89,18 @@ class StaffResource(resources.ModelResource):
             logging.error(f"Error parsing date '{date_str}': {e}")
             return None  # Or provide a default value
         
-class StaffAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    list_display =("employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","email","mobile_number","staff_role","employment_type","designation")
-    resource_class=StaffResource
+class StaffAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = (
+        "employee_id", "name", "father_name", "mother_name", "spouse_name",
+        "gender", "aadhar_number", "designation", "category", "date_of_birth",
+        "joining_date", "current_joining_date", "retirement_date",
+        "qualification", "subject", "email", "mobile_number",
+        "staff_role", "employment_type", "priority"  # ✅ added priority in admin
+    )
+    list_filter = ("school", "staff_role", "employment_type", "gender", "category")
+    search_fields = ("name", "employee_id", "email", "mobile_number")
+    ordering = ("priority", "name")  # ✅ staff ordered by priority then name
+    resource_class = StaffResource
 
 class StudentResource(resources.ModelResource):
     
@@ -192,52 +201,20 @@ class StudentAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     
     
 class TimetableSlotResource(resources.ModelResource):
-    season = fields.Field(attribute='season',column_name='Season')
-    day = fields.Field(attribute='day',column_name='Day')
+
     period = fields.Field(attribute='period',column_name='Period Count')
     start_time = fields.Field(attribute='start_time',column_name='Start Time')
     end_time = fields.Field(attribute='end_time',column_name='End Time')
 
     class Meta:
         model = TimetableSlot
-        fields=('season','day','period','start_time','end_time')
+        fields=('period','start_time','end_time')
         #use_id=False
 
 class TimetableSlotAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    list_display=('season','day','period','start_time','end_time')
+    list_display=('period','start_time','end_time')
     resource_class=TimetableSlotResource
 
-
-class TimeSlotResource(resources.ModelResource):
-    class Meta:
-        model = TimeSlot
-        fields=('id','time')
-
-class TimeSlotAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ['get_times']
-
-    def get_times(self, obj):
-        return str(obj.time)
-    get_times.short_description = 'Times'
-
-    resource_class = TimeSlotResource
-
-
-class DailyTimeSlotResource(resources.ModelResource):
-    
-    day = fields.Field(attribute='day',column_name='Day')
-    start_time = fields.Field(attribute='start_time',column_name='Start Time')
-    end_time = fields.Field(attribute='end_time',column_name='End Time')
-
-    class Meta:
-        model = DailyTimeSlot
-        fields=('id','day','start_time','end_time')
-        #use_id=False    
-
-
-class DailyTimeSlotAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    list_display=('day','start_time','end_time')
-    resource_class=DailyTimeSlotResource
 
 
 class TeacherSubjectAssignmentResource(resources.ModelResource):
@@ -318,6 +295,7 @@ class SMCMemberResource(resources.ModelResource):
     contact_number = fields.Field(attribute='contact_number', column_name='Contact Number')
     email = fields.Field(attribute='email', column_name='Email')
     remarks = fields.Field(attribute='remarks', column_name='Remarks')
+    priority = fields.Field(attribute='priority', column_name='Priority')  # 🔹 Added priority field
 
     class Meta:
         model = SMCMember
@@ -331,6 +309,7 @@ class SMCMemberResource(resources.ModelResource):
             "contact_number",
             "email",
             "remarks",
+            "priority",   # 🔹 include priority in export
         )
         export_order = (
             "id",
@@ -342,20 +321,25 @@ class SMCMemberResource(resources.ModelResource):
             "contact_number",
             "email",
             "remarks",
+            "priority",   # 🔹 ensure consistent order
         )
-    
-class SMCMemberAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('name', 'position', 'gender', 'category', 'contact_number', 'email', "school",'photo_tag')
 
+
+class SMCMemberAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('name', 'position', 'gender', 'category', 'contact_number', 'email', "school", 'priority', 'photo_tag')
     list_filter = ("position", "gender", "category", "school")
     search_fields = ("name", "email", "contact_number")
     resource_class = SMCMemberResource
 
+    # 🔹 Photo preview in admin
     def photo_tag(self, obj):
         if obj.photo:
-            return format_html('<img src="{}" width="50" height="50" style="object-fit:cover;border-radius:4px;"/>', obj.photo.url)
-        return "-"
-    photo_tag.short_description = 'Photo'
+            return format_html(
+                '<img src="{}" width="50" height="50" style="object-fit:cover;border-radius:5px;" />',
+                obj.photo.url
+            )
+        return "No Photo"
+    photo_tag.short_description = "Photo"
 
 
 class SanctionedPostResource(resources.ModelResource):
@@ -646,6 +630,7 @@ class SubjectAdmin(ImportExportModelAdmin):
     search_fields = ("name",)
     resource_class = SubjectResource        
 
+
 # Step 1: Define resource
 class SchoolResource(resources.ModelResource):
     class Meta:
@@ -673,7 +658,6 @@ class SchoolAdmin(ImportExportModelAdmin):
     search_fields = ("name", "email", "phone_number")
     list_filter = ("established_date", "accreditation")
 
-
 admin.site.register(Document,DocumentAdmin)
 #admin.site.register(User)  
 
@@ -695,8 +679,6 @@ admin.site.register(Staff,StaffAdmin)
 admin.site.register(Classroom)
 admin.site.register(ClassIncharge)
 admin.site.register(Timetable,TimetableAdmin)
-admin.site.register(TimeSlot,TimeSlotAdmin)
-admin.site.register(DailyTimeSlot,DailyTimeSlotAdmin)
 admin.site.register(TimetableSlot,TimetableSlotAdmin)
 admin.site.register(TimetableEntry,TimetableEntryAdmin)
 admin.site.register(Student,StudentAdmin)
@@ -704,6 +686,3 @@ admin.site.register(Topper)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
-
-
-
