@@ -642,14 +642,6 @@ class TimetableSlot(models.Model):
         # Add more semesters as needed
     )
     season = models.CharField(max_length=10, choices=SEASON_CHOICES)
-    DAY_CHOICES = [
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-    ]
-    day = models.CharField(max_length=20, choices=DAY_CHOICES)
 
     period = models.IntegerField(null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
@@ -950,5 +942,6 @@ class SanctionedPost(models.Model):
         return f"{self.school} - {self.get_post_type_display()} {self.designation or ''} ({self.total_posts})"
 
       
+
 
 
