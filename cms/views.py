@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Count, Q, Case, When
+from django.db.models import Count, Q, Case, When,Sum,OuterRef
 from .utils import get_current_school
 from .models import (
     Staff, Student, Class, Subject,
@@ -305,15 +305,29 @@ def committee_detail(request, pk):
     return render(request, "committee_detail.html", {"committee": committee})
 
 
-
 def staff_summary(request):
     school = get_object_or_404(School, id=request.session.get("school_id"))
 
+    # 1. Fetch sanctioned posts for this school
+    sanctioned = (
+        SanctionedPost.objects.filter(school=school)
+        .values("post_type__name", "subject__name")
+        .annotate(
+            sanctioned_posts=Sum("total_posts"),
+        )
+    )
+
+    # Convert into dictionary for easy lookup
+    sanctioned_map = {
+        (row["post_type__name"], row["subject__name"]): row["sanctioned_posts"]
+        for row in sanctioned
+    }
+
+    # 2. Fetch actual working staff
     summary = (
         Staff.objects.filter(school=school)
         .values("post_type__name", "subject__name")
         .annotate(
-            sanctioned_posts=Count("id"),  # if you have a separate sanctioned model, replace this
             regular_working=Count("id", filter=Q(employment_type="Regular")),
             guest_working=Count("id", filter=Q(employment_type="Guest")),
             hkrnl_working=Count("id", filter=Q(employment_type="HKRNL")),
@@ -322,14 +336,20 @@ def staff_summary(request):
         )
     )
 
-    # Derived fields
+    # 3. Merge with sanctioned posts
+    merged = []
     for row in summary:
-        row["vacant"] = row["sanctioned_posts"] - row["regular_working"]
+        sanctioned_posts = sanctioned_map.get(
+            (row["post_type__name"], row["subject__name"]), 0
+        )
+        row["sanctioned_posts"] = sanctioned_posts
+        row["vacant"] = sanctioned_posts - row["regular_working"]
         row["net_vacancy"] = (
-            row["sanctioned_posts"]
+            sanctioned_posts
             - row["regular_working"]
             - row["guest_working"]
             - row["hkrnl_working"]
         )
+        merged.append(row)
 
-    return render(request, "staff_summary.html", {"summary": summary, "school": school})
+    return render(request, "staff_summary.html", {"summary": merged, "school": school})
