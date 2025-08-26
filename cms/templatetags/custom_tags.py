@@ -48,11 +48,11 @@ def get_upper_class_stats(school_name):
 
 @register.simple_tag
 def get_teaching_staff():
-    return Staff.objects.filter(staff_role='Teaching').order_by('designation', 'name')
+    return Staff.objects.filter(staff_role='Teaching').order_by('post_type', 'name')
 
 @register.simple_tag
 def get_non_teaching_staff():
-    return Staff.objects.filter(staff_role='Non-Teaching').order_by('designation', 'name')
+    return Staff.objects.filter(staff_role='Non-Teaching').order_by('post_type', 'name')
 
 @register.simple_tag
 def get_academic_news(limit=10):
@@ -90,3 +90,4 @@ def show_sidebar(context):
         "smcmembers": get_smc_members(),
         "committees": get_committees(),
     }
+
