@@ -33,7 +33,7 @@ from .models import TimetableSlot
 from .models import TeacherSubjectAssignment
 from .models import TimetableEntry
 from .models import Student
-from .models import Topper
+from .models import Topper,PostType
 from .models import Book,Infrastructure,SanctionedPost
 from .models import SMCMember,AboutSchool,Principal,Association,AssociationType,AssociationRole,StaffAssociationRoleAssignment
 import logging
@@ -51,7 +51,7 @@ class StaffResource(resources.ModelResource):
     spouse_name = fields.Field(attribute='spouse_name',column_name='Spouse Name')
     gender = fields.Field(attribute='gender',column_name='Gender')
     aadhar_number = fields.Field(attribute='aadhar_number',column_name='Aadhar No')
-    designation = fields.Field(attribute='designation',column_name='Designation')
+    post_type = fields.Field(attribute='post_type',column_name='Post Type',widget=ForeignKeyWidget(PostType, field='name'))
     category = fields.Field(attribute='category',column_name='Category')
     date_of_birth = fields.Field(attribute='date_of_birth',column_name='Date of Birth')
     joining_date = fields.Field(attribute='joining_date',column_name='Date of Joining School/Office')
@@ -65,11 +65,11 @@ class StaffResource(resources.ModelResource):
     # teaching_subject_2 = fields.Field(attribute='teaching_subject_1',column_name='Teaching Subject 2',widget=ForeignKeyWidget(Subject, field='name'))
     staff_role = fields.Field(attribute='staff_role',column_name='Staff Role')
     employment_type = fields.Field(attribute='employment_type',column_name='Employment Type')
-    designation = fields.Field(attribute='designation',column_name='Designation')
+    #designation = fields.Field(attribute='designation',column_name='Designation')
     priority = fields.Field(attribute='priority', column_name='Priority') 
     class Meta:
         model = Staff
-        fields=('id',"employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","email","mobile_number","subject","staff_role","employment_type","designation")
+        fields=('id',"employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","email","mobile_number","subject","staff_role","employment_type","post_type")
 
     def before_import_row(self, row, **kwargs):
         try:
@@ -92,9 +92,9 @@ class StaffResource(resources.ModelResource):
 class StaffAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
         "employee_id", "name", "father_name", "mother_name", "spouse_name",
-        "gender", "aadhar_number", "designation", "category", "date_of_birth",
+        "gender", "aadhar_number", "post_type", "category", "date_of_birth",
         "joining_date", "current_joining_date", "retirement_date",
-        "qualification", "subject", "email", "mobile_number",
+        "qualification", "subject", "email", "mobile_number","school",
         "staff_role", "employment_type", "priority"  # ✅ added priority in admin
     )
     list_filter = ("school", "staff_role", "employment_type", "gender", "category")
@@ -354,7 +354,7 @@ class SanctionedPostResource(resources.ModelResource):
         widget=ForeignKeyWidget(Subject, field='name')
     )
 
-    post_type = fields.Field(attribute='post_type', column_name='Post Type')
+    post_type = fields.Field(attribute='post_type',column_name='Post Type',widget=ForeignKeyWidget(PostType, field='name'))
     designation = fields.Field(attribute='designation', column_name='Designation')
     total_posts = fields.Field(attribute='total_posts', column_name='Total Posts')
 
@@ -658,6 +658,21 @@ class SchoolAdmin(ImportExportModelAdmin):
     search_fields = ("name", "email", "phone_number")
     list_filter = ("established_date", "accreditation")
 
+
+class PostTypeResource(resources.ModelResource):
+    class Meta:
+        model = PostType
+        fields = ('id', 'name', 'description')  # specify fields for import/export
+        export_order = ('id', 'name', 'description')
+
+# Admin with import/export support
+@admin.register(PostType)
+class PostTypeAdmin(ImportExportModelAdmin):
+    resource_class = PostTypeResource
+    list_display = ('name', 'description')
+    search_fields = ('name',)
+
+
 admin.site.register(Document,DocumentAdmin)
 #admin.site.register(User)  
 
@@ -686,3 +701,5 @@ admin.site.register(Topper)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
+
+
