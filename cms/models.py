@@ -482,11 +482,25 @@ class SMCMember(models.Model):
 
 
 class Subject(models.Model):
-
     name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            # Normalize name before saving
+            self.name = self.name.strip().title()   # "   physics " → "Physics"
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        # Extra safeguard: prevent duplicates ignoring case
+        if Subject.objects.exclude(pk=self.pk).filter(name__iexact=self.name).exists():
+            from django.core.exceptions import ValidationError
+            raise ValidationError({"name": "This subject already exists (case-insensitive)."})
 
 
 class ClassSubject(models.Model):
