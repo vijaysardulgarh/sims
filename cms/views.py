@@ -307,57 +307,29 @@ def committee_detail(request, pk):
 
 
 def staff_summary(request):
-    school = get_current_school(request)
+    school = get_object_or_404(School, id=request.session.get("school_id"))
 
-    if not school:
-        return render(request, "staff_summary.html", {"summary_data": [], "school": None})
-
-    sanctioned_posts = (
-        SanctionedPost.objects.filter(school=school)
-        .select_related("subject")
+    summary = (
+        Staff.objects.filter(school=school)
+        .values("post_type__name", "subject__name")
+        .annotate(
+            sanctioned_posts=Count("id"),  # if you have a separate sanctioned model, replace this
+            regular_working=Count("id", filter=Q(employment_type="Regular")),
+            guest_working=Count("id", filter=Q(employment_type="Guest")),
+            hkrnl_working=Count("id", filter=Q(employment_type="HKRNL")),
+            male_working=Count("id", filter=Q(gender="Male")),
+            female_working=Count("id", filter=Q(gender="Female")),
+        )
     )
 
-    summary_data = []
+    # Derived fields
+    for row in summary:
+        row["vacant"] = row["sanctioned_posts"] - row["regular_working"]
+        row["net_vacancy"] = (
+            row["sanctioned_posts"]
+            - row["regular_working"]
+            - row["guest_working"]
+            - row["hkrnl_working"]
+        )
 
-    for sp in sanctioned_posts:
-        staff_queryset = Staff.objects.filter(school=school)
-
-        # Filter staff by subject (if the sanctioned post has a subject)
-        if sp.subject:
-            staff_queryset = staff_queryset.filter(subject=sp.subject)
-
-        # Count employment types
-        counts = {
-            et[0]: staff_queryset.filter(employment_type=et[0]).count()
-            for et in Staff.EMPLOYMENT_TYPE_CHOICES
-        }
-
-        # Gender counts
-        male = staff_queryset.filter(gender="Male").count()
-        female = staff_queryset.filter(gender="Female").count()
-
-        # Vacancy calculation
-        vacant_regular = max(sp.total_posts - counts.get("Regular", 0), 0)
-        net_vacancy = max(sp.total_posts - sum(counts.values()), 0)
-
-        summary_data.append({
-            "post_type": sp.get_post_type_display(),
-            "designation": sp.designation or (sp.subject.name if sp.subject else ""),
-            "sanction_post": sp.total_posts,
-            "regular_working": counts.get("Regular", 0),
-            "guest_working": counts.get("Guest", 0),
-            "hkrnl_working": counts.get("HKRNL", 0),
-            "ssa_working": counts.get("SSA", 0),
-            "nsqf_working": counts.get("NSQF", 0),
-            "mdm_working": counts.get("MDMWorker", 0),
-            "other_working": counts.get("Other", 0),
-            "vacant_regular_only": vacant_regular,
-            "net_vacancy": net_vacancy,
-            "male_working": male,
-            "female_working": female,
-        })
-
-    context = {"summary_data": summary_data, "school": school}
-    return render(request, "staff_summary.html", context)
-
-
+    return render(request, "staff_summary.html", {"summary": summary, "school": school})
