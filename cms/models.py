@@ -482,59 +482,8 @@ class SMCMember(models.Model):
 
 
 class Subject(models.Model):
-    NONE = 'None'
-    HINDI = 'Hindi'
-    ENGLISH = 'English'
-    SOCIAL_STUDIES = 'Social Studies'
-    SCIENCE = 'Science'
-    MATH = 'Math'
-    PUNJABI = 'Punjabi'
-    COMPUTER = 'Computer'
-    HOME_SCIENCE = 'Home Science'
-    PHYSICS = 'Physics'
-    CHEMISTRY = 'Chemistry'
-    ACCOUNT = 'Account'
-    BUSINESS = 'Business'
-    POLITICAL_SCIENCE = 'Political Science'
-    ECONOMICS = 'Economics'
-    GEOGRAPHY = 'Geography'
-    PSYCHOLOGY = 'Psychology'
-    PHYSICAL_EDUCATION = 'Physical Education'
-    MUSIC = 'Music'
-    AUTOMOBILE = 'Automobile'
-    BEAUTY_WELLNESS = 'Beauty & Wellness'
-    BIOLOGY = 'Biology'
-    SANSKRIT = 'Sanskrit'
-    FINEARTS = 'Fine Arts'
 
-    SUBJECT_CHOICES = [
-        (NONE, 'None'),
-        (HINDI, 'Hindi'),
-        (ENGLISH, 'English'),
-        (SOCIAL_STUDIES, 'Social Studies'),
-        (SCIENCE, 'Science'),
-        (MATH, 'Math'),
-        (PUNJABI, 'Punjabi'),
-        (COMPUTER, 'Computer'),
-        (HOME_SCIENCE, 'Home Science'),
-        (PHYSICS, 'Physics'),
-        (CHEMISTRY, 'Chemistry'),
-        (ACCOUNT, 'Account'),
-        (BUSINESS, 'Business'),
-        (POLITICAL_SCIENCE, 'Political Science'),
-        (ECONOMICS, 'Economics'),
-        (GEOGRAPHY, 'Geography'),
-        (PSYCHOLOGY, 'Psychology'),
-        (PHYSICAL_EDUCATION, 'Physical Education'),
-        (MUSIC, 'Music'),
-        (AUTOMOBILE, 'Automobile'),
-        (BEAUTY_WELLNESS, 'Beauty & Wellness'),
-        (BIOLOGY, 'Biology'),
-        (SANSKRIT, 'Sanskrit'),
-        (FINEARTS, 'Fine Arts'),
-    ]
-
-    name = models.CharField(max_length=100, choices=SUBJECT_CHOICES, unique=True)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
@@ -550,7 +499,13 @@ class ClassSubject(models.Model):
         return f"{self.class_info} - {self.subject}"
     
 
+class PostType(models.Model):
+    name = models.CharField(max_length=50, unique=True)  # e.g., TGT, PGT, Non-Teaching
+    description = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return self.name
+    
 class Staff(models.Model):
     employee_id = models.CharField(max_length=20, unique=True)
     school = models.ForeignKey('School', on_delete=models.SET_NULL, null=True, blank=True, related_name='staff')
@@ -568,7 +523,13 @@ class Staff(models.Model):
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, blank=True, null=True)
 
     aadhar_number = models.CharField(max_length=12, unique=True, null=True, blank=True, help_text="Optional. Must be unique if provided.")
-    designation = models.CharField(max_length=40, null=True, blank=True)
+    
+    post_type = models.ForeignKey(
+        PostType,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
     CATEGORY_CHOICES = [
         ('GEN', 'General'),
@@ -590,7 +551,7 @@ class Staff(models.Model):
 
     email = models.EmailField(null=True, blank=True, help_text="Unique if provided")
     mobile_number = models.CharField(max_length=15, null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='staff_profile/', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='staff_profile/',null=True,blank=True,default='staff_profile/default.png')
 
     STAFF_ROLE_CHOICES = [
         ('Administrative', 'Administrative'),
@@ -617,7 +578,7 @@ class Staff(models.Model):
     priority = models.PositiveIntegerField(default=0, help_text="Lower number = higher priority")
 
     def __str__(self):
-        return f"{self.name} ({self.employee_id})"
+        return f"{self.name} ({self.employee_id or 'No ID'})"
 
     class Meta:
         verbose_name_plural = "Staff"
@@ -885,32 +846,35 @@ class Infrastructure(models.Model):
         return f"{self.title} - {self.school.name}"
   
 
+
+
+
 class SanctionedPost(models.Model):
     school = models.ForeignKey(
-        'School', 
-        on_delete=models.CASCADE, 
+        'School',
+        on_delete=models.CASCADE,
         related_name='sanctioned_posts'
     )
 
-    POST_TYPE_CHOICES = [
-        ('TGT', 'TGT (6th–8th)'),
-        ('PGT', 'PGT (9th–12th)'),
-        ('Non-Teaching', 'Non-Teaching'),
-
-    ]
-    post_type = models.CharField(max_length=20, choices=POST_TYPE_CHOICES)
+    post_type = models.ForeignKey(
+        PostType,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
     designation = models.CharField(max_length=50, null=True, blank=True)  # e.g., PGT English, TGT Punjabi, Clerk
     subject = models.ForeignKey(
-        'Subject', 
-        on_delete=models.SET_NULL, 
-        null=True, 
+        'Subject',
+        on_delete=models.SET_NULL,
+        null=True,
         blank=True
     )
 
     total_posts = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.school} - {self.get_post_type_display()} {self.designation or ''} ({self.total_posts})"
+        designation = f" {self.designation}" if self.designation else ""
+        return f"{self.school} - {self.post_type}{designation} ({self.total_posts})"
 
       
