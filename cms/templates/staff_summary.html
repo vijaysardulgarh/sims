@@ -1,52 +1,43 @@
 {% extends "base.html" %}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-3">Staff Summary - {{ school.name }}</h2>
+{% block title %}Staff Summary{% endblock %}
 
-    {% if summary_data %}
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Post Type</th>
-                <th>Designation / Subject</th>
-                <th>Sanctioned</th>
-                <th>Regular</th>
-                <th>Guest</th>
-                <th>HKRNL</th>
-                <th>SSA</th>
-                <th>NSQF</th>
-                <th>MDM Worker</th>
-                <th>Other</th>
-                <th>Vacant (Regular)</th>
-                <th>Net Vacancy</th>
-                <th>Male</th>
-                <th>Female</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in summary_data %}
-            <tr>
-                <td>{{ row.post_type }}</td>
-                <td>{{ row.designation }}</td>
-                <td>{{ row.sanction_post }}</td>
-                <td>{{ row.regular_working }}</td>
-                <td>{{ row.guest_working }}</td>
-                <td>{{ row.hkrnl_working }}</td>
-                <td>{{ row.ssa_working }}</td>
-                <td>{{ row.nsqf_working }}</td>
-                <td>{{ row.mdm_working }}</td>
-                <td>{{ row.other_working }}</td>
-                <td>{{ row.vacant_regular_only }}</td>
-                <td>{{ row.net_vacancy }}</td>
-                <td>{{ row.male_working }}</td>
-                <td>{{ row.female_working }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <p>No sanctioned posts or staff data available.</p>
-    {% endif %}
+{% block content %}
+<div class="container mt-4 table-responsive">
+    <h2 class="mb-4">Staff Summary - {{ school.name }}</h2>
+   
+        <table class="table table-bordered table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Post Type</th>
+                    <th>Subject</th>
+                    <th>Sanctioned Posts</th>
+                    <th>Regular Working</th>
+                    <th>Vacant (Sanctioned - Regular)</th>
+                    <th>Guest Working</th>
+                    <th>HKRNL Working</th>
+                    <th>Net Vacancy (Sanctioned - Regular - Guest - HKRNL)</th>
+                    <th>Male Working</th>
+                    <th>Female Working</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in summary %}
+                <tr>
+                    <td>{{ row.post_type__name }}</td>
+                    <td>{{ row.subject__name }}</td>
+                    <td>{{ row.sanctioned_posts }}</td>
+                    <td>{{ row.regular_working }}</td>
+                    <td>{{ row.vacant }}</td>
+                    <td>{{ row.guest_working }}</td>
+                    <td>{{ row.hkrnl_working }}</td>
+                    <td>{{ row.net_vacancy }}</td>
+                    <td>{{ row.male_working }}</td>
+                    <td>{{ row.female_working }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    
 </div>
 {% endblock %}
