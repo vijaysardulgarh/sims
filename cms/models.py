@@ -3,6 +3,7 @@ from django import forms
 from django.utils import timezone
 import datetime
 import json,os
+from decimal import Decimal
 #from django.contrib.gis.db import models as gis_models
 from datetime import date
 #from django.contrib.auth.models import AbstractUser
@@ -805,21 +806,7 @@ class Student(models.Model):
         
         super().save(*args, **kwargs)
 
-class Topper(models.Model):
-    AWARD_TYPE = (
-        ('Topper', 'Topper'),
-        ('Shining Star', 'Shining Star')
-    )
 
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
-    subject = models.CharField(max_length=100)
-    obtained_marks = models.FloatField()
-    total_marks = models.FloatField()
-    exam_date = models.DateField()
-    position = models.PositiveIntegerField()
-    reason = models.TextField(null=True, blank=True)
-    date_awarded = models.DateField(null=True, blank=True)
-    award_type = models.CharField(max_length=20, choices=AWARD_TYPE,null=True) 
 
 
 class Book(models.Model):
@@ -892,3 +879,85 @@ class SanctionedPost(models.Model):
         return f"{self.school} - {self.post_type}{designation} ({self.total_posts})"
 
       
+class StudentAchievement(models.Model):
+    ACHIEVEMENT_TYPE_CHOICES = [ 
+        ("sports", "Sports"),
+        ("cultural", "Cultural Activity"),
+        ("competition", "Competition"),
+        ("exam", "Final Exam"),
+        ("quiz", "Quiz"),
+    ]
+
+    student_name = models.CharField(max_length=200, help_text="Enter student name")
+    achievement_type = models.CharField(max_length=20, choices=ACHIEVEMENT_TYPE_CHOICES)
+    event_name = models.CharField(max_length=200, blank=True, null=True, help_text="Name of event/activity/exam")
+    rank = models.CharField(max_length=50, blank=True, null=True, help_text="e.g. 1st, 2nd, Winner")
+    reward_title = models.CharField(max_length=200, blank=True, null=True, help_text="Certificate/Medal/Award Title")
+    date = models.DateField()
+    remarks = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.student_name} - {self.achievement_type} ({self.event_name or self.reward_title})"
+
+
+
+class ExamDetail(models.Model):
+    achievement = models.OneToOneField(
+        StudentAchievement,
+        on_delete=models.CASCADE,
+        related_name="exam_detail"
+    )
+    obtained_marks = models.DecimalField(max_digits=7, decimal_places=2)
+    total_marks = models.DecimalField(max_digits=7, decimal_places=2)
+
+    @property
+    def percentage(self):
+        if self.total_marks > 0:
+            return round((self.obtained_marks / self.total_marks) * 100, 2)
+        return 0
+
+    def __str__(self):
+        return f"{self.achievement.student_name} - {self.obtained_marks}/{self.total_marks} ({self.percentage}%)"
+
+
+
+class FeeStructure(models.Model):
+    student_class = models.ForeignKey("Class", on_delete=models.CASCADE)  
+    admission_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    tuition_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    annual_charges = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def exam_fee(self):
+        return self.tuition_fee * Decimal("0.1")  # ✅ use Decimal instead of float
+
+    def total_fee(self):
+        return self.admission_fee + self.tuition_fee + self.annual_charges + self.exam_fee()
+
+class FAQ(models.Model):
+    CATEGORY_CHOICES = [
+        ("admission", "Admission"),
+        ("fees", "Fees & Payments"),
+        ("academics", "Academics"),
+        ("facilities", "Facilities"),
+        ("general", "General"),
+    ]
+
+    question = models.CharField(max_length=300, help_text="Enter the FAQ question")
+    answer = models.TextField(help_text="Provide the answer for the question")
+    category = models.CharField(
+        max_length=50,
+        choices=CATEGORY_CHOICES,
+        default="general",
+        help_text="Select category of FAQ"
+    )
+    order = models.PositiveIntegerField(default=0, help_text="Order for display (0 = top)")
+    is_active = models.BooleanField(default=True, help_text="Show or hide on website")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["order", "category", "id"]
+
+    def __str__(self):
+        return self.question
