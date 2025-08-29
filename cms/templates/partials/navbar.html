@@ -67,7 +67,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="studentsDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">Students</a>
           <ul class="dropdown-menu" aria-labelledby="studentsDropdown">
-            <li><a class="dropdown-item" href="#">Achievements</a></li>
+            <li><a class="dropdown-item" href="{% url 'achievement_list' %}">Achievements</a></li>
             <li><a class="dropdown-item" href="#">Board Results / Toppers</a></li>
             <li><a class="dropdown-item" href="#">Sports & Cultural Achievements</a></li>
             <li><a class="dropdown-item" href="#">Gallery</a></li>
@@ -81,11 +81,10 @@
           <a class="nav-link dropdown-toggle" href="#" id="admissionsDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">Admissions</a>
           <ul class="dropdown-menu" aria-labelledby="admissionsDropdown">
-            <li><a class="dropdown-item" href="#">Admission Procedure</a></li>
-            <li><a class="dropdown-item" href="#">Admission Form</a></li>
-            <li><a class="dropdown-item" href="#">Prospectus</a></li>
-            <li><a class="dropdown-item" href="#">Fee Structure</a></li>
-            <li><a class="dropdown-item" href="#">FAQ</a></li>
+            <li><a class="dropdown-item" href="{% url 'admission_procedure' %}">Admission Procedure</a></li>
+            <li><a class="dropdown-item" href="{% url 'admission_form' %}">Admission Form</a></li>
+            <li><a class="dropdown-item" href="{% url 'fee_structure' %}">Fee Structure</a></li>
+            <li><a class="dropdown-item" href="{% url 'faq' %}">FAQ</a></li>
           </ul>
         </li>
 
