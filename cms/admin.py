@@ -685,17 +685,21 @@ class ExamDetailAdmin(ImportExportModelAdmin):
 
 @admin.register(FeeStructure)
 class FeeStructureAdmin(ImportExportModelAdmin):
-    list_display = ('student_class', 'admission_fee', 'tuition_fee', 'annual_charges', 'exam_fee', 'total_fee')
-    list_filter = ('student_class',)
-    search_fields = ('student_class__name',)  # use related field lookup
+    list_display = ("student_class", "admission_fee", "rcf", "cwf", "ccwf", "total_fee_display")
+    search_fields = ("student_class__name",)
+    list_filter = ("student_class",)
 
-    def exam_fee(self, obj):
-        return obj.exam_fee()
-    exam_fee.short_description = "Exam Fee"
-
-    def total_fee(self, obj):
+    def total_fee_display(self, obj):
         return obj.total_fee()
-    total_fee.short_description = "Total Fee"
+    total_fee_display.short_description = "Total Fee"
+
+
+@admin.register(FAQ)
+class FAQAdmin(ImportExportModelAdmin):
+    list_display = ("question", "category", "order", "is_active")
+    list_filter = ("category", "is_active")
+    search_fields = ("question", "answer")
+    ordering = ("order", "category")
 
 # --- Import/Export Resource ---
 class FAQResource(resources.ModelResource):
@@ -764,5 +768,6 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
+
 
 
