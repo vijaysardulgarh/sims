@@ -218,9 +218,9 @@ def admission_form(request):
 #def admission_form(request): return render(request, "admission_form.pdf")
 def prospectus(request): return render(request, "prospectus.html")
 
-def fee_structure(request):
-    fee_data = FeeStructure.objects.all().order_by('student_class')
-    return render(request, "fee_structure.html", {"fee_data": fee_data})
+def fee_structure_list(request):
+    fee_structures = FeeStructure.objects.select_related("student_class", "stream", "student_class__school")
+    return render(request, "fees_list.html", {"fee_structures": fee_structures})
 
 #def fee_structure(request): return render(request, "fee_structure.html")
 def faq(request):
@@ -383,4 +383,5 @@ def achievement_list(request):
 def achievement_detail(request, pk):
     achievement = get_object_or_404(StudentAchievement.objects.select_related("exam_detail"), pk=pk)
     return render(request, "achievement_detail.html", {"achievement": achievement})
+
 
