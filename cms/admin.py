@@ -32,12 +32,12 @@ from .models import Day
 from .models import TimetableSlot
 from .models import TeacherSubjectAssignment
 from .models import TimetableEntry
-from .models import Student
-from .models import Topper,PostType
+from .models import Student,FeeStructure
+from .models import PostType,FAQ
 from .models import Book,Infrastructure,SanctionedPost
 from .models import SMCMember,AboutSchool,Principal,Association,AssociationType,AssociationRole,StaffAssociationRoleAssignment
 import logging
-
+from .models import StudentAchievement, ExamDetail
  
 admin.site.site_header="SIMS" 
 admin.site.site_title="SIMS"
@@ -672,6 +672,69 @@ class PostTypeAdmin(ImportExportModelAdmin):
     list_display = ('name', 'description')
     search_fields = ('name',)
 
+@admin.register(StudentAchievement)
+class StudentAchievementAdmin(ImportExportModelAdmin):
+    list_display = ("student_name", "achievement_type", "event_name", "rank", "reward_title", "date")
+    list_filter = ("achievement_type", "date")
+    search_fields = ("student_name", "event_name", "reward_title")
+
+@admin.register(ExamDetail)
+class ExamDetailAdmin(ImportExportModelAdmin):
+    list_display = ("achievement", "obtained_marks", "total_marks", "percentage")
+    search_fields = ("achievement__student_name", "achievement__event_name")
+
+@admin.register(FeeStructure)
+class FeeStructureAdmin(ImportExportModelAdmin):
+    list_display = ('student_class', 'admission_fee', 'tuition_fee', 'annual_charges', 'exam_fee', 'total_fee')
+    list_filter = ('student_class',)
+    search_fields = ('student_class__name',)  # use related field lookup
+
+    def exam_fee(self, obj):
+        return obj.exam_fee()
+    exam_fee.short_description = "Exam Fee"
+
+    def total_fee(self, obj):
+        return obj.total_fee()
+    total_fee.short_description = "Total Fee"
+
+# --- Import/Export Resource ---
+class FAQResource(resources.ModelResource):
+    class Meta:
+        model = FAQ
+        fields = ("id", "question", "answer", "category", "order", "is_active", "created_at", "updated_at")
+        export_order = ("id", "question", "answer", "category", "order", "is_active", "created_at", "updated_at")
+
+
+# --- Admin Registration ---
+@admin.register(FAQ)
+class FAQAdmin(ImportExportModelAdmin):  # inherit ImportExportModelAdmin
+    resource_class = FAQResource
+
+    list_display = ("question", "category", "is_active", "order", "created_at")
+    list_filter = ("category", "is_active")
+    search_fields = ("question", "answer")
+    ordering = ("order", "category")
+    list_editable = ("is_active", "order")
+
+    fieldsets = (
+        (None, {
+            "fields": ("question", "answer", "category", "order", "is_active")
+        }),
+        ("Timestamps", {
+            "fields": ("created_at", "updated_at"),
+            "classes": ("collapse",),
+        }),
+    )
+
+    readonly_fields = ("created_at", "updated_at")
+
+    # Auto-populate order if not set
+    def save_model(self, request, obj, form, change):
+        if not obj.order:  # if order not set
+            max_order = FAQ.objects.filter(category=obj.category).aggregate(admin.models.Max("order"))["order__max"]
+            obj.order = (max_order or 0) + 1
+        super().save_model(request, obj, form, change)
+
 
 admin.site.register(Document,DocumentAdmin)
 #admin.site.register(User)  
@@ -697,7 +760,7 @@ admin.site.register(Timetable,TimetableAdmin)
 admin.site.register(TimetableSlot,TimetableSlotAdmin)
 admin.site.register(TimetableEntry,TimetableEntryAdmin)
 admin.site.register(Student,StudentAdmin)
-admin.site.register(Topper)
+
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
