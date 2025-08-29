@@ -68,7 +68,8 @@ urlpatterns = [
     path('admission_procedure/', views.admission_procedure, name='admission_procedure'),
     path('admission_form/', views.admission_form, name='admission_form'),
     path('admissions/prospectus/', views.prospectus, name='prospectus'),
-    path('fee_structure/', views.fee_structure, name='fee_structure'),
+    path("fees/", views.fee_structure_list, name="fee_structure_list"),
+    #path('fee_structure/', views.fee_structure, name='fee_structure'),
     path('faq', views.faq, name='faq'),
 
     # Mandatory Info
@@ -85,3 +86,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
