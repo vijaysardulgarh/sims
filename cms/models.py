@@ -924,14 +924,21 @@ class ExamDetail(models.Model):
 class FeeStructure(models.Model):
     student_class = models.ForeignKey("Class", on_delete=models.CASCADE)  
     admission_fee = models.DecimalField(max_digits=10, decimal_places=2)
-    tuition_fee = models.DecimalField(max_digits=10, decimal_places=2)
-    annual_charges = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def exam_fee(self):
-        return self.tuition_fee * Decimal("0.1")  # ✅ use Decimal instead of float
+    rcf = models.DecimalField(max_digits=10, decimal_places=2)  
+    cwf = models.DecimalField(max_digits=10, decimal_places=2)   
+    ccwf = models.DecimalField(max_digits=10, decimal_places=2)  
 
     def total_fee(self):
-        return self.admission_fee + self.tuition_fee + self.annual_charges + self.exam_fee()
+        return (
+            self.admission_fee 
+            + self.rcf 
+            + self.cwf 
+            + self.ccwf
+        )
+
+    def __str__(self):
+        return f"Fee Structure for {self.student_class}"
+        
 
 class FAQ(models.Model):
     CATEGORY_CHOICES = [
@@ -961,3 +968,4 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+
