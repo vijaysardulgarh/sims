@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fee Structures</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fee Structures</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>School</th>
+                <th>Class</th>
+                <th>Stream</th>
+                <th>Admission Fee</th>
+                <th>RCF</th>
+                <th>CWF</th>
+                <th>CCWF</th>
+                <th>Total Fee</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fee in fee_structures %}
+                <tr>
+                    <td>{{ fee.student_class.school.name }}</td>
+                    <td>{{ fee.student_class.name }}</td>
+                    <td>{{ fee.stream.name|default:"-" }}</td>
+                    <td>{{ fee.admission_fee|floatformat:0 }}</td>
+                    <td>{{ fee.rcf|floatformat:0 }}</td>
+                    <td>{{ fee.cwf|floatformat:0 }}</td>
+                    <td>{{ fee.ccwf|floatformat:0 }}</td>
+                    <td>{{ fee.total_fee|floatformat:0 }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8">No fee structures found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
