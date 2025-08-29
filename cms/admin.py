@@ -694,12 +694,16 @@ class FeeStructureAdmin(ImportExportModelAdmin):
     total_fee_display.short_description = "Total Fee"
 
 
-@admin.register(FAQ)
-class FAQAdmin(ImportExportModelAdmin):
-    list_display = ("question", "category", "order", "is_active")
-    list_filter = ("category", "is_active")
-    search_fields = ("question", "answer")
-    ordering = ("order", "category")
+@admin.register(FeeStructure)
+class FeeStructureAdmin(ImportExportModelAdmin):
+    list_display = ("student_class", "stream", "admission_fee", "rcf", "cwf", "ccwf", "total_fee")
+    search_fields = ("student_class__name", "stream__name")
+    list_filter = ("student_class", "stream")
+
+    def total_fee(self, obj):
+        return obj.total_fee()
+    total_fee.short_description = "Total Fee"
+ 
 
 # --- Import/Export Resource ---
 class FAQResource(resources.ModelResource):
@@ -768,6 +772,7 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
+
 
 
 
