@@ -685,24 +685,37 @@ class ExamDetailAdmin(ImportExportModelAdmin):
 
 @admin.register(FeeStructure)
 class FeeStructureAdmin(ImportExportModelAdmin):
-    list_display = ("student_class", "admission_fee", "rcf", "cwf", "ccwf", "total_fee_display")
-    search_fields = ("student_class__name",)
-    list_filter = ("student_class",)
-
-    def total_fee_display(self, obj):
-        return obj.total_fee()
-    total_fee_display.short_description = "Total Fee"
-
-
-@admin.register(FeeStructure)
-class FeeStructureAdmin(ImportExportModelAdmin):
-    list_display = ("student_class", "stream", "admission_fee", "rcf", "cwf", "ccwf", "total_fee")
+    list_display = (
+        "student_class",
+        "stream",
+        "admission_fee_display",
+        "rcf_display",
+        "cwf_display",
+        "ccwf_display",
+        "total_fee_display",
+    )
     search_fields = ("student_class__name", "stream__name")
     list_filter = ("student_class", "stream")
 
-    def total_fee(self, obj):
-        return obj.total_fee()
-    total_fee.short_description = "Total Fee"
+    def admission_fee_display(self, obj):
+        return round(obj.admission_fee)
+    admission_fee_display.short_description = "Admission Fee"
+
+    def rcf_display(self, obj):
+        return round(obj.rcf)
+    rcf_display.short_description = "RCF"
+
+    def cwf_display(self, obj):
+        return round(obj.cwf)
+    cwf_display.short_description = "CWF"
+
+    def ccwf_display(self, obj):
+        return round(obj.ccwf)
+    ccwf_display.short_description = "CCWF"
+
+    def total_fee_display(self, obj):
+        return round(obj.total_fee())
+    total_fee_display.short_description = "Total Fee"
  
 
 # --- Import/Export Resource ---
@@ -772,6 +785,7 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
+
 
 
 
