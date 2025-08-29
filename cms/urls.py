@@ -55,6 +55,8 @@ urlpatterns = [
     path('timetable/', timetable_view, name='timetable'),
 
     # Students
+    path("achievements/", views.achievement_list, name="achievement_list"),
+    path("achievements/<int:pk>/", views.achievement_detail, name="achievement_detail"),
     path('students/achievements/', views.achievements, name='achievements'),
     path('students/results/', views.board_results, name='board_results'),
     path('students/sports/', views.sports_achievements, name='sports_achievements'),
@@ -63,11 +65,11 @@ urlpatterns = [
     path('students/events/', views.events, name='events'),
 
     # Admissions
-    path('admissions/procedure/', views.admission_procedure, name='admission_procedure'),
-    path('admissions/form/', views.admission_form, name='admission_form'),
+    path('admission_procedure/', views.admission_procedure, name='admission_procedure'),
+    path('admission_form/', views.admission_form, name='admission_form'),
     path('admissions/prospectus/', views.prospectus, name='prospectus'),
-    path('admissions/fees/', views.fee_structure, name='fee_structure'),
-    path('admissions/faq/', views.faq, name='faq'),
+    path('fee_structure/', views.fee_structure, name='fee_structure'),
+    path('faq', views.faq, name='faq'),
 
     # Mandatory Info
     path('mandatory/disclosure/', views.mandatory_disclosure, name='mandatory_disclosure'),
