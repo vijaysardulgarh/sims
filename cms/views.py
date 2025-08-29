@@ -1,16 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Q, Case, When,Sum,OuterRef
+from django.http import FileResponse, Http404
 from .utils import get_current_school
 from .models import (
     Staff, Student, Class, Subject,
-    News, SMCMember, Committee, School,
-    AboutSchool, Principal, Affiliation,StaffAssociationRoleAssignment, Association,Infrastructure,SanctionedPost
+    News, SMCMember, Committee, School,FeeStructure,FAQ,
+    AboutSchool, Principal, Affiliation,StaffAssociationRoleAssignment, Association,StudentAchievement,Infrastructure,SanctionedPost
    
 )
 from cms.utils import generate_timetable
 import itertools
 from django.db.models import Prefetch
-
+import os
+from django.conf import settings
 # -------------------- Utility --------------------
 
 
@@ -154,7 +156,7 @@ def about_school(request):
     if not school:
         return redirect("/")
     about = AboutSchool.objects.filter(school=school).first()
-    return render(request, "about.html", {"about": about})
+    return render(request, "about_us/about.html", {"about": about})
 
 
 def smc_members(request):
@@ -162,13 +164,13 @@ def smc_members(request):
     if not school:
         return redirect("/")
     smcmembers = SMCMember.objects.filter(school=school)
-    return render(request, "smc_members.html", {"smcmembers": smcmembers})
+    return render(request, "about_us/smc_members.html", {"smcmembers": smcmembers})
 
 
 def principal(request):
     school = get_current_school(request)
     message = Principal.objects.filter(school=school).first() if school else Principal.objects.first()
-    return render(request, "principal.html", {"message": message})
+    return render(request, "about_us/principal.html", {"message": message})
 
 
 def affiliation_status(request):
@@ -176,14 +178,14 @@ def affiliation_status(request):
     if not school:
         return redirect("/")
     affiliations = Affiliation.objects.filter(school=school)
-    return render(request, "affiliation_status.html", {"school": school, "affiliations": affiliations})
+    return render(request, "about_us/affiliation_status.html", {"school": school, "affiliations": affiliations})
 
 
 # -------------------- Static Pages --------------------
 
 def management(request): return render(request, "management.html")
-def committee(request): return render(request, "committee.html")
-def infrastructure(request): return render(request, "infrastructure.html")
+def committee(request): return render(request, "about_us/committee.html")
+def infrastructure(request): return render(request, "about_us/infrastructure.html")
 
 def subjects_offered(request): return render(request, "subjects.html")
 def curriculum(request): return render(request, "curriculum.html")
@@ -206,10 +208,29 @@ def notices(request): return render(request, "notices.html")
 def events(request): return render(request, "events.html")
 
 def admission_procedure(request): return render(request, "admission_procedure.html")
-def admission_form(request): return render(request, "admission_form.html")
+def admission_form(request):
+    """Serve Admission Form PDF"""
+    file_path = os.path.join(settings.BASE_DIR, "static", "admission_form.pdf")
+    try:
+        return FileResponse(open(file_path, "rb"), content_type="application/pdf")
+    except FileNotFoundError:
+        raise Http404("Admission form not found.")
+#def admission_form(request): return render(request, "admission_form.pdf")
 def prospectus(request): return render(request, "prospectus.html")
-def fee_structure(request): return render(request, "fee_structure.html")
-def faq(request): return render(request, "faq.html")
+
+def fee_structure(request):
+    fee_data = FeeStructure.objects.all().order_by('student_class')
+    return render(request, "fee_structure.html", {"fee_data": fee_data})
+
+#def fee_structure(request): return render(request, "fee_structure.html")
+def faq(request):
+    faqs = FAQ.objects.filter(is_active=True).order_by('order', 'category')
+    # Optional: group by category
+    categories = {}
+    for faq in faqs:
+        categories.setdefault(faq.get_category_display(), []).append(faq)
+    return render(request, 'faq.html', {'categories': categories})
+# def faq(request): return render(request, "faq.html")
 
 def mandatory_disclosure(request): return render(request, "mandatory_disclosure.html")
 def statistics(request): return render(request, "statistics.html")
@@ -280,7 +301,7 @@ def nodal(request):
 
     return render(
         request,
-        "nodal.html",   # ✅ renamed template
+        "about_us/nodal.html",   # ✅ renamed template
         {"staff_members": staff_members, "school": school},
     )
 
@@ -290,7 +311,7 @@ def infrastructure(request):
         return redirect("/")  # if no school in session, send user back to homepage
 
     infrastructures = school.infrastructures.all().order_by("category")
-    return render(request, "infrastructure.html", {
+    return render(request, "about_us/infrastructure.html", {
         "school": school,
         "infrastructures": infrastructures
     })
@@ -353,3 +374,13 @@ def staff_summary(request):
         merged.append(row)
 
     return render(request, "staff_summary.html", {"summary": merged, "school": school})
+
+
+def achievement_list(request):
+    achievements = StudentAchievement.objects.select_related("exam_detail").all().order_by("-date")
+    return render(request, "achievement_list.html", {"achievements": achievements})
+
+def achievement_detail(request, pk):
+    achievement = get_object_or_404(StudentAchievement.objects.select_related("exam_detail"), pk=pk)
+    return render(request, "achievement_detail.html", {"achievement": achievement})
+
