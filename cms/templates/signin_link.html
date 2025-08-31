@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">📑 Generate Attendance Sheet</h2>
+        <p class="text-muted">Download PDF for each class & section</p>
+    </div>
+
+    {% if class_sections %}
+        {% regroup class_sections by studentclass as grouped_classes %}
+
+        {% for group in grouped_classes %}
+            <div class="mb-5">
+                <!-- Class Heading (Centered with highlight) -->
+                <h4 class="fw-bold text-white bg-primary py-2 rounded text-center shadow-sm">
+                    {{ group.grouper }}
+                </h4>
+
+                <!-- Sections in a row -->
+                <div class="row g-3 justify-content-center mt-3">
+                    {% for cs in group.list %}
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title fw-semibold text-dark">
+                                        Section {{ cs.section }}
+                                    </h6>
+                                    <a href="{% url 'signin' cs.studentclass cs.section %}" 
+                                       class="btn btn-gradient w-100 mt-2">
+                                        Download PDF
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-warning text-center mt-4">
+            No classes/sections available.
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    /* Gradient button */
+    .btn-gradient {
+        background: linear-gradient(45deg, #007bff, #00c6ff);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    .btn-gradient:hover {
+        background: linear-gradient(45deg, #0056b3, #0096c7);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        color: #fff;
+    }
+
+    /* Card hover effect */
+    .card {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Class heading styling */
+    h4 {
+        font-size: 12pt;
+        letter-spacing: 1px;
+    }
+</style>
+{% endblock %}

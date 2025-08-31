@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Student Achievements</h2>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Student</th>
+                <th>Type</th>
+                <th>Event</th>
+                <th>Rank</th>
+                <th>Reward</th>
+                <th>Date</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ach in achievements %}
+            <tr>
+                <td>{{ ach.student_name }}</td>
+                <td>{{ ach.get_achievement_type_display }}</td>
+                <td>{{ ach.event_name }}</td>
+                <td>{{ ach.rank }}</td>
+                <td>{{ ach.reward_title }}</td>
+                <td>{{ ach.date }}</td>
+                <td>
+                    <a href="{% url 'achievement_detail' ach.pk %}" class="btn btn-sm btn-primary">View</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No achievements found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

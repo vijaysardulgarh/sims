@@ -1,0 +1,43 @@
+{% extends "base.html" %} 
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Mandatory Public Disclosures</h2>
+
+    {% if disclosures %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Attachment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for disclosure in disclosures %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ disclosure.title }}</td>
+                            <td>{{ disclosure.description|default:"-" }}</td>
+                            <td>
+                                {% if disclosure.file %}
+                                    <a href="{{ disclosure.file.url }}" target="_blank" class="btn btn-sm btn-primary">
+                                        View File
+                                    </a>
+                                {% else %}
+                                    No File
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center">
+            No disclosures available right now.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
