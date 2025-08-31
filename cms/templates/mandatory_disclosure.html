@@ -19,7 +19,7 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ disclosure.title }}</td>
-                            <td>{{ disclosure.description|default:"-" }}</td>
+                            <td>{{ disclosure.value|default:"-" }}</td>
                             <td>
                                 {% if disclosure.file %}
                                     <a href="{{ disclosure.file.url }}" target="_blank" class="btn btn-sm btn-primary">
@@ -41,3 +41,4 @@
     {% endif %}
 </div>
 {% endblock %}
+
