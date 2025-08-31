@@ -1,8 +1,5 @@
-pip
-setuptools
-wheel
-tablib==3.5.0
 asgiref
+charset-normalizer
 defusedxml
 diff-match-patch
 Django
@@ -13,7 +10,11 @@ odfpy
 openpyxl
 pillow
 PyYAML
+reportlab
+setuptools
 sqlparse
+tablib
 tzdata
+wheel
 xlrd
 xlwt
