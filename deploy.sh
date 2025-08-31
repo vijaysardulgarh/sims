@@ -144,7 +144,7 @@ server {
     }
 
     location /static/ {
-        alias $PROJECT_DIR/staticfiles_collected/;
+        alias $PROJECT_DIR/static/;
     }
 
     location /media/ {
@@ -174,4 +174,12 @@ sudo certbot --nginx -d $DOMAIN -d www.$DOMAIN --non-interactive --agree-tos -m 
 # Fix project ownership
 sudo chown -R $USER:$USER $PROJECT_DIR
 
+
+echo "Restarting Gunicorn service..."
+sudo systemctl restart sims.gunicorn.service
+
+
+
 echo "===== Deployment of $PROJECT_NAME completed successfully! ====="
+
+
