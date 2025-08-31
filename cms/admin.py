@@ -33,7 +33,7 @@ from .models import TimetableSlot
 from .models import TeacherSubjectAssignment
 from .models import TimetableEntry
 from .models import Student,FeeStructure
-from .models import PostType,FAQ
+from .models import PostType,FAQ,MandatoryPublicDisclosure
 from .models import Book,Infrastructure,SanctionedPost
 from .models import SMCMember,AboutSchool,Principal,Association,AssociationType,AssociationRole,StaffAssociationRoleAssignment
 import logging
@@ -683,6 +683,7 @@ class ExamDetailAdmin(ImportExportModelAdmin):
     list_display = ("achievement", "obtained_marks", "total_marks", "percentage")
     search_fields = ("achievement__student_name", "achievement__event_name")
 
+
 @admin.register(FeeStructure)
 class FeeStructureAdmin(ImportExportModelAdmin):
     list_display = (
@@ -716,7 +717,7 @@ class FeeStructureAdmin(ImportExportModelAdmin):
     def total_fee_display(self, obj):
         return round(obj.total_fee())
     total_fee_display.short_description = "Total Fee"
- 
+
 
 # --- Import/Export Resource ---
 class FAQResource(resources.ModelResource):
@@ -756,7 +757,12 @@ class FAQAdmin(ImportExportModelAdmin):  # inherit ImportExportModelAdmin
             obj.order = (max_order or 0) + 1
         super().save_model(request, obj, form, change)
 
-
+@admin.register(MandatoryPublicDisclosure)
+class MandatoryPublicDisclosureAdmin(ImportExportModelAdmin):
+    list_display = ("section", "title", "value", "file", "order", "is_active")
+    list_filter = ("section", "is_active")
+    search_fields = ("title", "value")
+    ordering = ("section", "order")
 admin.site.register(Document,DocumentAdmin)
 #admin.site.register(User)  
 
@@ -785,11 +791,5 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
-
-
-
-
-
-
 
 
