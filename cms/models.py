@@ -385,33 +385,47 @@ class Stream(models.Model):
         (SCIENCE, 'Science'),
         (COMMERCE, 'Commerce'),
         (ARTS, 'Arts'),
-        # Add more streams as needed
     ]
 
-    name = models.CharField(max_length=100, choices=STREAM_CHOICES, unique=True)
-    
+    name = models.CharField(max_length=100, choices=STREAM_CHOICES)
+    school = models.ForeignKey(School, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.school.name}"
+
+    class Meta:
+        verbose_name_plural = "Streams"
+        constraints = [
+            models.UniqueConstraint(fields=["name", "school"], name="unique_stream_per_school")
+        ]
+        ordering = ["school", "name"]
     
 class Class(models.Model):
     CLASS_CHOICES = [
-    ('6th', '6th'),
-    ('7th', '7th'),
-    ('8th', '8th'),
-    ('9th', '9th'),
-    ('10th', '10th'),
-    ('11th', '11th'),
-    ('12th', '12th'),
-    ('na', 'NA'),
-]    
-    name = models.CharField(max_length=50, unique=True,choices=CLASS_CHOICES)  # Ensure class name is unique
-    school = models.ForeignKey(School, on_delete=models.PROTECT)  # Link to School
+        ('6th', '6th'),
+        ('7th', '7th'),
+        ('8th', '8th'),
+        ('9th', '9th'),
+        ('10th', '10th'),
+        ('11th', '11th'),
+        ('12th', '12th'),
+        ('na', 'NA'),
+    ]
+
+    name = models.CharField(
+        max_length=50,
+        choices=CLASS_CHOICES
+    )
+    school = models.ForeignKey(School, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.school.name}"
+
     class Meta:
-        verbose_name_plural = 'Class'
+        verbose_name_plural = "Classes"
+        constraints = [
+            models.UniqueConstraint(fields=["name", "school"], name="unique_class_per_school")
+        ]
 
 
 class Section(models.Model):
@@ -729,28 +743,43 @@ class TimetableEntry(models.Model):
 
 class Student(models.Model):
     #user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    srn = models.CharField(primary_key=True,max_length=11)
-    stream = models.CharField(max_length=50, blank=True, null=True)
+    srn = models.CharField(primary_key=True, max_length=11)
     school_code = models.CharField(max_length=20, blank=True, null=True)
     school_name = models.CharField(max_length=255, blank=True, null=True)
-    admission_date = models.DateField(blank=True, null=True,)
-    studentclass = models.CharField(max_length=20,blank=True, null=True)
-    stream = models.CharField(max_length=20,blank=True, null=True)
-    section = models.CharField(max_length=20,blank=True, null=True)
-    roll_number = models.CharField(max_length=20,blank=True, null=True)
-    admission_number = models.CharField(max_length=20,blank=True, null=True)
-    full_name_aadhar = models.CharField(max_length=255,blank=True, null=True)
+    admission_date = models.DateField(blank=True, null=True)
+    studentclass = models.CharField(max_length=20, blank=True, null=True)
+    stream = models.CharField(max_length=50, blank=True, null=True)
+    section = models.CharField(max_length=20, blank=True, null=True)
+    roll_number = models.CharField(max_length=20, blank=True, null=True)
+    admission_number = models.CharField(max_length=20, blank=True, null=True)
+
+    # Personal Info
+    full_name_aadhar = models.CharField(max_length=255, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=10,blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
     aadhaar_number = models.CharField(max_length=20, blank=True, null=True)
     domicile_of_haryana = models.CharField(max_length=100, blank=True, null=True)
-    father_full_name_aadhar = models.CharField(max_length=255,blank=True, null=True)
+
+    # Parents / Guardian
+    father_full_name_aadhar = models.CharField(max_length=255, blank=True, null=True)
     father_aadhaar_number = models.CharField(max_length=20, blank=True, null=True)
-    mother_full_name_aadhar = models.CharField(max_length=255,blank=True, null=True)
-    mother_aadhaar_number = models.CharField(max_length=20,blank=True, null=True)
+    mother_full_name_aadhar = models.CharField(max_length=255, blank=True, null=True)
+    mother_aadhaar_number = models.CharField(max_length=20, blank=True, null=True)
     guardian_full_name_aadhar = models.CharField(max_length=255, blank=True, null=True)
     guardian_aadhaar_number = models.CharField(max_length=20, blank=True, null=True)
+
+    # Contact
+    father_mobile = models.CharField(max_length=20, blank=True, null=True)
+    mother_mobile = models.CharField(max_length=20, blank=True, null=True)
+    guardian_mobile = models.CharField(max_length=20, blank=True, null=True)
+
+    # Financial
     family_annual_income = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    account_number = models.CharField(max_length=50, blank=True, null=True)
+    bank_name = models.CharField(max_length=255, blank=True, null=True)
+    ifsc = models.CharField(max_length=20, blank=True, null=True)
+
+    # Address
     state = models.CharField(max_length=255, blank=True, null=True)
     district = models.CharField(max_length=255, blank=True, null=True)
     block = models.CharField(max_length=100, blank=True, null=True)
@@ -758,20 +787,16 @@ class Student(models.Model):
     city_village_town = models.CharField(max_length=100, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     postal_code = models.CharField(max_length=20, blank=True, null=True)
-    father_mobile = models.CharField(max_length=20, blank=True, null=True)
-    mother_mobile = models.CharField(max_length=20, blank=True, null=True)
-    guardian_mobile = models.CharField(max_length=20, blank=True, null=True)
-    account_number = models.CharField(max_length=50, blank=True, null=True)
-    bank_name = models.CharField(max_length=255, blank=True, null=True)
-    ifsc = models.CharField(max_length=20, blank=True, null=True)
-    subjects_opted = models.CharField(max_length=255, blank=True, null=True)
+
+    # Subjects
+    subjects_opted = models.TextField(blank=True, null=True, help_text="Format: Optional:Math, Compulsory:English")
+    subjects = models.TextField(blank=True, null=True)
+
     caste = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(max_length=100, blank=True, null=True)
-    disability = models.CharField(max_length=255,blank=True, null=True)
+    disability = models.CharField(max_length=255, blank=True, null=True)
     disorder = models.CharField(max_length=100, blank=True, null=True)
-    subjects_opted = models.CharField(max_length=255, blank=True, null=True)
-    subjects = models.TextField(blank=True, null=True) 
-    bpl_certificate_issuing_authority= models.CharField(max_length=255,blank=True, null=True)
+    bpl_certificate_issuing_authority = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return str(self.full_name_aadhar) if self.full_name_aadhar else 'Student {}'.format(self.pk)
@@ -937,7 +962,6 @@ class FeeStructure(models.Model):
         if self.stream:
             return f"Fee Structure for {self.student_class} ({self.stream})"
         return f"Fee Structure for {self.student_class}"
-        
 
 class FAQ(models.Model):
     CATEGORY_CHOICES = [
@@ -967,6 +991,31 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+    
 
+class MandatoryPublicDisclosure(models.Model):
+    SECTION_CHOICES = [
+        ("general_info", "General Information"),
+        ("documents", "Documents and Information"),
+        ("academics", "Academics"),
+        ("staff", "Staff Teaching"),
+        ("infrastructure", "Infrastructure"),
+    ]
 
+    section = models.CharField(max_length=50, choices=SECTION_CHOICES)
+    title = models.CharField(max_length=255, help_text="Field Name (e.g., Name of School, Affiliation No.)")
+    value = models.TextField(help_text="Content or file URL")
 
+    # Optional for files
+    file = models.FileField(upload_to="mandatory_disclosure/", blank=True, null=True)
+
+    order = models.PositiveIntegerField(default=0, help_text="Sorting order")
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["section", "order"]
+        verbose_name = "Mandatory Public Disclosure"
+        verbose_name_plural = "Mandatory Public Disclosures"
+
+    def __str__(self):
+        return f"{self.section} - {self.title}"
