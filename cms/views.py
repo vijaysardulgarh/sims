@@ -1,23 +1,30 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Count, Q, Case, When,Sum,OuterRef
+from django.db.models import Count, Q, Case, When,Sum,OuterRef,IntegerField,Value,CharField
 from django.http import FileResponse, Http404
 from .utils import get_current_school
 from .models import (
-    Staff, Student, Class, Subject,
+    Staff, Student, Class, Subject,MandatoryPublicDisclosure,
     News, SMCMember, Committee, School,FeeStructure,FAQ,
     AboutSchool, Principal, Affiliation,StaffAssociationRoleAssignment, Association,StudentAchievement,Infrastructure,SanctionedPost
    
 )
+from collections import defaultdict
 from cms.utils import generate_timetable
 import itertools
 from django.db.models import Prefetch
 import os
 from django.conf import settings
 # -------------------- Utility --------------------
+from django.db.models import F
+from django.http import HttpResponse
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from .models import Student
+import io
 
-
-
-
+from reportlab.platypus import Spacer
 # -------------------- Dashboard & Common --------------------
 
 def index(request):
@@ -218,6 +225,10 @@ def admission_form(request):
 #def admission_form(request): return render(request, "admission_form.pdf")
 def prospectus(request): return render(request, "prospectus.html")
 
+# def fee_structure(request):
+#     fee_data = FeeStructure.objects.all().order_by('student_class')
+#     return render(request, "fee_structure.html", {"fee_data": fee_data})
+
 def fee_structure_list(request):
     fee_structures = FeeStructure.objects.select_related("student_class", "stream", "student_class__school")
     return render(request, "fees_list.html", {"fee_structures": fee_structures})
@@ -232,7 +243,7 @@ def faq(request):
     return render(request, 'faq.html', {'categories': categories})
 # def faq(request): return render(request, "faq.html")
 
-def mandatory_disclosure(request): return render(request, "mandatory_disclosure.html")
+
 def statistics(request): return render(request, "statistics.html")
 def safety_committee(request): return render(request, "safety_committee.html")
 def grievance_committee(request): return render(request, "grievance_committee.html")
@@ -384,4 +395,574 @@ def achievement_detail(request, pk):
     achievement = get_object_or_404(StudentAchievement.objects.select_related("exam_detail"), pk=pk)
     return render(request, "achievement_detail.html", {"achievement": achievement})
 
+def signin_link(request):
+    # distinct combinations of class and section
+    class_sections = (
+        Student.objects.values("studentclass", "section")
+        .distinct()
+    )
 
+    # ✅ Define custom order for classes
+    class_order = ["Sixth", "Seventh", "Eighth", "Nineth", "Tenth", "Eleventh", "Twelfth"]
+    order_map = {name: i for i, name in enumerate(class_order)}
+
+    # ✅ Sort by studentclass (custom order) then section (alphabetically)
+    class_sections = sorted(
+        class_sections,
+        key=lambda cs: (order_map.get(cs["studentclass"], 999), cs["section"])
+    )
+
+    return render(request, "signin_link.html", {"class_sections": class_sections})
+
+from django.http import HttpResponse
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, PageBreak
+from reportlab.lib.pagesizes import landscape, A4
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+import datetime
+
+def signin(request, class_name, section_name):
+    # Get current school
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+    school_name = school.name
+    school_address = getattr(school, 'address', '')
+    school_logo = getattr(school, 'logo', None)  # optional logo
+
+    # Filter students
+    # Filter students and sort by roll_number
+    students = Student.objects.filter(studentclass=class_name, section=section_name).order_by('roll_number')
+
+    # PDF Response
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="attendance_{class_name}_{section_name}.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4), rightMargin=20, leftMargin=20, topMargin=20, bottomMargin=20)
+    elements = []
+    styles = getSampleStyleSheet()
+
+    # Custom styles
+    school_style = ParagraphStyle(name="SchoolTitle", fontSize=18, alignment=1, spaceAfter=4, fontName="Helvetica-Bold")
+    heading_style = ParagraphStyle(name="Heading", fontSize=14, alignment=1, spaceAfter=10, fontName="Helvetica-Bold")
+    normal_center = ParagraphStyle(name="NormalCenter", alignment=1)
+
+    # --- Header: Logo + School Name + Address ---
+    header_table_data = []
+
+    if school_logo:
+        logo = Image(school_logo.path, width=50, height=50)
+        header_table_data.append([logo, Paragraph(f"<b>{school_name}</b>", school_style), ""])
+    else:
+        header_table_data.append(["", Paragraph(f"<b>{school_name}</b>", school_style), ""])
+
+    header_table = Table(header_table_data, colWidths=[60, 600, 60])
+    header_table.setStyle(TableStyle([
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 10)
+    ]))
+    elements.append(header_table)
+
+    if school_address:
+        elements.append(Paragraph(school_address, normal_center))
+    elements.append(Spacer(1, 12))
+
+    # --- Class Info Box ---
+    class_info = Table(
+        [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {datetime.date.today().strftime('%d-%m-%Y')}"]],
+        colWidths=[200, 200, 200]
+    )
+    class_info.setStyle(TableStyle([
+        ("GRID", (0,0), (-1,-1), 1, colors.black),
+        ("BACKGROUND", (0,0), (-1,-1), colors.lightgrey),
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("FONTNAME", (0,0), (-1,-1), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 10),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+        ("TOPPADDING", (0,0), (-1,-1), 6),
+    ]))
+    elements.append(class_info)
+    elements.append(Spacer(1, 12))
+
+    # --- Table Header ---
+    data = [["SRN", "Roll No", "Student's Name", "Sub 1", "Sub 2", "Sub 3", "Sub 4", "Sub 5", "Sub 6", "Sub 7"]]
+
+    # --- Student rows ---
+    for idx, student in enumerate(students, start=1):
+        data.append([
+            student.srn,
+            student.roll_number,
+            student.full_name_aadhar,
+            "", "", "", "", "", "", ""
+        ])
+
+    # --- Table Styling ---
+    table = Table(data, repeatRows=1, colWidths=[60, 50, 200, 60, 60, 60, 60, 60, 60, 60])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor('#AED6F1')),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.black),
+        ("ALIGN", (0,0), (1,-1), "CENTER"),
+        ("ALIGN", (2,0), (2,-1), "LEFT"),
+        ("ALIGN", (3,0), (-1,-1), "CENTER"),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 9),
+        ("GRID", (0,0), (-1,-1), 0.5, colors.black),
+        ("BOX", (0,0), (-1,-1), 1, colors.black),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+    ]))
+
+    # Alternate row background
+    for i in range(1, len(data)):
+        if i % 2 == 0:
+            table.setStyle(TableStyle([("BACKGROUND", (0,i), (-1,i), colors.whitesmoke)]))
+
+    elements.append(table)
+    elements.append(Spacer(1, 20))
+
+    # --- Footer with signature lines ---
+    footer_data = [
+        ["Class Teacher Signature: ______________________", "", "Principal Signature: ______________________"]
+    ]
+    footer_table = Table(footer_data, colWidths=[250, 100, 250])
+    footer_table.setStyle(TableStyle([
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("FONTNAME", (0,0), (-1,-1), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 10),
+        ("TOPPADDING", (0,0), (-1,-1), 20)
+    ]))
+    elements.append(footer_table)
+
+    # --- Page number function ---
+    def add_page_number(canvas, doc):
+        canvas.saveState()
+        canvas.setFont('Helvetica', 8)
+        canvas.drawString(750, 15, f"Page {doc.page}")
+        canvas.restoreState()
+
+    doc.build(elements, onFirstPage=add_page_number, onLaterPages=add_page_number)
+    return response
+
+
+from django.http import HttpResponse
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
+import datetime
+
+def roll_call_link(request):
+    # ✅ distinct combinations of class and section
+    class_sections = (
+        Student.objects.values("studentclass", "section")
+        .distinct()
+    )
+
+    # ✅ Define custom order for classes
+    class_order = ["Sixth", "Seventh", "Eighth", "Nineth", "Tenth", "Eleventh", "Twelfth"]
+    order_map = {name: i for i, name in enumerate(class_order)}
+
+    # ✅ Sort by studentclass (custom order) then section (alphabetically)
+    class_sections = sorted(
+        class_sections,
+        key=lambda cs: (order_map.get(cs["studentclass"], 999), cs["section"])
+    )
+
+    return render(request, "roll_call_link.html", {"class_sections": class_sections})
+
+def roll_call(request, class_name, section_name):
+    # Get current school
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+    school_name = school.name
+    school_address = getattr(school, 'address', '')
+    school_logo = getattr(school, 'logo', None)
+
+    # Filter students
+    students = Student.objects.filter(studentclass=class_name, section=section_name).order_by("roll_number")
+
+    # PDF Response
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="roll_call_register_{class_name}_{section_name}.pdf"'
+
+    doc = SimpleDocTemplate(
+        response,
+        pagesize=landscape(A4),
+        rightMargin=20,
+        leftMargin=20,
+        topMargin=20,
+        bottomMargin=20,
+    )
+    elements = []
+    styles = getSampleStyleSheet()
+
+    # Custom styles
+    school_style = ParagraphStyle(name="SchoolTitle", fontSize=18, alignment=1, spaceAfter=4, fontName="Helvetica-Bold")
+    normal_center = ParagraphStyle(name="NormalCenter", alignment=1)
+
+    # --- Header: Logo + School Name ---
+    header_table_data = []
+    if school_logo:
+        logo = Image(school_logo.path, width=50, height=50)
+        header_table_data.append([logo, Paragraph(f"<b>{school_name}</b>", school_style), ""])
+    else:
+        header_table_data.append(["", Paragraph(f"<b>{school_name}</b>", school_style), ""])
+
+    header_table = Table(header_table_data, colWidths=[60, 600, 60])
+    header_table.setStyle(TableStyle([
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 10),
+    ]))
+    elements.append(header_table)
+
+    if school_address:
+        elements.append(Paragraph(school_address, normal_center))
+    elements.append(Spacer(1, 12))
+
+    # --- Class Info ---
+    class_info = Table(
+        [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {datetime.date.today().strftime('%d-%m-%Y')}"]],
+        colWidths=[200, 200, 200],
+    )
+    class_info.setStyle(TableStyle([
+        ("GRID", (0,0), (-1,-1), 1, colors.black),
+        ("BACKGROUND", (0,0), (-1,-1), colors.lightgrey),
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("FONTNAME", (0,0), (-1,-1), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 10),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+        ("TOPPADDING", (0,0), (-1,-1), 6),
+    ]))
+    elements.append(class_info)
+    elements.append(Spacer(1, 12))
+
+    # --- Table Header ---
+    data = [[
+        "SRN", "Roll No", "Adm No", "Student's Name",
+        "DOB", "Gender", "Aadhaar No",
+        "Father's Name", "Mother's Name", "Mobile No.", "Category"
+    ]]
+
+    # --- Student Rows ---
+    for student in students:
+        data.append([
+            student.srn,
+            student.roll_number,
+            student.admission_number,
+            student.full_name_aadhar,
+            student.date_of_birth.strftime("%d-%m-%Y") if student.date_of_birth else "",
+            student.gender,
+            student.aadhaar_number,
+            student.father_full_name_aadhar,
+            student.mother_full_name_aadhar,
+            student.father_mobile,
+            student.category,
+        ])
+
+    # --- Table Styling ---
+    table = Table(data, repeatRows=1, colWidths=[50, 30, 40, 100, 70, 50, 80, 100, 100, 80, 70])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#AED6F1")),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.black),
+        ("ALIGN", (0,0), (2,-1), "CENTER"),
+        ("ALIGN", (4,0), (4,-1), "LEFT"),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 8),
+        ("GRID", (0,0), (-1,-1), 0.5, colors.black),
+        ("BOX", (0,0), (-1,-1), 1, colors.black),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+    ]))
+
+    # Alternate row shading
+    for i in range(1, len(data)):
+        if i % 2 == 0:
+            table.setStyle(TableStyle([("BACKGROUND", (0,i), (-1,i), colors.whitesmoke)]))
+
+    elements.append(table)
+
+    # --- Page numbers ---
+    def add_page_number(canvas, doc):
+        canvas.saveState()
+        canvas.setFont("Helvetica", 8)
+        canvas.drawString(750, 15, f"Page {doc.page}")
+        canvas.restoreState()
+
+    doc.build(elements, onFirstPage=add_page_number, onLaterPages=add_page_number)
+    return response
+
+
+from collections import defaultdict
+from django.http import HttpResponse
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
+from reportlab.lib.styles import getSampleStyleSheet
+
+from collections import defaultdict
+from django.http import HttpResponse
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
+from reportlab.lib.styles import getSampleStyleSheet
+
+def generate_student_strength_pdf(request):
+    # -------------------------------------------------
+    # 🔹 Mapping of DB values -> Display
+    # -------------------------------------------------
+    class_mapping = {
+        "sixth": "6th",
+        "seventh": "7th",
+        "eighth": "8th",
+        "nineth": "9th",
+        "ninth": "9th",   # ✅ handle both spellings
+        "tenth": "10th",
+        "eleventh": "11th",
+        "twelfth": "12th",
+    }
+
+    # Natural order for sorting
+    class_order = {
+        c: i for i, c in enumerate(
+            ["sixth", "seventh", "eighth", "nineth", "ninth", "tenth", "eleventh", "twelfth"]
+        )
+    }
+
+    category_list = ["SC", "BC-A", "BC-B", "GEN"]
+
+    # -------------------------------------------------
+    # 📊 Group students by class-section
+    # -------------------------------------------------
+    section_data = defaultdict(lambda: [0] * 8)  # [SC_M, SC_F, BCA_M, BCA_F, BCB_M, BCB_F, GEN_M, GEN_F]
+
+    students = Student.objects.exclude(studentclass__isnull=True).exclude(section__isnull=True)
+
+    for student in students:
+        cls = (student.studentclass or "").strip().lower()
+        sec = (student.section or "NA").strip().upper()
+        gender = (student.gender or "").strip().lower()
+        category = (student.category or "").strip().upper()
+
+        if cls not in class_mapping:
+            continue  # skip classes outside 6th–12th
+
+        if category not in category_list:
+            category = "GEN"  # fallback if unknown
+
+        base_index = category_list.index(category) * 2
+        if gender == "male":
+            section_data[(cls, sec)][base_index] += 1
+        elif gender == "female":
+            section_data[(cls, sec)][base_index + 1] += 1
+        else:
+            section_data[(cls, sec)][base_index] += 1  # default to male col
+
+    # -------------------------------------------------
+    # 🏷️ Helper to build table data (class-wise sorting)
+    # -------------------------------------------------
+    def build_table_data(classes_subset):
+        # Header rows
+        data = [
+            ["Class", "Section",
+             "SC", "", "", "BCA", "", "", "BCB", "", "", "GEN", "", "", "Grand Total"],
+            ["", "", "Male", "Female", "Total",
+             "Male", "Female", "Total",
+             "Male", "Female", "Total",
+             "Male", "Female", "Total",
+             "Total"],
+        ]
+
+        block_total = [0] * 8
+
+        # ✅ loop classes in correct order
+        for cls in sorted(classes_subset, key=lambda c: class_order.get(c, 999)):
+            class_total = [0] * 8
+
+            # all sections for this class
+            for (cur_cls, sec), counts in sorted(
+                section_data.items(),
+                key=lambda x: x[0][1]  # sort sections alphabetically
+            ):
+                if cur_cls != cls:
+                    continue
+
+                sc_total = counts[0] + counts[1]
+                bca_total = counts[2] + counts[3]
+                bcb_total = counts[4] + counts[5]
+                gen_total = counts[6] + counts[7]
+                grand_total = sc_total + bca_total + bcb_total + gen_total
+
+                data.append([
+                    class_mapping.get(cur_cls, cur_cls), sec,
+                    counts[0], counts[1], sc_total,
+                    counts[2], counts[3], bca_total,
+                    counts[4], counts[5], bcb_total,
+                    counts[6], counts[7], gen_total,
+                    grand_total
+                ])
+
+                # accumulate into class total
+                class_total = [a+b for a, b in zip(class_total, counts)]
+
+            # ✅ add total row for this class
+            if sum(class_total) > 0:
+                sc_total = class_total[0] + class_total[1]
+                bca_total = class_total[2] + class_total[3]
+                bcb_total = class_total[4] + class_total[5]
+                gen_total = class_total[6] + class_total[7]
+                grand_total = sc_total + bca_total + bcb_total + gen_total
+
+                data.append([
+                    f"Total {class_mapping.get(cls, cls)}", "",
+                    class_total[0], class_total[1], sc_total,
+                    class_total[2], class_total[3], bca_total,
+                    class_total[4], class_total[5], bcb_total,
+                    class_total[6], class_total[7], gen_total,
+                    grand_total
+                ])
+
+                # add into block total
+                block_total = [a+b for a, b in zip(block_total, class_total)]
+
+        # ✅ finally block total
+        sc_total = block_total[0] + block_total[1]
+        bca_total = block_total[2] + block_total[3]
+        bcb_total = block_total[4] + block_total[5]
+        gen_total = block_total[6] + block_total[7]
+        grand_total = sc_total + bca_total + bcb_total + gen_total
+
+        data.append([
+            f"Total ({', '.join(class_mapping[c] for c in classes_subset if c in class_mapping)})", "",
+            block_total[0], block_total[1], sc_total,
+            block_total[2], block_total[3], bca_total,
+            block_total[4], block_total[5], bcb_total,
+            block_total[6], block_total[7], gen_total,
+            grand_total
+        ])
+
+        return data, block_total
+
+    # -------------------------------------------------
+    # 📌 Prepare PDF
+    # -------------------------------------------------
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="student_strength.pdf"'
+
+    page_width, page_height = landscape(A4)
+    doc = SimpleDocTemplate(
+        response,
+        pagesize=(page_width, page_height),
+        leftMargin=20, rightMargin=20,
+        topMargin=20, bottomMargin=20
+    )
+
+    elements = []
+    styles = getSampleStyleSheet()
+
+    # -------------------------------------------------
+    # Page 1 → 6th to 8th
+    # -------------------------------------------------
+    elements.append(Paragraph("<b>Student Strength Report (6th to 8th)</b>", styles["Title"]))
+    elements.append(Spacer(1, 12))
+
+    data_6_8, total_6_8 = build_table_data(["sixth", "seventh", "eighth"])
+    col_widths = [50, 50] + [40] * (len(data_6_8[0]) - 2)
+
+    table1 = Table(data_6_8, colWidths=col_widths, repeatRows=2)
+    style = TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.darkblue),
+        ("BACKGROUND", (0, 1), (-1, 1), colors.lightblue),
+        ("TEXTCOLOR", (0, 0), (-1, 1), colors.whitesmoke),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("FONTNAME", (0, 0), (-1, 1), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 8),
+        ("GRID", (0, 0), (-1, -1), 0.25, colors.grey),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+
+        # spans
+        ("SPAN", (0, 0), (0, 1)),  # Class
+        ("SPAN", (1, 0), (1, 1)),  # Section
+        ("SPAN", (2, 0), (4, 0)),  # SC
+        ("SPAN", (5, 0), (7, 0)),  # BCA
+        ("SPAN", (8, 0), (10, 0)), # BCB
+        ("SPAN", (11, 0), (13, 0)),# GEN
+        ("SPAN", (14, 0), (14, 1)),# Grand Total
+
+        ("BACKGROUND", (0, -1), (-1, -1), colors.lightgrey),
+        ("FONTNAME", (0, -1), (-1, -1), "Helvetica-Bold"),
+    ])
+    table1.setStyle(style)
+    elements.append(table1)
+
+    elements.append(PageBreak())
+
+    # -------------------------------------------------
+    # Page 2 → 9th to 12th
+    # -------------------------------------------------
+    elements.append(Paragraph("<b>Student Strength Report (9th to 12th)</b>", styles["Title"]))
+    elements.append(Spacer(1, 12))
+
+    data_9_12, total_9_12 = build_table_data(["ninth", "nineth", "tenth", "eleventh", "twelfth"])
+    table2 = Table(data_9_12, colWidths=col_widths, repeatRows=2)
+    table2.setStyle(style)
+    elements.append(table2)
+
+    # -------------------------------------------------
+    # Optional Grand Total across 6th–12th
+    # -------------------------------------------------
+    grand_total = [a+b for a, b in zip(total_6_8, total_9_12)]
+    sc_total = grand_total[0] + grand_total[1]
+    bca_total = grand_total[2] + grand_total[3]
+    bcb_total = grand_total[4] + grand_total[5]
+    gen_total = grand_total[6] + grand_total[7]
+    all_total = sc_total + bca_total + bcb_total + gen_total
+
+    data_grand = [[
+        "Grand Total (6th–12th)", "",
+        grand_total[0], grand_total[1], sc_total,
+        grand_total[2], grand_total[3], bca_total,
+        grand_total[4], grand_total[5], bcb_total,
+        grand_total[6], grand_total[7], gen_total,
+        all_total
+    ]]
+
+    table3 = Table(data_grand, colWidths=col_widths)
+    table3.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("GRID", (0, 0), (-1, -1), 0.25, colors.black),
+    ]))
+    elements.append(Spacer(1, 12))
+    elements.append(table3)
+
+    # -------------------------------------------------
+    # Build PDF
+    # -------------------------------------------------
+    doc.build(elements)
+    return response
+
+
+def mandatory_public_disclosure(request):
+    disclosures = MandatoryPublicDisclosure.objects.filter(is_active=True).order_by("id")
+
+    return render(request, "mandatory_disclosure.html", {"disclosures": disclosures})
+
+
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('index')  # redirect to dashboard
+        else:
+            error = "Invalid credentials"
+            return render(request, 'index.html', {'error': error})
+    return redirect('index')
