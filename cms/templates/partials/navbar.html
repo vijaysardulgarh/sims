@@ -43,10 +43,10 @@
           <ul class="dropdown-menu" aria-labelledby="academicsDropdown">
             <li><a class="dropdown-item" href="{% url 'subjects' %}">Subjects Offered</a></li>
             <li><a class="dropdown-item" href="{% url 'curriculum' %}">Curriculum</a></li>
-            <li><a class="dropdown-item" href="#">Syllabus</a></li>
-            <li><a class="dropdown-item" href="#">Examinations & Results</a></li>
-            <li><a class="dropdown-item" href="#">Time Table</a></li>
-            <li><a class="dropdown-item" href="#">Downloads</a></li>
+            <li><a class="dropdown-item" href="{% url 'syllabus' %}">Syllabus</a></li>
+            <li><a class="dropdown-item" href="{% url 'exams' %}">Examinations & Results</a></li>
+            <li><a class="dropdown-item" href="{% url 'time_table' %}">Time Table</a></li>
+            <li><a class="dropdown-item" href="{% url 'downloads' %}">Downloads</a></li>
           </ul>
         </li>
 
@@ -68,11 +68,14 @@
             aria-expanded="false">Students</a>
           <ul class="dropdown-menu" aria-labelledby="studentsDropdown">
             <li><a class="dropdown-item" href="{% url 'achievement_list' %}">Achievements</a></li>
-            <li><a class="dropdown-item" href="#">Board Results / Toppers</a></li>
-            <li><a class="dropdown-item" href="#">Sports & Cultural Achievements</a></li>
-            <li><a class="dropdown-item" href="#">Gallery</a></li>
-            <li><a class="dropdown-item" href="#">Notices</a></li>
-            <li><a class="dropdown-item" href="#">Events</a></li>
+            <li><a class="dropdown-item" href="{% url 'board_results' %}">Board Results / Toppers</a></li>
+            <li><a class="dropdown-item" href="{% url 'sports_achievements' %}">Sports & Cultural Achievements</a></li>
+            <li><a class="dropdown-item" href="{% url 'gallery' %}">Gallery</a></li>
+            <li><a class="dropdown-item" href="{% url 'notices' %}">Notices</a></li>
+            <li><a class="dropdown-item" href="{% url 'events' %}">Events</a></li>
+            <li><a class="dropdown-item" href="{% url 'signin_link' %}">Signin Sheet</a></li>
+            <li><a class="dropdown-item" href="{% url 'roll_call_link' %}">Roll Call Sheet</a></li>
+            <li><a class="dropdown-item" href="{% url 'student_strength_pdf' %}">Student Strength Report</a></li>
           </ul>
         </li>
 
@@ -93,11 +96,10 @@
           <a class="nav-link dropdown-toggle" href="#" id="mandatoryDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">Mandatory Info</a>
           <ul class="dropdown-menu" aria-labelledby="mandatoryDropdown">
+            <li><a class="dropdown-item" href="{% url 'mandatory_public_disclosure' %}">Mandatory Public Disclosure</a></li>
             {% for committee in menu_committees %}
               <li>
-                <a class="dropdown-item" href="{% url 'committee_detail' committee.id %}">
-                  {{ committee.name }}
-                </a>
+                <a class="dropdown-item" href="{% url 'committee_detail' committee.id %}">{{ committee.name }}</a>
               </li>
             {% empty %}
               <li><span class="dropdown-item text-muted">No Committees</span></li>
@@ -125,4 +127,3 @@
     </div>
   </div>
 </nav>
-
