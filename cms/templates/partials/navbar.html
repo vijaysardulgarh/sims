@@ -1,15 +1,15 @@
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-warning text-dark shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light bg-warning text-dark shadow-sm">
   <div class="container-fluid">
+
     <!-- Logo / School Name -->
     <a class="navbar-brand fw-bold" href="{% url 'index' %}">
       🏫 School Information Management System (SIMS)
     </a>
 
     <!-- Mobile Toggle -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#schoolNavbar" aria-controls="schoolNavbar"
-      aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#schoolNavbar"
+      aria-controls="schoolNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -19,7 +19,8 @@
 
         <!-- Home -->
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" 
+             href="{% url 'index' %}">Home</a>
         </li>
 
         <!-- About Us -->
@@ -33,6 +34,7 @@
             <li><a class="dropdown-item" href="{% url 'nodal' %}">Nodal Officer</a></li>
             <li><a class="dropdown-item" href="{% url 'affiliation_status' %}">Affiliation Status</a></li>
             <li><a class="dropdown-item" href="{% url 'infrastructure' %}">Infrastructure</a></li>
+            <li><a class="dropdown-item" href="{% url 'contact' %}">Contact Us</a></li>
           </ul>
         </li>
 
@@ -73,9 +75,6 @@
             <li><a class="dropdown-item" href="{% url 'gallery' %}">Gallery</a></li>
             <li><a class="dropdown-item" href="{% url 'notices' %}">Notices</a></li>
             <li><a class="dropdown-item" href="{% url 'events' %}">Events</a></li>
-            <li><a class="dropdown-item" href="{% url 'signin_link' %}">Signin Sheet</a></li>
-            <li><a class="dropdown-item" href="{% url 'roll_call_link' %}">Roll Call Sheet</a></li>
-            <li><a class="dropdown-item" href="{% url 'student_strength_pdf' %}">Student Strength Report</a></li>
           </ul>
         </li>
 
@@ -98,9 +97,7 @@
           <ul class="dropdown-menu" aria-labelledby="mandatoryDropdown">
             <li><a class="dropdown-item" href="{% url 'mandatory_public_disclosure' %}">Mandatory Public Disclosure</a></li>
             {% for committee in menu_committees %}
-              <li>
-                <a class="dropdown-item" href="{% url 'committee_detail' committee.id %}">{{ committee.name }}</a>
-              </li>
+              <li><a class="dropdown-item" href="{% url 'committee_detail' committee.id %}">{{ committee.name }}</a></li>
             {% empty %}
               <li><span class="dropdown-item text-muted">No Committees</span></li>
             {% endfor %}
@@ -118,9 +115,17 @@
           </ul>
         </li>
 
-        <!-- Contact -->
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+        <!-- Reports -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Reports</a>
+          <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+            <li><a class="dropdown-item" href="{% url 'signin_link' %}">Signin Report</a></li>
+            <li><a class="dropdown-item" href="{% url 'roll_call_link' %}">Student Report</a></li>
+            <li><a class="dropdown-item" href="{% url 'subject_report_link' %}">Subject Report</a></li>
+            <li><a class="dropdown-item" href="{% url 'bank_report_link' %}">Bank Account Report</a></li>
+            <li><a class="dropdown-item" href="{% url 'student_strength_pdf' %}">Student Strength Report</a></li>
+          </ul>
         </li>
 
       </ul>
