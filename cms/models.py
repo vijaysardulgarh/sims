@@ -755,7 +755,7 @@ class Student(models.Model):
     studentclass = models.CharField(max_length=20, blank=True, null=True)
     stream = models.CharField(max_length=50, blank=True, null=True)
     section = models.CharField(max_length=20, blank=True, null=True)
-    roll_number = models.CharField(max_length=20, blank=True, null=True)
+    roll_number = models.IntegerField(blank=True, null=True)
     admission_number = models.CharField(max_length=20, blank=True, null=True)
 
     # Personal Info
@@ -1028,6 +1028,7 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
 
