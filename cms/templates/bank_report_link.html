@@ -3,8 +3,8 @@
 {% block content %}
 <div class="container mt-5">
     <div class="text-center mb-4">
-        <h2 class="fw-bold text-success">📋 Roll Call - {{ school.name }}</h2>
-        <p class="text-muted">Download Roll Call PDF for each class & section</p>
+        <h2 class="fw-bold text-primary">🏦 Bank Report - {{ school.name }}</h2>
+        <p class="text-muted">Download Bank Report PDF for each class & section</p>
     </div>
 
     {% if class_sections %}
@@ -13,7 +13,7 @@
         {% for group in grouped_classes %}
             <div class="mb-5">
                 <!-- Class Heading -->
-                <h4 class="fw-bold text-white bg-success py-2 rounded text-center shadow-sm">
+                <h4 class="fw-bold text-white bg-primary py-2 rounded text-center shadow-sm">
                     {{ group.grouper }}
                 </h4>
 
@@ -26,8 +26,8 @@
                                     <h6 class="card-title fw-semibold text-dark">
                                         Section {{ cs.section }}
                                     </h6>
-                                    <a href="{% url 'roll_call' cs.studentclass cs.section %}" 
-                                       class="btn btn-rollcall w-100 mt-2">
+                                    <a href="{% url 'bank_report' cs.studentclass cs.section %}" 
+                                       class="btn btn-bank w-100 mt-2">
                                         Download PDF
                                     </a>
                                 </div>
@@ -45,17 +45,17 @@
 </div>
 
 <style>
-    /* Roll Call Gradient button */
-    .btn-rollcall {
-        background: linear-gradient(45deg, #28a745, #00c851);
+    /* Bank Report Gradient button */
+    .btn-bank {
+        background: linear-gradient(45deg, #007bff, #00a8ff);
         color: #fff;
         border: none;
         border-radius: 8px;
         transition: all 0.3s ease;
         font-weight: 500;
     }
-    .btn-rollcall:hover {
-        background: linear-gradient(45deg, #1e7e34, #009432);
+    .btn-bank:hover {
+        background: linear-gradient(45deg, #0056b3, #006fbd);
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         color: #fff;
