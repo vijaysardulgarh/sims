@@ -402,7 +402,7 @@ class Stream(models.Model):
         ]
         ordering = ["school", "name"]
     
-class Class(models.Model):
+class StudentClass(models.Model):
     CLASS_CHOICES = [
         ('6th', '6th'),
         ('7th', '7th'),
@@ -411,17 +411,18 @@ class Class(models.Model):
         ('10th', '10th'),
         ('11th', '11th'),
         ('12th', '12th'),
-        ('na', 'NA'),
     ]
 
     name = models.CharField(
         max_length=50,
-        choices=CLASS_CHOICES
+        choices=CLASS_CHOICES,
+        blank=True,
+        null=True
     )
-    school = models.ForeignKey(School, on_delete=models.PROTECT)
+    school = models.ForeignKey("School", on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"{self.name} - {self.school.name}"
+        return f"{self.name or 'No Class'} - {self.school.name}"
 
     class Meta:
         verbose_name_plural = "Classes"
@@ -429,20 +430,22 @@ class Class(models.Model):
             models.UniqueConstraint(fields=["name", "school"], name="unique_class_per_school")
         ]
 
-
 class Section(models.Model):
     SECTION_CHOICES = [
         ('A', 'A'),
         ('B', 'B'),
         ('C', 'C'),
         ('D', 'D'),
-        ('na', 'NA'),
         # Add more choices as needed
     ]
+
     name = models.CharField(max_length=2, choices=SECTION_CHOICES)
-    section_class = models.ForeignKey('Class', on_delete=models.PROTECT, related_name='sections')
-    section_stream = models.ForeignKey('Stream', on_delete=models.PROTECT, related_name='sections')
+    section_class = models.ForeignKey('StudentClass', on_delete=models.PROTECT, related_name='sections')
+    section_stream = models.ForeignKey('Stream', on_delete=models.PROTECT, related_name='sections', blank=True, null=True)
+
     def __str__(self):
+        if self.section_stream:
+            return f"{self.section_class.name} - {self.section_stream.name} ({self.name})"
         return f"{self.section_class.name} ({self.name})"
 
 
@@ -1021,6 +1024,7 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
 
