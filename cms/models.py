@@ -377,22 +377,23 @@ class Department(models.Model):
         return self.name
     
 class Stream(models.Model):
-    SCIENCE = 'Science'
-    COMMERCE = 'Commerce'
-    ARTS = 'Arts'
+    class StreamType(models.TextChoices):
+        SCIENCE = "Science", "Science"
+        COMMERCE = "Commerce", "Commerce"
+        ARTS = "Arts", "Arts"
 
-    STREAM_CHOICES = [
-        ("", "---------"),  # empty option
-        (SCIENCE, 'Science'),
-        (COMMERCE, 'Commerce'),
-        (ARTS, 'Arts'),
-    ]
-
-    name = models.CharField(max_length=100, choices=STREAM_CHOICES)
-    school = models.ForeignKey(School, on_delete=models.PROTECT)
+    # Stream can be NULL (for 6th–10th) OR one of the choices (for 11th–12th)
+    name = models.CharField(
+        max_length=100,
+        choices=StreamType.choices,
+        blank=True,
+        null=True
+    )
+    school = models.ForeignKey("School", on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"{self.name} - {self.school.name}"
+        # show "No Stream" if name is empty
+        return f"{self.name or 'No Stream'} - {self.school.name}"
 
     class Meta:
         verbose_name_plural = "Streams"
@@ -1020,5 +1021,6 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
