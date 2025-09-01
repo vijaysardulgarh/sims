@@ -822,68 +822,68 @@ class Student(models.Model):
 
                 # --- code if want to sort alphabetically ---
 
-        # if self.subjects_opted:
-        #     subject_list = self.subjects_opted.split(',')
-        #     all_subjects = []
-
-        #     for subject in subject_list:
-        #         parts = subject.split(':', 1)
-        #         if len(parts) == 2:
-        #             subject_type, subject_name = parts
-        #             subject_type = subject_type.strip()
-        #             subject_name = subject_name.strip()
-
-        #             if subject_type == "Compulsory":
-        #                 all_subjects.append(subject_name)
-        #             elif subject_type in ("Optional", "NSQF", "Language"):
-        #                 all_subjects.append(subject_name)
-        #             elif subject_type == "Additional":
-        #                 all_subjects.append(f"Additional: {subject_name}")
-
-        #     # 🔹 Remove duplicates but preserve order
-        #     seen = {}
-        #     cleaned_subjects = [seen.setdefault(s, s) for s in all_subjects if s not in seen]
-
-        #     # 🔹 Sort alphabetically (case-insensitive)
-        #     self.subjects = ', '.join(sorted(cleaned_subjects, key=lambda x: x.lower()))
-        # else:
-        #     self.subjects = None
-            
-
-        # --- code if want to sort as per given choice ---
-
         if self.subjects_opted:
             subject_list = self.subjects_opted.split(',')
-
-            compulsory_subjects = []
-            optional_subjects = []
-            nsqf_subjects = []
-            additional_subjects = []
-            language_subjects = []
+            all_subjects = []
 
             for subject in subject_list:
-                parts = subject.split(':', 1)  # prevent ValueError
+                parts = subject.split(':', 1)
                 if len(parts) == 2:
                     subject_type, subject_name = parts
                     subject_type = subject_type.strip()
                     subject_name = subject_name.strip()
 
-                    if subject_type.lower() == "compulsory":
-                        compulsory_subjects.append(f"Compulsory: {subject_name}")
-                    elif subject_type.lower() == "optional":
-                        optional_subjects.append(f"Optional: {subject_name}")
-                    elif subject_type.lower() == "nsqf":
-                        nsqf_subjects.append(f"NSQF: {subject_name}")
-                    elif subject_type.lower() == "additional":
-                        additional_subjects.append(f"Additional: {subject_name}")
-                    elif subject_type.lower() == "language":
-                        language_subjects.append(f"Language: {subject_name}")
+                    if subject_type == "Compulsory":
+                        all_subjects.append(subject_name)
+                    elif subject_type in ("Optional", "NSQF", "Language"):
+                        all_subjects.append(subject_name)
+                    elif subject_type == "Additional":
+                        all_subjects.append(f"Additional: {subject_name}")
 
-            # ✅ Define order: Compulsory → Optional → NSQF → Additional → Language
-            ordered_subjects = compulsory_subjects + optional_subjects + nsqf_subjects + additional_subjects + language_subjects
+            # 🔹 Remove duplicates but preserve order
+            seen = {}
+            cleaned_subjects = [seen.setdefault(s, s) for s in all_subjects if s not in seen]
 
-            # Save back to subjects field in correct order
-            self.subjects = ", ".join(ordered_subjects)
+            # 🔹 Sort alphabetically (case-insensitive)
+            self.subjects = ', '.join(sorted(cleaned_subjects, key=lambda x: x.lower()))
+        else:
+            self.subjects = None
+            
+
+        # --- code if want to sort as per given choice ---
+
+        # if self.subjects_opted:
+        #     subject_list = self.subjects_opted.split(',')
+
+        #     compulsory_subjects = []
+        #     optional_subjects = []
+        #     nsqf_subjects = []
+        #     additional_subjects = []
+        #     language_subjects = []
+
+        #     for subject in subject_list:
+        #         parts = subject.split(':', 1)  # prevent ValueError
+        #         if len(parts) == 2:
+        #             subject_type, subject_name = parts
+        #             subject_type = subject_type.strip()
+        #             subject_name = subject_name.strip()
+
+        #             if subject_type.lower() == "compulsory":
+        #                 compulsory_subjects.append(f"Compulsory: {subject_name}")
+        #             elif subject_type.lower() == "optional":
+        #                 optional_subjects.append(f"Optional: {subject_name}")
+        #             elif subject_type.lower() == "nsqf":
+        #                 nsqf_subjects.append(f"NSQF: {subject_name}")
+        #             elif subject_type.lower() == "additional":
+        #                 additional_subjects.append(f"Additional: {subject_name}")
+        #             elif subject_type.lower() == "language":
+        #                 language_subjects.append(f"Language: {subject_name}")
+
+        #     # ✅ Define order: Compulsory → Optional → NSQF → Additional → Language
+        #     ordered_subjects = compulsory_subjects + optional_subjects + nsqf_subjects + additional_subjects + language_subjects
+
+        #     # Save back to subjects field in correct order
+        #     self.subjects = ", ".join(ordered_subjects)
 
             super().save(*args, **kwargs)
 
