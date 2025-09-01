@@ -402,7 +402,7 @@ class Stream(models.Model):
         ]
         ordering = ["school", "name"]
     
-class StudentClass(models.Model):
+class Class(models.Model):
     CLASS_CHOICES = [
         ('6th', '6th'),
         ('7th', '7th'),
@@ -1024,6 +1024,7 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
 
