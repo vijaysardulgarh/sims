@@ -382,6 +382,7 @@ class Stream(models.Model):
     ARTS = 'Arts'
 
     STREAM_CHOICES = [
+        (_, '_'),
         (SCIENCE, 'Science'),
         (COMMERCE, 'Commerce'),
         (ARTS, 'Arts'),
@@ -1019,3 +1020,4 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
