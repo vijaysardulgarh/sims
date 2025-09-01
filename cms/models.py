@@ -820,6 +820,8 @@ class Student(models.Model):
                 subject_type, subject_name = subject.split(':')
                 if subject_type.strip().startswith('Optional'):
                     optional_subjects.append(subject_name.strip())  # Append to optional subjects list
+                if subject_type.strip().startswith('NSQF'):
+                    optional_subjects.append(subject_name.strip())  # Append nsqf to ubjects list                    
                 #elif subject_type.strip().lower() == 'compulsory':
                    # compulsory_subjects.append(subject_name.strip())  # Append to compulsory subjects list
             
@@ -1024,6 +1026,7 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
 
