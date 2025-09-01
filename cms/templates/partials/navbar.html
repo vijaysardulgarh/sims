@@ -90,19 +90,20 @@
           </ul>
         </li>
 
-        <!-- Mandatory Info -->
+        <!-- Reports -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="mandatoryDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Mandatory Info</a>
-          <ul class="dropdown-menu" aria-labelledby="mandatoryDropdown">
-            <li><a class="dropdown-item" href="{% url 'mandatory_public_disclosure' %}">Mandatory Public Disclosure</a></li>
-            {% for committee in menu_committees %}
-              <li><a class="dropdown-item" href="{% url 'committee_detail' committee.id %}">{{ committee.name }}</a></li>
-            {% empty %}
-              <li><span class="dropdown-item text-muted">No Committees</span></li>
-            {% endfor %}
+          <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Reports</a>
+          <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+            <li><a class="dropdown-item" href="{% url 'signin_link' %}">Signin Report</a></li>
+            <li><a class="dropdown-item" href="{% url 'roll_call_link' %}">Student Report</a></li>
+            <li><a class="dropdown-item" href="{% url 'subject_report_link' %}">Subject Report</a></li>
+            <li><a class="dropdown-item" href="{% url 'bank_report_link' %}">Bank Account Report</a></li>
+            <li><a class="dropdown-item" href="{% url 'student_strength_pdf' %}">Student Strength Report</a></li>
           </ul>
         </li>
+
+
 
         <!-- Statistics -->
         <li class="nav-item dropdown">
@@ -115,16 +116,17 @@
           </ul>
         </li>
 
-        <!-- Reports -->
+        <!-- Mandatory Info -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Reports</a>
-          <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
-            <li><a class="dropdown-item" href="{% url 'signin_link' %}">Signin Report</a></li>
-            <li><a class="dropdown-item" href="{% url 'roll_call_link' %}">Student Report</a></li>
-            <li><a class="dropdown-item" href="{% url 'subject_report_link' %}">Subject Report</a></li>
-            <li><a class="dropdown-item" href="{% url 'bank_report_link' %}">Bank Account Report</a></li>
-            <li><a class="dropdown-item" href="{% url 'student_strength_pdf' %}">Student Strength Report</a></li>
+          <a class="nav-link dropdown-toggle" href="#" id="mandatoryDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Mandatory Info</a>
+          <ul class="dropdown-menu" aria-labelledby="mandatoryDropdown">
+            <li><a class="dropdown-item" href="{% url 'mandatory_public_disclosure' %}">Mandatory Public Disclosure</a></li>
+            {% for committee in menu_committees %}
+              <li><a class="dropdown-item" href="{% url 'committee_detail' committee.id %}">{{ committee.name }}</a></li>
+            {% empty %}
+              <li><span class="dropdown-item text-muted">No Committees</span></li>
+            {% endfor %}
           </ul>
         </li>
 
