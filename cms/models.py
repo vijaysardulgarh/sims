@@ -377,23 +377,21 @@ class Department(models.Model):
         return self.name
     
 class Stream(models.Model):
-    class StreamType(models.TextChoices):
-        SCIENCE = "Science", "Science"
-        COMMERCE = "Commerce", "Commerce"
-        ARTS = "Arts", "Arts"
+    SCIENCE = 'Science'
+    COMMERCE = 'Commerce'
+    ARTS = 'Arts'
 
-    # Stream can be NULL (for 6th–10th) OR one of the choices (for 11th–12th)
-    name = models.CharField(
-        max_length=100,
-        choices=StreamType.choices,
-        blank=True,
-        null=True
-    )
-    school = models.ForeignKey("School", on_delete=models.PROTECT)
+    STREAM_CHOICES = [
+        (SCIENCE, 'Science'),
+        (COMMERCE, 'Commerce'),
+        (ARTS, 'Arts'),
+    ]
+
+    name = models.CharField(max_length=100, choices=STREAM_CHOICES)
+    school = models.ForeignKey(School, on_delete=models.PROTECT)
 
     def __str__(self):
-        # show "No Stream" if name is empty
-        return f"{self.name or 'No Stream'} - {self.school.name}"
+        return f"{self.name} - {self.school.name}"
 
     class Meta:
         verbose_name_plural = "Streams"
@@ -411,18 +409,17 @@ class Class(models.Model):
         ('10th', '10th'),
         ('11th', '11th'),
         ('12th', '12th'),
+        ('na', 'NA'),
     ]
 
     name = models.CharField(
         max_length=50,
-        choices=CLASS_CHOICES,
-        blank=True,
-        null=True
+        choices=CLASS_CHOICES
     )
-    school = models.ForeignKey("School", on_delete=models.PROTECT)
+    school = models.ForeignKey(School, on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"{self.name or 'No Class'} - {self.school.name}"
+        return f"{self.name} - {self.school.name}"
 
     class Meta:
         verbose_name_plural = "Classes"
@@ -430,22 +427,20 @@ class Class(models.Model):
             models.UniqueConstraint(fields=["name", "school"], name="unique_class_per_school")
         ]
 
+
 class Section(models.Model):
     SECTION_CHOICES = [
         ('A', 'A'),
         ('B', 'B'),
         ('C', 'C'),
         ('D', 'D'),
+        ('na', 'NA'),
         # Add more choices as needed
     ]
-
     name = models.CharField(max_length=2, choices=SECTION_CHOICES)
-    section_class = models.ForeignKey('StudentClass', on_delete=models.PROTECT, related_name='sections')
-    section_stream = models.ForeignKey('Stream', on_delete=models.PROTECT, related_name='sections', blank=True, null=True)
-
+    section_class = models.ForeignKey('Class', on_delete=models.PROTECT, related_name='sections')
+    section_stream = models.ForeignKey('Stream', on_delete=models.PROTECT, related_name='sections')
     def __str__(self):
-        if self.section_stream:
-            return f"{self.section_class.name} - {self.section_stream.name} ({self.name})"
         return f"{self.section_class.name} ({self.name})"
 
 
@@ -802,45 +797,65 @@ class Student(models.Model):
     disability = models.CharField(max_length=255, blank=True, null=True)
     disorder = models.CharField(max_length=100, blank=True, null=True)
     bpl_certificate_issuing_authority = models.CharField(max_length=255, blank=True, null=True)
-
+    family_id = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return str(self.full_name_aadhar) if self.full_name_aadhar else 'Student {}'.format(self.pk)
 
     def save(self, *args, **kwargs):
+    # --- Normalize category ---
+        if self.category:
+            normalized = self.category.strip().lower()
+            mapping = {
+                "sc": "SC",
+                "scheduled caste": "SC",
+                "gen": "GEN",
+                "general": "GEN",
+                "bc-a": "BC-A",
+                "bca": "BC-A",
+                "bc-b": "BC-B",
+                "bcb": "BC-B",
+                "sbc": "GEN",   # 🔹 Count SBC in General
+            }
+            self.category = mapping.get(normalized, self.category.upper())
+
+        # --- Normalize subjects ---
+        # if self.subjects_opted:
+        #     subject_list = self.subjects_opted.split(',')
+        #     all_subjects = []
+
+        #     for subject in subject_list:
+        #         subject_type, subject_name = subject.split(':')
+        #         if subject_type.strip().startswith(('Compulsory','Optional', 'NSQF', 'Language','Additional')):
+        #             all_subjects.append(subject_name.strip())
+
+        # # 🔹 Sort subjects alphabetically before saving
+        # self.subjects = ', '.join(sorted(all_subjects))
+                # --- Normalize subjects ---
         if self.subjects_opted:
-            # Split the subjects_opted string into individual subjects
             subject_list = self.subjects_opted.split(',')
-            
-            # Initialize lists to store optional and compulsory subjects
-            optional_subjects = []
-            #compulsory_subjects = []
-            
-            # Iterate through each subject to categorize as optional or compulsory
+            all_subjects = []
+
             for subject in subject_list:
-                subject_type, subject_name = subject.split(':')
-                if subject_type.strip().startswith('Optional'):
-                    optional_subjects.append(subject_name.strip())  # Append to optional subjects list
-                if subject_type.strip().startswith('NSQF'):
-                    optional_subjects.append(subject_name.strip())  # Append nsqf to ubjects list 
-                if subject_type.strip().startswith('Language'):
-                    optional_subjects.append(subject_name.strip())  # Append nsqf to ubjects list                     
-                #elif subject_type.strip().lower() == 'compulsory':
-                   # compulsory_subjects.append(subject_name.strip())  # Append to compulsory subjects list
-            
-            # Construct a dictionary to store optional and compulsory subjects
-            #subjects_dict = {
-            #    'optional': optional_subjects,
-            #    #'compulsory': compulsory_subjects
-            #}
-                       
-            # Store the dictionary in JSON format in the subjects field
-                    
-            self.subjects = ', '.join(optional_subjects)
-            #self.subjects = json.dumps(optional_subjects)
-        
+                parts = subject.split(':', 1)
+                if len(parts) == 2:
+                    subject_type, subject_name = parts
+                    subject_type = subject_type.strip()
+                    subject_name = subject_name.strip()
+
+                    if subject_type == "Compulsory":
+                        all_subjects.append(subject_name)
+                    elif subject_type in ("Optional", "NSQF", "Language"):
+                        all_subjects.append(subject_name)
+                    elif subject_type == "Additional":
+                        all_subjects.append(f"Additional: {subject_name}")
+
+            # 🔹 Remove duplicates but preserve order
+            seen = {}
+            self.subjects = ', '.join(seen.setdefault(s, s) for s in all_subjects if s not in seen)
+        else:
+            self.subjects = None
+
         super().save(*args, **kwargs)
-
-
 
 
 class Book(models.Model):
@@ -1028,11 +1043,3 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
-
-
-
-
-
-
-
-

@@ -396,9 +396,15 @@ def achievement_detail(request, pk):
     return render(request, "achievement_detail.html", {"achievement": achievement})
 
 def signin_link(request):
-    # distinct combinations of class and section
+    # ✅ Get current school
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+    # ✅ distinct combinations of class and section for this school
     class_sections = (
-        Student.objects.values("studentclass", "section")
+        Student.objects.filter(school_name=school)
+        .values("studentclass", "section")
         .distinct()
     )
 
@@ -412,7 +418,15 @@ def signin_link(request):
         key=lambda cs: (order_map.get(cs["studentclass"], 999), cs["section"])
     )
 
-    return render(request, "signin_link.html", {"class_sections": class_sections})
+    return render(
+        request,
+        "signin_link.html",
+        {
+            "class_sections": class_sections,
+            "school": school  # ✅ also send school to template
+        }
+    )
+
 
 from django.http import HttpResponse
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, PageBreak
@@ -433,7 +447,11 @@ def signin(request, class_name, section_name):
 
     # Filter students
     # Filter students and sort by roll_number
-    students = Student.objects.filter(studentclass=class_name, section=section_name).order_by('roll_number')
+    students = Student.objects.filter(
+        school_name=school.name,
+        studentclass=class_name,
+        section=section_name
+    ).order_by("roll_number")
 
     # PDF Response
     response = HttpResponse(content_type="application/pdf")
@@ -553,9 +571,15 @@ from reportlab.lib import colors
 import datetime
 
 def roll_call_link(request):
-    # ✅ distinct combinations of class and section
+    # ✅ Get current school
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+    # ✅ distinct combinations of class and section for this school
     class_sections = (
-        Student.objects.values("studentclass", "section")
+        Student.objects.filter(school_name=school)
+        .values("studentclass", "section")
         .distinct()
     )
 
@@ -569,7 +593,8 @@ def roll_call_link(request):
         key=lambda cs: (order_map.get(cs["studentclass"], 999), cs["section"])
     )
 
-    return render(request, "roll_call_link.html", {"class_sections": class_sections})
+    return render(request, "roll_call_link.html", {"class_sections": class_sections, "school": school})
+
 
 def roll_call(request, class_name, section_name):
     # Get current school
@@ -582,7 +607,11 @@ def roll_call(request, class_name, section_name):
     school_logo = getattr(school, 'logo', None)
 
     # Filter students
-    students = Student.objects.filter(studentclass=class_name, section=section_name).order_by("roll_number")
+    students = Student.objects.filter(
+        school_name=school.name,
+        studentclass=class_name,
+        section=section_name
+    ).order_by("roll_number")
 
     # PDF Response
     response = HttpResponse(content_type="application/pdf")
@@ -966,3 +995,303 @@ def user_login(request):
             error = "Invalid credentials"
             return render(request, 'index.html', {'error': error})
     return redirect('index')
+
+
+# ✅ Show available class-section links
+def subject_report_link(request):
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+    # distinct class-section for this school
+    class_sections = (
+        Student.objects.filter(school_name=school)
+        .values("studentclass", "section")
+        .distinct()
+    )
+
+    # custom order
+    class_order = ["Sixth", "Seventh", "Eighth", "Nineth", "Tenth", "Eleventh", "Twelfth"]
+    order_map = {name: i for i, name in enumerate(class_order)}
+
+    # sort by class (custom) then section
+    class_sections = sorted(
+        class_sections,
+        key=lambda cs: (order_map.get(cs["studentclass"], 999), cs["section"])
+    )
+
+    return render(request, "subject_report_link.html", {
+        "class_sections": class_sections,
+        "school": school
+    })
+
+
+# ✅ Generate subject report PDF
+def subject_report(request, class_name, section_name):
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+    school_name = school.name
+    school_address = getattr(school, 'address', '')
+    school_logo = getattr(school, 'logo', None)
+
+    # fetch students
+    students = Student.objects.filter(
+        school_name=school.name,
+        studentclass=class_name,
+        section=section_name
+    ).order_by("roll_number")
+
+    # response PDF
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="subject_report_{class_name}_{section_name}.pdf"'
+
+    doc = SimpleDocTemplate(
+        response,
+        pagesize=landscape(A4),
+        rightMargin=20, leftMargin=20, topMargin=20, bottomMargin=20,
+    )
+
+    elements = []
+    styles = getSampleStyleSheet()
+
+    # styles
+    school_style = ParagraphStyle(name="SchoolTitle", fontSize=18, alignment=1, spaceAfter=4, fontName="Helvetica-Bold")
+    normal_center = ParagraphStyle(name="NormalCenter", alignment=1)
+
+    # --- Header ---
+    header_table_data = []
+    if school_logo:
+        logo = Image(school_logo.path, width=50, height=50)
+        header_table_data.append([logo, Paragraph(f"<b>{school_name}</b>", school_style), ""])
+    else:
+        header_table_data.append(["", Paragraph(f"<b>{school_name}</b>", school_style), ""])
+
+    header_table = Table(header_table_data, colWidths=[60, 600, 60])
+    header_table.setStyle(TableStyle([
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 10),
+    ]))
+    elements.append(header_table)
+
+    if school_address:
+        elements.append(Paragraph(school_address, normal_center))
+    elements.append(Spacer(1, 12))
+
+    # --- Class Info ---
+    class_info = Table(
+        [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {datetime.date.today().strftime('%d-%m-%Y')}"]],
+        colWidths=[200, 200, 200],
+    )
+    class_info.setStyle(TableStyle([
+        ("GRID", (0,0), (-1,-1), 1, colors.black),
+        ("BACKGROUND", (0,0), (-1,-1), colors.lightgrey),
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("FONTNAME", (0,0), (-1,-1), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 10),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+        ("TOPPADDING", (0,0), (-1,-1), 6),
+    ]))
+    elements.append(class_info)
+    elements.append(Spacer(1, 12))
+
+    # --- Table Header ---
+    data = [[
+        "SRN", "Class", "Section", "Roll No",
+        "Student's Name", "Subjects"
+    ]]
+
+    # --- Student Rows ---
+    for student in students:
+        data.append([
+            student.srn,
+            student.studentclass,
+            student.section,
+            student.roll_number,
+            student.full_name_aadhar,
+            student.subjects if student.subjects else ""
+        ])
+
+    # --- Table Styling ---
+    table = Table(data, repeatRows=1, colWidths=[60, 60, 60, 50, 150, 300])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#F9E79F")),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.black),
+        ("ALIGN", (0,0), (3,-1), "CENTER"),
+        ("ALIGN", (4,0), (5,-1), "LEFT"),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 8),
+        ("GRID", (0,0), (-1,-1), 0.5, colors.black),
+        ("BOX", (0,0), (-1,-1), 1, colors.black),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+    ]))
+
+    # alternate row shading
+    for i in range(1, len(data)):
+        if i % 2 == 0:
+            table.setStyle(TableStyle([("BACKGROUND", (0,i), (-1,i), colors.whitesmoke)]))
+
+    elements.append(table)
+
+    # --- Page numbers ---
+    def add_page_number(canvas, doc):
+        canvas.saveState()
+        canvas.setFont("Helvetica", 8)
+        canvas.drawString(750, 15, f"Page {doc.page}")
+        canvas.restoreState()
+
+    doc.build(elements, onFirstPage=add_page_number, onLaterPages=add_page_number)
+    return response
+
+def bank_report_link(request):
+    # ✅ Get current school
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+    # ✅ distinct combinations of class and section for this school
+    class_sections = (
+        Student.objects.filter(school_name=school)
+        .values("studentclass", "section")
+        .distinct()
+    )
+
+    # ✅ Define custom order for classes
+    class_order = ["Sixth", "Seventh", "Eighth", "Nineth", "Tenth", "Eleventh", "Twelfth"]
+    order_map = {name: i for i, name in enumerate(class_order)}
+
+    # ✅ Sort by studentclass (custom order) then section (alphabetically)
+    class_sections = sorted(
+        class_sections,
+        key=lambda cs: (order_map.get(cs["studentclass"], 999), cs["section"])
+    )
+
+    return render(request, "bank_report_link.html", {"class_sections": class_sections, "school": school})
+
+
+def bank_report(request, class_name, section_name):
+    # ✅ Get current school
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+    school_name = school.name
+    school_address = getattr(school, "address", "")
+    school_logo = getattr(school, "logo", None)
+
+    # ✅ Filter students
+    students = Student.objects.filter(
+        school_name=school.name,
+        studentclass=class_name,
+        section=section_name
+    ).order_by("roll_number")
+
+    # ✅ PDF Response
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="bank_report_{class_name}_{section_name}.pdf"'
+
+    doc = SimpleDocTemplate(
+        response,
+        pagesize=landscape(A4),
+        rightMargin=20,
+        leftMargin=20,
+        topMargin=20,
+        bottomMargin=20,
+    )
+    elements = []
+    styles = getSampleStyleSheet()
+
+    # ✅ Custom styles
+    school_style = ParagraphStyle(name="SchoolTitle", fontSize=18, alignment=1, spaceAfter=4, fontName="Helvetica-Bold")
+    normal_center = ParagraphStyle(name="NormalCenter", alignment=1)
+
+    # --- Header: Logo + School Name ---
+    header_table_data = []
+    if school_logo:
+        logo = Image(school_logo.path, width=50, height=50)
+        header_table_data.append([logo, Paragraph(f"<b>{school_name}</b>", school_style), ""])
+    else:
+        header_table_data.append(["", Paragraph(f"<b>{school_name}</b>", school_style), ""])
+
+    header_table = Table(header_table_data, colWidths=[60, 600, 60])
+    header_table.setStyle(TableStyle([
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 10),
+    ]))
+    elements.append(header_table)
+
+    if school_address:
+        elements.append(Paragraph(school_address, normal_center))
+    elements.append(Spacer(1, 12))
+
+    # --- Class Info ---
+    class_info = Table(
+        [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {datetime.date.today().strftime('%d-%m-%Y')}"]],
+        colWidths=[200, 200, 200],
+    )
+    class_info.setStyle(TableStyle([
+        ("GRID", (0,0), (-1,-1), 1, colors.black),
+        ("BACKGROUND", (0,0), (-1,-1), colors.lightgrey),
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("FONTNAME", (0,0), (-1,-1), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 10),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+        ("TOPPADDING", (0,0), (-1,-1), 6),
+    ]))
+    elements.append(class_info)
+    elements.append(Spacer(1, 12))
+
+    # --- Table Header ---
+    data = [[
+        "SRN", "Class", "Section", "Roll No", "Student's Name",
+        "Aadhaar No", "Account Number", "IFSC", "Family ID"
+    ]]
+
+    # --- Student Rows ---
+    for student in students:
+        data.append([
+            student.srn,
+            student.studentclass,
+            student.section,
+            student.roll_number,
+            student.full_name_aadhar,
+            student.aadhaar_number,
+            student.account_number,
+            student.ifsc,
+            student.family_id,
+        ])
+
+    # --- Table Styling ---
+    table = Table(data, repeatRows=1, colWidths=[50, 60, 60, 40, 120, 90, 100, 80, 100])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#F9E79F")),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.black),
+        ("ALIGN", (0,0), (3,-1), "CENTER"),
+        ("ALIGN", (4,0), (-1,-1), "LEFT"),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 8),
+        ("GRID", (0,0), (-1,-1), 0.5, colors.black),
+        ("BOX", (0,0), (-1,-1), 1, colors.black),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+    ]))
+
+    # Alternate row shading
+    for i in range(1, len(data)):
+        if i % 2 == 0:
+            table.setStyle(TableStyle([("BACKGROUND", (0,i), (-1,i), colors.whitesmoke)]))
+
+    elements.append(table)
+
+    # --- Page numbers ---
+    def add_page_number(canvas, doc):
+        canvas.saveState()
+        canvas.setFont("Helvetica", 8)
+        canvas.drawString(750, 15, f"Page {doc.page}")
+        canvas.restoreState()
+
+    doc.build(elements, onFirstPage=add_page_number, onLaterPages=add_page_number)
+    return response
+

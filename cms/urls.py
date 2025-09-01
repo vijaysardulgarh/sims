@@ -58,11 +58,20 @@ urlpatterns = [
     path('students/notices/', views.notices, name='notices'),
     path('students/events/', views.events, name='events'),
     path('signin/<str:class_name>/<str:section_name>/', views.signin, name='signin'),
+    #path("roll-call/<str:studentclass>/<str:section>/", views.roll_call, name="roll_call"),
+    
     path('roll-call/<str:class_name>/<str:section_name>/', views.roll_call, name='roll_call'),
     path('signin_link/', views.signin_link, name='signin_link'),
     path('roll_call_link/', views.roll_call_link, name='roll_call_link'),
     path('student-strength-pdf/', views.generate_student_strength_pdf, name='student_strength_pdf'),
+        # ✅ Subject Reports
+    path("subject-report/", views.subject_report_link, name="subject_report_link"),
+    path("subject-report/<str:class_name>/<str:section_name>/", views.subject_report, name="subject_report"),
 
+    # Bank Report
+    path("bank-report/", views.bank_report_link, name="bank_report_link"),
+    path("bank-report/<str:class_name>/<str:section_name>/", views.bank_report, name="bank_report"),
+    
     # Admissions & Fees
     path('admission_procedure/', views.admission_procedure, name='admission_procedure'),
     path('admission_form/', views.admission_form, name='admission_form'),

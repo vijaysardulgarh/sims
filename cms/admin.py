@@ -103,77 +103,90 @@ class StaffAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = StaffResource
 
 class StudentResource(resources.ModelResource):
+
+    sr_no = fields.Field(attribute='sr_no', column_name='Sr No.')
+    srn = fields.Field(attribute='srn', column_name='SRN')
+    family_id = fields.Field(attribute='family_id', column_name='FamilyId') 
     
-    srn = fields.Field(attribute='srn',column_name='SRN')
-    stream = fields.Field(attribute='stream',column_name='Stream')
-    studentclass = fields.Field(attribute='studentclass',column_name='Class')
-    section = fields.Field(attribute='section',column_name='Section')
-    roll_number = fields.Field(attribute='roll_number',column_name='Roll Number')
-    full_name_aadhar = fields.Field(attribute='full_name_aadhar',column_name='FullName as on Aadhar Card')
-    father_full_name_aadhar = fields.Field(attribute='father_full_name_aadhar',column_name="Father's Full Name aso on Aadhar Card")
-    mother_full_name_aadhar = fields.Field(attribute='mother_full_name_aadhar',column_name="Mother's Full Name as on Aadhaar")
-    
-    date_of_birth = fields.Field(attribute='date_of_birth',column_name='Date of Birth')
-    gender = fields.Field(attribute='gender',column_name='Gender')
-    aadhaar_number = fields.Field(attribute='aadhaar_number',column_name='Aadhaar Number (If any)')
-    category = fields.Field(attribute='category', column_name='Category Name')
-    admission_number = fields.Field(attribute='admission_number',column_name='Admission Number')
-    admission_date = fields.Field(attribute='admission_date',column_name='Admission Date')
-    father_mobile = fields.Field(attribute='father_mobile',column_name="Father's Mobile No")
+    school_code = fields.Field(attribute='school_code', column_name='SchoolCode')
+    school_name = fields.Field(attribute='school_name', column_name='SchoolName')
+    admission_date = fields.Field(attribute='admission_date', column_name='Admission Date')
+    studentclass = fields.Field(attribute='studentclass', column_name='Class')
+    stream = fields.Field(attribute='stream', column_name='Stream')
+    section = fields.Field(attribute='section', column_name='Section')
+    roll_number = fields.Field(attribute='roll_number', column_name='Roll Number')
+    admission_number = fields.Field(attribute='admission_number', column_name='Admission Number')
+    title = fields.Field(attribute='title', column_name='Title')
+    full_name_aadhar = fields.Field(attribute='full_name_aadhar', column_name='FullName as on Aadhar Card')
+    name_in_local_language = fields.Field(attribute='name_in_local_language', column_name='Name In Local Language')
+    date_of_birth = fields.Field(attribute='date_of_birth', column_name='Date of Birth')
+    gender = fields.Field(attribute='gender', column_name='Gender')
+    aadhaar_number = fields.Field(attribute='aadhaar_number', column_name='Aadhaar Number (If any)')
+    eid_number = fields.Field(attribute='eid_number', column_name='EID Number (If any)')
+    domicile_of_haryana = fields.Field(attribute='domicile_of_haryana', column_name='Domicile Of Haryana?')
+    nationality = fields.Field(attribute='nationality', column_name='Nationality')
+    birth_country = fields.Field(attribute='birth_country', column_name='Country')
+    birth_state = fields.Field(attribute='birth_state', column_name='State')
+    birth_district = fields.Field(attribute='birth_district', column_name='District')
+    birth_sub_district = fields.Field(attribute='birth_sub_district', column_name='Sub-district/Tehsil')
+    birth_city_village_town = fields.Field(attribute='birth_city_village_town', column_name='City/Village/Town')
+
+    father_full_name_aadhar = fields.Field(attribute='father_full_name_aadhar', column_name="Father's Full Name aso on Aadhar Card")
+    father_aadhaar_number = fields.Field(attribute='father_aadhaar_number', column_name="Father's Aadhaar Number")
+    father_mobile = fields.Field(attribute='father_mobile', column_name="Father's Mobile No")
+
+    mother_full_name_aadhar = fields.Field(attribute='mother_full_name_aadhar', column_name="Mother's Full Name as on Aadhaar")
+    mother_aadhaar_number = fields.Field(attribute='mother_aadhaar_number', column_name="Mother's Aadhaar Number")
     mother_mobile = fields.Field(attribute='mother_mobile', column_name="Mother's Mobile No")
-    bank_name = fields.Field(attribute='bank_name', column_name='Bank Name')
-    ifsc = fields.Field(attribute='ifsc', column_name='IFSC')
-    account_number = fields.Field(attribute='account_number', column_name='Account Number')
-    disability = fields.Field(attribute='disability', column_name='Disability')
-    disorder = fields.Field(attribute='disorder', column_name='Disorder Name')
+
+    guardian_full_name_aadhar = fields.Field(attribute='guardian_full_name_aadhar', column_name="Guardian's Full Name as on Aadhar Card")
+    guardian_aadhaar_number = fields.Field(attribute='guardian_aadhaar_number', column_name="Guardian's Aadhar Nummber")
+    guardian_mobile = fields.Field(attribute='guardian_mobile', column_name="Guardian's Mobile No")
+
+    family_annual_income = fields.Field(attribute='family_annual_income', column_name='Family Annual Income')
+    bpl_certificate_issuing_authority = fields.Field(attribute='bpl_certificate_issuing_authority', column_name='BPL Certificate Issuing Authority')
+
+    address = fields.Field(attribute='address', column_name='Adress Line 1')
+    postal_code = fields.Field(attribute='postal_code', column_name='Postalcode')
+
+    caste = fields.Field(attribute='caste', column_name='Caste Name')
+    category = fields.Field(attribute='category', column_name='Category Name')
+
     subjects_opted = fields.Field(attribute='subjects_opted', column_name='Subjects opted by student')
-    stream = fields.Field(attribute='stream',column_name='Stream')
-    school_code = fields.Field(attribute='school_code',column_name='SchoolCode')
-    school_name = fields.Field(attribute='school_name',column_name='SchoolName')
-    domicile_of_haryana = fields.Field(attribute='domicile_of_haryana',column_name='Domicile Of Haryana?')
-    father_aadhaar_number = fields.Field(attribute='father_aadhaar_number',column_name="Father's Aadhaar Number")
-    mother_aadhaar_number = fields.Field(attribute='mother_aadhaar_number',column_name="Mother's Aadhaar Number")
-    guardian_full_name_aadhar = fields.Field(attribute='guardian_full_name_aadhar',column_name="Guardian's Full Name as on Aadhar Card")
-    guardian_aadhaar_number = fields.Field(attribute='guardian_aadhaar_number',column_name="Guardian's Aadhar Nummber")
-    family_annual_income = fields.Field(attribute='family_annual_income',column_name='Family Annual Income')
-    state = fields.Field(attribute='state',column_name='State')
-    district = fields.Field(attribute='district',column_name='District')
-    block = fields.Field(attribute='block',column_name='CD Block')
-    sub_district = fields.Field(attribute='sub_district',column_name='Sub-district/Tehsil')
-    city_village_town = fields.Field(attribute='city_village_town',column_name='City/Village/Town')
-    address = fields.Field(attribute='address',column_name='Adress Line 1')
-    postal_code = fields.Field(attribute='postal_code',column_name='Postalcode')
-    guardian_mobile = fields.Field(attribute='mother_mobile', column_name="Guardian's Mobile No")
-    caste = fields.Field(attribute='caste_name', column_name='Caste Name')
-    bpl_certificate_issuing_authority=fields.Field(attribute='bpl_certificate_issuing_authority',column_name='BPL Certificate Issuing Authority')
-    
+    subjects = fields.Field(attribute='subjects', column_name='Processed Subjects')  # ✅ your cleaned subjects logic
+
     class Meta:
         model = Student
-        #exclude = ('id',)
-        fields = ('srn', 'father_full_name_aadhar','mother_full_name_aadhar','category','father_mobile','stream','school_code', 'school_name', 'admission_date', 'studentclass', 'stream', 'section', 'roll_number', 'admission_number','admission_date','title', 'full_name_aadhar', 'name_in_local_language', 'date_of_birth', 'gender', 'aadhaar_number', 'eid_number', 'domicile_of_haryana', 'nationality', 'excel_birth_country', 'birth_state', 'birth_district', 'birth_sub_district', 'birth_city_village_town','subjects_opted','subjects') 
         import_id_fields = ['srn']
-        export_order = ('srn','stream','studentclass','section','roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar','date_of_birth','gender','aadhaar_number','category','admission_number','father_mobile','subjects')
-        #widgets = {
-        #    'admission_date': {'format': '%d/%m/%Y'},  # Format for date fields
-        #    'date_of_birth': {'format': '%d/%m/%Y'},  # Format for date fields
-        #    'bpl_certificate_issued_date': {'format': '%d/%m/%Y'},  # Format for date fields
-        #    'sibling_date_of_birth': {'format': '%d/%m/%Y'},  # Format for date fields
-        #    # Widgets for boolean fields
-       
-        #}       
-        def before_import(self, dataset, using_transactions, dry_run, **kwargs):
-        # Collect all SRNs from the Excel file
-            excel_srn_list = [row['SRN'] for row in dataset.dict]
+        export_order = (
+            'sr_no', 'srn', 'family_id',
+            'school_code', 'school_name', 'admission_date',
+            'studentclass', 'stream', 'section', 'roll_number', 'admission_number',
+            'title', 'full_name_aadhar', 'name_in_local_language',
+            'date_of_birth', 'gender', 'aadhaar_number', 'eid_number',
+            'domicile_of_haryana', 'nationality', 'birth_country',
+            'birth_state', 'birth_district', 'birth_sub_district', 'birth_city_village_town',
+            'father_full_name_aadhar', 'father_aadhaar_number', 'father_mobile',
+            'mother_full_name_aadhar', 'mother_aadhaar_number', 'mother_mobile',
+            'guardian_full_name_aadhar', 'guardian_aadhaar_number', 'guardian_mobile',
+            'family_annual_income', 'bpl_certificate_issuing_authority',
+            'address', 'postal_code', 'caste', 'category',
+            'subjects_opted', 'subjects','family_id'
+        )
+      
+    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+    # Collect all SRNs from the Excel file
+        excel_srn_list = [row['SRN'] for row in dataset.dict]
 
-            # Get all existing SRNs from the database
-            existing_srn_set = set(Student.objects.values_list('srn', flat=True))
+        # Get all existing SRNs from the database
+        existing_srn_set = set(Student.objects.values_list('srn', flat=True))
 
-            # Find SRNs that need to be deleted
-            srns_to_delete = existing_srn_set - set(excel_srn_list)
+        # Find SRNs that need to be deleted
+        srns_to_delete = existing_srn_set - set(excel_srn_list)
 
-            # Delete records from the database whose SRNs are not present in the Excel file
-            if srns_to_delete:
-                Student.objects.filter(srn__in=srns_to_delete).delete()
+        # Delete records from the database whose SRNs are not present in the Excel file
+        if srns_to_delete:
+            Student.objects.filter(srn__in=srns_to_delete).delete()
             
     def before_import_row(self, row, **kwargs):
         try:
@@ -193,11 +206,27 @@ class StudentResource(resources.ModelResource):
             logging.error(f"Error parsing date '{date_str}': {e}")
             return None  # Or provide a default value
         
-class StudentAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    
-    resource_class=StudentResource
-    list_display=('srn','stream','studentclass','section','roll_number','full_name_aadhar','father_full_name_aadhar','mother_full_name_aadhar','date_of_birth','gender','aadhaar_number','category','admission_number','father_mobile','subjects_opted','subjects')
-
+class StudentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = StudentResource
+    list_display = (
+        'srn',
+        'stream',
+        'studentclass',
+        'section',
+        'roll_number',
+        'full_name_aadhar',
+        'father_full_name_aadhar',
+        'mother_full_name_aadhar',
+        'date_of_birth',
+        'gender',
+        'aadhaar_number',
+        'category',
+        'admission_number',
+        'father_mobile',
+        'family_id',  # ✅ Added family_id here
+        'subjects_opted',
+        'subjects',
+    )
     
     
 class TimetableSlotResource(resources.ModelResource):
