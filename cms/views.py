@@ -1099,7 +1099,7 @@ def subject_report(request, class_name, section_name):
 
     # --- Table Header ---
     data = [[
-        "SRN", "Class", "Section", "Roll No",
+        "SRN", "Roll No",
         "Student's Name", "Subjects"
     ]]
 
@@ -1107,19 +1107,18 @@ def subject_report(request, class_name, section_name):
     for student in students:
         data.append([
             student.srn,
-            student.studentclass,
-            student.section,
             student.roll_number,
             student.full_name_aadhar,
             student.subjects if student.subjects else ""
         ])
 
     # --- Table Styling ---
-    table = Table(data, repeatRows=1, colWidths=[60, 60, 60, 50, 150, 300])
+    table = Table(data, repeatRows=1, colWidths=[60, 50, 150, 400])
     table.setStyle(TableStyle([
         ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#F9E79F")),
         ("TEXTCOLOR", (0,0), (-1,0), colors.black),
         ("ALIGN", (0,0), (3,-1), "CENTER"),
+         ("ALIGN", (2,0), (2,-1), "LEFT"),     # Student's Name left-aligned
         ("ALIGN", (4,0), (5,-1), "LEFT"),
         ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
         ("FONTSIZE", (0,0), (-1,-1), 8),
@@ -1246,30 +1245,34 @@ def bank_report(request, class_name, section_name):
 
     # --- Table Header ---
     data = [[
-        "SRN", "Class", "Section", "Roll No", "Student's Name",
-        "Aadhaar No", "Account Number", "IFSC", "Family ID"
+        "SRN", "Roll No", "Student's Name",
+        "Aadhaar No", "Bank Name","Account Number", "IFSC", "Family ID","Category"
     ]]
 
     # --- Student Rows ---
     for student in students:
         data.append([
             student.srn,
-            student.studentclass,
-            student.section,
+            
             student.roll_number,
             student.full_name_aadhar,
             student.aadhaar_number,
+            
+            student.bank_name,
+            
             student.account_number,
             student.ifsc,
             student.family_id,
+            student.category,
         ])
 
     # --- Table Styling ---
-    table = Table(data, repeatRows=1, colWidths=[50, 60, 60, 40, 120, 90, 100, 80, 100])
+    table = Table(data, repeatRows=1, colWidths=[50, 40, 100, 90, 240, 80, 70, 60,40])
     table.setStyle(TableStyle([
         ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#F9E79F")),
         ("TEXTCOLOR", (0,0), (-1,0), colors.black),
         ("ALIGN", (0,0), (3,-1), "CENTER"),
+        ("ALIGN", (2,0), (2,-1), "LEFT"),
         ("ALIGN", (4,0), (-1,-1), "LEFT"),
         ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
         ("FONTSIZE", (0,0), (-1,-1), 8),
