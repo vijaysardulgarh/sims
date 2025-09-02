@@ -42,64 +42,77 @@ from .models import StudentAchievement, ExamDetail
 admin.site.site_header="SIMS" 
 admin.site.site_title="SIMS"
 admin.site.index_title="School Information Management System"
+
+
 class StaffResource(resources.ModelResource):
-    employee_id = fields.Field(attribute='employee_id',column_name='Employee ID')
-    school = fields.Field(attribute='school',column_name='School',widget=ForeignKeyWidget(School, field='name'))
-    name = fields.Field(attribute='name',column_name='Employee Name [ID]')
-    father_name = fields.Field(attribute='father_name',column_name="Father's Name")
-    mother_name = fields.Field(attribute='mother_name',column_name="Mother's Name")
-    spouse_name = fields.Field(attribute='spouse_name',column_name='Spouse Name')
-    gender = fields.Field(attribute='gender',column_name='Gender')
-    aadhar_number = fields.Field(attribute='aadhar_number',column_name='Aadhar No')
-    post_type = fields.Field(attribute='post_type',column_name='Post Type',widget=ForeignKeyWidget(PostType, field='name'))
-    category = fields.Field(attribute='category',column_name='Category')
-    date_of_birth = fields.Field(attribute='date_of_birth',column_name='Date of Birth')
-    joining_date = fields.Field(attribute='joining_date',column_name='Date of Joining School/Office')
-    current_joining_date = fields.Field(attribute='current_joining_date',column_name='Date of Joining School/Office')
-    retirement_date = fields.Field(attribute='retirement_date',column_name='Retirement Date')
-    qualification= fields.Field(attribute='qualification',column_name='Qualification')
-    subject = fields.Field(attribute='subject',column_name='Subject',widget=ForeignKeyWidget(Subject, field='name'))
-    email = fields.Field(attribute='email',column_name='Email ID')
-    mobile_number = fields.Field(attribute='mobile_number',column_name='Mobile Number')
-    # teaching_subject_1 = fields.Field(attribute='teaching_subject_1',column_name='Teaching Subject 1',widget=ForeignKeyWidget(Subject, field='name'))
-    # teaching_subject_2 = fields.Field(attribute='teaching_subject_1',column_name='Teaching Subject 2',widget=ForeignKeyWidget(Subject, field='name'))
-    staff_role = fields.Field(attribute='staff_role',column_name='Staff Role')
-    employment_type = fields.Field(attribute='employment_type',column_name='Employment Type')
-    #designation = fields.Field(attribute='designation',column_name='Designation')
+    employee_id = fields.Field(attribute='employee_id', column_name='Employee ID')
+    school = fields.Field(attribute='school', column_name='School', widget=ForeignKeyWidget(School, field='name'))
+    name = fields.Field(attribute='name', column_name='Employee Name [ID]')
+    father_name = fields.Field(attribute='father_name', column_name="Father's Name")
+    mother_name = fields.Field(attribute='mother_name', column_name="Mother's Name")
+    spouse_name = fields.Field(attribute='spouse_name', column_name='Spouse Name')
+    gender = fields.Field(attribute='gender', column_name='Gender')
+    aadhar_number = fields.Field(attribute='aadhar_number', column_name='Aadhar No')
+    post_type = fields.Field(attribute='post_type', column_name='Post Type', widget=ForeignKeyWidget(PostType, field='name'))
+    category = fields.Field(attribute='category', column_name='Category')
+    date_of_birth = fields.Field(attribute='date_of_birth', column_name='Date of Birth')
+    joining_date = fields.Field(attribute='joining_date', column_name='First Joining Date')  # ✅ renamed
+    current_joining_date = fields.Field(attribute='current_joining_date', column_name='Current Joining Date')  # ✅ renamed
+    retirement_date = fields.Field(attribute='retirement_date', column_name='Retirement Date')
+    qualification = fields.Field(attribute='qualification', column_name='Qualification')
+    subject = fields.Field(attribute='subject', column_name='Subject', widget=ForeignKeyWidget(Subject, field='name'))
+    email = fields.Field(attribute='email', column_name='Email ID')
+    mobile_number = fields.Field(attribute='mobile_number', column_name='Mobile Number')
+    staff_role = fields.Field(attribute='staff_role', column_name='Staff Role')
+    employment_type = fields.Field(attribute='employment_type', column_name='Employment Type')
     priority = fields.Field(attribute='priority', column_name='Priority') 
+
     class Meta:
         model = Staff
-        fields=('id',"employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","email","mobile_number","subject","staff_role","employment_type","post_type")
+        fields = (
+            'id', 'employee_id', 'name', 'father_name', 'mother_name', 'spouse_name',
+            'gender', 'aadhar_number', 'category', 'date_of_birth', 'joining_date',
+            'current_joining_date', 'retirement_date', 'qualification', 'email',
+            'mobile_number', 'subject', 'staff_role', 'employment_type', 'post_type'
+        )
 
     def before_import_row(self, row, **kwargs):
         try:
             if 'Date of Birth' in row and row['Date of Birth']:
                 row['Date of Birth'] = self.reformat_date(row['Date of Birth'])
-            if 'Date of Joining School/Office' in row and row['Date of Joining School/Office']:
-                row['Date of Joining School/Office'] = self.reformat_date(row['Date of Joining School/Office'])
+            if 'First Joining Date' in row and row['First Joining Date']:
+                row['First Joining Date'] = self.reformat_date(row['First Joining Date'])
+            if 'Current Joining Date' in row and row['Current Joining Date']:
+                row['Current Joining Date'] = self.reformat_date(row['Current Joining Date'])
         except ValueError as e:
             logging.error(f"Error converting date: {e}. Row: {row}")
 
     def reformat_date(self, date_str):
-        try:
-            original_format = "%Y-%m-%d"  # Adjust format for date with time
-            date_obj = datetime.datetime.strptime(date_str, original_format)
-            return date_obj.strftime("%Y-%m-%d")
-        except ValueError as e:
-            logging.error(f"Error parsing date '{date_str}': {e}")
-            return None  # Or provide a default value
+        formats = ["%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%m/%d/%Y"]
+        for fmt in formats:
+            try:
+                return datetime.datetime.strptime(date_str, fmt).strftime("%Y-%m-%d")
+            except ValueError:
+                continue
+        logging.error(f"Unrecognized date format: {date_str}")
+        return None
+
         
 class StaffAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
         "employee_id", "name", "father_name", "mother_name", "spouse_name",
         "gender", "aadhar_number", "post_type", "category", "date_of_birth",
         "joining_date", "current_joining_date", "retirement_date",
-        "qualification", "subject", "email", "mobile_number","school",
-        "staff_role", "employment_type", "priority"  # ✅ added priority in admin
+        "qualification", "subject", "email", "mobile_number", "school",
+        "staff_role", "employment_type", "priority"  # ✅ added priority
     )
-    list_filter = ("school", "staff_role", "employment_type", "gender", "category")
-    search_fields = ("name", "employee_id", "email", "mobile_number")
-    ordering = ("priority", "name")  # ✅ staff ordered by priority then name
+    list_filter = (
+        "school", "staff_role", "employment_type", "gender", "category"
+    )
+    search_fields = (
+        "name", "employee_id", "email", "mobile_number"
+    )
+    ordering = ("priority", "name")  # ✅ Order by priority, then name
     resource_class = StaffResource
 
 class StudentResource(resources.ModelResource):
@@ -155,11 +168,15 @@ class StudentResource(resources.ModelResource):
     subjects_opted = fields.Field(attribute='subjects_opted', column_name='Subjects opted by student')
     subjects = fields.Field(attribute='subjects', column_name='Processed Subjects')  # ✅ your cleaned subjects logic
 
+    account_number = fields.Field(attribute='account_number', column_name='Account Number')
+    bank_name = fields.Field(attribute='bank_name', column_name='Bank Name')
+    ifsc = fields.Field(attribute='ifsc', column_name='IFSC')
+
     class Meta:
         model = Student
         import_id_fields = ['srn']
         export_order = (
-            'sr_no', 'srn', 'family_id',
+            'sr_no', 'srn',
             'school_code', 'school_name', 'admission_date',
             'studentclass', 'stream', 'section', 'roll_number', 'admission_number',
             'title', 'full_name_aadhar', 'name_in_local_language',
@@ -171,10 +188,10 @@ class StudentResource(resources.ModelResource):
             'guardian_full_name_aadhar', 'guardian_aadhaar_number', 'guardian_mobile',
             'family_annual_income', 'bpl_certificate_issuing_authority',
             'address', 'postal_code', 'caste', 'category',
-            'subjects_opted', 'subjects','family_id'
+            'subjects_opted', 'subjects','family_id','account_number','bank_name','ifsc'
         )
       
-    def before_import(self, dataset, **kwargs):
+    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
     # Collect all SRNs from the Excel file
         excel_srn_list = [row['SRN'] for row in dataset.dict]
 
@@ -820,6 +837,5 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
-
 
 
