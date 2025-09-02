@@ -174,7 +174,7 @@ class StudentResource(resources.ModelResource):
             'subjects_opted', 'subjects','family_id'
         )
       
-    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+    def before_import(self, dataset, **kwargs):
     # Collect all SRNs from the Excel file
         excel_srn_list = [row['SRN'] for row in dataset.dict]
 
@@ -820,5 +820,6 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
+
 
 
