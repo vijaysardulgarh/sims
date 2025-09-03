@@ -765,13 +765,12 @@ class Student(models.Model):
     father_aadhaar_number = models.CharField(max_length=20, blank=True, null=True)
     mother_full_name_aadhar = models.CharField(max_length=255, blank=True, null=True)
     mother_aadhaar_number = models.CharField(max_length=20, blank=True, null=True)
-    guardian_full_name_aadhar = models.CharField(max_length=255, blank=True, null=True)
-    guardian_aadhaar_number = models.CharField(max_length=20, blank=True, null=True)
+
 
     # Contact
     father_mobile = models.CharField(max_length=20, blank=True, null=True)
     mother_mobile = models.CharField(max_length=20, blank=True, null=True)
-    guardian_mobile = models.CharField(max_length=20, blank=True, null=True)
+
 
     # Financial
     family_annual_income = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
@@ -802,7 +801,7 @@ class Student(models.Model):
         return str(self.full_name_aadhar) if self.full_name_aadhar else 'Student {}'.format(self.pk)
 
     def save(self, *args, **kwargs):
-    # --- Normalize category ---
+        # --- Normalize category ---
         if self.category:
             normalized = self.category.strip().lower()
             mapping = {
@@ -818,12 +817,9 @@ class Student(models.Model):
             }
             self.category = mapping.get(normalized, self.category.upper())
 
-          
-
-                # --- code if want to sort alphabetically ---
-
+        # --- Normalize subjects_opted ---
         if self.subjects_opted:
-            subject_list = self.subjects_opted.split(',')
+            subject_list = str(self.subjects_opted).split(',')
             all_subjects = []
 
             for subject in subject_list:
@@ -833,9 +829,7 @@ class Student(models.Model):
                     subject_type = subject_type.strip()
                     subject_name = subject_name.strip()
 
-                    if subject_type == "Compulsory":
-                        all_subjects.append(subject_name)
-                    elif subject_type in ("Optional", "NSQF", "Language"):
+                    if subject_type in ("Compulsory", "Optional", "NSQF", "Language"):
                         all_subjects.append(subject_name)
                     elif subject_type == "Additional":
                         all_subjects.append(f"Additional: {subject_name}")
@@ -848,6 +842,12 @@ class Student(models.Model):
             self.subjects = ', '.join(sorted(cleaned_subjects, key=lambda x: x.lower()))
         else:
             self.subjects = None
+
+        # ✅ Always call super().save()
+        super().save(*args, **kwargs)
+
+
+
             
 
         # --- code if want to sort as per given choice ---
@@ -885,7 +885,7 @@ class Student(models.Model):
         #     # Save back to subjects field in correct order
         #     self.subjects = ", ".join(ordered_subjects)
 
-            super().save(*args, **kwargs)
+
 
 
 class Book(models.Model):
