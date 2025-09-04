@@ -1298,3 +1298,158 @@ def bank_report(request, class_name, section_name):
     doc.build(elements, onFirstPage=add_page_number, onLaterPages=add_page_number)
     return response
 
+
+
+def cwsn_students_report(request):
+    # Get current school
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+
+    CLASS_ORDER = {
+        "Sixth": 6,
+        "Seventh": 7,
+        "Eighth": 8,
+        "Nineth": 9,
+        "Tenth": 10,
+        "Eleventh": 11,
+        "Twelfth": 12,
+    }
+
+    students = list(Student.objects.filter(
+        school_name=school.name
+    ).exclude(disability__isnull=True).exclude(disability__exact=""))
+
+    students.sort(
+        key=lambda s: (
+            CLASS_ORDER.get(s.studentclass, 99),
+            s.section or "",
+            s.roll_number or 0
+        )
+    )
+    # PDF Response
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="cwsn_students_{school.name}.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4), rightMargin=20, leftMargin=20, topMargin=20, bottomMargin=20)
+    elements = []
+    styles = getSampleStyleSheet()
+
+    title_style = ParagraphStyle(name="Title", fontSize=16, alignment=1, spaceAfter=10, fontName="Helvetica-Bold")
+    elements.append(Paragraph(f"CWSN Students Report - {school.name}", title_style))
+    elements.append(Spacer(1, 12))
+
+    # Table Header
+    data = [[
+        "SRN", "Class", "Section", "Roll No", "Adm No", "Student's Name",
+        "Father's Name", "DOB", "Gender", "Disability"
+    ]]
+
+    # Rows
+    for s in students:
+        data.append([
+            s.srn,
+            s.studentclass,
+            s.section,
+            s.roll_number,
+            s.admission_number,
+            s.full_name_aadhar,
+            s.father_full_name_aadhar,
+            s.date_of_birth.strftime("%d-%m-%Y") if s.date_of_birth else "",
+            s.gender,
+            s.disability,
+        ])
+
+    # Table
+    table = Table(data, repeatRows=1, colWidths=[60, 50, 50, 40, 60, 100, 100, 70, 50, 150])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#AED6F1")),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("GRID", (0,0), (-1,-1), 0.5, colors.black),
+        ("FONTSIZE", (0,0), (-1,-1), 8),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+    ]))
+    elements.append(table)
+
+    doc.build(elements)
+    return response
+
+
+def bpl_students_report(request):
+    # Get current school
+    school = get_current_school(request)
+    if not school:
+        return redirect("/")
+
+
+    CLASS_ORDER = {
+        "Sixth": 6,
+        "Seventh": 7,
+        "Eighth": 8,
+        "Nineth": 9,
+        "Tenth": 10,
+        "Eleventh": 11,
+        "Twelfth": 12,
+    }
+
+    students = list(Student.objects.filter(
+        school_name=school.name
+    ).exclude(below_poverty_line_certificate_number__isnull=True).exclude(below_poverty_line_certificate_number__exact=""))
+
+    students.sort(
+        key=lambda s: (
+            CLASS_ORDER.get(s.studentclass, 99),
+            s.section or "",
+            s.roll_number or 0
+        )
+    )
+
+
+    # PDF Response
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="bpl_students_{school.name}.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=landscape(A4), rightMargin=20, leftMargin=20, topMargin=20, bottomMargin=20)
+    elements = []
+    styles = getSampleStyleSheet()
+
+    title_style = ParagraphStyle(name="Title", fontSize=16, alignment=1, spaceAfter=10, fontName="Helvetica-Bold")
+    elements.append(Paragraph(f"BPL Students Report - {school.name}", title_style))
+    elements.append(Spacer(1, 12))
+
+    # Table Header
+    data = [[
+        "SRN", "Class", "Section", "Roll No", "Adm No", "Student's Name",
+        "DOB", "Gender", "Father's Name", "BPL Certificate No.","Category",
+    ]]
+
+    # Rows
+    for s in students:
+        data.append([
+            s.srn,
+            s.studentclass,
+            s.section,
+            s.roll_number,
+            s.admission_number,
+            s.full_name_aadhar,
+            s.date_of_birth.strftime("%d-%m-%Y") if s.date_of_birth else "",
+            s.gender,
+            s.father_full_name_aadhar,
+            s.below_poverty_line_certificate_number,
+            s.category,
+        ])
+
+    # Table
+    table = Table(data, repeatRows=1, colWidths=[60, 50, 50, 40, 60, 100, 70, 50, 100, 100,50])
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#AED6F1")),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("GRID", (0,0), (-1,-1), 0.5, colors.black),
+        ("FONTSIZE", (0,0), (-1,-1), 8),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+    ]))
+    elements.append(table)
+
+    doc.build(elements)
+    return response
