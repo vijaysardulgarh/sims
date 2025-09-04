@@ -795,7 +795,9 @@ class Student(models.Model):
     category = models.CharField(max_length=100, blank=True, null=True)
     disability = models.CharField(max_length=255, blank=True, null=True)
     disorder = models.CharField(max_length=100, blank=True, null=True)
+    below_poverty_line_certificate_number=models.CharField(max_length=255, blank=True, null=True)
     bpl_certificate_issuing_authority = models.CharField(max_length=255, blank=True, null=True)
+
     family_id = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return str(self.full_name_aadhar) if self.full_name_aadhar else 'Student {}'.format(self.pk)
@@ -1073,3 +1075,4 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
