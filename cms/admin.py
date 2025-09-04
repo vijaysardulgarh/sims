@@ -150,6 +150,8 @@ class StudentResource(resources.ModelResource):
     disability = fields.Field(attribute='disability', column_name='Disability')
     disorder = fields.Field(attribute='disorder', column_name='Disorder Name')
     bpl_certificate_issuing_authority = fields.Field(attribute='bpl_certificate_issuing_authority', column_name='BPL Certificate Issuing Authority')
+    below_poverty_line_certificate_number = fields.Field(attribute='below_poverty_line_certificate_number', column_name='Below Poverty Line Certificate Number')
+    
     family_id = fields.Field(attribute='family_id', column_name='FamilyId') 
 
     class Meta:
@@ -199,6 +201,7 @@ class StudentResource(resources.ModelResource):
              'disability',
              'disorder',
              'bpl_certificate_issuing_authority',
+             'below_poverty_line_certificate_number',
              'family_id'
              
         )
@@ -255,6 +258,7 @@ class StudentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'family_id',  # ✅ Added family_id here
         'subjects_opted',
         'subjects',
+        'below_poverty_line_certificate_number',
     )
     
     
@@ -849,5 +853,6 @@ admin.site.register(Student,StudentAdmin)
 admin.site.register(Book)
 admin.site.register(SMCMember,SMCMemberAdmin)
 admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
+
 
 
