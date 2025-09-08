@@ -1453,3 +1453,4 @@ def bpl_students_report(request):
 
     doc.build(elements)
     return response
+
