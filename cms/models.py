@@ -7,7 +7,7 @@ from decimal import Decimal
 #from django.contrib.gis.db import models as gis_models
 from datetime import date
 #from django.contrib.auth.models import AbstractUser
-
+from django.core.exceptions import ValidationError
 
 #class User(AbstractUser):
     #STUDENT = 'student'
@@ -58,6 +58,383 @@ class School(models.Model):
         ordering = ["name"]
 
 
+
+class PostType(models.Model):
+    name = models.CharField(max_length=50, unique=True)  # e.g., TGT, PGT, Non-Teaching
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+    
+
+
+class Staff(models.Model):
+
+    school = models.ForeignKey('School', on_delete=models.SET_NULL, null=True, blank=True, related_name='staff')
+    employee_id = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
+    father_name = models.CharField(max_length=50, null=True, blank=True)
+    mother_name = models.CharField(max_length=50, null=True, blank=True)
+    spouse_name = models.CharField(max_length=50, null=True, blank=True)
+
+    GENDER_CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
+    ]
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, blank=True, null=True)
+    aadhar_number = models.CharField(max_length=12, unique=True, null=True, blank=True, help_text="Optional. Must be unique if provided.")
+    post_type = models.ForeignKey(
+        PostType,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    CATEGORY_CHOICES = [
+        ('GEN', 'General'),
+        ('SC', 'SC'),
+        ('BC-A', 'BC-A'),
+        ('BC-B', 'BC-B'),
+        ('EWS', 'EWS'),
+        ('OTHER', 'Other'),
+    ]
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    joining_date = models.DateField(null=True, blank=True)
+    current_joining_date = models.DateField(null=True, blank=True)
+    retirement_date = models.DateField(null=True, blank=True)
+    qualification = models.CharField(max_length=255, null=True, blank=True)
+    subject = models.ForeignKey('Subject', on_delete=models.SET_NULL, related_name='staff_subject', null=True, blank=True)
+    email = models.EmailField(null=True, blank=True, help_text="Unique if provided")
+    mobile_number = models.CharField(max_length=15, null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='staff_profile/',null=True,blank=True,default='staff_profile/default.png')
+
+    STAFF_ROLE_CHOICES = [
+        ('Administrative', 'Administrative'),
+        ('Teaching', 'Teaching'),
+        ('Non-Teaching', 'Non-Teaching'),
+        ('Support', 'Support'),
+    ]
+    staff_role = models.CharField(max_length=20, choices=STAFF_ROLE_CHOICES, default='Teaching')
+
+    EMPLOYMENT_TYPE_CHOICES = [
+        ('Regular', 'Regular'),
+        ('SSA', 'SSA'),
+        ('Guest', 'Guest'),
+        ('HKRNL', 'HKRNL'),
+        ('NSQF', 'NSQF'),
+        ('MDMWorker', 'MDM Worker'),
+        ('Other', 'Other'),
+    ]
+    employment_type = models.CharField(max_length=20, choices=EMPLOYMENT_TYPE_CHOICES, default='Regular')
+
+    bio = models.TextField(blank=True)
+    priority = models.PositiveIntegerField(default=0, help_text="Lower number = higher priority")
+
+    def __str__(self):
+        return f"{self.name} ({self.employee_id or 'No ID'})"
+
+    class Meta:
+        unique_together = ('school', 'employee_id')    
+        verbose_name_plural = "Staff"
+        ordering = ["school", "priority","staff_role", "employment_type", "name"]
+
+
+
+class Medium(models.Model):
+    name = models.CharField(max_length=50)  # e.g., English, Hindi, Punjabi
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="mediums")
+
+    class Meta:
+        unique_together = ('school', 'name')
+
+    def __str__(self):
+        return f"{self.name} ({self.school.name})"
+    
+class Classroom(models.Model):
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="classrooms")
+    room_number = models.CharField(max_length=20)   # e.g., R101, Block A-2
+    capacity = models.PositiveIntegerField(default=40)
+    floor = models.CharField(max_length=20, blank=True, null=True)
+
+    class Meta:
+        unique_together = ('school', 'room_number')
+
+    def __str__(self):
+        return f"Room {self.room_number} ({self.school.name})"
+
+
+class Stream(models.Model):
+
+    name = models.CharField(max_length=100)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="streams")
+
+    class Meta:
+        unique_together = ('school', 'name')
+
+    def __str__(self):
+        return f"{self.name} ({self.school.name})"
+    
+
+class Class(models.Model):
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="classes")
+    name = models.CharField(max_length=50)  # e.g., 9th, 10th
+    stream = models.ForeignKey(Stream, on_delete=models.SET_NULL, null=True, blank=True, related_name="classes")
+    medium = models.ForeignKey(Medium, on_delete=models.SET_NULL, null=True, blank=True, related_name="classes")
+
+    class Meta:
+        unique_together = ('school', 'name', 'stream', 'medium')
+
+    def __str__(self):
+        base = f"{self.name}"
+        if self.stream:
+            base += f" ({self.stream.name})"
+        if self.medium:
+            base += f" - {self.medium.name}"
+        return f"{base} ({self.school.name})"
+
+class Section(models.Model):
+    school_class = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="sections")
+    name = models.CharField(max_length=10)  # e.g., A, B, C
+    classroom = models.ForeignKey(Classroom, on_delete=models.SET_NULL, null=True, blank=True, related_name="sections")
+
+    class Meta:
+        unique_together = ('school_class', 'name')
+
+    def __str__(self):
+        room = f" - Room {self.classroom.room_number}" if self.classroom else ""
+        return f"{self.school_class.name} {self.name}{room} ({self.school_class.school.name})"
+
+    
+
+class ClassIncharge(models.Model):
+    section = models.OneToOneField(
+        Section,
+        on_delete=models.CASCADE,
+        related_name="incharge"
+    )
+    staff = models.ForeignKey(
+        Staff,
+        on_delete=models.CASCADE,
+        related_name="incharge_assignments",
+        limit_choices_to={"staff_role": "Teaching"},  # ✅ restrict in admin/forms
+    )
+    
+    assigned_date = models.DateField(auto_now_add=True)  # system timestamp
+    effective_from = models.DateField()                  # when the role starts
+    effective_to = models.DateField(null=True, blank=True)  # when the role ends (null = still active)
+    
+    active = models.BooleanField(default=True)
+
+    def clean(self):
+        """Ensure only teaching staff can be assigned as class incharge."""
+        if self.staff and self.staff.staff_role != "Teaching":
+            from django.core.exceptions import ValidationError
+            raise ValidationError(
+                {"staff": "Only teaching staff can be assigned as class incharge."}
+            )    
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["section"],
+                condition=models.Q(active=True),
+                name="unique_active_incharge_per_section"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.staff.name} → {self.section} [{self.effective_from} - {self.effective_to or 'Present'}]"
+
+class Subject(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            # Normalize name before saving
+            self.name = self.name.strip().title()   # "   physics " → "Physics"
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        # Extra safeguard: prevent duplicates ignoring case
+        if Subject.objects.exclude(pk=self.pk).filter(name__iexact=self.name).exists():
+            from django.core.exceptions import ValidationError
+            raise ValidationError({"name": "This subject already exists (case-insensitive)."})
+
+
+
+class ClassSubject(models.Model):
+    class_info = models.ForeignKey("Class", on_delete=models.CASCADE, related_name="class_subjects")
+    subject = models.ForeignKey("Subject", on_delete=models.CASCADE, related_name="class_subjects")
+    periods_per_week = models.PositiveIntegerField(default=0)
+    is_optional = models.BooleanField(default=False)
+    has_lab = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("class_info", "subject")
+
+    def __str__(self):
+        return f"{self.class_info} - {self.subject}"
+
+
+
+class Day(models.Model):
+    school = models.ForeignKey("School", on_delete=models.CASCADE)
+    name = models.CharField(max_length=20)  # e.g., Monday / Cycle Day 1
+    sequence = models.PositiveIntegerField()  # ordering
+
+    class Meta:
+        unique_together = ("school", "name")
+        ordering = ["sequence"]
+
+    def __str__(self):
+        return f"{self.school.name} - {self.name}"
+
+
+
+class TimetableSlot(models.Model):
+    school = models.ForeignKey("School", on_delete=models.CASCADE)
+    day = models.ForeignKey(Day, on_delete=models.CASCADE)
+
+    # Sequence for ordering (always present)
+    sequence_number = models.PositiveIntegerField()
+
+    # Period number only for teaching slots
+    period_number = models.PositiveIntegerField(null=True, blank=True)
+
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    # Flags
+    is_break = models.BooleanField(default=False)
+    is_assembly = models.BooleanField(default=False)
+    is_special_event = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("school", "day", "sequence_number")
+        ordering = ["day", "sequence_number"]
+
+    def __str__(self):
+        label = f"{self.day.name}"
+        if self.period_number:
+            label += f" (Period {self.period_number})"
+        if self.is_break:
+            label += " [Break]"
+        if self.is_assembly:
+            label += " [Assembly]"
+        if self.is_special_event:
+            label += " [Special Event]"
+        return label
+
+class Timetable(models.Model):
+    school = models.ForeignKey("School", on_delete=models.CASCADE, related_name="timetable_entries")
+    section = models.ForeignKey("Section", on_delete=models.CASCADE, related_name="timetable_entries")
+    class_subject = models.ForeignKey(
+        "ClassSubject", 
+        on_delete=models.CASCADE, 
+        related_name="timetable_entries"
+    )
+    teacher = models.ForeignKey(
+        "Staff", 
+        on_delete=models.CASCADE,
+        related_name="timetable_entries",
+        limit_choices_to={"staff_role": "Teaching"}
+    )
+    slot = models.ForeignKey("TimetableSlot", on_delete=models.CASCADE, related_name="timetable_entries")
+    classroom = models.ForeignKey("Classroom", on_delete=models.SET_NULL, null=True, blank=True)
+
+    substitute_teacher = models.ForeignKey(
+        "Staff", on_delete=models.SET_NULL, null=True, blank=True,
+        related_name="substitute_entries",
+        limit_choices_to={"staff_role": "Teaching"}
+    )
+
+    class Meta:
+        unique_together = [
+            ("section", "slot"),      # 1 section can't have 2 subjects at same slot
+            ("teacher", "slot"),      # teacher can't be double-booked
+            ("classroom", "slot"),    # classroom can't be double-booked
+        ]
+        ordering = ["slot__day", "slot__period_number"]
+
+    def __str__(self):
+        return f"{self.section} - {self.class_subject.subject.name} by ({self.teacher.name}) @ {self.slot}"
+
+    def clean(self):
+        # ✅ Validate teacher is actually assigned to this class_subject
+        if not TeacherSubjectAssignment.objects.filter(
+            teacher=self.teacher,
+            class_subject=self.class_subject
+        ).exists():
+            raise ValidationError(
+                {"teacher": f"{self.teacher.name} is not assigned to {self.class_subject}."}
+            )
+
+
+class TeacherSubjectAssignment(models.Model):
+    teacher = models.ForeignKey(
+        "Staff", 
+        on_delete=models.CASCADE,
+        related_name="subject_assignments",
+        limit_choices_to={"staff_role": "Teaching"}
+    )
+    class_subject = models.ForeignKey(
+        "ClassSubject", 
+        on_delete=models.CASCADE, 
+        related_name="teacher_assignments"
+    )
+    max_periods_per_week = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ("teacher", "class_subject")
+
+    def __str__(self):
+        return f"{self.teacher.name} → {self.class_subject}"
+
+
+class TimetableForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        instance = kwargs.get("instance")
+
+        # If editing an existing Timetable entry
+        if instance and instance.class_name and instance.subject:
+            teacher_ids = TeacherSubjectAssignment.objects.filter(
+                class_subject__class_info=instance.class_name,
+                class_subject__subject=instance.subject
+            ).values_list("teacher_id", flat=True)
+
+            self.fields["teachers"].queryset = Staff.objects.filter(
+                id__in=teacher_ids, 
+                is_teaching=True  # only teaching staff
+            )
+
+        # If adding a new entry, we can start with empty queryset
+        else:
+            self.fields["teachers"].queryset = Staff.objects.none()
+
+    class Meta:
+        model = Timetable
+        fields = "__all__"
+
+
+
+
+
+
+
+
+    
+
+
 class AboutSchool(models.Model):
     school = models.OneToOneField(School, on_delete=models.CASCADE, related_name='about')
     history = models.TextField(blank=True)
@@ -70,6 +447,7 @@ class AboutSchool(models.Model):
     class Meta:
         verbose_name = "About School"
         verbose_name_plural = "About Schools"
+
 
 
 class Principal(models.Model):
@@ -101,6 +479,11 @@ class Affiliation(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.school.name}"
+
+
+
+
+
 
 
 class Facility(models.Model):
@@ -376,72 +759,9 @@ class Department(models.Model):
     def __str__(self):
         return self.name
     
-class Stream(models.Model):
-    SCIENCE = 'Science'
-    COMMERCE = 'Commerce'
-    ARTS = 'Arts'
 
-    STREAM_CHOICES = [
-        (SCIENCE, 'Science'),
-        (COMMERCE, 'Commerce'),
-        (ARTS, 'Arts'),
-    ]
-
-    name = models.CharField(max_length=100, choices=STREAM_CHOICES)
-    school = models.ForeignKey(School, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return f"{self.name} - {self.school.name}"
-
-    class Meta:
-        verbose_name_plural = "Streams"
-        constraints = [
-            models.UniqueConstraint(fields=["name", "school"], name="unique_stream_per_school")
-        ]
-        ordering = ["school", "name"]
     
-class Class(models.Model):
-    CLASS_CHOICES = [
-        ('6th', '6th'),
-        ('7th', '7th'),
-        ('8th', '8th'),
-        ('9th', '9th'),
-        ('10th', '10th'),
-        ('11th', '11th'),
-        ('12th', '12th'),
-        ('na', 'NA'),
-    ]
 
-    name = models.CharField(
-        max_length=50,
-        choices=CLASS_CHOICES
-    )
-    school = models.ForeignKey(School, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return f"{self.name} - {self.school.name}"
-
-    class Meta:
-        verbose_name_plural = "Classes"
-        constraints = [
-            models.UniqueConstraint(fields=["name", "school"], name="unique_class_per_school")
-        ]
-
-
-class Section(models.Model):
-    SECTION_CHOICES = [
-        ('A', 'A'),
-        ('B', 'B'),
-        ('C', 'C'),
-        ('D', 'D'),
-        ('na', 'NA'),
-        # Add more choices as needed
-    ]
-    name = models.CharField(max_length=2, choices=SECTION_CHOICES)
-    section_class = models.ForeignKey('Class', on_delete=models.PROTECT, related_name='sections')
-    section_stream = models.ForeignKey('Stream', on_delete=models.PROTECT, related_name='sections')
-    def __str__(self):
-        return f"{self.section_class.name} ({self.name})"
 
 
 class SMCMember(models.Model):
@@ -496,247 +816,7 @@ class SMCMember(models.Model):
         ordering = ['priority', 'position', 'name']
 
 
-class Subject(models.Model):
-    name = models.CharField(max_length=100, unique=True)
 
-    class Meta:
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            # Normalize name before saving
-            self.name = self.name.strip().title()   # "   physics " → "Physics"
-        super().save(*args, **kwargs)
-
-    def clean(self):
-        # Extra safeguard: prevent duplicates ignoring case
-        if Subject.objects.exclude(pk=self.pk).filter(name__iexact=self.name).exists():
-            from django.core.exceptions import ValidationError
-            raise ValidationError({"name": "This subject already exists (case-insensitive)."})
-
-
-class ClassSubject(models.Model):
-    class_info = models.ForeignKey(Class, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    periods_per_week = models.IntegerField()
-    # Add fields for subject-specific requirements
-
-    def __str__(self):
-        return f"{self.class_info} - {self.subject}"
-    
-
-class PostType(models.Model):
-    name = models.CharField(max_length=50, unique=True)  # e.g., TGT, PGT, Non-Teaching
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-    
-class Staff(models.Model):
-    employee_id = models.CharField(max_length=20, unique=True)
-    school = models.ForeignKey('School', on_delete=models.SET_NULL, null=True, blank=True, related_name='staff')
-
-    name = models.CharField(max_length=50)
-    father_name = models.CharField(max_length=50, null=True, blank=True)
-    mother_name = models.CharField(max_length=50, null=True, blank=True)
-    spouse_name = models.CharField(max_length=50, null=True, blank=True)
-
-    GENDER_CHOICES = [
-        ('Male', 'Male'),
-        ('Female', 'Female'),
-        ('Other', 'Other'),
-    ]
-    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, blank=True, null=True)
-
-    aadhar_number = models.CharField(max_length=12, unique=True, null=True, blank=True, help_text="Optional. Must be unique if provided.")
-    
-    post_type = models.ForeignKey(
-        PostType,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
-
-    CATEGORY_CHOICES = [
-        ('GEN', 'General'),
-        ('SC', 'SC'),
-        ('BC-A', 'BC-A'),
-        ('BC-B', 'BC-B'),
-        ('EWS', 'EWS'),
-        ('OTHER', 'Other'),
-    ]
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, null=True, blank=True)
-
-    date_of_birth = models.DateField(null=True, blank=True)
-    joining_date = models.DateField(null=True, blank=True)
-    current_joining_date = models.DateField(null=True, blank=True)
-    retirement_date = models.DateField(null=True, blank=True)
-
-    qualification = models.CharField(max_length=255, null=True, blank=True)
-    subject = models.ForeignKey('Subject', on_delete=models.SET_NULL, related_name='staff_subject', null=True, blank=True)
-
-    email = models.EmailField(null=True, blank=True, help_text="Unique if provided")
-    mobile_number = models.CharField(max_length=15, null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='staff_profile/',null=True,blank=True,default='staff_profile/default.png')
-
-    STAFF_ROLE_CHOICES = [
-        ('Administrative', 'Administrative'),
-        ('Teaching', 'Teaching'),
-        ('Non Teaching', 'Non Teaching'),
-        ('Support', 'Support'),
-    ]
-    staff_role = models.CharField(max_length=20, choices=STAFF_ROLE_CHOICES, default='Teaching')
-
-    EMPLOYMENT_TYPE_CHOICES = [
-        ('Regular', 'Regular'),
-        ('SSA', 'SSA'),
-        ('Guest', 'Guest'),
-        ('HKRNL', 'HKRNL'),
-        ('NSQF', 'NSQF'),
-        ('MDMWorker', 'MDM Worker'),
-        ('Other', 'Other'),
-    ]
-    employment_type = models.CharField(max_length=20, choices=EMPLOYMENT_TYPE_CHOICES, default='Regular')
-
-    bio = models.TextField(blank=True)
-
-    # 🔹 New Priority Field
-    priority = models.PositiveIntegerField(default=0, help_text="Lower number = higher priority")
-
-    def __str__(self):
-        return f"{self.name} ({self.employee_id or 'No ID'})"
-
-    class Meta:
-        verbose_name_plural = "Staff"
-        ordering = ["priority", "school", "staff_role", "employment_type", "name"]
-
-
-class Classroom(models.Model):
-    name = models.CharField(max_length=100)
-    capacity = models.PositiveIntegerField()
-    location = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-class ClassIncharge(models.Model):
-    teacher_name = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    class_alloted = models.ForeignKey(Class, on_delete=models.CASCADE)
-    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
-    section = models.ForeignKey(Section, on_delete=models.CASCADE)
-    def __str__(self):
-        return f"{self.teacher_name.name} - {self.classroom.name} - {self.class_alloted} - {self.section}"
-    
-class TimetableSlot(models.Model):
-    
-    period = models.IntegerField(null=True, blank=True)
-    start_time = models.TimeField(null=True, blank=True)
-    end_time = models.TimeField(null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.period} - {self.start_time} - {self.end_time}"
-    
-
-
-
-    
-
-class TeacherSubjectAssignment(models.Model):
-
-    class_name = models.ForeignKey(Class, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Staff, on_delete=models.CASCADE,to_field='employee_id')
-    maximum_periods_per_teacher = models.PositiveIntegerField()
-    periods_per_week = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return f"{self.teacher.name} - {self.subject} - {self.class_name} ({self.maximum_periods_per_teacher} periods)"
-
-
-
-class Timetable(models.Model):
-
-    CLASS_TYPE_CHOICES = (
-        ('Regular', 'Regular'),
-        ('Assembly', 'Assembly'),
-        ('Recess', 'Recess'),
-        ('Special', 'Special Event'),
-        # Add more types as needed
-    )
-
-    
-    season = models.ForeignKey(TimetableSlot, on_delete=models.SET_NULL, related_name='timetable_season', null=True, blank=True)
-    class_name = models.ForeignKey('Class', on_delete=models.CASCADE,related_name='rrrr')
-    section = models.ForeignKey('Section', on_delete=models.CASCADE, related_name='rr')
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    class_type = models.CharField(max_length=10, choices=CLASS_TYPE_CHOICES, default='Regular')
-    teachers = models.ManyToManyField(Staff, blank=True,limit_choices_to={'subject__in': models.OuterRef('subject')})
-    classrooms = models.ManyToManyField(Classroom, blank=True)
-    day = models.ForeignKey(TimetableSlot, on_delete=models.SET_NULL, related_name='timetable_day', null=True, blank=True)
-    period = models.ForeignKey(TimetableSlot, on_delete=models.SET_NULL, related_name='timetable_period', null=True, blank=True)
-    start_time = models.ForeignKey(TimetableSlot, on_delete=models.SET_NULL, related_name='timetable_start_time', null=True, blank=True)
-    end_time = models.ForeignKey(TimetableSlot, on_delete=models.SET_NULL, related_name='timetable_end_time', null=True, blank=True)
-
-
-    is_mandatory = models.BooleanField(default=True)
- 
-
-    def __str__(self):
-        return f"{self.day}, {self.start_time} - {self.end_time}: {self.class_name} ({self.section})"
-
-
-class TimetableForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if 'instance' in kwargs:
-            subject = kwargs['instance'].subject
-            if subject:
-                self.fields['teachers'].queryset = subject.teachers.all()
-                # Adjust the queryset as needed based on your model structure
-
-    class Meta:
-        model = Timetable
-        fields = '__all__'
-
-
-class Day(models.Model):
-    DAY_CHOICES = [
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
-        ('Sunday', 'Sunday'),
-    ]
-    name = models.CharField(max_length=20, choices=DAY_CHOICES)
-
-    def __str__(self):
-        return self.name
-
-
-
-
-class TimetableEntry(models.Model):
-    school = models.ForeignKey(School, on_delete=models.CASCADE)  # Link to School
-    section = models.ForeignKey(Section, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    slot = models.ForeignKey(TimetableSlot, on_delete=models.CASCADE)
-    
-
-    # Optional field for handling absent teachers
-    #substitute_teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = 'Time Table Entries'
-        unique_together = ('section', 'slot')  # Ensure no duplicate entries for section and slot
-
-    def __str__(self):
-        return f"{self.section.name} - {self.subject.name} - {self.teacher.name} ({self.slot})"
                         
 
 
@@ -1075,4 +1155,5 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
