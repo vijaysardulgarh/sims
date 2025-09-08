@@ -3,8 +3,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 from .views import timetable_view
-
+from cms.admin import timetable_admin
 urlpatterns = [
+    path("timetable-admin/", timetable_admin.urls),
     path('login/', views.user_login, name='login'),
     # Home
     path('', views.index, name='index'),
@@ -92,4 +93,3 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
