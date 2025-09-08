@@ -28,22 +28,24 @@ from .models import Staff
 from .models import Classroom
 from .models import ClassIncharge
 from .models import Timetable
-from .models import Day
+from .models import Day,ClassSubject
 from .models import TimetableSlot
-from .models import TeacherSubjectAssignment
-from .models import TimetableEntry
+from .models import TeacherSubjectAssignment,Medium
+# from .models import TimetableEntry
 from .models import Student,FeeStructure
 from .models import PostType,FAQ,MandatoryPublicDisclosure
 from .models import Book,Infrastructure,SanctionedPost
 from .models import SMCMember,AboutSchool,Principal,Association,AssociationType,AssociationRole,StaffAssociationRoleAssignment
 import logging
 from .models import StudentAchievement, ExamDetail
+from django.contrib.admin import AdminSite
+from import_export.widgets import ForeignKeyWidget
 admin.site.site_header="SIMS" 
 admin.site.site_title="SIMS"
 admin.site.index_title="School Information Management System"
 class StaffResource(resources.ModelResource):
-    employee_id = fields.Field(attribute='employee_id',column_name='Employee ID')
     school = fields.Field(attribute='school',column_name='School',widget=ForeignKeyWidget(School, field='name'))
+    employee_id = fields.Field(attribute='employee_id',column_name='Employee ID')
     name = fields.Field(attribute='name',column_name='Employee Name [ID]')
     father_name = fields.Field(attribute='father_name',column_name="Father's Name")
     mother_name = fields.Field(attribute='mother_name',column_name="Mother's Name")
@@ -53,22 +55,43 @@ class StaffResource(resources.ModelResource):
     post_type = fields.Field(attribute='post_type',column_name='Post Type',widget=ForeignKeyWidget(PostType, field='name'))
     category = fields.Field(attribute='category',column_name='Category')
     date_of_birth = fields.Field(attribute='date_of_birth',column_name='Date of Birth')
-    joining_date = fields.Field(attribute='joining_date',column_name='Date of Joining School/Office')
-    current_joining_date = fields.Field(attribute='current_joining_date',column_name='Date of Joining School/Office')
+    joining_date = fields.Field(attribute='joining_date',column_name='Date of Joining Service')
+    current_joining_date = fields.Field(attribute='current_joining_date',column_name='Date of Joining Current School')
     retirement_date = fields.Field(attribute='retirement_date',column_name='Retirement Date')
     qualification= fields.Field(attribute='qualification',column_name='Qualification')
     subject = fields.Field(attribute='subject',column_name='Subject',widget=ForeignKeyWidget(Subject, field='name'))
     email = fields.Field(attribute='email',column_name='Email ID')
     mobile_number = fields.Field(attribute='mobile_number',column_name='Mobile Number')
-    # teaching_subject_1 = fields.Field(attribute='teaching_subject_1',column_name='Teaching Subject 1',widget=ForeignKeyWidget(Subject, field='name'))
-    # teaching_subject_2 = fields.Field(attribute='teaching_subject_1',column_name='Teaching Subject 2',widget=ForeignKeyWidget(Subject, field='name'))
     staff_role = fields.Field(attribute='staff_role',column_name='Staff Role')
     employment_type = fields.Field(attribute='employment_type',column_name='Employment Type')
     #designation = fields.Field(attribute='designation',column_name='Designation')
     priority = fields.Field(attribute='priority', column_name='Priority') 
     class Meta:
         model = Staff
-        fields=('id',"employee_id","name","father_name","mother_name","spouse_name","gender","aadhar_number","category","date_of_birth","joining_date","retirement_date","qualification","email","mobile_number","subject","staff_role","employment_type","post_type")
+        fields=(
+                'id',
+                'school',
+                "employee_id",
+                "name",
+                "father_name",
+                "mother_name",
+                "spouse_name",
+                "gender",
+                "aadhar_number",
+                "post_type",
+                "category",
+                "date_of_birth",
+                "joining_date",
+                'current_joining_date',
+                "retirement_date",
+                "qualification",
+                "subject",
+                "email",
+                "mobile_number",
+                "staff_role",
+                "employment_type",
+                "priority"
+                )
 
     def before_import_row(self, row, **kwargs):
         try:
@@ -90,11 +113,28 @@ class StaffResource(resources.ModelResource):
         
 class StaffAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        "employee_id", "name", "father_name", "mother_name", "spouse_name",
-        "gender", "aadhar_number", "post_type", "category", "date_of_birth",
-        "joining_date", "current_joining_date", "retirement_date",
-        "qualification", "subject", "email", "mobile_number","school",
-        "staff_role", "employment_type", "priority"  # ✅ added priority in admin
+                'id',
+                'school',
+                "employee_id",
+                "name",
+                "father_name",
+                "mother_name",
+                "spouse_name",
+                "gender",
+                "aadhar_number",
+                "post_type",
+                "category",
+                "date_of_birth",
+                "joining_date",
+                'current_joining_date',
+                "retirement_date",
+                "qualification",
+                "subject",
+                "email",
+                "mobile_number",
+                "staff_role",
+                "employment_type",
+                "priority"
     )
     list_filter = ("school", "staff_role", "employment_type", "gender", "category")
     search_fields = ("name", "employee_id", "email", "mobile_number")
@@ -260,46 +300,373 @@ class StudentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'subjects',
         'below_poverty_line_certificate_number',
     )
-    
-    
-class TimetableSlotResource(resources.ModelResource):
 
-    period = fields.Field(attribute='period',column_name='Period Count')
-    start_time = fields.Field(attribute='start_time',column_name='Start Time')
-    end_time = fields.Field(attribute='end_time',column_name='End Time')
+
+
+# --- Widgets ---
+
+
+
+# class ClassWidget(ForeignKeyWidget):
+#     def __init__(self):
+#         super().__init__(Class, "name")
+
+#     def clean(self, value, row=None, *args, **kwargs):
+#         if not value:
+#             return None
+
+#         school_name = row.get("School")
+#         if not school_name:
+#             raise ValueError("School column is required to identify Class")
+
+#         try:
+#             school = School.objects.get(name=school_name.strip())
+#         except School.DoesNotExist:
+#             raise ValueError(f"School '{school_name}' does not exist")
+
+#         stream_name = row.get("Stream")
+#         medium_name = row.get("Medium")
+
+#         classes = Class.objects.filter(
+#             school=school,
+#             name__iexact=value.strip()
+#         )
+#         if stream_name:
+#             classes = classes.filter(stream__name__iexact=stream_name.strip())
+#         if medium_name:
+#             classes = classes.filter(medium__name__iexact=medium_name.strip())
+
+#         if not classes.exists():
+#             raise ValueError(
+#                 f"Class '{value}' not found in School '{school_name}' "
+#                 f"with Stream '{stream_name}' and Medium '{medium_name}'"
+#             )
+#         if classes.count() > 1:
+#             raise ValueError(
+#                 f"Multiple Classes found for '{value}' in School '{school_name}' "
+#                 f"with Stream '{stream_name}' and Medium '{medium_name}'"
+#             )
+
+#         return classes.first()
+
+
+# class SubjectWidget(ForeignKeyWidget):
+#     def __init__(self):
+#         super().__init__(Subject, "name")
+
+#     def clean(self, value, row=None, *args, **kwargs):
+#         if not value:
+#             return None
+#         try:
+#             return Subject.objects.get(name=value.strip())
+#         except Subject.DoesNotExist:
+#             raise ValueError(f"Subject '{value}' does not exist")
+
+
+# class ClassSubjectWidget(ForeignKeyWidget):
+#     def __init__(self):
+#         super().__init__(ClassSubject, "id")  # Ensure correct call to parent constructor
+
+#     def clean(self, value, row=None, *args, **kwargs):
+#         class_name = row.get("Class Name")
+#         subject_name = row.get("Subject")
+
+#         if not class_name or not subject_name:
+#             raise ValueError("Both 'Class Name' and 'Subject' are required")
+
+#         class_obj = ClassWidget().clean(class_name, row=row)
+#         subject_obj = SubjectWidget().clean(subject_name, row=row)
+
+#         try:
+#             return ClassSubject.objects.get(
+#                 class_info=class_obj,
+#                 subject=subject_obj
+#             )
+#         except ClassSubject.DoesNotExist:
+#             raise ValueError(
+#                 f"ClassSubject not found for Class '{class_name}' and Subject '{subject_name}'"
+#             )
+# --- Teacher Subject Assignment Resource ---
+
+class TeacherSubjectAssignmentResource(resources.ModelResource):
+    # Raw FK fields with widgets
+    teacher = fields.Field(
+        column_name="teacher",
+        attribute="teacher",
+        widget=ForeignKeyWidget(Staff, "id")   # import by Staff.id
+    )
+    class_subject = fields.Field(
+        column_name="class_subject",
+        attribute="class_subject",
+        widget=ForeignKeyWidget(ClassSubject, "id")   # import by ClassSubject.id
+    )
+
+    # Human-readable Excel fields
+    teacher_name = fields.Field(column_name="Teacher")
+    school_name = fields.Field(column_name="School")
+    class_name = fields.Field(column_name="Class")
+    stream_name = fields.Field(column_name="Stream")
+    medium_name = fields.Field(column_name="Medium")
+    subject_name = fields.Field(column_name="Subject")
+    max_periods_per_week = fields.Field(
+        column_name="Max Periods / Week",
+        attribute="max_periods_per_week"
+    )
+
+    class Meta:
+        model = TeacherSubjectAssignment
+        import_id_fields = ("teacher", "class_subject")
+        fields = (
+            "id",
+            "teacher",
+            "class_subject",
+            "teacher_name",
+            "school_name",
+            "class_name",
+            "stream_name",
+            "medium_name",
+            "subject_name",
+            "max_periods_per_week",
+        )
+        export_order = fields
+
+    # --- EXPORT (Readable) ---
+    def dehydrate_teacher_name(self, obj):
+        return obj.teacher.name if obj.teacher else ""
+
+    def dehydrate_subject_name(self, obj):
+        return obj.class_subject.subject.name if obj.class_subject and obj.class_subject.subject else ""
+
+    def dehydrate_class_name(self, obj):
+        return obj.class_subject.class_info.name if obj.class_subject and obj.class_subject.class_info else ""
+
+    def dehydrate_school_name(self, obj):
+        return (
+            obj.class_subject.class_info.school.name
+            if obj.class_subject and obj.class_subject.class_info and obj.class_subject.class_info.school
+            else ""
+        )
+
+    def dehydrate_stream_name(self, obj):
+        return (
+            obj.class_subject.class_info.stream.name
+            if obj.class_subject and obj.class_subject.class_info and obj.class_subject.class_info.stream
+            else ""
+        )
+
+    def dehydrate_medium_name(self, obj):
+        return (
+            obj.class_subject.class_info.medium.name
+            if obj.class_subject and obj.class_subject.class_info and obj.class_subject.class_info.medium
+            else ""
+        )
+
+    # --- IMPORT (Smart lookup) ---
+    def before_import_row(self, row, **kwargs):
+        teacher_name = row.get("Teacher")
+        school_name = row.get("School")
+        class_name = row.get("Class")
+        stream_name = row.get("Stream")
+        medium_name = row.get("Medium")
+        subject_name = row.get("Subject")
+
+        # Teacher lookup
+        teacher = Staff.objects.filter(name=teacher_name, staff_role="Teaching").first()
+        if not teacher:
+            raise Exception(f"Teacher '{teacher_name}' not found.")
+
+        # Class lookup
+        class_qs = Class.objects.filter(
+            name=class_name,
+            school__name=school_name,
+            stream__name=stream_name,
+            medium__name=medium_name,
+        )
+        if not class_qs.exists():
+            raise Exception(
+                f"Class '{class_name}' with School='{school_name}', Stream='{stream_name}', Medium='{medium_name}' not found."
+            )
+        class_obj = class_qs.first()
+
+        # Subject lookup
+        subject = Subject.objects.filter(name=subject_name).first()
+        if not subject:
+            raise Exception(f"Subject '{subject_name}' not found.")
+
+        # ClassSubject lookup
+        class_subject = ClassSubject.objects.filter(
+            class_info=class_obj,
+            subject=subject
+        ).first()
+        if not class_subject:
+            raise Exception(
+                f"ClassSubject for Class='{class_name}' and Subject='{subject_name}' not found."
+            )
+
+        # ✅ Instead of PKs, assign the **actual instance**
+        row["teacher"] = teacher.id
+        row["class_subject"] = class_subject.id
+
+
+class TeacherSubjectAssignmentAdmin(ImportExportModelAdmin):
+    resource_class = TeacherSubjectAssignmentResource
+
+    list_display = (
+        "teacher_name",
+        "class_name",
+        "subject_name",
+        "max_periods_per_week",
+    )
+    search_fields = (
+        "teacher__name",
+        "class_subject__class_info__name",
+        "class_subject__class_info__medium__name",
+        "class_subject__class_info__stream__name",
+        "class_subject__subject__name",
+    )
+    list_filter = (
+        "teacher",
+        "class_subject__class_info__medium",
+        "class_subject__class_info__stream",
+        "class_subject__class_info",
+        "class_subject__subject",
+    )
+
+    def get_queryset(self, request):
+        # Limit queryset to only Teaching staff
+        qs = super().get_queryset(request)
+        return qs.filter(teacher__staff_role="Teaching")
+
+    # Custom column for Teacher
+    def teacher_name(self, obj):
+        return obj.teacher.name if obj.teacher else "-"
+    teacher_name.short_description = "Teacher"
+
+    # Custom column for Class
+    def class_name(self, obj):
+        return obj.class_subject.class_info.name if obj.class_subject else "-"
+    class_name.short_description = "Class"
+
+    # Custom column for Subject
+    def subject_name(self, obj):
+        return obj.class_subject.subject.name if obj.class_subject else "-"
+    subject_name.short_description = "Subject"
+
+# -------------------
+# Day Resource & Admin
+# -------------------
+class DayResource(resources.ModelResource):
+    class Meta:
+        model = Day
+        fields = ("id", "school__name", "name", "sequence")
+        export_order = ("id", "school__name", "name", "sequence")
+
+@admin.register(Day)
+class DayAdmin(ImportExportModelAdmin):
+    resource_class = DayResource
+    list_display = ("id", "school", "name", "sequence")
+    search_fields = ("name", "school__name")
+    list_filter = ("school",)
+    ordering = ("school", "sequence")
+
+# -------------------
+# TimetableSlot Resource & Admin
+# -------------------
+class SchoolWidget(ForeignKeyWidget):
+    def __init__(self):
+        super().__init__(School, "name")
+
+
+class DayWidget(ForeignKeyWidget):
+    """Custom Day widget that also considers school"""
+    def __init__(self):
+        super().__init__(Day, "name")
+
+    def clean(self, value, row=None, *args, **kwargs):
+        school_name = row.get("School")  # get school from import row
+        if not school_name:
+            return None
+        try:
+            school = School.objects.get(name=school_name)
+            return Day.objects.get(school=school, name=value)
+        except (School.DoesNotExist, Day.DoesNotExist):
+            raise ValueError(f"Day '{value}' not found for school '{school_name}'")
+
+
+class TimetableSlotResource(resources.ModelResource):
+    
+    school = fields.Field(
+        column_name="School",
+        attribute="school",
+        widget=SchoolWidget()   # ✅ model class, not string
+    )
+    day = fields.Field(
+        column_name="Day",
+        attribute="day",
+        widget=DayWidget()      # ✅ model class, not string
+    )
 
     class Meta:
         model = TimetableSlot
-        fields=('period','start_time','end_time')
-        #use_id=False
+        fields = (
+            "id",
+            "school",
+            "day",
+            "sequence_number",
+            "period_number",
+            "start_time",
+            "end_time",
+            "is_break",
+            "is_assembly",
+            "is_special_event",
+        )
+        export_order = fields
+        import_id_fields = ("school", "day", "sequence_number")
 
-class TimetableSlotAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    list_display=('period','start_time','end_time')
-    resource_class=TimetableSlotResource
+@admin.register(TimetableSlot)
+class TimetableSlotAdmin(ImportExportModelAdmin):
+    resource_class = TimetableSlotResource
+    list_display = (
+        "school",
+        "day",
+        "sequence_number",
+        "period_number",
+        "start_time",
+        "end_time",
+        "is_break",
+        "is_assembly",
+        "is_special_event",
+    )
+    list_filter = ("school", "day", "is_break", "is_assembly", "is_special_event")
+    ordering = ("school", "day__sequence", "sequence_number")
 
+# -------------------
+# Medium Resource
+# -------------------
+class MediumResource(resources.ModelResource):
+    school = fields.Field(
+        column_name="School",
+        attribute="school",
+        widget=ForeignKeyWidget(School, "name")  # use school.name instead of ID
+    )
+    name = fields.Field(column_name="Medium Name", attribute="name")
 
-
-class TeacherSubjectAssignmentResource(resources.ModelResource):
-    
-    teacher = fields.Field(attribute='teacher',column_name='Teacher')
-    subject = fields.Field(attribute='subject',column_name='Subject')
-    class_name = fields.Field(attribute='class_name',column_name='Class Name')
-    maximum_periods_per_teacher = fields.Field(attribute='periods',column_name='Maximum Periods Per Teacher')
-    periods_per_week = fields.Field(attribute='periods_per_week',column_name='Maximum Periods Per Subject Per Week')
     class Meta:
-        model = TeacherSubjectAssignment
-        fields=('id','class_name','subject','teacher','maximum_periods_per_teacher','periods_per_week')
-        #use_id=False    
+        model = Medium
+        fields = ("id", "name", "school")
+        export_order = ("id", "school", "name")
+        import_id_fields = ("school", "name")  # respects unique_together
 
-    
 
-class TeacherSubjectAssignmentAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    list_display=('class_name','subject','teacher','maximum_periods_per_teacher','periods_per_week')
-    resource_class=TeacherSubjectAssignmentResource
-    
-    def get_queryset(self, request):
-        # Return only teaching staff
-        return TeacherSubjectAssignment.objects.filter(teacher__staff_role='Teaching')
+# -------------------
+# Medium Admin
+# -------------------
+@admin.register(Medium)
+class MediumAdmin(ImportExportModelAdmin):
+    resource_class = MediumResource
+    list_display = ("name", "school")
+    search_fields = ("name", "school__name")
+    list_filter = ("school",)
 
 class TimetableEntryResource(resources.ModelResource):
     section = fields.Field(attribute='section',column_name='Section')
@@ -308,7 +675,7 @@ class TimetableEntryResource(resources.ModelResource):
     slot = fields.Field(attribute='slot',column_name='Slot')
 
     class Meta:
-        model = TimetableEntry
+        model = Timetable
         fields=('section','subject','teacher','slot')
         #use_id=False
 
@@ -316,33 +683,135 @@ class TimetableEntryAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     list_display=('section','subject','teacher','slot')
     resource_class=TimetableEntryResource    
 
+# --- ClassSubject Widget ---
+class ClassSubjectWidget(ForeignKeyWidget):
+    def __init__(self, model, field, *args, **kwargs):
+        super().__init__(model, field, *args, **kwargs)
 
+    def clean(self, value, row=None, *args, **kwargs):
+        class_name = row.get("Class Name")
+        subject_name = row.get("Subject")
+
+        if not class_name or not subject_name:
+            raise ValueError("Both 'Class Name' and 'Subject' are required")
+
+        try:
+            class_obj = Class.objects.get(name=class_name.strip())
+            subject_obj = Subject.objects.get(name=subject_name.strip())
+            return ClassSubject.objects.get(class_info=class_obj, subject=subject_obj)
+        except (Class.DoesNotExist, Subject.DoesNotExist, ClassSubject.DoesNotExist):
+            raise ValueError(f"ClassSubject not found for Class '{class_name}' and Subject '{subject_name}'")
+
+
+# --- TimetableSlot Widget ---
+class TimetableSlotWidget(ForeignKeyWidget):
+    def __init__(self, model, field, *args, **kwargs):
+        super().__init__(model, field, *args, **kwargs)
+
+    def clean(self, value, row=None, *args, **kwargs):
+        school_name = row.get("School")
+        day_name = row.get("Day")
+        sequence_number = row.get("Sequence Number")
+
+        if not (school_name and day_name and sequence_number):
+            raise ValueError("School, Day, and Sequence Number are required to identify TimetableSlot")
+
+        try:
+            school = School.objects.get(name=school_name.strip())
+            day = school.day_set.get(name=day_name.strip())  # Assuming Day FK to School
+            return TimetableSlot.objects.get(
+                school=school,
+                day=day,
+                sequence_number=int(sequence_number)
+            )
+        except (School.DoesNotExist, Day.DoesNotExist, TimetableSlot.DoesNotExist):
+            raise ValueError(f"TimetableSlot not found for given identifiers")
+# -------------------
+# Timetable Resource & Admin
+# -------------------
 class TimetableResource(resources.ModelResource):
-    class_name = fields.Field(attribute='class_name',column_name='Class')
-    section = fields.Field(attribute='section',column_name='Section')
-    subject = fields.Field(attribute='subject',column_name='Subject')
-    day = fields.Field(attribute='day',column_name='Subject')
-    period=fields.Field(attribute="period",column_name="Period")
-    start_time = fields.Field(attribute='start_time',column_name='Subject')
-    end_time = fields.Field(attribute='end_time',column_name='Subject')
-    class_name = fields.Field(attribute='class_name',column_name='Class')
-    section = fields.Field(attribute='section',column_name='Section')
-    #classrooms = fields.Field(attribute='classrooms',column_name='Subject')
-    teachers = fields.Field(attribute='teachers',column_name='Teachers' )
-    #slot = fields.Field(attribute='slot',column_name='Slot')
+    school = fields.Field(
+        column_name="School",
+        attribute="school",
+        widget=ForeignKeyWidget(School, "name")
+    )
+    section = fields.Field(
+        column_name="Section",
+        attribute="section",
+        widget=ForeignKeyWidget(Section, "name")
+    )
+    class_subject = fields.Field(
+        column_name="Class Subject",
+        attribute="class_subject",
+        widget=ClassSubjectWidget(ClassSubject, "id")
+    )
+    teacher = fields.Field(
+        column_name="Teacher",
+        attribute="teacher",
+        widget=ForeignKeyWidget(Staff, "name")
+    )
+    slot = fields.Field(
+        column_name="Slot",
+        attribute="slot",
+        widget=TimetableSlotWidget(TimetableSlot, "id")
+    )
+    classroom = fields.Field(
+        column_name="Classroom",
+        attribute="classroom",
+        widget=ForeignKeyWidget(Classroom, "name")
+    )
+    substitute_teacher = fields.Field(
+        column_name="Substitute Teacher",
+        attribute="substitute_teacher",
+        widget=ForeignKeyWidget(Staff, "name")
+    )
 
     class Meta:
         model = Timetable
-        fields=('day','period','start_time','end_time','class_name','section','subject','teachers')
-        #use_id=False
+        fields = (
+            "id",
+            "school",
+            "section",
+            "class_subject",
+            "teacher",
+            "slot",
+            "classroom",
+            "substitute_teacher",
+        )
+        export_order = fields
+        import_id_fields = ("section", "slot", "teacher")
 
-class TimetableAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    list_display=('day','period','start_time','end_time','class_name','section','subject','teacher_name')
 
-    def teacher_name(self, obj):
-        return obj.teachers.name
-    
-    resource_class=TimetableResource   
+
+
+class TimetableAdmin(ImportExportModelAdmin):
+    resource_class = TimetableResource
+    list_display = (
+        "school",
+        "section",
+        "get_class",
+        "get_subject",
+        "teacher",
+        "slot",
+        "classroom",
+        "substitute_teacher",
+    )
+    search_fields = (
+        "school__name",
+        "section__name",
+        "class_subject__class_info__name",
+        "class_subject__subject__name",
+        "teacher__name",
+    )
+    list_filter = ("school", "section", "teacher", "slot__day")
+
+    def get_class(self, obj):
+        return obj.class_subject.class_info
+    get_class.short_description = "Class"
+
+    def get_subject(self, obj):
+        return obj.class_subject.subject
+    get_subject.short_description = "Subject"
 
 class SMCMemberResource(resources.ModelResource):
     school = fields.Field(
@@ -825,6 +1294,321 @@ class MandatoryPublicDisclosureAdmin(ImportExportModelAdmin):
     list_filter = ("section", "is_active")
     search_fields = ("title", "value")
     ordering = ("section", "order")
+
+
+class StreamResource(resources.ModelResource):
+    stream_name = fields.Field(
+        column_name='Stream Name',
+        attribute='name'
+    )
+    school_name = fields.Field(
+        column_name='School Name'
+    )
+
+    class Meta:
+        model = Stream
+        fields = ('id', 'stream_name', 'school_name')
+        export_order = ('id', 'stream_name', 'school_name')
+        import_id_fields = ('id',)
+
+    def before_import_row(self, row, **kwargs):
+        school_name = row.get('School Name')
+        try:
+            school = School.objects.get(name=school_name)
+            row['school'] = school.id  # Convert name → ID before import
+        except School.DoesNotExist:
+            row['school'] = None  # Or raise a validation error
+
+    def dehydrate_school_name(self, stream):
+        # For exporting: show school name instead of ID
+        return stream.school.name if stream.school else ""
+
+    def hydrate_school_name(self, value):
+        # Used during import: map school name to school instance
+        try:
+            return School.objects.get(name=value)
+        except School.DoesNotExist:
+            return None
+
+class StreamAdmin(ImportExportModelAdmin):
+    resource_class = StreamResource
+    list_display = ('name', 'school')
+    search_fields = ('name', 'school__name')
+
+class ClassroomResource(resources.ModelResource):
+    class Meta:
+        model = Classroom
+        fields = (
+            "id",
+            "school__name",
+            "room_number",
+            "capacity",
+            "floor",
+        )
+        export_order = fields
+
+
+class ClassResource(resources.ModelResource):
+    school = fields.Field(
+        column_name="School",       # must match column in Excel/CSV
+        attribute="school",
+        widget=ForeignKeyWidget(School, "name")   # match by School.name
+    )
+    stream = fields.Field(
+        column_name="Stream",
+        attribute="stream",
+        widget=ForeignKeyWidget(Stream, "name")
+    )
+    medium = fields.Field(
+        column_name="Medium",
+        attribute="medium",
+        widget=ForeignKeyWidget(Medium, "name")
+    )
+
+    class Meta:
+        model = Class
+        fields = ("id", "school", "name", "stream", "medium")
+        export_order = ("id", "school", "name", "stream", "medium")
+
+
+class ClassWidget(ForeignKeyWidget):
+    """
+    Custom widget to match Class using School + Class name + Stream + Medium from Excel row.
+    """
+    def clean(self, value, row=None, *args, **kwargs):
+        if not value:
+            return None
+
+        school_name = row.get("School")
+        if not school_name:
+            raise ValueError("School column is required to identify Class")
+        try:
+            school = School.objects.get(name=school_name.strip())
+        except School.DoesNotExist:
+            raise ValueError(f"School '{school_name}' does not exist")
+
+        # Optional Stream and Medium
+        stream_name = row.get("Stream")
+        medium_name = row.get("Medium")
+
+        classes = Class.objects.filter(school=school, name__iexact=value.strip())
+
+        if stream_name:
+            classes = classes.filter(stream__name__iexact=stream_name.strip())
+        if medium_name:  # only filter if Medium is provided
+            classes = classes.filter(medium__name__iexact=medium_name.strip())
+
+
+        if not classes.exists():
+            raise ValueError(f"Class '{value}' not found in school '{school_name}' with Stream '{stream_name}' and Medium '{medium_name}'")
+        if classes.count() > 1:
+            raise ValueError(f"Multiple Classes found for '{value}' in '{school_name}' with Stream '{stream_name}' and Medium '{medium_name}'")
+        return classes.first()
+
+
+class SectionResource(resources.ModelResource):
+    school = fields.Field(column_name="School", attribute="school_class", readonly=True)
+    school_class = fields.Field(column_name="Class", attribute="school_class", widget=ClassWidget(Class, "name"))
+    stream = fields.Field(column_name="Stream", readonly=True)
+    medium = fields.Field(column_name="Medium", readonly=True)
+    section_name = fields.Field(column_name="Section Name", attribute="name")
+    classroom_number = fields.Field(column_name="Classroom", attribute="classroom", widget=ForeignKeyWidget(Classroom, "room_number"))
+
+    class Meta:
+        model = Section
+        fields = ("id", "school", "school_class", "stream", "medium", "section_name", "classroom_number")
+        export_order = ("id", "school", "school_class", "stream", "medium", "section_name", "classroom_number")
+
+    def dehydrate_school(self, obj):
+        return obj.school_class.school.name if obj.school_class else ""
+
+    def dehydrate_stream(self, obj):
+        return obj.school_class.stream.name if obj.school_class and obj.school_class.stream else ""
+
+    def dehydrate_medium(self, obj):
+        return obj.school_class.medium.name if obj.school_class and obj.school_class.medium else ""
+
+    def dehydrate_classroom_number(self, obj):
+        return obj.classroom.room_number if obj.classroom else ""
+
+class ClassroomAdmin(ImportExportModelAdmin):
+    resource_class = ClassroomResource
+    list_display = ("room_number", "school", "capacity", "floor")
+    search_fields = ("room_number", "school__name")
+    list_filter = ("school",)
+
+
+class ClassAdmin(ImportExportModelAdmin):
+    resource_class = ClassResource
+    list_display = ("name", "school", "stream", "medium")
+    search_fields = ("name", "school__name", "stream__name", "medium__name")
+    list_filter = ("school", "stream", "medium")
+
+
+class SectionAdmin(ImportExportModelAdmin):
+    resource_class = SectionResource
+    list_display = ("name", "school_class", "classroom")
+    search_fields = ("name", "school_class__name", "school_class__school__name")
+    list_filter = ("school_class__school",)
+
+
+
+class ClassInfoWidget(ForeignKeyWidget):
+    """
+    Custom widget to match Class using School + Class name + Stream + Medium from Excel row.
+    """
+    def clean(self, value, row=None, *args, **kwargs):
+        if not value:
+            return None
+
+        school_name = row.get("School")
+        if not school_name:
+            raise ValueError("School column is required to identify Class")
+
+        try:
+            school = School.objects.get(name=school_name.strip())
+        except School.DoesNotExist:
+            raise ValueError(f"School '{school_name}' does not exist")
+
+        stream_name = row.get("Stream")
+        medium_name = row.get("Medium")
+
+        classes = Class.objects.filter(school=school, name__iexact=value.strip())
+
+        # Stream filter
+        if stream_name and stream_name.strip():
+            classes = classes.filter(stream__name__iexact=stream_name.strip())
+        else:
+            classes = classes.filter(stream__isnull=True)
+
+        # Medium filter
+        if medium_name and medium_name.strip():
+            classes = classes.filter(medium__name__iexact=medium_name.strip())
+        else:
+            classes = classes.filter(medium__isnull=True)
+
+        if not classes.exists():
+            raise ValueError(
+                f"Class '{value}' not found in school '{school_name}' with Stream '{stream_name}' and Medium '{medium_name}'"
+            )
+        if classes.count() > 1:
+            raise ValueError(
+                f"Multiple Classes found for '{value}' in school '{school_name}' with Stream '{stream_name}' and Medium '{medium_name}'"
+            )
+        return classes.first()
+
+
+
+class ClassSubjectResource(resources.ModelResource):
+    school = fields.Field(column_name="School", attribute="class_info", readonly=True)
+    class_info = fields.Field(column_name="Class", attribute="class_info", widget=ClassInfoWidget(Class, "name"))
+    stream = fields.Field(column_name="Stream", readonly=True)
+    medium = fields.Field(column_name="Medium", readonly=True)
+    subject = fields.Field(column_name="Subject", attribute="subject", widget=ForeignKeyWidget(Subject, "name"))
+    periods_per_week = fields.Field(column_name="Periods Per Week", attribute="periods_per_week")
+    is_optional = fields.Field(column_name="Is Optional", attribute="is_optional")
+    has_lab = fields.Field(column_name="Has Lab", attribute="has_lab")
+
+    class Meta:
+        model = ClassSubject
+        fields = (
+            "id",
+            "school",
+            "class_info",
+            "stream",
+            "medium",
+            "subject",
+            "periods_per_week",
+            "is_optional",
+            "has_lab",
+        )
+        export_order = fields
+
+    def dehydrate_school(self, obj):
+        return obj.class_info.school.name if obj.class_info and obj.class_info.school else ""
+
+    def dehydrate_stream(self, obj):
+        return obj.class_info.stream.name if obj.class_info and obj.class_info.stream else ""
+
+    def dehydrate_medium(self, obj):
+        return obj.class_info.medium.name if obj.class_info and obj.class_info.medium else ""
+
+class ClassSubjectAdmin(ImportExportModelAdmin):
+    resource_class = ClassSubjectResource
+    list_display = (
+        "class_info",
+        "get_stream",
+        "get_medium",
+        "subject",
+        "periods_per_week",
+        "is_optional",
+        "has_lab",
+    )
+
+    @admin.display(description="Stream")
+    def get_stream(self, obj):
+        return obj.class_info.stream.name if obj.class_info and obj.class_info.stream else "—"
+
+    @admin.display(description="Medium")
+    def get_medium(self, obj):
+        return obj.class_info.medium.name if obj.class_info and obj.class_info.medium else "—"
+
+    search_fields = (
+        "class_info__name",
+        "class_info__school__name",
+        "subject__name",
+    )
+    list_filter = ("class_info__school", "is_optional", "has_lab")
+
+
+
+class ClassInchargeResource(resources.ModelResource):
+    # Explicitly handle related fields
+    section = fields.Field(
+        column_name="Section",
+        attribute="section",
+        widget=ForeignKeyWidget(Section, "name")  # or use any unique identifier field
+    )
+
+    staff = fields.Field(
+        column_name="Staff",
+        attribute="staff",
+        widget=ForeignKeyWidget(Staff, "name")  # assuming Staff has unique `name`
+    )
+
+    class Meta:
+        model = ClassIncharge
+        fields = (
+            "id",
+            "section",
+            "staff",
+            "assigned_date",
+            "effective_from",
+            "effective_to",
+            "active",
+        )
+        export_order = fields
+
+class ClassInchargeAdmin(ImportExportModelAdmin):
+    resource_class = ClassInchargeResource
+
+    list_display = (
+        "section",
+        "staff",
+        "effective_from",
+        "effective_to",
+        "active",
+    )
+    list_filter = (
+        "active",
+        "staff__staff_role",
+    )
+    search_fields = (
+        "section__name",
+        "staff__name",
+    )
+    ordering = ("section",)
+
 admin.site.register(Document,DocumentAdmin)
 #admin.site.register(User)  
 
@@ -838,16 +1622,16 @@ admin.site.register(Committee)
 admin.site.register(CommitteeMember)
 admin.site.register(CommitteeMeeting)
 admin.site.register(Department)
-admin.site.register(Stream)
-admin.site.register(Class)
-admin.site.register(Section)
+admin.site.register(Stream,StreamAdmin)
+admin.site.register(Class,ClassAdmin)
+admin.site.register(Section,SectionAdmin)
 # admin.site.register(Subject)
 admin.site.register(Staff,StaffAdmin)
-admin.site.register(Classroom)
-admin.site.register(ClassIncharge)
+admin.site.register(Classroom,ClassroomAdmin)
+admin.site.register(ClassIncharge,ClassInchargeAdmin)
 admin.site.register(Timetable,TimetableAdmin)
-admin.site.register(TimetableSlot,TimetableSlotAdmin)
-admin.site.register(TimetableEntry,TimetableEntryAdmin)
+# admin.site.register(TimetableSlot,TimetableSlotAdmin)
+# admin.site.register(TimetableEntry,TimetableEntryAdmin)
 admin.site.register(Student,StudentAdmin)
 
 admin.site.register(Book)
@@ -856,3 +1640,82 @@ admin.site.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
 
 
 
+class TimetableAdminSite(AdminSite):
+    site_header = "Timetable Administration"
+    site_title = "Timetable Portal"
+    index_title = "Timetable Management"
+
+    def get_app_list(self, request):
+        """
+        Return a custom-ordered app list, keeping models under one app heading.
+        """
+        app_list = super().get_app_list(request)
+
+        # Flatten into dict for quick lookup
+        app_dict = {app["app_label"]: app for app in app_list}
+
+        # Desired model order (app_label.ModelName)
+        model_order = [
+            "cms.School",            
+            "cms.Stream",
+            "cms.Medium",  
+            "cms.Class",   
+            "cms.Classroom",
+            "cms.Section",     
+            "cms.Subject",
+            "cms.ClassSubject",
+            "cms.PostType",
+            "cms.Staff",     
+            "cms.Day",            
+            "cms.TimetableSlot",
+            "cms.TeacherSubjectAssignment",
+            "cms.Timetable",
+
+
+
+
+        ]
+
+        ordered_apps = []
+
+        for app_label, app in app_dict.items():
+            # Build a model lookup
+            model_lookup = {m["object_name"]: m for m in app["models"]}
+
+            ordered_models = []
+            for model_path in model_order:
+                al, model_name = model_path.split(".")
+                if al == app_label and model_name in model_lookup:
+                    ordered_models.append(model_lookup[model_name])
+
+            # Add any models not in the order list
+            for m in app["models"]:
+                if m not in ordered_models:
+                    ordered_models.append(m)
+
+            # Replace models with ordered list
+            app_copy = app.copy()
+            app_copy["models"] = ordered_models
+            ordered_apps.append(app_copy)
+
+        return ordered_apps
+
+
+# 👉 This is the object you should import in urls.py
+timetable_admin = TimetableAdminSite(name="timetable_admin")
+
+# Register timetable-related models
+timetable_admin.register(School,SchoolAdmin)
+timetable_admin.register(Stream,StreamAdmin)
+timetable_admin.register(Medium,MediumAdmin)
+timetable_admin.register(Day,DayAdmin)
+timetable_admin.register(TimetableSlot,TimetableSlotAdmin)
+timetable_admin.register(Timetable,TimetableAdmin)
+timetable_admin.register(Class,ClassAdmin)
+timetable_admin.register(Section,SectionAdmin)
+timetable_admin.register(Classroom,ClassroomAdmin)
+timetable_admin.register(Subject,SubjectAdmin)
+timetable_admin.register(ClassSubject,ClassSubjectAdmin)
+timetable_admin.register(PostType,PostTypeAdmin)
+timetable_admin.register(Staff,StaffAdmin)
+timetable_admin.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
