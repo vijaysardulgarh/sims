@@ -911,7 +911,7 @@ class Student(models.Model):
                     subject_type = subject_type.strip()
                     subject_name = subject_name.strip()
 
-                    if subject_type in ("Compulsory", "Optional", "NSQF", "Language"):
+                    if subject_type in ("Compulsory", "Optional","Optional 1","Optional 2", "NSQF", "Language"):
                         all_subjects.append(subject_name)
                     elif subject_type == "Additional":
                         all_subjects.append(f"Additional: {subject_name}")
@@ -1155,5 +1155,6 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
