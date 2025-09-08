@@ -1418,10 +1418,10 @@ def bpl_students_report(request):
     elements.append(Paragraph(f"BPL Students Report - {school.name}", title_style))
     elements.append(Spacer(1, 12))
 
-    # Table Header
+   # Table Header
     data = [[
-        "SRN", "Class", "Section", "Roll No", "Adm No", "Student's Name",
-        "DOB", "Gender", "Father's Name", "BPL Certificate No.","Category",
+        "SRN", "Class", "Section", "Roll No", "Student's Name",
+        "DOB", "Gender", "Account No.", "Family ID","BPL Certificate No.","Category",
     ]]
 
     # Rows
@@ -1431,17 +1431,17 @@ def bpl_students_report(request):
             s.studentclass,
             s.section,
             s.roll_number,
-            s.admission_number,
             s.full_name_aadhar,
             s.date_of_birth.strftime("%d-%m-%Y") if s.date_of_birth else "",
             s.gender,
-            s.father_full_name_aadhar,
+            s.account_number,
+            s.family_id,
             s.below_poverty_line_certificate_number,
             s.category,
         ])
 
     # Table
-    table = Table(data, repeatRows=1, colWidths=[60, 50, 50, 40, 60, 100, 70, 50, 100, 100,50])
+    table = Table(data, repeatRows=1, colWidths=[60, 50, 50, 40, 100, 70, 50, 90, 60,80,50])
     table.setStyle(TableStyle([
         ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#AED6F1")),
         ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
@@ -1453,4 +1453,5 @@ def bpl_students_report(request):
 
     doc.build(elements)
     return response
+
 
