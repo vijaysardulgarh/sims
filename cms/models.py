@@ -395,26 +395,9 @@ class TeacherSubjectAssignment(models.Model):
     class Meta:
         unique_together = ("teacher", "class_subject")
 
-    #def __str__(self):
-        #return f"{self.teacher.name} → {self.class_subject}"
+    def __str__(self):
+        return f"{self.teacher.name} → {self.class_subject}"
         
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # Default empty subject list
-        self.fields["class_subject"].queryset = ClassSubject.objects.none()
-
-        if "class_info" in self.data:  # when user selects a class
-            try:
-                class_id = int(self.data.get("class_info"))
-                self.fields["class_subject"].queryset = ClassSubject.objects.filter(class_info_id=class_id)
-            except (ValueError, TypeError):
-                pass
-        elif self.instance.pk:  # when editing existing assignment
-            self.fields["class_info"].initial = self.instance.class_subject.class_info
-            self.fields["class_subject"].queryset = ClassSubject.objects.filter(
-                class_info=self.instance.class_subject.class_info
-            )
 
 class TimetableForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -1172,6 +1155,7 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
 
