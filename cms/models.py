@@ -8,7 +8,7 @@ from decimal import Decimal
 from datetime import date
 #from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
-from import_export import resources
+from import_export import resources,fields
 #class User(AbstractUser):
     #STUDENT = 'student'
    # TEACHER = 'teacher'
@@ -1172,6 +1172,7 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
 
