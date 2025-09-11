@@ -1,15 +1,17 @@
-from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 from .views import timetable_view
 from cms.admin import timetable_admin
+from django.urls import path, include
 urlpatterns = [
-    path("accounts/", include("django.contrib.auth.urls")),  # 👈 includes login/logout
+    path('', views.sims_index, name='sims_index'),    # Home page → sims_index.html
+    path('index/', views.index, name='index'),   # index.html page
     path("timetable-admin/", timetable_admin.urls),
     path('login/', views.user_login, name='login'),
+    path("accounts/", include("django.contrib.auth.urls")),  # 👈 includes login/logout
     # Home
-    path('', views.index, name='index'),
+
 
     # About
     path('about/', views.about_school, name='about'),
@@ -94,4 +96,3 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
