@@ -90,36 +90,6 @@
           </ul>
         </li>
 
-        <!-- Reports -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Reports</a>
-          <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
-            <li><a class="dropdown-item" href="{% url 'signin_link' %}">Signin Report</a></li>
-            <li><a class="dropdown-item" href="{% url 'roll_call_link' %}">Student Report</a></li>
-            <li><a class="dropdown-item" href="{% url 'subject_report_link' %}">Subject Report</a></li>
-            <li><a class="dropdown-item" href="{% url 'bank_report_link' %}">Bank Account Report</a></li>
-            <li><a class="dropdown-item" href="{% url 'student_strength_pdf' %}">Student Strength Report</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'cwsn_students_report' %}">CWSN Students Report</a></li>
-            <li><a class="dropdown-item" href="{% url 'bpl_students_report' %}">BPL Students Report</a></li>
-          </ul>
-        </li>
-
-
-
-
-        <!-- Statistics -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="statisticsDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Statistics</a>
-          <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
-            <li><a class="dropdown-item" href="{% url 'staff_summary' %}">Staff Vacancy</a></li>
-            <li><a class="dropdown-item" href="{% url 'student_strength' %}">Student Category Wise</a></li>
-            <li><a class="dropdown-item" href="{% url 'subject_strength' %}">Student Subject Wise</a></li>
-          </ul>
-        </li>
-
         <!-- Mandatory Info -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="mandatoryDropdown" role="button" data-bs-toggle="dropdown"
@@ -134,8 +104,54 @@
           </ul>
         </li>
 
+
+        {% if request.user.is_authenticated %}
+          <!-- Reports -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">Reports</a>
+            <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+              <li><a class="dropdown-item" href="{% url 'signin_link' %}">Signin Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'roll_call_link' %}">Student Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'subject_report_link' %}">Subject Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'bank_report_link' %}">Bank Account Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'student_strength_pdf' %}">Student Strength Report</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'cwsn_students_report' %}">CWSN Students Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'bpl_students_report' %}">BPL Students Report</a></li>
+            </ul>
+          </li>
+
+          <!-- Statistics -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="statisticsDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">Statistics</a>
+            <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
+              <li><a class="dropdown-item" href="{% url 'staff_summary' %}">Staff Vacancy</a></li>
+              <li><a class="dropdown-item" href="{% url 'student_strength' %}">Student Category Wise</a></li>
+              <li><a class="dropdown-item" href="{% url 'subject_strength' %}">Student Subject Wise</a></li>
+            </ul>
+          </li>
+
+          <!-- Welcome + Logout -->
+          <li class="nav-item d-flex align-items-center ms-3">
+            <span class="navbar-text fw-semibold text-dark">
+              👋 Welcome, {{ request.user.get_full_name|default:request.user.username }}
+            </span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-danger fw-bold" href="{% url 'logout' %}">Logout</a>
+          </li>
+        {% else %}
+          <!-- Login -->
+          <li class="nav-item">
+            <a class="nav-link text-success fw-bold" href="{% url 'login' %}">Login</a>
+          </li>
+        {% endif %}
+
+
+
       </ul>
     </div>
   </div>
 </nav>
-
