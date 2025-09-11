@@ -340,24 +340,26 @@ def committee_detail(request, pk):
 def staff_summary(request):
     school = get_object_or_404(School, id=request.session.get("school_id"))
 
-    # 1. Fetch sanctioned posts for this school
+    # Allowed post types in required order
+    allowed_post_types = ["Principal", "PGT", "TGT", "Clerk", "Lab Attendent", "Class IV"]
+
+    # 1. Fetch sanctioned posts
     sanctioned = (
-        SanctionedPost.objects.filter(school=school)
+        SanctionedPost.objects.filter(school=school, post_type__name__in=allowed_post_types)
         .values("post_type__name", "subject__name")
         .annotate(
             sanctioned_posts=Sum("total_posts"),
         )
     )
 
-    # Convert into dictionary for easy lookup
     sanctioned_map = {
         (row["post_type__name"], row["subject__name"]): row["sanctioned_posts"]
         for row in sanctioned
     }
 
-    # 2. Fetch actual working staff
+    # 2. Fetch working staff
     summary = (
-        Staff.objects.filter(school=school)
+        Staff.objects.filter(school=school, post_type__name__in=allowed_post_types)
         .values("post_type__name", "subject__name")
         .annotate(
             regular_working=Count("id", filter=Q(employment_type="Regular")),
@@ -383,6 +385,10 @@ def staff_summary(request):
             - row["hkrnl_working"]
         )
         merged.append(row)
+
+    # 4. Sort according to required order
+    post_order = {name: i for i, name in enumerate(allowed_post_types)}
+    merged.sort(key=lambda x: post_order.get(x["post_type__name"], 999))
 
     return render(request, "staff_summary.html", {"summary": merged, "school": school})
 
@@ -1453,5 +1459,6 @@ def bpl_students_report(request):
 
     doc.build(elements)
     return response
+
 
 
