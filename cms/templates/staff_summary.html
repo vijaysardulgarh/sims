@@ -22,23 +22,33 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in summary %}
-            <tr>
-                <td>{{ row.post_type__name }}</td>
-                <td>{{ row.subject__name }}</td>
-                <td>{{ row.sanctioned_posts }}</td>
-                <td>{{ row.regular_working }}</td>
-                <td>{{ row.vacant }}</td>
-                <td>{{ row.guest_working }}</td>
-                <td>{{ row.hkrnl_working }}</td>
-                <td>{{ row.net_vacancy }}</td>
-                <td>{{ row.male_working }}</td>
-                <td>{{ row.female_working }}</td>
-            </tr>
+            {% regroup summary by post_type__name as grouped_summary %}
+
+            {% for group in grouped_summary %}
+                <!-- Post Type Header -->
+                <tr class="table-secondary fw-bold">
+                    <td colspan="10">{{ group.grouper }}</td>
+                </tr>
+
+                <!-- Subject-wise details -->
+                {% for row in group.list %}
+                <tr>
+                    <td>{{ row.post_type__name }}</td>
+                    <td>{{ row.subject__name }}</td>
+                    <td>{{ row.sanctioned_posts }}</td>
+                    <td>{{ row.regular_working }}</td>
+                    <td>{{ row.vacant }}</td>
+                    <td>{{ row.guest_working }}</td>
+                    <td>{{ row.hkrnl_working }}</td>
+                    <td>{{ row.net_vacancy }}</td>
+                    <td>{{ row.male_working }}</td>
+                    <td>{{ row.female_working }}</td>
+                </tr>
+                {% endfor %}
             {% empty %}
-            <tr>
-                <td colspan="10">No staff data available.</td>
-            </tr>
+                <tr>
+                    <td colspan="10">No staff data available.</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
