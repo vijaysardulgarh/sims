@@ -744,7 +744,6 @@ def roll_call(request, class_name, section_name):
     doc.build(elements, onFirstPage=add_page_number, onLaterPages=add_page_number)
     return response
 
-
 from collections import defaultdict
 from django.http import HttpResponse
 from reportlab.lib import colors
@@ -1474,6 +1473,7 @@ def bpl_students_report(request):
 
     doc.build(elements)
     return response
+
 
 
 
