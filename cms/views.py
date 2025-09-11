@@ -358,7 +358,7 @@ def staff_summary(request):
     }
 
     # 2. Fetch working staff
-    summary = (
+    staff_summary = (
         Staff.objects.filter(school=school, post_type__name__in=allowed_post_types)
         .values("post_type__name", "subject__name")
         .annotate(
@@ -370,13 +370,28 @@ def staff_summary(request):
         )
     )
 
-    # 3. Merge with sanctioned posts
+    staff_map = {
+        (row["post_type__name"], row["subject__name"]): row
+        for row in staff_summary
+    }
+
+    # 3. Merge (loop only over sanctioned posts)
     merged = []
-    for row in summary:
-        sanctioned_posts = sanctioned_map.get(
-            (row["post_type__name"], row["subject__name"]), 0
-        )
-        row["sanctioned_posts"] = sanctioned_posts
+    for key, sanctioned_posts in sanctioned_map.items():
+        post_type, subject = key
+        staff_data = staff_map.get(key, {})
+
+        row = {
+            "post_type__name": post_type,
+            "subject__name": subject,
+            "sanctioned_posts": sanctioned_posts,
+            "regular_working": staff_data.get("regular_working", 0),
+            "guest_working": staff_data.get("guest_working", 0),
+            "hkrnl_working": staff_data.get("hkrnl_working", 0),
+            "male_working": staff_data.get("male_working", 0),
+            "female_working": staff_data.get("female_working", 0),
+        }
+
         row["vacant"] = sanctioned_posts - row["regular_working"]
         row["net_vacancy"] = (
             sanctioned_posts
@@ -384,6 +399,7 @@ def staff_summary(request):
             - row["guest_working"]
             - row["hkrnl_working"]
         )
+
         merged.append(row)
 
     # 4. Sort according to required order
@@ -391,7 +407,6 @@ def staff_summary(request):
     merged.sort(key=lambda x: post_order.get(x["post_type__name"], 999))
 
     return render(request, "staff_summary.html", {"summary": merged, "school": school})
-
 
 def achievement_list(request):
     achievements = StudentAchievement.objects.select_related("exam_detail").all().order_by("-date")
@@ -1459,6 +1474,7 @@ def bpl_students_report(request):
 
     doc.build(elements)
     return response
+
 
 
 
