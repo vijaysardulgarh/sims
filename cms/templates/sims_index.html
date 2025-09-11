@@ -6,9 +6,20 @@
     <title>About SIMS</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
+    <!-- Bootstrap Icons (for the icon in button) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
     <style>
-        /* Add custom styles here */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
@@ -17,8 +28,10 @@
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
             <h1 class="text-center mb-4">About SIMS</h1>
+
             <div class="card">
                 <div class="card-body">
+
                     <h3>Overview</h3>
                     <p>SIMS is a robust web-based application designed to streamline various administrative and academic processes within educational institutions. From student enrollment and attendance tracking to grade management and reporting, SIMS offers a wide range of features to meet the needs of educators, administrators, students, and parents alike.</p>
 
@@ -40,35 +53,53 @@
 
                     <h3>Version Information</h3>
                     <p>Current Version: SIMS 1.0</p>
-                    <p>Release Date: [Upcoming Soon]</p>
-                    <p>Release Notes: [Upcoming Soon]</p>
+                    <p>Release Date: Coming Soon</p>
+                    <p>Release Notes: Coming Soon</p>
 
                     <h3>Feedback and Support</h3>
-                    <p>We value your feedback and are committed to providing excellent support to our users. If you have any questions, suggestions, or encounter any issues while using SIMS, please don't hesitate to contact us:</p>
-                    <ul>
-                        <li>Email: support@sims.com</li>
-                        <li>Phone: [9988214808]</li>
-                        <li>Community Forum: [upcoming soon]</li>
-                    </ul>
+                    <address>
+                        <p>Email: <a href="mailto:support@sims.com">support@sims.com</a></p>
+                        <p>Phone: 9988214808</p>
+                        <p>Community Forum: Coming Soon</p>
+                    </address>
 
                     <h3>Privacy Policy and Terms of Use</h3>
-                    <p>Please review our <a href="link-to-privacy-policy">Privacy Policy</a> and <a href="link-to-terms-of-use">Terms of Use</a> for information on how we collect, use, and protect your data when using SIMS.</p>
+                    <p>Please review our <a href="/privacy-policy.html">Privacy Policy</a> and <a href="/terms-of-use.html">Terms of Use</a> for information on how we collect, use, and protect your data when using SIMS.</p>
 
                     <h3>Credits</h3>
-                    <p>We would like to extend our sincere gratitude to the following individuals and organizations for their valuable contributions to the development and improvement of SIMS:</p>
                     <ul>
-
-                        <li>
-                            <strong>Open Source Community:</strong> The vibrant community of developers and contributors who have shared their knowledge, expertise, and code to enhance SIMS and its underlying technologies.
-                        </li>
-                        <li>
-                            <strong>Educational Institutions:</strong> Schools that have provided feedback, testing, and real-world use cases to help shape the features and functionality of SIMS.
-                        </li>
-                
-                        <li>
-                            <strong>Users and Supporters:</strong> The teachers, students, parents, my friends, nears and dears who have embraced SIMS as their preferred platform for managing educational processes, and who continue to provide valuable feedback and support.
-                        </li>
+                        <li><strong>Open Source Community:</strong> Developers and contributors who enhance SIMS and its technologies.</li>
+                        <li><strong>Educational Institutions:</strong> Schools that provided valuable feedback and testing.</li>
+                        <li><strong>Users and Supporters:</strong> Teachers, students, parents, friends, and family who continue to support SIMS.</li>
                     </ul>
+
+                    <h3 class="mt-4">Select Your School</h3>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="row align-items-center">
+                            <div class="col-md-6 mb-2">
+                                <select name="school" class="form-select" required>
+                                    <option value="">-- Choose a School --</option>
+                                    {% for school in schools %}
+                                    <option value="{{ school.id }}" {% if selected_school and school.id == selected_school.id %}selected{% endif %}>
+                                        {{ school.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle"></i> Select
+                                </button>
+                            </div>
+                            {% if selected_school %}
+                            <div class="col-md-4 text-end">
+                                <span class="badge bg-success">Current School: {{ selected_school.name }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
