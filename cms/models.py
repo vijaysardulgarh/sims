@@ -192,6 +192,13 @@ class Class(models.Model):
             base += f" ({self.stream.name})"
         if self.medium:
             base += f" - {self.medium.name}"
+        return base
+    def full_display(self):
+        base = f"{self.name}"
+        if self.stream:
+            base += f" ({self.stream.name})"
+        if self.medium:
+            base += f" - {self.medium.name}"
         return f"{base} ({self.school.name})"
 
 class Section(models.Model):
@@ -1155,6 +1162,7 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
 
