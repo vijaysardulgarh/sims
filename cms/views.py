@@ -4,7 +4,7 @@ from django.http import FileResponse, Http404
 from .utils import get_current_school
 from .models import (
     Staff, Student, Class, Subject,MandatoryPublicDisclosure,
-    News, SMCMember, Committee, School,FeeStructure,FAQ,
+    News, SMCMember, Committee, School,FeeStructure,FAQ,ClassSubject,
     AboutSchool, Principal, Affiliation,StaffAssociationRoleAssignment, Association,StudentAchievement,Infrastructure,SanctionedPost
    
 )
@@ -1546,5 +1546,6 @@ def subjects_offered(request):
         "subjects_offered.html",
         {"school": school, "grouped_data": grouped_data},
     )
+
 
 
