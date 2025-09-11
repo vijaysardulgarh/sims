@@ -27,21 +27,31 @@ import io
 from reportlab.platypus import Spacer
 # -------------------- Dashboard & Common --------------------
 
-def index(request):
+def sims_index(request):
+    if 'clear' in request.GET:
+        request.session.pop('school_id', None)
+        return redirect('/')
+
     schools = School.objects.all()
-    selected_school_id = request.session.get("school_id")
-    selected_school = None
-    if selected_school_id:
-        selected_school = School.objects.filter(id=selected_school_id).first()
 
     if request.method == "POST":
         school_id = request.POST.get("school")
         if school_id:
             request.session["school_id"] = int(school_id)
-            return redirect("/")
+            return redirect("/index/")
 
     context = {
-        "schools": schools,
+        "schools": schools
+    }
+    return render(request, "sims_index.html", context)
+
+def index(request):
+    selected_school_id = request.session.get("school_id")
+    selected_school = None
+    if selected_school_id:
+        selected_school = School.objects.filter(id=selected_school_id).first()
+
+    context = {
         "selected_school": selected_school,
     }
     return render(request, "index.html", context)
@@ -1476,5 +1486,65 @@ def bpl_students_report(request):
 
 
 
+def subjects_offered(request):
+    # Ensure a school is selected
+    school = get_current_school(request)
+    if not school:
+        return redirect("select_school")
+
+    # Fetch all ClassSubject for this school
+    class_subjects = (
+        ClassSubject.objects
+        .select_related("class_info__stream", "class_info__medium", "subject")
+        .filter(class_info__school=school)
+        .order_by("class_info__name", "subject__name")
+    )
+
+    # Helper: determine school level
+    def get_level(class_name: str):
+        try:
+            num = int("".join([c for c in class_name if c.isdigit()]))
+        except ValueError:
+            return "Other"
+        if 1 <= num <= 5:
+            return "Primary"
+        elif 6 <= num <= 8:
+            return "Middle"
+        elif 9 <= num <= 10:
+            return "Secondary"
+        elif 11 <= num <= 12:
+            return "Senior Secondary"
+        return "Other"
+
+    # Initialize grouped_data including 'Other' to avoid KeyError
+    grouped_data = {
+        "Primary": {},
+        "Middle": {},
+        "Secondary": {},
+        "Senior Secondary": {},
+        "Other": {}
+    }
+
+    # Organize subjects into level → class → subjects
+    for cs in class_subjects:
+        level = get_level(cs.class_info.name)
+        class_label = cs.class_info.full_display()  # includes stream + medium
+
+        # Safely create entries
+        grouped_data.setdefault(level, {})
+        grouped_data[level].setdefault(class_label, [])
+
+        grouped_data[level][class_label].append({
+            "name": cs.subject.name,
+            "periods_per_week": cs.periods_per_week,
+            "is_optional": cs.is_optional,
+            "has_lab": cs.has_lab,
+        })
+
+    return render(
+        request,
+        "subjects_offered.html",
+        {"school": school, "grouped_data": grouped_data},
+    )
 
 
