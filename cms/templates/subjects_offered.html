@@ -1,74 +1,41 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Subjects Offered{% endblock %}
+{% block title %}Subjects Offered - {{ school.name }}{% endblock %}
 
 {% block content %}
-  <header class="bg-warning text-dark text-center py-4 rounded shadow-sm">
-    <h1>📚 Subjects Offered</h1>
-  </header>
+<header class="bg-warning text-dark text-center py-4 rounded shadow-sm">
+  <h1>📚 Subjects Offered</h1>
+  <h3>{{ school.name }}</h3>
+</header>
 
-  <section class="mt-4">
-    <h2>Primary (Classes I–V)</h2>
-    <ul>
-      <li>English</li>
-      <li>Hindi</li>
-      <li>Mathematics</li>
-      <li>Environmental Studies (EVS)</li>
-      <li>Computer Awareness</li>
-      <li>Art & Craft</li>
-      <li>Physical Education</li>
-    </ul>
+<section class="mt-4">
+  {% for level, classes in grouped_data.items %}
+    {% if classes %}
+      <article class="mb-4">
+        <h2>{{ level }}</h2>
 
-    <h2>Middle (Classes VI–VIII)</h2>
-    <ul>
-      <li>English</li>
-      <li>Hindi / Punjabi (Third Language option)</li>
-      <li>Mathematics</li>
-      <li>Science</li>
-      <li>Social Science</li>
-      <li>Computer Science</li>
-      <li>General Knowledge & Moral Education</li>
-      <li>Art, Music & Physical Education</li>
-    </ul>
-
-    <h2>Secondary (Classes IX–X)</h2>
-    <ul>
-      <li>English (Communicative / Language & Literature)</li>
-      <li>Hindi / Punjabi</li>
-      <li>Mathematics (Standard / Basic)</li>
-      <li>Science (Physics, Chemistry, Biology)</li>
-      <li>Social Science (History, Civics, Geography, Economics)</li>
-      <li>Information Technology / Computer Applications</li>
-      <li>Health & Physical Education</li>
-    </ul>
-
-    <h2>Senior Secondary (Classes XI–XII)</h2>
-    <h3>Science Stream</h3>
-    <ul>
-      <li>English Core</li>
-      <li>Physics</li>
-      <li>Chemistry</li>
-      <li>Biology / Mathematics</li>
-      <li>Computer Science / Physical Education</li>
-    </ul>
-
-    <h3>Commerce Stream</h3>
-    <ul>
-      <li>English Core</li>
-      <li>Accountancy</li>
-      <li>Business Studies</li>
-      <li>Economics</li>
-      <li>Mathematics / Informatics Practices</li>
-    </ul>
-
-    <h3>Humanities Stream</h3>
-    <ul>
-      <li>English Core</li>
-      <li>Political Science</li>
-      <li>History</li>
-      <li>Geography</li>
-      <li>Economics / Sociology / Physical Education</li>
-    </ul>
-  </section>
+        {% for class_name, subjects in classes.items %}
+          <h4 class="mt-3">{{ class_name }}</h4>
+          <ul class="list-group list-group-flush">
+            {% for subject in subjects %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                  {{ subject.name }}
+                  {% if subject.is_optional %}<span class="badge bg-info ms-2">Optional</span>{% endif %}
+                  {% if subject.has_lab %}<span class="badge bg-success ms-2">Lab</span>{% endif %}
+                </span>
+                <span class="badge bg-secondary">
+                  {{ subject.periods_per_week }} periods/week
+                </span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endfor %}
+      </article>
+    {% else %}
+      <p class="text-muted">No subjects available for {{ level }}.</p>
+    {% endif %}
+  {% endfor %}
+</section>
 {% endblock %}
