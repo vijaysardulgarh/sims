@@ -4,6 +4,7 @@ from . import views
 from .views import timetable_view
 from cms.admin import timetable_admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('', views.sims_index, name='sims_index'),    # Home page → sims_index.html
     path('index/', views.index, name='index'),   # index.html page
@@ -98,4 +99,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
