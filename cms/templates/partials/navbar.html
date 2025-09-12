@@ -160,7 +160,6 @@
   </div>
 </nav>
 
-
 <!-- 🔑 Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -171,14 +170,6 @@
       </div>
       <div class="modal-body">
 
-        <!-- Show error if login fails -->
-        {% if form.errors %}
-        <div class="alert alert-danger py-2 small">
-          Invalid username or password.
-        </div>
-        {% endif %}
-
-        <!-- Login Form -->
         <form method="post" action="{% url 'login' %}">
           {% csrf_token %}
           <div class="mb-3">
@@ -201,5 +192,6 @@
     </div>
   </div>
 </div>
+
 
 
