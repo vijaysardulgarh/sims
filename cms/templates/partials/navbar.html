@@ -140,7 +140,12 @@
             </span>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-danger fw-bold" href="{% url 'logout' %}">Logout</a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="nav-link btn btn-link text-danger fw-bold" style="padding:0; margin:0;">
+                Logout
+              </button>
+            </form>
           </li>
         {% else %}
           <!-- Login -->
@@ -155,3 +160,4 @@
     </div>
   </div>
 </nav>
+
