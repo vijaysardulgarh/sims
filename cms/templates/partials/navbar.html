@@ -148,16 +148,58 @@
             </form>
           </li>
         {% else %}
-          <!-- Login -->
+          <!-- Login trigger (opens modal) -->
           <li class="nav-item">
-            <a class="nav-link text-success fw-bold" href="{% url 'login' %}">Login</a>
+            <a class="nav-link text-success fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+              Login
+            </a>
           </li>
         {% endif %}
-
-
-
       </ul>
     </div>
   </div>
 </nav>
+
+
+<!-- 🔑 Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-sm">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="loginModalLabel"><i class="bi bi-box-arrow-in-right"></i> Login</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Show error if login fails -->
+        {% if form.errors %}
+        <div class="alert alert-danger py-2 small">
+          Invalid username or password.
+        </div>
+        {% endif %}
+
+        <!-- Login Form -->
+        <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+          </button>
+        </form>
+
+        <div class="mt-2 text-center">
+          <a href="#" class="small text-decoration-none">Forgot Password?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
