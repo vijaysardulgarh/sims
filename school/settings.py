@@ -137,6 +137,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+CSRF_TRUSTED_ORIGINS = ["https://vijaysardulgarh.com"]
+CSRF_COOKIE_SECURE = True  # since using https
+SESSION_COOKIE_SECURE = True
+
 
 
 
