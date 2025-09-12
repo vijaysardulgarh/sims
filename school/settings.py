@@ -141,10 +141,11 @@ CSRF_TRUSTED_ORIGINS = ["https://vijaysardulgarh.com"]
 CSRF_COOKIE_SECURE = True  # since using https
 SESSION_COOKIE_SECURE = True
 
-LOGIN_REDIRECT_URL = '/'   # or any homepage/dashboard URL
+LOGIN_REDIRECT_URL = '/index/'   # or any homepage/dashboard URL
 
 # Redirect users after logout
 LOGOUT_REDIRECT_URL = '/'  # optional
+
 
 
 
