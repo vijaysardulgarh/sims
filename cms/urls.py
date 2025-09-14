@@ -1,22 +1,25 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
-from .views import timetable_view
+from .views import timetable_dragndrop
 from cms.admin import timetable_admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 urlpatterns = [
-    
+    path('timetable_dragndrop/', views.timetable_dragndrop, name='timetable_dragndrop'),
+    path('timetable_update/', views.timetable_update, name='timetable_update'),
+    path('timetable_remove/', views.timetable_remove, name='timetable_remove'),
     path('', views.sims_index, name='sims_index'),    # Home page → sims_index.html
     path('index/', views.index, name='index'),   # index.html page
     path("timetable-admin/", timetable_admin.urls),
-    #path('login/', views.user_login, name='login'),
-    #path("accounts/", include("django.contrib.auth.urls")),  # 👈 includes login/logout
     path("login/", auth_views.LoginView.as_view(redirect_authenticated_user=True, next_page='/index/'), name="login"),
     path("logout/", auth_views.LogoutView.as_view(next_page="sims_index"), name="logout"),
+    #path("accounts/", include("django.contrib.auth.urls")),  # 👈 includes login/logout
     # Home
-
-
+    path('timetable/create/', views.create_timetable_entry, name='create_timetable_entry'),
+    path('timetable/', views.timetable_list, name='timetable_list'),  # optional: list all timetable entries
+    path('assign-subjects/', views.assign_subjects, name='assign_subjects'),
+    path('ajax/get_subjects/', views.get_subjects_for_section, name='get_subjects_for_section'),
     # About
     path('about/', views.about_school, name='about'),
     path('principal/', views.principal, name='principal_message'),
@@ -54,7 +57,7 @@ urlpatterns = [
     path('school_subject_strength/', views.subject_strength, name='school_subject_strength'),
 
     # Timetable
-    path('timetable/', timetable_view, name='timetable'),
+    #path('timetable/', timetable_view, name='timetable'),
 
     # Students
     path('achievements/', views.achievement_list, name='achievement_list'),
@@ -81,7 +84,7 @@ urlpatterns = [
     # Bank Report
     path("bank-report/", views.bank_report_link, name="bank_report_link"),
     path("bank-report/<str:class_name>/<str:section_name>/", views.bank_report, name="bank_report"),
-    
+    path("reports/", views.reports_dashboard, name="reports_dashboard"),
     
     # Admissions & Fees
     path('admission_procedure/', views.admission_procedure, name='admission_procedure'),
@@ -100,8 +103,3 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-
-
-
