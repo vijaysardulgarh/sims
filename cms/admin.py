@@ -29,7 +29,7 @@ from .models import Classroom
 from .models import ClassIncharge
 from .models import Timetable
 from .models import Day,ClassSubject
-from .models import TimetableSlot
+from .models import TimetableSlot,TeacherAttendance
 from .models import TeacherSubjectAssignment,Medium
 # from .models import TimetableEntry
 from .models import Student,FeeStructure
@@ -39,7 +39,8 @@ from .models import SMCMember,AboutSchool,Principal,Association,AssociationType,
 import logging
 from .models import StudentAchievement, ExamDetail
 from django.contrib.admin import AdminSite
-from import_export.widgets import ForeignKeyWidget
+from import_export.widgets import ForeignKeyWidget,CharWidget
+from import_export import widgets
 admin.site.site_header="SIMS" 
 admin.site.site_title="SIMS"
 admin.site.index_title="School Information Management System"
@@ -66,6 +67,7 @@ class StaffResource(resources.ModelResource):
     employment_type = fields.Field(attribute='employment_type',column_name='Employment Type')
     #designation = fields.Field(attribute='designation',column_name='Designation')
     priority = fields.Field(attribute='priority', column_name='Priority') 
+    max_periods_per_week= fields.Field(attribute='max_periods_per_week', column_name='Max Periods Per Week')
     class Meta:
         model = Staff
         fields=(
@@ -90,7 +92,8 @@ class StaffResource(resources.ModelResource):
                 "mobile_number",
                 "staff_role",
                 "employment_type",
-                "priority"
+                "priority",
+                "max_periods_per_week"
                 )
 
     def before_import_row(self, row, **kwargs):
@@ -134,7 +137,8 @@ class StaffAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 "mobile_number",
                 "staff_role",
                 "employment_type",
-                "priority"
+                "priority",
+                "max_periods_per_week"
     )
     list_filter = ("school", "staff_role", "employment_type", "gender", "category")
     search_fields = ("name", "employee_id", "email", "mobile_number")
@@ -303,209 +307,250 @@ class StudentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 
-# --- Widgets ---
 
-
-
-# class ClassWidget(ForeignKeyWidget):
-#     def __init__(self):
-#         super().__init__(Class, "name")
-
-#     def clean(self, value, row=None, *args, **kwargs):
-#         if not value:
-#             return None
-
-#         school_name = row.get("School")
-#         if not school_name:
-#             raise ValueError("School column is required to identify Class")
-
-#         try:
-#             school = School.objects.get(name=school_name.strip())
-#         except School.DoesNotExist:
-#             raise ValueError(f"School '{school_name}' does not exist")
-
-#         stream_name = row.get("Stream")
-#         medium_name = row.get("Medium")
-
-#         classes = Class.objects.filter(
-#             school=school,
-#             name__iexact=value.strip()
-#         )
-#         if stream_name:
-#             classes = classes.filter(stream__name__iexact=stream_name.strip())
-#         if medium_name:
-#             classes = classes.filter(medium__name__iexact=medium_name.strip())
-
-#         if not classes.exists():
-#             raise ValueError(
-#                 f"Class '{value}' not found in School '{school_name}' "
-#                 f"with Stream '{stream_name}' and Medium '{medium_name}'"
-#             )
-#         if classes.count() > 1:
-#             raise ValueError(
-#                 f"Multiple Classes found for '{value}' in School '{school_name}' "
-#                 f"with Stream '{stream_name}' and Medium '{medium_name}'"
-#             )
-
-#         return classes.first()
-
-
-# class SubjectWidget(ForeignKeyWidget):
-#     def __init__(self):
-#         super().__init__(Subject, "name")
-
-#     def clean(self, value, row=None, *args, **kwargs):
-#         if not value:
-#             return None
-#         try:
-#             return Subject.objects.get(name=value.strip())
-#         except Subject.DoesNotExist:
-#             raise ValueError(f"Subject '{value}' does not exist")
-
-
-# class ClassSubjectWidget(ForeignKeyWidget):
-#     def __init__(self):
-#         super().__init__(ClassSubject, "id")  # Ensure correct call to parent constructor
-
-#     def clean(self, value, row=None, *args, **kwargs):
-#         class_name = row.get("Class Name")
-#         subject_name = row.get("Subject")
-
-#         if not class_name or not subject_name:
-#             raise ValueError("Both 'Class Name' and 'Subject' are required")
-
-#         class_obj = ClassWidget().clean(class_name, row=row)
-#         subject_obj = SubjectWidget().clean(subject_name, row=row)
-
-#         try:
-#             return ClassSubject.objects.get(
-#                 class_info=class_obj,
-#                 subject=subject_obj
-#             )
-#         except ClassSubject.DoesNotExist:
-#             raise ValueError(
-#                 f"ClassSubject not found for Class '{class_name}' and Subject '{subject_name}'"
-#             )
 # --- Teacher Subject Assignment Resource ---
 
-class TeacherSubjectAssignmentResource(resources.ModelResource):
-    # Raw FK fields with widgets
-    teacher = fields.Field(
-        column_name="teacher",
-        attribute="teacher",
-        widget=ForeignKeyWidget(Staff, "id")   # import by Staff.id
-    )
-    class_subject = fields.Field(
-        column_name="class_subject",
-        attribute="class_subject",
-        widget=ForeignKeyWidget(ClassSubject, "id")   # import by ClassSubject.id
-    )
+# class TeacherSubjectAssignmentResource(resources.ModelResource):
+#     # Raw FK fields with widgets
+#     teacher = fields.Field(
+#         column_name="teacher",
+#         attribute="teacher",
+#         widget=ForeignKeyWidget(Staff, "id")   # import by Staff.id
+#     )
+#     section = fields.Field(
+#         column_name="section",
+#         attribute="section",
+#         widget=ForeignKeyWidget(Section, "id")  # import by Section.id
+#     )
+#     class_subject = fields.Field(
+#         column_name="class_subject",
+#         attribute="class_subject",
+#         widget=ForeignKeyWidget(ClassSubject, "id")   # import by ClassSubject.id
+#     )
 
-    # Human-readable Excel fields
+#     # Human-readable Excel fields
+#     teacher_name = fields.Field(column_name="Teacher")
+#     school_name = fields.Field(column_name="School")
+#     class_name = fields.Field(column_name="Class")
+#     section_name = fields.Field(column_name="Section")
+#     stream_name = fields.Field(column_name="Stream")
+#     medium_name = fields.Field(column_name="Medium")
+#     subject_name = fields.Field(column_name="Subject")
+#     max_periods_per_week = fields.Field(
+#         column_name="Max Periods / Week",
+#         attribute="max_periods_per_week"
+#     )
+
+#     class Meta:
+#         model = TeacherSubjectAssignment
+#         import_id_fields = ("teacher", "section", "class_subject")
+#         fields = (
+#             "id",
+#             "teacher",
+#             "section",
+#             "class_subject",
+#             "teacher_name",
+#             "school_name",
+#             "class_name",
+#             "section_name",
+#             "stream_name",
+#             "medium_name",
+#             "subject_name",
+#             "max_periods_per_week",
+#         )
+#         export_order = fields
+
+#     # --- EXPORT (Readable) ---
+#     def dehydrate_teacher_name(self, obj):
+#         return obj.teacher.name if obj.teacher else ""
+
+#     def dehydrate_subject_name(self, obj):
+#         return obj.class_subject.subject.name if obj.class_subject and obj.class_subject.subject else ""
+
+#     def dehydrate_class_name(self, obj):
+#         return obj.section.school_class.name if obj.section and obj.section.school_class else ""
+
+#     def dehydrate_section_name(self, obj):
+#         return obj.section.name if obj.section else ""
+
+#     def dehydrate_school_name(self, obj):
+#         return (
+#             obj.section.school_class.school.name
+#             if obj.section and obj.section.school_class and obj.section.school_class.school
+#             else ""
+#         )
+
+#     def dehydrate_stream_name(self, obj):
+#         return (
+#             obj.section.school_class.stream.name
+#             if obj.section and obj.section.school_class and obj.section.school_class.stream
+#             else ""
+#         )
+
+#     def dehydrate_medium_name(self, obj):
+#         return (
+#             obj.section.school_class.medium.name
+#             if obj.section and obj.section.school_class and obj.section.school_class.medium
+#             else ""
+#         )
+
+#     # --- IMPORT (Smart lookup) ---
+#     def before_import_row(self, row, **kwargs):
+#         teacher_name = row.get("Teacher")
+#         school_name = row.get("School")
+#         class_name = row.get("Class")
+#         section_name = row.get("Section")
+#         stream_name = row.get("Stream")
+#         medium_name = row.get("Medium")
+#         subject_name = row.get("Subject")
+
+#         # Teacher lookup
+#         teacher = Staff.objects.filter(name=teacher_name, staff_role="Teaching").first()
+#         if not teacher:
+#             raise Exception(f"Teacher '{teacher_name}' not found.")
+
+#         # Class lookup
+#         class_qs = Class.objects.filter(
+#             name=class_name,
+#             school__name=school_name,
+#             stream__name=stream_name,
+#             medium__name=medium_name,
+#         )
+#         if not class_qs.exists():
+#             raise Exception(
+#                 f"Class '{class_name}' with School='{school_name}', Stream='{stream_name}', Medium='{medium_name}' not found."
+#             )
+#         class_obj = class_qs.first()
+
+#         # Section lookup
+#         section = Section.objects.filter(
+#             school_class=class_obj,
+#             name=section_name
+#         ).first()
+#         if not section:
+#             raise Exception(
+#                 f"Section '{section_name}' not found for Class='{class_name}' in School='{school_name}'."
+#             )
+
+#         # Subject lookup
+#         subject = Subject.objects.filter(name=subject_name).first()
+#         if not subject:
+#             raise Exception(f"Subject '{subject_name}' not found.")
+
+#         # ClassSubject lookup
+#         class_subject = ClassSubject.objects.filter(
+#             class_info=class_obj,
+#             subject=subject
+#         ).first()
+#         if not class_subject:
+#             raise Exception(
+#                 f"ClassSubject for Class='{class_name}' and Subject='{subject_name}' not found."
+#             )
+
+#         # ✅ Assign resolved PKs
+#         row["teacher"] = teacher.id
+#         row["section"] = section.id
+#         row["class_subject"] = class_subject.id
+
+
+
+
+
+class TeacherSubjectAssignmentResource(resources.ModelResource):
+    # Internal ID fields (hidden from export)
+    teacher = fields.Field(column_name="teacher", attribute="teacher", widget=widgets.IntegerWidget(), saves_null_values=False)
+    section = fields.Field(column_name="section", attribute="section", widget=widgets.IntegerWidget(), saves_null_values=False)
+    class_subject = fields.Field(column_name="class_subject", attribute="class_subject", widget=widgets.IntegerWidget(), saves_null_values=False)
+
+    # Human-readable export fields
     teacher_name = fields.Field(column_name="Teacher")
     school_name = fields.Field(column_name="School")
     class_name = fields.Field(column_name="Class")
+    section_name = fields.Field(column_name="Section")
     stream_name = fields.Field(column_name="Stream")
     medium_name = fields.Field(column_name="Medium")
     subject_name = fields.Field(column_name="Subject")
-    max_periods_per_week = fields.Field(
-        column_name="Max Periods / Week",
-        attribute="max_periods_per_week"
-    )
 
     class Meta:
         model = TeacherSubjectAssignment
-        import_id_fields = ("teacher", "class_subject")
+        import_id_fields = ("teacher", "section", "class_subject")  # internal IDs
         fields = (
-            "id",
             "teacher",
+            "section",
             "class_subject",
             "teacher_name",
             "school_name",
             "class_name",
+            "section_name",
             "stream_name",
             "medium_name",
             "subject_name",
-            "max_periods_per_week",
         )
         export_order = fields
 
-    # --- EXPORT (Readable) ---
+    # ------- EXPORT HELPERS -------
     def dehydrate_teacher_name(self, obj):
         return obj.teacher.name if obj.teacher else ""
 
-    def dehydrate_subject_name(self, obj):
-        return obj.class_subject.subject.name if obj.class_subject and obj.class_subject.subject else ""
+    def dehydrate_school_name(self, obj):
+        return obj.section.school_class.school.name if obj.section else ""
 
     def dehydrate_class_name(self, obj):
-        return obj.class_subject.class_info.name if obj.class_subject and obj.class_subject.class_info else ""
+        return obj.section.school_class.name if obj.section else ""
 
-    def dehydrate_school_name(self, obj):
-        return (
-            obj.class_subject.class_info.school.name
-            if obj.class_subject and obj.class_subject.class_info and obj.class_subject.class_info.school
-            else ""
-        )
+    def dehydrate_section_name(self, obj):
+        return obj.section.name if obj.section else ""
 
     def dehydrate_stream_name(self, obj):
-        return (
-            obj.class_subject.class_info.stream.name
-            if obj.class_subject and obj.class_subject.class_info and obj.class_subject.class_info.stream
-            else ""
-        )
+        return obj.section.school_class.stream.name if obj.section and obj.section.school_class.stream else ""
 
     def dehydrate_medium_name(self, obj):
-        return (
-            obj.class_subject.class_info.medium.name
-            if obj.class_subject and obj.class_subject.class_info and obj.class_subject.class_info.medium
-            else ""
-        )
+        return obj.section.school_class.medium.name if obj.section and obj.section.school_class.medium else ""
 
-    # --- IMPORT (Smart lookup) ---
+    def dehydrate_subject_name(self, obj):
+        return obj.class_subject.subject.name if obj.class_subject else ""
+
+    # ------- IMPORT HELPERS -------
     def before_import_row(self, row, **kwargs):
+        """Convert human-readable values into FK IDs for import."""
+
+        # Teacher
         teacher_name = row.get("Teacher")
-        school_name = row.get("School")
+        if teacher_name:
+            try:
+                teacher = Staff.objects.get(name__iexact=teacher_name.strip(), staff_role="Teaching")
+                row["teacher"] = teacher.id  # ✅ must be a string key
+            except Staff.DoesNotExist:
+                raise ValueError(f"❌ Teacher '{teacher_name}' not found")
+
+        # Section
         class_name = row.get("Class")
-        stream_name = row.get("Stream")
-        medium_name = row.get("Medium")
+        section_name = row.get("Section")
+        if class_name and section_name:
+            try:
+                section = Section.objects.get(
+                    school_class__name__iexact=class_name.strip(),
+                    name__iexact=section_name.strip(),
+                )
+                row["section"] = section.id
+            except Section.DoesNotExist:
+                raise ValueError(f"❌ Section '{class_name}-{section_name}' not found")
+
+        # Subject
         subject_name = row.get("Subject")
+        if class_name and subject_name:
+            try:
+                class_subject = ClassSubject.objects.get(
+                    sclass_info__name__iexact=class_name.strip(),
+                    subject__name__iexact=subject_name.strip(),
+                )
+                row["class_subject"] = class_subject.id
+            except ClassSubject.DoesNotExist:
+                raise ValueError(f"❌ Subject '{subject_name}' not found in class '{class_name}'")
 
-        # Teacher lookup
-        teacher = Staff.objects.filter(name=teacher_name, staff_role="Teaching").first()
-        if not teacher:
-            raise Exception(f"Teacher '{teacher_name}' not found.")
 
-        # Class lookup
-        class_qs = Class.objects.filter(
-            name=class_name,
-            school__name=school_name,
-            stream__name=stream_name,
-            medium__name=medium_name,
-        )
-        if not class_qs.exists():
-            raise Exception(
-                f"Class '{class_name}' with School='{school_name}', Stream='{stream_name}', Medium='{medium_name}' not found."
-            )
-        class_obj = class_qs.first()
 
-        # Subject lookup
-        subject = Subject.objects.filter(name=subject_name).first()
-        if not subject:
-            raise Exception(f"Subject '{subject_name}' not found.")
 
-        # ClassSubject lookup
-        class_subject = ClassSubject.objects.filter(
-            class_info=class_obj,
-            subject=subject
-        ).first()
-        if not class_subject:
-            raise Exception(
-                f"ClassSubject for Class='{class_name}' and Subject='{subject_name}' not found."
-            )
-
-        # ✅ Instead of PKs, assign the **actual instance**
-        row["teacher"] = teacher.id
-        row["class_subject"] = class_subject.id
 
 
 class TeacherSubjectAssignmentAdmin(ImportExportModelAdmin):
@@ -513,44 +558,52 @@ class TeacherSubjectAssignmentAdmin(ImportExportModelAdmin):
 
     list_display = (
         "teacher_name",
+        "school_name",
         "class_name",
+        "section_name",
         "subject_name",
-        "max_periods_per_week",
     )
     search_fields = (
         "teacher__name",
-        "class_subject__class_info__name",
-        "class_subject__class_info__medium__name",
-        "class_subject__class_info__stream__name",
+        "section__name",
+        "section__school_class__name",
+        "section__school_class__medium__name",
+        "section__school_class__stream__name",
         "class_subject__subject__name",
     )
     list_filter = (
         "teacher",
-        "class_subject__class_info__medium",
-        "class_subject__class_info__stream",
-        "class_subject__class_info",
+        "section__school_class__school",
+        "section__school_class__medium",
+        "section__school_class__stream",
+        "section",
         "class_subject__subject",
     )
 
     def get_queryset(self, request):
-        # Limit queryset to only Teaching staff
         qs = super().get_queryset(request)
         return qs.filter(teacher__staff_role="Teaching")
 
-    # Custom column for Teacher
+    # ---------- Custom display helpers ----------
     def teacher_name(self, obj):
         return obj.teacher.name if obj.teacher else "-"
     teacher_name.short_description = "Teacher"
 
-    # Custom column for Class
     def class_name(self, obj):
-        return obj.class_subject.class_info.name if obj.class_subject else "-"
+        return obj.section.school_class.name if obj.section and obj.section.school_class else "-"
     class_name.short_description = "Class"
 
-    # Custom column for Subject
+    def section_name(self, obj):
+        return obj.section.name if obj.section else "-"
+    section_name.short_description = "Section"
+
     def subject_name(self, obj):
         return obj.class_subject.subject.name if obj.class_subject else "-"
     subject_name.short_description = "Subject"
+
+    def school_name(self, obj):
+        return obj.section.school_class.school.name if obj.section and obj.section.school_class and obj.section.school_class.school else "-"
+    school_name.short_description = "School"
 
 # -------------------
 # Day Resource & Admin
@@ -803,7 +856,7 @@ class TimetableAdmin(ImportExportModelAdmin):
         "class_subject__subject__name",
         "teacher__name",
     )
-    list_filter = ("school", "section", "teacher", "slot__day")
+    list_filter = ['teacher_assignment', 'slot', 'classroom']
 
     def get_class(self, obj):
         return obj.class_subject.class_info
@@ -1440,7 +1493,7 @@ class ClassroomAdmin(ImportExportModelAdmin):
 
 class ClassAdmin(ImportExportModelAdmin):
     resource_class = ClassResource
-    list_display = ("name", "school", "stream", "medium")
+    list_display = ("name", "school", "stream", "medium","class_order")
     search_fields = ("name", "school__name", "stream__name", "medium__name")
     list_filter = ("school", "stream", "medium")
 
@@ -1609,6 +1662,37 @@ class ClassInchargeAdmin(ImportExportModelAdmin):
     )
     ordering = ("section",)
 
+
+class TeacherAttendanceAdmin(admin.ModelAdmin):
+    list_display = ("teacher", "date", "present")
+    list_editable = ("present",)
+
+
+from django import forms
+from django.forms import modelformset_factory
+from .models import TeacherAttendance, Staff
+from datetime import date
+
+class TeacherAttendanceForm(forms.ModelForm):
+    class Meta:
+        model = TeacherAttendance
+        fields = ['teacher', 'present']
+
+# Create a formset for all teachers
+TeacherAttendanceFormSet = modelformset_factory(
+    TeacherAttendance,
+    form=TeacherAttendanceForm,
+    extra=0
+)
+
+
+
+
+
+
+
+
+admin.site.register(TeacherAttendance, TeacherAttendanceAdmin)    
 admin.site.register(Document,DocumentAdmin)
 #admin.site.register(User)  
 
@@ -1719,3 +1803,4 @@ timetable_admin.register(ClassSubject,ClassSubjectAdmin)
 timetable_admin.register(PostType,PostTypeAdmin)
 timetable_admin.register(Staff,StaffAdmin)
 timetable_admin.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
+timetable_admin.register(TeacherAttendance, TeacherAttendanceAdmin)
