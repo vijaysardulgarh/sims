@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>School Timetable</title>
+    <style>
+        table {border-collapse: collapse; width: 100%;}
+        th, td {border: 1px solid #ccc; padding: 5px; text-align: center; vertical-align: top;}
+        th {background-color: #f4f4f4;}
+        select {margin-right: 10px;}
+        .break {background-color: #ffebcc;}
+        .assembly {background-color: #cce5ff;}
+        .special {background-color: #e6ccff;}
+    </style>
+</head>
+<body>
+<h1>School Timetable</h1>
+
+<!-- Filter Form -->
+<form method="get">
+    <select name="school">
+        <option value="">All Schools</option>
+        {% for school in schools %}
+            <option value="{{ school.id }}" {% if request.GET.school == school.id|stringformat:"s" %}selected{% endif %}>{{ school.name }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="class_id">
+        <option value="">All Classes</option>
+        {% for cls in classes %}
+            <option value="{{ cls.id }}" {% if request.GET.class_id == cls.id|stringformat:"s" %}selected{% endif %}>{{ cls.full_display }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="section">
+        <option value="">All Sections</option>
+        {% for section in sections %}
+            <option value="{{ section.id }}" {% if request.GET.section == section.id|stringformat:"s" %}selected{% endif %}>{{ section.full_display }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="teacher">
+        <option value="">All Teachers</option>
+        {% for teacher in teachers %}
+            <option value="{{ teacher.id }}" {% if request.GET.teacher == teacher.id|stringformat:"s" %}selected{% endif %}>{{ teacher.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+
+<!-- Timetable Table -->
+<table border="1" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th>Day / Period</th>
+            {% for period in period_numbers %}
+                <th>Period {{ period }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for day_row in timetable_grid %}
+            <tr>
+                <td>{{ day_row.day.name }}</td>
+                {% for entry in day_row.entries %}
+                    {% if entry %}
+                        {% if entry.slot.is_break %}
+                            <td class="break">Break</td>
+                        {% elif entry.slot.is_assembly %}
+                            <td class="assembly">Assembly</td>
+                        {% elif entry.slot.is_special_event %}
+                            <td class="special">Special Event</td>
+                        {% else %}
+                            <td>
+                                {{ entry.teacher.name }}<br>
+                                {% with cls=entry.section.school_class %}
+                                    {{ cls.name }} - Section {{ entry.section.name }}{% if cls.stream %} ({{ cls.stream.name }}){% endif %}<br>
+                                    {{ entry.class_subject.subject.name }}<br>
+                                    {% if cls.medium %}
+                                        Medium - {{ cls.medium.name }}
+                                    {% endif %}
+                                {% endwith %}
+                                {% if entry.classroom %}
+                                    <br>Room: {{ entry.classroom.room_number }}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

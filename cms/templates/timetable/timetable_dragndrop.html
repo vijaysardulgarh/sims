@@ -1,0 +1,256 @@
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editable Timetable - {{ school.name }}</title>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <style>
+        body {display:flex; font-family: Arial;}
+        .left-panel {width: 280px; border-right: 1px solid #ccc; padding: 10px;}
+        .left-panel h3 {margin-top:0;}
+        .draggable {
+            padding: 6px; margin: 6px 0; background:#e3f2fd; cursor:grab; border-radius:4px;
+        }
+        .disabled {background:#ffcdd2; cursor:not-allowed; opacity:0.6;}
+        .yellow-bg {background: #fff59d !important;} /* combined class */
+        .red-bg {background: #ef9a9a !important;} /* conflict */
+        .remove-btn {color:red; cursor:pointer; border:none; background:none; font-weight:bold;}
+        table {border-collapse: collapse; width: 100%;}
+        th, td {border: 1px solid #ccc; padding: 6px; text-align:center; vertical-align:top;}
+        .dropzone {min-height:60px;}
+        small {font-size: 12px;}
+    </style>
+</head>
+<body>
+
+<div class="left-panel">
+    <h3>Available Assignments</h3>
+    {% for assign in assignments %}
+        <div class="draggable {% if assign.current_load >= assign.max_load or assign.current_subject_load >= assign.required_subject_load %}disabled{% endif %}"
+             draggable="true"
+             data-entry-id="{{ assign.id }}"
+             data-section-id="{{ assign.section.id }}"
+             data-section-class-id="{{ assign.section.school_class.id }}"
+             data-teacher-id="{{ assign.teacher.id }}"
+             data-max-load="{{ assign.max_load }}"
+             data-current-load="{{ assign.current_load }}"
+             data-subject-id="{{ assign.class_subject.id }}"
+             data-required-load="{{ assign.required_subject_load }}"
+             data-current-subject-load="{{ assign.current_subject_load }}">
+            
+            <strong>{{ assign.class_subject.subject.name }}</strong> - {{ assign.teacher.name }}
+            
+            <br><small class="teacher-workload">Teacher: {{ assign.current_load }}/{{ assign.max_load }}</small>
+            <br><small class="subject-workload">Subject: {{ assign.current_subject_load }}/{{ assign.required_subject_load }}</small>
+            
+            <br><em>{{ assign.section.school_class.name }} - Section {{ assign.section.name }}</em>
+        </div>
+    {% endfor %}
+</div>
+
+<div style="flex:1; padding:10px;">
+<h2>Timetable - {{ school.name }}</h2>
+
+<form method="get">
+    <input type="hidden" name="school" value="{{ school.id }}">
+    <label>Select Sections:</label>
+    <select name="sections" multiple>
+        {% for cls in school.classes.all %}
+            {% for sec in cls.sections.all %}
+                <option value="{{ sec.id }}" {% if sec in sections %}selected{% endif %}>
+                    {{ cls.name }} - Section {{ sec.name }}
+                </option>
+            {% endfor %}
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Day / Period</th>
+            {% for p in period_numbers %}
+                <th>Period {{ p }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for day in days %}
+        <tr data-day="{{ day.id }}">
+            <td>{{ day.name }}</td>
+            {% for period in period_numbers %}
+                <td class="dropzone" data-period="{{ period }}">
+                    {% for section in sections %}
+                        {% for entry in timetable_lookup|get_item:day.id|get_item:period|get_item:section.id %}
+                            <div class="draggable"
+                                 data-entry-id="{{ entry.teacher_assignment.id }}"
+                                 data-section-id="{{ entry.section.id }}"
+                                 data-section-class-id="{{ entry.section.school_class.id }}"
+                                 data-teacher-id="{{ entry.teacher.id }}"
+                                 data-subject-id="{{ entry.class_subject.id }}">
+                                {{ entry.class_subject.subject.name }} - {{ entry.teacher.name }}
+                                <button class="remove-btn"
+                                        data-entry-id="{{ entry.teacher_assignment.id }}"
+                                        data-section-id="{{ entry.section.id }}">X</button>
+                                <br><em>{{ entry.section.school_class.name }} - Section {{ entry.section.name }}</em>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<script>
+function getCSRF() {
+    return document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+}
+
+// Update workload display
+function updateWorkload(card, teacherDelta, subjectDelta) {
+    let teacherLoad = parseInt(card.dataset.currentLoad) + teacherDelta;
+    let subjectLoad = parseInt(card.dataset.currentSubjectLoad) + subjectDelta;
+
+    card.dataset.currentLoad = teacherLoad;
+    card.dataset.currentSubjectLoad = subjectLoad;
+
+    const teacherEl = card.querySelector('.teacher-workload');
+    if (teacherEl) teacherEl.textContent = `Teacher: ${teacherLoad}/${card.dataset.maxLoad}`;
+
+    const subjectEl = card.querySelector('.subject-workload');
+    if (subjectEl) subjectEl.textContent = `Subject: ${subjectLoad}/${card.dataset.requiredLoad}`;
+
+    if (teacherLoad >= card.dataset.maxLoad || subjectLoad >= card.dataset.requiredLoad) {
+        card.classList.add("disabled");
+    } else {
+        card.classList.remove("disabled");
+    }
+}
+
+// Refresh visual warnings dynamically
+function refreshVisualWarnings() {
+    document.querySelectorAll('.dropzone .draggable').forEach(d => {
+        d.classList.remove('yellow-bg', 'red-bg');
+    });
+
+    const allDraggables = document.querySelectorAll('.draggable');
+    const byDayPeriodTeacher = {};
+
+    allDraggables.forEach(a => {
+        const cell = a.closest('.dropzone');
+        if (!cell) return;
+        const day = cell.closest('tr').dataset.day;
+        const period = cell.dataset.period;
+        const key = `${day}_${period}_${a.dataset.teacherId}`;
+        if (!byDayPeriodTeacher[key]) byDayPeriodTeacher[key] = [];
+        byDayPeriodTeacher[key].push(a);
+    });
+
+    Object.values(byDayPeriodTeacher).forEach(group => {
+        if (group.length <= 1) return;
+        const subjects = group.map(a => a.dataset.subjectId);
+        const classes = group.map(a => a.dataset.sectionClassId);
+
+        group.forEach(a => {
+            const sameSubject = subjects.every(s => s === subjects[0]);
+            const sameClass = classes.every(c => c === classes[0]);
+            if (sameSubject && sameClass) {
+                a.classList.add('yellow-bg'); // combined class
+            } else {
+                a.classList.add('red-bg'); // conflict
+            }
+        });
+    });
+}
+
+// Drag start
+document.querySelectorAll('.draggable').forEach(el=>{
+    el.addEventListener('dragstart', e=>{
+        if(el.classList.contains("disabled")) { e.preventDefault(); return; }
+        e.dataTransfer.setData('entryId', el.dataset.entryId);
+        e.dataTransfer.setData('sectionId', el.dataset.sectionId);
+    });
+});
+
+// Dropzone
+document.querySelectorAll('.dropzone').forEach(cell=>{
+    cell.addEventListener('dragover', e=>e.preventDefault());
+    cell.addEventListener('drop', e=>{
+        e.preventDefault();
+        const entryId = e.dataTransfer.getData('entryId');
+        const sectionId = e.dataTransfer.getData('sectionId');
+        const targetDay = cell.closest('tr').dataset.day;
+        const targetPeriod = cell.dataset.period;
+
+        fetch("{% url 'timetable_update' %}", {
+            method:'POST',
+            headers:{
+                'X-CSRFToken': getCSRF(),
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({entry_id:entryId, section_id:sectionId, target_day:targetDay, target_period:targetPeriod})
+        }).then(res=>res.json()).then(data=>{
+            if(data.success){
+                const original = document.querySelector(`.draggable[data-entry-id='${entryId}'][data-section-id='${sectionId}']`);
+                const clone = original.cloneNode(true);
+                clone.querySelector(".remove-btn")?.remove();
+                clone.innerHTML += `<button class="remove-btn" data-entry-id="${entryId}" data-section-id="${sectionId}">X</button>`;
+                cell.appendChild(clone);
+
+                // Update workload (+1)
+                updateWorkload(original, +1, +1);
+
+                // Bind remove button for clone
+                clone.querySelector(".remove-btn").addEventListener("click", function() {
+                    const btn = this;
+                    fetch("{% url 'timetable_remove' %}", {
+                        method:'POST',
+                        headers:{'X-CSRFToken': getCSRF(),'Content-Type':'application/json'},
+                        body: JSON.stringify({entry_id:entryId, section_id:sectionId})
+                    }).then(res=>res.json()).then(data=>{
+                        if(data.success){
+                            btn.parentElement.remove();
+                            updateWorkload(original, -1, -1);
+                            refreshVisualWarnings();
+                        } else { alert(data.error); }
+                    });
+                });
+
+                refreshVisualWarnings();
+            } else {
+                alert(data.error);
+            }
+        });
+    });
+});
+
+// Remove existing
+document.querySelectorAll('.remove-btn').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+        const entryId = btn.dataset.entryId;
+        const sectionId = btn.dataset.sectionId;
+        fetch("{% url 'timetable_remove' %}", {
+            method:'POST',
+            headers:{'X-CSRFToken': getCSRF(),'Content-Type':'application/json'},
+            body: JSON.stringify({entry_id:entryId, section_id:sectionId})
+        }).then(res=>res.json()).then(data=>{
+            if(data.success){
+                btn.parentElement.remove();
+                const original = document.querySelector(`.draggable[data-entry-id='${entryId}'][data-section-id='${sectionId}']`);
+                if(original) updateWorkload(original, -1, -1);
+                refreshVisualWarnings();
+            } else { alert(data.error); }
+        });
+    });
+});
+
+// Initial refresh
+refreshVisualWarnings();
+</script>
+</body>
+</html>

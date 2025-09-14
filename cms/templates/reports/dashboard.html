@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">📊 Timetable & Workload Reports</h1>
+
+    <!-- Filter Form -->
+    <form method="get" class="row g-3 mb-5 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label">Section</label>
+            <select name="section" class="form-select">
+                <option value="">-- Select Section --</option>
+                {% for s in sections %}
+                    <option value="{{ s.id }}" {% if selected_section == s.id %}selected{% endif %}>
+                        {{ s.school_class.name }} → {{ s.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Teacher</label>
+            <select name="teacher" class="form-select">
+                <option value="">-- Select Teacher --</option>
+                {% for t in teachers %}
+                    <option value="{{ t.id }}" {% if selected_teacher == t.id %}selected{% endif %}>
+                        {{ t.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary w-100">View Reports</button>
+        </div>
+    </form>
+
+    {% comment %} Define days and periods {% endcomment %}
+    {% with days="Monday,Tuesday,Wednesday,Thursday,Friday,Saturday"|split:"," %}
+    {% with periods=1|to_range:8 %}
+
+    <!-- Section-wise Timetable Grid -->
+    {% if section_report %}
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">Section-wise Timetable</div>
+        <div class="card-body">
+            <table class="table table-bordered text-center align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Period / Day</th>
+                        {% for day in days %}
+                            <th>{{ day }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for period in periods %}
+                    <tr>
+                        <th>Period {{ period }}</th>
+                        {% for day in days %}
+                        <td>
+                            {% for p in section_report|dict_get:day %}
+                                {% if p.period == period %}
+                                    <div class="p-2 mb-1 text-white rounded" style="background-color: {{ p.subject|color_hash }};">
+                                        <strong>{{ p.subject }}</strong><br>
+                                        <small>{{ p.teacher }}</small><br>
+                                        <small>{{ p.class_name }} → {{ p.section_name }}</small>
+                                        {% if p.classroom %}
+                                            <br><span class="badge bg-light text-dark">{{ p.classroom }}</span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Teacher-wise Timetable Grid -->
+    {% if teacher_report %}
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">Teacher-wise Timetable</div>
+        <div class="card-body">
+            <table class="table table-bordered text-center align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Period / Day</th>
+                        {% for day in days %}
+                            <th>{{ day }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for period in periods %}
+                    <tr>
+                        <th>Period {{ period }}</th>
+                        {% for day in days %}
+                        <td>
+                            {% for p in teacher_report|dict_get:day %}
+                                {% if p.period == period %}
+                                    <div class="p-2 mb-1 text-white rounded" style="background-color: {{ p.subject|color_hash }};">
+                                        <strong>{{ p.subject }}</strong><br>
+                                        <small>{{ p.class_name }} → {{ p.section_name }}</small>
+                                        {% if p.classroom %}
+                                            <br><span class="badge bg-light text-dark">{{ p.classroom }}</span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% endwith %}
+
+    <!-- Teacher Workload Report -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">Teacher Workload Report</div>
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Teacher</th>
+                        <th>Total Periods Assigned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for w in teacher_workload_report %}
+                        <tr>
+                            <td>{{ w.teacher_assignment__teacher__name }}</td>
+                            <td>{{ w.total_periods }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Subject / Section Period Report -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">Subject / Section Period Report</div>
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Class → Section</th>
+                        <th>Subject</th>
+                        <th>Periods Assigned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in subject_section_report %}
+                        <tr>
+                            <td>{{ s.teacher_assignment__section__school_class__name }} → {{ s.teacher_assignment__section__name }}</td>
+                            <td>{{ s.teacher_assignment__class_subject__subject__name }}</td>
+                            <td>{{ s.periods_assigned }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Subject-wise Overall Load Report -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Subject-wise Overall Load</div>
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Total Periods Assigned (All Sections)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in subject_overall_load_report %}
+                        <tr>
+                            <td>{{ s.teacher_assignment__class_subject__subject__name }}</td>
+                            <td>{{ s.total_periods }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

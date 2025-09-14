@@ -1,0 +1,16 @@
+<form method="post">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <th>Teacher</th>
+            <th>Present</th>
+        </tr>
+        {% for form in formset %}
+        <tr>
+            <td>{{ form.teacher.value }}</td>
+            <td>{{ form.present }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <button type="submit">Save Attendance</button>
+</form>

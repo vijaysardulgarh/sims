@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Create Timetable</h2>
+
+    <!-- School name (only once) -->
+    <div class="alert alert-info">
+        <strong>School:</strong> {{ school.name }}
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="accordion" id="teacherAccordion">
+            {% for t in teachers %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ t.id }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse{{ t.id }}" aria-expanded="false" aria-controls="collapse{{ t.id }}">
+                        {{ t.teacher }} – {{ t.class_subject }} ({{ t.section }})
+                    </button>
+                </h2>
+                <div id="collapse{{ t.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ t.id }}"
+                    data-bs-parent="#teacherAccordion">
+                    <div class="accordion-body">
+
+                        <!-- Days -->
+                        <div class="mb-3">
+                            <label class="form-label">Days</label>
+                            <select name="days_{{ t.id }}" class="form-select select2" multiple required>
+                                {% for d in days %}
+                                <option value="{{ d }}" {% if d != "Sunday" %}selected{% endif %}>{{ d }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input select-all-days" type="checkbox"
+                                    data-target="days_{{ t.id }}" checked>
+                                <label class="form-check-label">Select All / Clear All</label>
+                            </div>
+                        </div>
+
+                        <!-- Periods -->
+                        <div class="mb-3">
+                            <label class="form-label">Periods</label>
+                            <select name="periods_{{ t.id }}" class="form-select select2" multiple required>
+                                {% for p in periods %}
+                                <option value="{{ p }}">Period {{ p }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Classroom -->
+                        <div class="mb-3">
+                            <label class="form-label">Classroom</label>
+                            <select name="classroom_{{ t.id }}" class="form-select select2">
+                                <option value="">-- None --</option>
+                                {% for room in classrooms %}
+                                <option value="{{ room.id }}">{{ room.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Substitute Teacher -->
+                        <div class="mb-3">
+                            <label class="form-label">Substitute Teacher</label>
+                            <select name="substitute_teacher_{{ t.id }}" class="form-select select2">
+                                <option value="">-- None --</option>
+                                {% for st in substitute_teachers %}
+                                <option value="{{ st.id }}">{{ st }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Save button (per teacher) -->
+                        <button type="submit" class="btn btn-success" name="save_teacher" value="{{ t.id }}">
+                            Save Timetable for {{ t.teacher }}
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </form>
+</div>
+
+<!-- Select2 + Select All for days -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".select2").select2({
+            width: "100%"
+        });
+
+        // Toggle select all / clear all for days only
+        $(".select-all-days").on("change", function () {
+            let target = $(this).data("target");
+            let $select = $(`select[name='${target}']`);
+            if (this.checked) {
+                $select.find("option").prop("selected", true).trigger("change");
+            } else {
+                $select.find("option").prop("selected", false).trigger("change");
+            }
+        });
+    });
+</script>
+{% endblock %}

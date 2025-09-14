@@ -5,7 +5,18 @@
 {% block content %}
 <div class="container my-4 position-relative">
 
+    <!-- Login Button to trigger modal -->
+    <div class="text-end mb-3">
+        {% if not user.is_authenticated %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+        </button>
+        {% else %}
+        <span class="badge bg-success">Logged in as {{ user.username }}</span>
+        {% endif %}
+    </div>
 
+    
 
     <!-- Banner Carousel with captions -->
     <div id="schoolBannerCarousel" class="carousel slide mb-4 shadow-sm rounded" data-bs-ride="carousel">
@@ -232,4 +243,3 @@
 </script>
 
 {% endblock %}
-
