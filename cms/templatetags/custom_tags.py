@@ -1,7 +1,7 @@
 from django import template
 from django.db.models import Count, Q
 from cms.models import Student, Staff, News, SMCMember, Committee
-
+import hashlib
 register = template.Library()
 
 # =====================
@@ -74,8 +74,6 @@ def get_smc_members():
 def get_committees():
     return Committee.objects.all()
 
-
-
 @register.inclusion_tag("partials/sidebar.html", takes_context=True)
 def show_sidebar(context):
     school_name = "PM Shri Government Senior Secondary School Nagpur"
@@ -91,3 +89,108 @@ def show_sidebar(context):
         "committees": get_committees(),
     }
 
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
+@register.filter
+def dict_items(value):
+    """Return items() of a dictionary for template iteration."""
+    if isinstance(value, dict):
+        return value.items()
+    return []
+
+@register.filter
+def to_range(start, end):
+    """
+    Usage: 1|to_range:7  → gives [1,2,3,4,5,6,7]
+    """
+    return range(start, end + 1)
+
+@register.filter
+def split(value, delimiter=","):
+    return value.split(delimiter)
+
+@register.filter
+def groupby_attr(value, attr_name):
+    """
+    Groups a queryset/list of objects by a given attribute name.
+    Usage: {% for day, items in timetables|groupby_attr:"slot.day" %}
+    """
+    # Sort by attribute first
+    sorted_list = sorted(value, key=lambda x: getattr_nested(x, attr_name))
+    # Group by attribute
+    return [(k, list(g)) for k, g in groupby(sorted_list, key=lambda x: getattr_nested(x, attr_name))]
+
+def getattr_nested(obj, attr):
+    """Supports nested attributes like 'slot.day.name'"""
+    for part in attr.split("."):
+        obj = getattr(obj, part)
+    return obj
+
+@register.filter
+def get_slot(slots, day_period):
+    """
+    day_period: "Monday-1"
+    slots: queryset of TimetableSlot
+    """
+    try:
+        day_name, period_number = day_period.split("-")
+        period_number = int(period_number)
+        return slots.filter(day__name=day_name, period_number=period_number).first()
+    except Exception:
+        return None
+    
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key, [])
+
+
+@register.filter
+def get_item(dictionary, key):
+    """Get value from dictionary safely."""
+    if dictionary is None:
+        return None
+    return dictionary.get(key)
+
+@register.filter
+def dict_get(d, key):
+    return d.get(key, None)
+
+
+@register.filter
+def get_item(dictionary, key):
+    """
+    Returns the value for the given key in a dictionary.
+    Supports nested keys if passed as tuple.
+    """
+    if dictionary is None:
+        return None
+
+    # Support tuple key
+    if isinstance(key, tuple) or isinstance(key, list):
+        result = dictionary
+        try:
+            for k in key:
+                result = result.get(k, {})
+            return result
+        except AttributeError:
+            return None
+    return dictionary.get(key)
+
+@register.filter
+def color_hash(value):
+    """
+    Generates a consistent pastel background color for a string (like a subject name).
+    """
+    h = hashlib.md5(value.encode()).hexdigest()
+    r = int(h[:2], 16)
+    g = int(h[2:4], 16)
+    b = int(h[4:6], 16)
+    # Lighten color
+    r = (r + 128) // 2
+    g = (g + 128) // 2
+    b = (b + 128) // 2
+    return f"rgb({r},{g},{b})"
