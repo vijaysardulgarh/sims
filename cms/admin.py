@@ -541,7 +541,7 @@ class TeacherSubjectAssignmentResource(resources.ModelResource):
         if class_name and subject_name:
             try:
                 class_subject = ClassSubject.objects.get(
-                    sclass_info__name__iexact=class_name.strip(),
+                    class_info__name__iexact=class_name.strip(),
                     subject__name__iexact=subject_name.strip(),
                 )
                 row["class_subject"] = class_subject.id
@@ -1804,3 +1804,4 @@ timetable_admin.register(PostType,PostTypeAdmin)
 timetable_admin.register(Staff,StaffAdmin)
 timetable_admin.register(TeacherSubjectAssignment,TeacherSubjectAssignmentAdmin)
 timetable_admin.register(TeacherAttendance, TeacherAttendanceAdmin)
+
