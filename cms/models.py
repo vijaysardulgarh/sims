@@ -138,7 +138,7 @@ class Staff(models.Model):
     class Meta:
         unique_together = ('school', 'employee_id')    
         verbose_name_plural = "Staff"
-        ordering = ["school", "priority","staff_role", "employment_type", "name"]
+        ordering = ["school", "post_type", "name", "staff_role", "employment_type", "priority"]
 
 
 
