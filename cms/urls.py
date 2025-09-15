@@ -18,7 +18,7 @@ urlpatterns = [
     # Home
     path('timetable/create/', views.create_timetable_entry, name='create_timetable_entry'),
     path('timetable/', views.timetable_list, name='timetable_list'),  # optional: list all timetable entries
-    path('assign-subjects/', views.assign_subjects, name='assign_subjects'),
+    path('teacher-subject-section-assignment/', views.teacher_subject_section_assignment, name='teacher_subject_section_assignment'),
     path('ajax/get_subjects/', views.get_subjects_for_section, name='get_subjects_for_section'),
     # About
     path('about/', views.about_school, name='about'),
@@ -85,7 +85,9 @@ urlpatterns = [
     path("bank-report/", views.bank_report_link, name="bank_report_link"),
     path("bank-report/<str:class_name>/<str:section_name>/", views.bank_report, name="bank_report"),
     path("reports/", views.reports_dashboard, name="reports_dashboard"),
-    
+    path("attendance/", views.teacher_attendance, name="teacher_attendance"),
+    path("attendance/update/<int:pk>/", views.teacher_attendance_update, name="teacher_attendance_update"),
+    path("attendance/delete/<int:pk>/", views.teacher_attendance_delete, name="teacher_attendance_delete"),
     # Admissions & Fees
     path('admission_procedure/', views.admission_procedure, name='admission_procedure'),
     path('admission_form/', views.admission_form, name='admission_form'),
