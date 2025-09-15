@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Q, Case, When,Sum,OuterRef,IntegerField,Value,CharField
 from django.http import FileResponse, Http404
+from django.utils.timezone import now
+
 from .utils import get_current_school
 from .models import (
     Staff, Student, Class, Subject,MandatoryPublicDisclosure,Timetable,TimetableSlot,Classroom,Day,School,
-    News, SMCMember, Committee, School,FeeStructure,FAQ,ClassSubject,Section,TeacherSubjectAssignment,
+    News, SMCMember, Committee, School,FeeStructure,FAQ,ClassSubject,Section,TeacherSubjectAssignment,TeacherAttendance,
     AboutSchool, Principal, Affiliation,StaffAssociationRoleAssignment, Association,StudentAchievement,Infrastructure,SanctionedPost
    
 )
@@ -31,6 +33,9 @@ from reportlab.platypus import Spacer
 import json
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
+from django.utils.dateparse import parse_date
+from django.utils import timezone
+
 # -------------------- Dashboard & Common --------------------
 def sims_index(request):
     if 'clear' in request.GET:
@@ -201,6 +206,65 @@ def affiliation_status(request):
         return redirect("/")
     affiliations = Affiliation.objects.filter(school=school)
     return render(request, "about_us/affiliation_status.html", {"school": school, "affiliations": affiliations})
+
+
+
+
+def teacher_attendance(request):
+    # Parse date (default to today)
+    date_str = request.POST.get("date") or request.GET.get("date")
+    date = parse_date(date_str) if date_str else timezone.now().date()
+    if date is None:  # fallback if parse_date fails
+        date = timezone.now().date()
+
+    if request.method == "POST":
+        # Clear old records for the date
+        TeacherAttendance.objects.filter(date=date).delete()
+
+        # Save new attendance
+        for teacher in Staff.objects.filter(staff_role="Teaching"):
+            present = request.POST.get(f"present_{teacher.id}") == "on"
+            TeacherAttendance.objects.create(
+                teacher=teacher,
+                date=date,
+                present=present
+            )
+        return redirect("teacher_attendance")
+
+    # Teachers list
+    teachers = Staff.objects.filter(staff_role="Teaching").order_by("name")
+
+    # Existing records for that date
+    attendance_records = {
+        rec.teacher_id: rec for rec in TeacherAttendance.objects.filter(date=date)
+    }
+
+    # Attach record to each teacher object
+    for teacher in teachers:
+        teacher.attendance_record = attendance_records.get(teacher.id)
+
+    return render(request, "teacher_attendance.html", {
+        "teachers": teachers,
+        "date": date,
+    })
+
+
+def teacher_attendance_update(request, pk):
+    record = get_object_or_404(TeacherAttendance, pk=pk)
+    if request.method == "POST":
+        record.present = request.POST.get("present") == "on"
+        record.save()
+        return redirect("teacher_attendance")
+    return render(request, "teacher_attendance_update.html", {"record": record})
+
+
+def teacher_attendance_delete(request, pk):
+    record = get_object_or_404(TeacherAttendance, pk=pk)
+    if request.method == "POST":
+        record.delete()
+        return redirect("teacher_attendance")
+    return render(request, "teacher_attendance_delete.html", {"record": record})
+
 
 
 # -------------------- Static Pages --------------------
@@ -1557,10 +1621,27 @@ def subjects_offered(request):
         {"school": school, "grouped_data": grouped_data},
     )
 
-def assign_subjects(request):
-    teachers = Staff.objects.filter(staff_role="Teaching").order_by("name")
+def teacher_subject_section_assignment(request):
+    teachers_qs = Staff.objects.filter(staff_role="Teaching").select_related("post_type")
 
-    sections_qs = Section.objects.select_related("school_class").all().order_by("school_class__name", "name")
+    def sort_post_type(post_type_name):
+        if post_type_name == "TGT":
+            return 0
+        elif post_type_name == "PGT":
+            return 1
+        else:
+            return 2
+
+    teachers = sorted(
+        teachers_qs,
+        key=lambda t: (
+            sort_post_type(t.post_type.name if t.post_type else ''),
+            t.post_type.name if t.post_type else '',
+            t.name
+        )
+    )
+
+    sections_qs = Section.objects.select_related("school_class").all().order_by("school_class__class_order", "name")
     sections = {sec.id: sec for sec in sections_qs}
 
     class_subjects_qs = ClassSubject.objects.select_related("class_info", "subject").all()
@@ -1596,7 +1677,7 @@ def assign_subjects(request):
                         class_subject_id=subj_id
                     )
 
-        return redirect("assign_subjects")
+        return redirect("teacher_subject_section_assignment")
 
     context = {
         "teachers": teachers,
@@ -1604,7 +1685,7 @@ def assign_subjects(request):
         "class_subjects": class_subjects,
         "teacher_assignments": teacher_assignments,
     }
-    return render(request, "assign_subjects.html", context)
+    return render(request, "teacher_subject_section_assignment.html", context)
 
 
 # AJAX view for filtering subjects by section
