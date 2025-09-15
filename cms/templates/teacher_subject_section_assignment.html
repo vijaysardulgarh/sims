@@ -58,7 +58,7 @@
                                                                         {% for sec_id, sec in sections.items %}
                                                                             <option value="{{ sec_id }}"
                                                                                 {% if sec_id == section_id %}selected{% endif %}>
-                                                                                {{ sec.full_display }}
+                                                                                {{ sec.school_class.name }} {{ sec.name }} {% if sec.school_class.medium %} ({{ sec.school_class.medium }}){% endif %}{% if sec.school_class.stream %} ({{ sec.school_class.stream }}){% endif %}
                                                                             </option>
                                                                         {% endfor %}
                                                                     </select>
