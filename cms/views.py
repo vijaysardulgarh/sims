@@ -1,11 +1,15 @@
+from .subjects_map import SUBJECT_CODE_MAP, MEDIUM_CODE_MAP
+import csv
+import datetime
+from datetime import datetime
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Q, Case, When,Sum,OuterRef,IntegerField,Value,CharField
 from django.http import FileResponse, Http404
 from django.utils.timezone import now
-
+from reportlab.lib.pagesizes import legal, landscape
 from .utils import get_current_school
 from .models import (
-    Staff, Student, Class, Subject,MandatoryPublicDisclosure,Timetable,TimetableSlot,Classroom,Day,School,
+    Staff, Student, Class, Subject,MandatoryPublicDisclosure,Timetable,TimetableSlot,Classroom,Day,School,ClassIncharge,
     News, SMCMember, Committee, School,FeeStructure,FAQ,ClassSubject,Section,TeacherSubjectAssignment,TeacherAttendance,
     AboutSchool, Principal, Affiliation,StaffAssociationRoleAssignment, Association,StudentAchievement,Infrastructure,SanctionedPost
    
@@ -35,7 +39,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from django.utils.dateparse import parse_date
 from django.utils import timezone
-
+import re
 # -------------------- Dashboard & Common --------------------
 def sims_index(request):
     if 'clear' in request.GET:
@@ -162,8 +166,7 @@ def subject_strength(request):
         english=Count("srn", filter=Q(subjects_opted__icontains="English")),
         hindi=Count("srn", filter=Q(subjects_opted__icontains="Hindi")),
         social_science=Count("srn", filter=Q(subjects_opted__icontains="Social Science")),
-        science = Count("srn",filter=Q(subjects_opted__iregex=r"\bScience(\s*(and|&)\s*Technology)?\b")),
-        # science=Count("srn", filter=Q(subjects_opted__icontains="Science") & ~Q(subjects_opted__icontains="Political Science")& ~Q(subjects_opted__icontains="Computer Science") & ~Q(subjects_opted__icontains="Home Science")),
+        science=Count("srn", filter=Q(subjects_opted__icontains="Science") & ~Q(subjects_opted__icontains="Political Science") & ~Q(subjects_opted__icontains="Home Science")),
         physics=Count("srn", filter=Q(subjects_opted__icontains="Physics")),
         chemistry=Count("srn", filter=Q(subjects_opted__icontains="Chemistry")),
         biology=Count("srn", filter=Q(subjects_opted__icontains="Biology")),
@@ -171,7 +174,6 @@ def subject_strength(request):
         physical_education=Count("srn", filter=Q(subjects_opted__icontains="Physical and Health Education") | Q(subjects_opted__icontains="Physical Education")),
         automobile=Count("srn", filter=Q(subjects_opted__icontains="Automotive")),
         beauty_wellness=Count("srn", filter=Q(subjects_opted__icontains="Beauty & Wellness")),
-        computer_science=Count("srn", filter=Q(subjects_opted__icontains="Computer Science")),
         order=Case(*[When(studentclass=cls, then=pos) for cls, pos in class_order.items()])
     ).order_by("order")
 
@@ -536,7 +538,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib.pagesizes import landscape, A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-import datetime
+
 
 def signin(request, class_name, section_name):
     # Get current school
@@ -591,11 +593,11 @@ def signin(request, class_name, section_name):
     elements.append(Spacer(1, 12))
 
     # --- Class Info Box ---
-    class_info = Table(
+    subject_class = Table(
         [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {datetime.date.today().strftime('%d-%m-%Y')}"]],
         colWidths=[200, 200, 200]
     )
-    class_info.setStyle(TableStyle([
+    subject_class.setStyle(TableStyle([
         ("GRID", (0,0), (-1,-1), 1, colors.black),
         ("BACKGROUND", (0,0), (-1,-1), colors.lightgrey),
         ("ALIGN", (0,0), (-1,-1), "CENTER"),
@@ -604,7 +606,7 @@ def signin(request, class_name, section_name):
         ("BOTTOMPADDING", (0,0), (-1,-1), 6),
         ("TOPPADDING", (0,0), (-1,-1), 6),
     ]))
-    elements.append(class_info)
+    elements.append(subject_class)
     elements.append(Spacer(1, 12))
 
     # --- Table Header ---
@@ -671,7 +673,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, 
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
-import datetime
+
 
 def roll_call_link(request):
     # ✅ Get current school
@@ -756,11 +758,11 @@ def roll_call(request, class_name, section_name):
     elements.append(Spacer(1, 12))
 
     # --- Class Info ---
-    class_info = Table(
+    subject_class = Table(
         [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {datetime.date.today().strftime('%d-%m-%Y')}"]],
         colWidths=[200, 200, 200],
     )
-    class_info.setStyle(TableStyle([
+    subject_class.setStyle(TableStyle([
         ("GRID", (0,0), (-1,-1), 1, colors.black),
         ("BACKGROUND", (0,0), (-1,-1), colors.lightgrey),
         ("ALIGN", (0,0), (-1,-1), "CENTER"),
@@ -769,7 +771,7 @@ def roll_call(request, class_name, section_name):
         ("BOTTOMPADDING", (0,0), (-1,-1), 6),
         ("TOPPADDING", (0,0), (-1,-1), 6),
     ]))
-    elements.append(class_info)
+    elements.append(subject_class)
     elements.append(Spacer(1, 12))
 
     # --- Table Header ---
@@ -1188,11 +1190,11 @@ def subject_report(request, class_name, section_name):
     elements.append(Spacer(1, 12))
 
     # --- Class Info ---
-    class_info = Table(
+    subject_class = Table(
         [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {datetime.date.today().strftime('%d-%m-%Y')}"]],
         colWidths=[200, 200, 200],
     )
-    class_info.setStyle(TableStyle([
+    subject_class.setStyle(TableStyle([
         ("GRID", (0,0), (-1,-1), 1, colors.black),
         ("BACKGROUND", (0,0), (-1,-1), colors.lightgrey),
         ("ALIGN", (0,0), (-1,-1), "CENTER"),
@@ -1201,7 +1203,7 @@ def subject_report(request, class_name, section_name):
         ("BOTTOMPADDING", (0,0), (-1,-1), 6),
         ("TOPPADDING", (0,0), (-1,-1), 6),
     ]))
-    elements.append(class_info)
+    elements.append(subject_class)
     elements.append(Spacer(1, 12))
 
     # --- Table Header ---
@@ -1334,11 +1336,11 @@ def bank_report(request, class_name, section_name):
     elements.append(Spacer(1, 12))
 
     # --- Class Info ---
-    class_info = Table(
+    subject_class = Table(
         [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {datetime.date.today().strftime('%d-%m-%Y')}"]],
         colWidths=[200, 200, 200],
     )
-    class_info.setStyle(TableStyle([
+    subject_class.setStyle(TableStyle([
         ("GRID", (0,0), (-1,-1), 1, colors.black),
         ("BACKGROUND", (0,0), (-1,-1), colors.lightgrey),
         ("ALIGN", (0,0), (-1,-1), "CENTER"),
@@ -1347,7 +1349,7 @@ def bank_report(request, class_name, section_name):
         ("BOTTOMPADDING", (0,0), (-1,-1), 6),
         ("TOPPADDING", (0,0), (-1,-1), 6),
     ]))
-    elements.append(class_info)
+    elements.append(subject_class)
     elements.append(Spacer(1, 12))
 
     # --- Table Header ---
@@ -1571,9 +1573,9 @@ def subjects_offered(request):
     # Fetch all ClassSubject for this school
     class_subjects = (
         ClassSubject.objects
-        .select_related("class_info__stream", "class_info__medium", "subject")
-        .filter(class_info__school=school)
-        .order_by("class_info__name", "subject__name")
+        .select_related("subject_class__stream", "subject_class__medium", "subject")
+        .filter(subject_class__school=school)
+        .order_by("subject_class__name", "subject__name")
     )
 
     # Helper: determine school level
@@ -1603,8 +1605,8 @@ def subjects_offered(request):
 
     # Organize subjects into level → class → subjects
     for cs in class_subjects:
-        level = get_level(cs.class_info.name)
-        class_label = cs.class_info.full_display()  # includes stream + medium
+        level = get_level(cs.subject_class.name)
+        class_label = cs.subject_class.full_display()  # includes stream + medium
 
         # Safely create entries
         grouped_data.setdefault(level, {})
@@ -1643,10 +1645,10 @@ def teacher_subject_section_assignment(request):
         )
     )
 
-    sections_qs = Section.objects.select_related("school_class").all().order_by("school_class__class_order", "name")
+    sections_qs = Section.objects.select_related("sec_class", "stream", "medium").all().order_by("sec_class__class_order", "name")
     sections = {sec.id: sec for sec in sections_qs}
 
-    class_subjects_qs = ClassSubject.objects.select_related("class_info", "subject").all()
+    class_subjects_qs = ClassSubject.objects.select_related("subject_class", "subject").all()
     class_subjects = {cs.id: cs for cs in class_subjects_qs}
 
     # Existing assignments lookup
@@ -1697,14 +1699,22 @@ def get_subjects_for_section(request):
 
     if section_id:
         try:
-            section = Section.objects.select_related("school_class__stream").get(id=section_id)
-            class_subjects = ClassSubject.objects.filter(class_info=section.school_class)
+            section = Section.objects.select_related("sec_class", "stream").get(id=section_id)
+
+            # Filter ClassSubject by class, stream, sub_stream
+            class_subjects = ClassSubject.objects.filter(
+                subject_class=section.sec_class,
+                stream=section.stream if section.stream else None,
+                sub_stream=section.sub_stream if section.sub_stream else None
+            )
+
             for cs in class_subjects:
                 subjects.append({"id": cs.id, "name": cs.subject.name})
         except Section.DoesNotExist:
             pass
 
     return JsonResponse({"subjects": subjects})
+
 
 def create_timetable_entry(request):
     teachers = TeacherSubjectAssignment.objects.select_related("teacher").all()
@@ -1795,7 +1805,7 @@ def timetable_list(request):
 
 def reports_dashboard(request):
     # Fetch all sections and teachers for dropdowns
-    sections = Section.objects.select_related("school_class").order_by("school_class__name", "name")
+    sections = Section.objects.select_related("sec_class").order_by("sec_class__name", "name")
     teachers = Staff.objects.filter(staff_role="Teaching").order_by("name")
 
     section_id = request.GET.get("section")
@@ -1859,7 +1869,7 @@ def section_timetable_report(section_id, teacher_id=None):
     entries = entries.select_related(
         "teacher_assignment__teacher",
         "teacher_assignment__class_subject__subject",
-        "teacher_assignment__section__school_class",
+        "teacher_assignment__section__sec_class",
         "slot",
         "classroom"
     ).order_by("slot__day__sequence", "slot__period_number")
@@ -1870,7 +1880,7 @@ def section_timetable_report(section_id, teacher_id=None):
             "period": e.slot.period_number,
             "subject": e.teacher_assignment.class_subject.subject.name,
             "teacher": e.teacher_assignment.teacher.name,
-            "class_name": e.teacher_assignment.section.school_class.name,
+            "class_name": e.teacher_assignment.section.sec_class.name,
             "section_name": e.teacher_assignment.section.name,
             "classroom": e.classroom.name if e.classroom else None,
         })
@@ -1882,7 +1892,7 @@ def teacher_timetable_report(teacher_id):
         Timetable.objects.filter(teacher_assignment__teacher_id=teacher_id)
         .select_related(
             "teacher_assignment__section",
-            "teacher_assignment__section__school_class",
+            "teacher_assignment__section__sec_class",
             "teacher_assignment__class_subject__subject",
             "slot",
             "classroom"
@@ -1895,7 +1905,7 @@ def teacher_timetable_report(teacher_id):
         timetable[e.slot.day.name].append({
             "period": e.slot.period_number,
             "subject": e.teacher_assignment.class_subject.subject.name,
-            "class_name": e.teacher_assignment.section.school_class.name,
+            "class_name": e.teacher_assignment.section.sec_class.name,
             "section_name": e.teacher_assignment.section.name,
             "classroom": e.classroom.name if e.classroom else None,
         })
@@ -1916,13 +1926,13 @@ def teacher_workload_report():
 def subject_section_period_report():
     return (
         Timetable.objects.values(
-            "teacher_assignment__section__school_class__name",
+            "teacher_assignment__section__sec_class__name",
             "teacher_assignment__section__name",
             "teacher_assignment__class_subject__subject__name"
         )
         .annotate(periods_assigned=Count("id"))
         .order_by(
-            "teacher_assignment__section__school_class__name",
+            "teacher_assignment__section__sec_class__name",
             "teacher_assignment__section__name",
             "teacher_assignment__class_subject__subject__name"
         )
@@ -1950,41 +1960,30 @@ def timetable_dragndrop(request):
     if not school:
         return redirect("/")
 
-    # school_name = school.name    
-
-
-
-    # school = request.GET.get("school")
-    # school = get_object_or_404(School, id=school)
-
     # Multi-section selection
     section_ids = request.GET.getlist("sections")
     if section_ids:
         sections = Section.objects.filter(id__in=section_ids)
     else:
-        sections = Section.objects.filter(school_class__school=school)
+        sections = Section.objects.filter(sec_class__school=school)
 
     # Teacher-Subject assignments for selected sections
-    assignments = (
-        TeacherSubjectAssignment.objects.filter(section__in=sections)
-        .select_related(
-            "teacher",
-            "class_subject__subject",
-            "section__school_class",
-            "section__classroom"
-        )
+    assignments = TeacherSubjectAssignment.objects.filter(section__in=sections).select_related(
+        "teacher",
+        "class_subject__subject",
+        "section__sec_class",
+        "section__classroom"
     )
 
-    # Current Timetable entries
-    timetable_entries = (
-        Timetable.objects.filter(teacher_assignment__section__in=sections)
-        .select_related(
-            "teacher_assignment__teacher",
-            "teacher_assignment__class_subject__subject",
-            "slot",
-            "classroom",
-            "teacher_assignment__section__school_class"
-        )
+    # Current timetable entries
+    timetable_entries = Timetable.objects.filter(
+        teacher_assignment__section__in=sections
+    ).select_related(
+        "teacher_assignment__teacher",
+        "teacher_assignment__class_subject__subject",
+        "slot",
+        "classroom",
+        "teacher_assignment__section__sec_class"
     )
 
     # Build lookup dict: timetable_lookup[day][period][section_id] = entries
@@ -1992,7 +1991,7 @@ def timetable_dragndrop(request):
     for entry in timetable_entries:
         day_id = entry.slot.day.id
         period = entry.slot.period_number or 0
-        timetable_lookup[day_id][period][entry.section.id].append(entry)
+        timetable_lookup[day_id][period][entry.teacher_assignment.section.id].append(entry)
 
     # Period numbers
     period_numbers = list(
@@ -2002,18 +2001,16 @@ def timetable_dragndrop(request):
         .order_by("period_number")
     )
 
-    # Precompute workloads
+    # Compute workloads
     teacher_loads = defaultdict(int)
     subject_loads = defaultdict(int)
 
-    # Teacher load across all sections (global)
     all_teachers = [a.teacher for a in assignments]
     for entry in Timetable.objects.filter(teacher_assignment__teacher__in=all_teachers):
-        teacher_loads[entry.teacher.id] += 1
+        teacher_loads[entry.teacher_assignment.teacher.id] += 1
 
-    # Subject load per section
     for entry in timetable_entries:
-        subject_loads[(entry.class_subject.id, entry.section.id)] += 1
+        subject_loads[(entry.teacher_assignment.class_subject.id, entry.teacher_assignment.section.id)] += 1
 
     # Add workload info to assignments
     assignment_data = []
@@ -2023,9 +2020,9 @@ def timetable_dragndrop(request):
             "teacher": assign.teacher,
             "class_subject": assign.class_subject,
             "section": assign.section,
-            "current_load": teacher_loads[assign.teacher.id],
+            "current_load": teacher_loads.get(assign.teacher.id, 0),
             "max_load": assign.teacher.max_periods_per_week,
-            "current_subject_load": subject_loads[(assign.class_subject.id, assign.section.id)],
+            "current_subject_load": subject_loads.get((assign.class_subject.id, assign.section.id), 0),
             "required_subject_load": assign.class_subject.periods_per_week,
         })
 
@@ -2055,15 +2052,15 @@ def timetable_update(request):
         slot = TimetableSlot.objects.get(
             day_id=target_day,
             period_number=target_period,
-            school=tsa.section.school_class.school
+            school=tsa.section.sec_class.school
         )
 
-        tt_entry, created = Timetable.objects.update_or_create(
+        Timetable.objects.update_or_create(
             teacher_assignment=tsa,
             slot=slot,
             defaults={
                 "classroom": tsa.section.classroom,
-                "school": tsa.section.school_class.school
+                "school": tsa.section.sec_class.school
             }
         )
         return JsonResponse({"success": True})
@@ -2086,6 +2083,338 @@ def timetable_remove(request):
 
 
 
+# def extract_subject_name(raw_subject: str) -> str:
+#     """
+#     Convert database subject string to clean subject name.
+#     Example:
+#         'Compulsory:English' -> 'English'
+#         'NSQF:Beauty & Wellness' -> 'Beauty & Wellness'
+#         'Language:Punjabi' -> 'Punjabi'
+#     """
+#     parts = raw_subject.split(":", 1)
+#     if len(parts) == 2:
+#         return parts[1].strip()
+#     return raw_subject.strip()
+
+
+# # Subjects that should not go to CBSE enrollment
+# IGNORED_SUBJECTS = {
+#     "GENERAL AWARENESS & LIFE SKILLS",
+#     "SPORTS AND GAMES",
+#     "CULTURAL LITERACY SCIENTIFIC ACTIVITIES NCC SCOUTS AND GUIDES",
+# }
+
+# def convert_subjects_to_cbse_slots(student_subjects):
+#     slots = {f"sub{i}": "" for i in range(1, 8)}
+
+#     # normalize subject list (clean + upper)
+#     cleaned_subjects = [extract_subject_name(s).strip() for s in student_subjects]
+#     cleaned_subjects_upper = [s.upper() for s in cleaned_subjects]
+
+#     # ----- enforce slot rules -----
+#     # sub1: English
+#     if "ENGLISH" in cleaned_subjects_upper:
+#         slots["sub1"] = "English"
+
+#     # sub2: Hindi only (if Hindi present), else fallback Punjabi/Sanskrit
+#     if "Hindi" in cleaned_subjects_upper:
+#         slots["sub2"] = "Hindi"
+
+
+#     # sub3: Mathematics
+#     if "MATHEMATICS" in cleaned_subjects_upper:
+#         slots["sub3"] = "Mathematics"
+
+#     # sub4: Science
+#     if "SCIENCE & TECHNOLOGY" in cleaned_subjects_upper or "Science" in cleaned_subjects_upper:
+#         slots["sub4"] = "Science"
+
+#     # sub5: Social Science
+#     if "SOCIAL SCIENCE" in cleaned_subjects_upper:
+#         slots["sub5"] = "Social Studies"
+
+#     # sub6: Vocational (first match from map)
+#     if "AUTOMOTIVE" in cleaned_subjects_upper:
+#         slots["sub6"] = "Automobile"
+#     elif "BEAUTY & WELLNESS" in cleaned_subjects_upper:
+#         slots["sub6"] = "Beauty & Wellness"
+
+#     # sub7: Optional (Punjabi/Sanskrit/Drawing/Home Science/Music etc.)
+#     if "PUNJABI" in cleaned_subjects_upper:
+#         slots["sub7"] = "Punjabi"
+#     elif "SANSKRIT" in cleaned_subjects_upper:
+#         slots["sub7"] = "Sanskrit"
+#     elif "DRAWING" in cleaned_subjects_upper or "PAINTING" in cleaned_subjects_upper:
+#         slots["sub7"] = "049"
+#     elif "HOME SCIENCE" in cleaned_subjects_upper:
+#         slots["sub7"] = "064"
+#     elif "MUSIC HINDUSTANI VOCAL (MHV)" in cleaned_subjects_upper:
+#         slots["sub7"] = "034"
+
+#     return slots
 
 
 
+def extract_subject_name(raw_subject: str) -> str:
+    """
+    Convert DB subject string to clean subject name.
+    Example:
+        'Compulsory:English' -> 'ENGLISH'
+        'NSQF:Beauty & Wellness' -> 'BEAUTY & WELLNESS'
+        'Language:Punjabi' -> 'PUNJABI'
+    """
+    if not raw_subject:
+        return ""
+
+    parts = raw_subject.split(":", 1)
+    subject = parts[1] if len(parts) == 2 else raw_subject
+    return subject.strip().upper()
+
+
+# Subjects ignored for CBSE enrollment
+IGNORED_SUBJECTS = {
+    "GENERAL AWARENESS & LIFE SKILLS",
+    "SPORTS AND GAMES",
+    "CULTURAL LITERACY SCIENTIFIC ACTIVITIES NCC SCOUTS AND GUIDES",
+}
+
+
+def convert_subjects_to_cbse_slots(student_subjects):
+    """
+    Takes student subjects and enforces CBSE slot rules.
+    Returns dict {sub1..sub7}.
+    """
+    slots = {f"sub{i}": "" for i in range(1, 8)}
+
+    if not student_subjects:
+        return slots
+
+    # normalize subjects
+    cleaned_subjects = [extract_subject_name(s) for s in student_subjects]
+    cleaned_subjects = [s for s in cleaned_subjects if s and s not in IGNORED_SUBJECTS]
+
+
+
+
+    # --- enforce slot rules ---
+    for slot, mapping in SUBJECT_CODE_MAP.items():
+        for subj in cleaned_subjects:
+            if subj in mapping:
+                slots[slot] = mapping[subj]
+                break  # assign first valid match and stop
+
+    return slots
+
+# Helper: Medium code
+def get_medium_from_section(section_name: str) -> str:
+    """
+    Extract medium from section field like 'F (Hindi)', 'A (English)'.
+    Default to Hindi if not found.
+    """
+    if not section_name:
+        return "2"  # Default Hindi
+    
+    # Regex to capture text inside parentheses
+    match = re.search(r"\((.*?)\)", section_name)
+    if match:
+        medium_text = match.group(1).strip().upper()
+        return MEDIUM_CODE_MAP.get(medium_text, "2")  # Default Hindi
+    
+    return "2"  # fallback if no parentheses found
+
+# -------------------------------
+# CBSE Enrollment PDF View
+# -------------------------------
+# -------------------------------
+# CBSE Enrollment PDF View
+# -------------------------------
+def cbse_enrollment_pdf(request):
+    # Response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = (
+        f'attachment; filename="cbse_enrollment_{datetime.now().strftime("%Y%m%d")}.pdf"'
+    )
+
+    # Document setup
+    page_width, page_height = landscape(legal)
+    doc = SimpleDocTemplate(
+        response,
+        pagesize=(page_width, page_height),
+        rightMargin=10, leftMargin=10, topMargin=10, bottomMargin=10
+    )
+
+    elements = []
+    styles = getSampleStyleSheet()
+
+    # Table header (already cleaned)
+    headers = [
+        "CLASS", "SECTION", "ROLL_NO",
+        "CAT", "CNAME", "MNAME", "FNAME",
+        "SEX", "CAST", "HANDICAP",
+        "SUB1", "SUB2", "SUB3", "SUB4", "SUB5", "SUB6", "SUB7",
+        "D_O_B", "ANNUAL_INC", "ONLY_CHILD", "ADM_SRL", "ADM_DATE", "MINORITY"
+    ]
+    data = [[Paragraph(h, styles['Normal']) for h in headers]]
+
+    minority_religions = {"MUSLIM", "CHRISTIAN", "SIKH", "BUDDHIST", "JAIN", "PARSI"}
+
+    # Fetch students
+    students = Student.objects.filter(studentclass__in=["Nineth"]).order_by("studentclass","section","roll_number")
+
+    for s in students:
+        # Convert subjects
+        subs = convert_subjects_to_cbse_slots((s.subjects_opted or "").split(","))
+
+        # Minority flag
+        minority_flag = "N"
+        if getattr(s, "religion", None):
+            if s.religion.upper() in minority_religions:
+                minority_flag = "Y"
+
+        row = [
+            s.studentclass or "",
+            s.section or "",
+            s.roll_number or "",
+            s.category or "",
+            s.full_name_aadhar or "",
+            s.mother_full_name_aadhar or "",
+            s.father_full_name_aadhar or "",
+            s.gender or "",
+            s.caste or "",
+            "Y" if s.disability else "N",
+
+            subs.get("sub1", ""),
+            subs.get("sub2", ""),
+            subs.get("sub3", ""),
+            subs.get("sub4", ""),
+            subs.get("sub5", ""),
+            subs.get("sub6", ""),
+            subs.get("sub7", ""),
+
+            s.date_of_birth.strftime("%d-%m-%Y") if s.date_of_birth else "",
+            str(s.family_annual_income) if s.family_annual_income else "",
+            "Y" if getattr(s, "only_child", False) else "N",
+            s.admission_number or "",
+            s.admission_date.strftime("%d-%m-%Y") if s.admission_date else "",
+            minority_flag
+        ]
+
+        data.append([Paragraph(str(c), styles['Normal']) for c in row])
+
+    # Auto-adjust column widths to fit full page width
+    table_width = page_width - 20  # account for left/right margins
+    num_cols = len(headers)
+    col_width = table_width / num_cols
+    col_widths = [col_width] * num_cols
+
+    # Table style
+    table = Table(data, colWidths=col_widths, repeatRows=1)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
+        ('GRID', (0,0), (-1,-1), 0.25, colors.black),
+        ('FONTSIZE', (0,0), (-1,-1), 7),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+    ]))
+
+    elements.append(table)
+    doc.build(elements)
+    return response
+# -------------------------------
+# CBSE Enrollment CSV View
+# -------------------------------
+def cbse_enrollment_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="cbse_enrollment.csv"'
+
+    writer = csv.writer(response)
+    # Updated headers (no SCH_NO, SERIAL, IREGDNO)
+    writer.writerow([
+        "CLASS", "SECTION", "ROLL_NO", "CAT", "CNAME", "MNAME", "FNAME",
+        "SEX", "CAST", "HANDICAP",
+        "SUB1","MED1","SUB2","MED2","SUB3","MED3",
+        "SUB4","MED4","SUB5","MED5","SUB6","MED6","SUB7","MED7",
+        "D_O_B","ANNUAL_INC","ONLY_CHILD","ADM_SRL","ADM_DATE","MINORITY"
+    ])
+
+    minority_religions = {"MUSLIM", "CHRISTIAN", "SIKH", "BUDDHIST", "JAIN", "PARSI"}
+
+    students = Student.objects.filter(studentclass__in=["Nineth"]).order_by("studentclass","section","roll_number")
+
+    for idx, s in enumerate(students, start=1):
+        subs = convert_subjects_to_cbse_slots((s.subjects_opted or "").split(","))
+        medium = MEDIUM_CODE_MAP.get(getattr(s, "medium", "ENGLISH").upper(), "1")
+
+        minority_flag = "N"  # default
+        if getattr(s, "religion", None):
+            if s.religion.upper() in minority_religions:
+                minority_flag = "Y"
+
+        writer.writerow([
+            s.studentclass or "",
+            s.section or "",
+            s.roll_number or "",
+            s.category or "",
+            s.full_name_aadhar or "",
+            s.mother_full_name_aadhar or "",
+            s.father_full_name_aadhar or "",
+            s.gender or "",
+            s.caste or "",
+            "Y" if s.disability else "N",
+
+            subs.get("sub1", ""), medium,
+            subs.get("sub2", ""), medium,
+            subs.get("sub3", ""), medium,
+            subs.get("sub4", ""), medium,
+            subs.get("sub5", ""), medium,
+            subs.get("sub6", ""), medium,
+            subs.get("sub7", ""), medium,
+
+            s.date_of_birth.strftime("%d-%m-%Y") if s.date_of_birth else "",
+            str(s.family_annual_income) if s.family_annual_income else "",
+            "Y" if getattr(s, "only_child", False) else "N",
+            s.admission_number or "",
+            s.admission_date.strftime("%d-%m-%Y") if s.admission_date else "",
+            minority_flag
+        ])
+
+    return response
+
+
+def class_incharge_report(request):
+    # Step 1: Count students by (studentclass, section)
+    student_counts = (
+        Student.objects.values("studentclass", "section")
+        .annotate(strength=Count("srn"))
+    )
+    strength_lookup = {
+        (s["studentclass"], s["section"]): s["strength"]
+        for s in student_counts
+    }
+
+    # Step 2: Fetch incharges with section + staff
+    incharges = ClassIncharge.objects.filter(active=True).select_related(
+        "section__sec_class", "section__stream", "section__medium", "staff"
+    )
+
+    report_data = []
+    for incharge in incharges:
+        sec = incharge.section
+        staff = incharge.staff
+
+        # Match with Student data
+        key = (sec.sec_class.name, sec.name)
+        student_strength = strength_lookup.get(key, 0)
+
+        report_data.append({
+            "class": sec.sec_class.name,
+            "section": sec.name,
+            "stream": sec.stream.name if sec.stream else "",
+            "sub_stream": sec.sub_stream or "",
+            "medium": sec.medium.name if sec.medium else "",
+            "teacher_name": staff.name,
+            "contact": staff.mobile_number or staff.email,
+            "student_strength": student_strength,
+        })
+
+    return render(request, "reports/class_incharge_report.html", {"report_data": report_data})
