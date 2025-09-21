@@ -5,7 +5,10 @@ from .views import timetable_dragndrop
 from cms.admin import timetable_admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from .views import cbse_enrollment_csv, cbse_enrollment_pdf
 urlpatterns = [
+    path('cbse/enrollment/csv/', cbse_enrollment_csv, name='cbse_enrollment_csv'),
+    path('cbse/enrollment/pdf/', cbse_enrollment_pdf, name='cbse_enrollment_pdf'),
     path('timetable_dragndrop/', views.timetable_dragndrop, name='timetable_dragndrop'),
     path('timetable_update/', views.timetable_update, name='timetable_update'),
     path('timetable_remove/', views.timetable_remove, name='timetable_remove'),
@@ -80,7 +83,7 @@ urlpatterns = [
         # ✅ Subject Reports
     path("subject-report/", views.subject_report_link, name="subject_report_link"),
     path("subject-report/<str:class_name>/<str:section_name>/", views.subject_report, name="subject_report"),
-
+    path("reports/class-incharge/", views.class_incharge_report, name="class_incharge_report"),
     # Bank Report
     path("bank-report/", views.bank_report_link, name="bank_report_link"),
     path("bank-report/<str:class_name>/<str:section_name>/", views.bank_report, name="bank_report"),
