@@ -13,3 +13,4 @@ def committees_context(request):
         ).order_by("name")
     return {"menu_committees": committees}
 
+
