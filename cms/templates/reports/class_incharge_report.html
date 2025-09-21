@@ -1,0 +1,216 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class Incharge Report</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #0d6efd;
+            color: white;
+            z-index: 2;
+            cursor: pointer;
+        }
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .filter-input, .filter-select {
+            max-width: 200px;
+            margin-right: 10px;
+        }
+        .high-strength { background-color: #fff3cd !important; } /* Yellow */
+        .low-strength { background-color: #f8d7da !important; } /* Red */
+        .sort-asc::after { content: " ▲"; }
+        .sort-desc::after { content: " ▼"; }
+    </style>
+</head>
+<body>
+<div class="container my-4">
+    <h2 class="mb-4">Class Incharge Report</h2>
+
+    <!-- Export Links -->
+    <div class="mb-3">
+        <a href="?export=csv" class="btn btn-sm btn-success">📥 Download CSV</a>
+        <a href="?export=pdf" class="btn btn-sm btn-danger">📥 Download PDF</a>
+    </div>
+
+    <!-- Filters + Thresholds + Reset -->
+    <div class="mb-3 d-flex align-items-center flex-wrap">
+        <input type="text" id="classFilter" class="form-control filter-input" placeholder="Filter by Class">
+        <input type="text" id="sectionFilter" class="form-control filter-input" placeholder="Filter by Section">
+        <select id="streamFilter" class="form-select filter-select">
+            <option value="">All Streams</option>
+            {% for row in report_data|dictsort:"stream"|dictsortreversed:"stream" %}
+                {% if row.stream %}<option value="{{ row.stream }}">{{ row.stream }}</option>{% endif %}
+            {% endfor %}
+        </select>
+        <select id="subStreamFilter" class="form-select filter-select">
+            <option value="">All Sub-Streams</option>
+            {% for row in report_data|dictsort:"sub_stream"|dictsortreversed:"sub_stream" %}
+                {% if row.sub_stream %}<option value="{{ row.sub_stream }}">{{ row.sub_stream }}</option>{% endif %}
+            {% endfor %}
+        </select>
+        <input type="number" id="highThreshold" class="form-control filter-input" placeholder="High Strength >50" style="max-width:150px;">
+        <input type="number" id="lowThreshold" class="form-control filter-input" placeholder="Low Strength <20" style="max-width:150px;">
+        <button id="resetButton" class="btn btn-sm btn-secondary ms-2">🔄 Reset Filters & Sort</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+        <table class="table table-bordered table-striped table-hover" id="reportTable">
+            <thead>
+                <tr>
+                    <th data-column="0">Class</th>
+                    <th data-column="1">Section</th>
+                    <th data-column="2">Stream</th>
+                    <th data-column="3">Sub-Stream</th>
+                    <th data-column="4">Medium</th>
+                    <th data-column="5">Incharge Teacher</th>
+                    <th data-column="6">Contact</th>
+                    <th data-column="7">Student Strength</th>
+                </tr>
+            </thead>
+            <tbody id="reportTableBody">
+                {% for row in report_data %}
+                <tr class="{% if row.student_strength > 50 %}high-strength{% elif row.student_strength < 20 %}low-strength{% endif %}">
+                    <td>{{ row.class }}</td>
+                    <td>{{ row.section }}</td>
+                    <td>{{ row.stream }}</td>
+                    <td>{{ row.sub_stream }}</td>
+                    <td>{{ row.medium }}</td>
+                    <td>{{ row.teacher_name }}</td>
+                    <td>{{ row.contact }}</td>
+                    <td>{{ row.student_strength }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">No class incharge data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const classInput = document.getElementById('classFilter');
+    const sectionInput = document.getElementById('sectionFilter');
+    const streamFilter = document.getElementById('streamFilter');
+    const subStreamFilter = document.getElementById('subStreamFilter');
+    const highThresholdInput = document.getElementById('highThreshold');
+    const lowThresholdInput = document.getElementById('lowThreshold');
+    const resetButton = document.getElementById('resetButton');
+    const tableBody = document.getElementById('reportTableBody');
+    const table = document.getElementById('reportTable');
+    const headers = table.querySelectorAll('thead th');
+
+    let sortDirection = {};
+
+    // --- Filter Table ---
+    function filterTable() {
+        const classVal = classInput.value.toLowerCase();
+        const sectionVal = sectionInput.value.toLowerCase();
+        const streamVal = streamFilter.value.toLowerCase();
+        const subStreamVal = subStreamFilter.value.toLowerCase();
+
+        Array.from(tableBody.rows).forEach(row => {
+            const classCell = row.cells[0].textContent.toLowerCase();
+            const sectionCell = row.cells[1].textContent.toLowerCase();
+            const streamCell = row.cells[2].textContent.toLowerCase();
+            const subStreamCell = row.cells[3].textContent.toLowerCase();
+
+            if (classCell.includes(classVal) &&
+                sectionCell.includes(sectionVal) &&
+                (streamVal === "" || streamCell === streamVal) &&
+                (subStreamVal === "" || subStreamCell === subStreamVal)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        applyStrengthHighlights(); // Apply highlighting after filtering
+    }
+
+    [classInput, sectionInput, streamFilter, subStreamFilter].forEach(el => {
+        el.addEventListener('input', filterTable);
+        el.addEventListener('change', filterTable);
+    });
+
+    // --- Apply Strength Highlights ---
+    function applyStrengthHighlights() {
+        const highThreshold = parseInt(highThresholdInput.value) || 50;
+        const lowThreshold = parseInt(lowThresholdInput.value) || 20;
+
+        Array.from(tableBody.rows).forEach(row => {
+            if (row.style.display === "none") return; // skip hidden rows
+            const strength = parseInt(row.cells[7].textContent) || 0;
+            row.classList.remove('high-strength', 'low-strength');
+
+            if (strength > highThreshold) row.classList.add('high-strength');
+            if (strength < lowThreshold) row.classList.add('low-strength');
+        });
+    }
+
+    highThresholdInput.addEventListener('input', applyStrengthHighlights);
+    lowThresholdInput.addEventListener('input', applyStrengthHighlights);
+
+    // --- Sorting ---
+    headers.forEach(header => {
+        sortDirection[header.dataset.column] = 'asc';
+        header.addEventListener('click', () => {
+            const columnIndex = header.dataset.column;
+            const direction = sortDirection[columnIndex];
+            const rows = Array.from(tableBody.rows).filter(r => r.style.display !== "none");
+
+            rows.sort((a, b) => {
+                let aText = a.cells[columnIndex].textContent.trim();
+                let bText = b.cells[columnIndex].textContent.trim();
+
+                if (columnIndex == 7) { // Numeric sort for Student Strength
+                    aText = parseInt(aText) || 0;
+                    bText = parseInt(bText) || 0;
+                }
+
+                if (aText < bText) return direction === 'asc' ? -1 : 1;
+                if (aText > bText) return direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            rows.forEach(r => tableBody.appendChild(r));
+            sortDirection[columnIndex] = direction === 'asc' ? 'desc' : 'asc';
+            headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+            header.classList.add(sortDirection[columnIndex] === 'asc' ? 'sort-asc' : 'sort-desc');
+        });
+    });
+
+    // --- Reset Button ---
+    resetButton.addEventListener('click', () => {
+        // Clear filters
+        classInput.value = '';
+        sectionInput.value = '';
+        streamFilter.value = '';
+        subStreamFilter.value = '';
+        highThresholdInput.value = '';
+        lowThresholdInput.value = '';
+
+        filterTable();
+
+        // Reset sorting
+        const rowsArray = Array.from(tableBody.rows);
+        rowsArray.forEach(r => tableBody.appendChild(r));
+        headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+        Object.keys(sortDirection).forEach(key => sortDirection[key] = 'asc');
+    });
+
+    // Initial highlighting
+    applyStrengthHighlights();
+</script>
+</body>
+</html>

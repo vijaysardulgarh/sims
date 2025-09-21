@@ -13,13 +13,49 @@
             padding: 6px; margin: 6px 0; background:#e3f2fd; cursor:grab; border-radius:4px;
         }
         .disabled {background:#ffcdd2; cursor:not-allowed; opacity:0.6;}
-        .yellow-bg {background: #fff59d !important;} /* combined class */
-        .red-bg {background: #ef9a9a !important;} /* conflict */
+        .yellow-bg {background: #fff59d !important;}
+        .red-bg {background: #ef9a9a !important;}
         .remove-btn {color:red; cursor:pointer; border:none; background:none; font-weight:bold;}
         table {border-collapse: collapse; width: 100%;}
         th, td {border: 1px solid #ccc; padding: 6px; text-align:center; vertical-align:top;}
         .dropzone {min-height:60px;}
-        small {font-size: 12px;}
+        small {font-size: 12px; display:block;}
+
+        /* Tooltip styles */
+        .tooltip-container { position: relative; display: inline-block; }
+        .tooltip-box {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+            white-space: pre-line;
+            transition: opacity 0.2s ease-in-out;
+            z-index: 1000;
+            min-width: 120px;
+            max-width: 200px;
+        }
+        .tooltip-box::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+        .tooltip-container:hover .tooltip-box { visibility: visible; opacity: 1; }
+        .tooltip-box .safe { color: #4caf50; font-weight: bold; }
+        .tooltip-box .overload { color: #f44336; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -31,7 +67,7 @@
              draggable="true"
              data-entry-id="{{ assign.id }}"
              data-section-id="{{ assign.section.id }}"
-             data-section-class-id="{{ assign.section.school_class.id }}"
+             data-section-class-id="{{ assign.section.sec_class.id }}"
              data-teacher-id="{{ assign.teacher.id }}"
              data-max-load="{{ assign.max_load }}"
              data-current-load="{{ assign.current_load }}"
@@ -39,12 +75,10 @@
              data-required-load="{{ assign.required_subject_load }}"
              data-current-subject-load="{{ assign.current_subject_load }}">
             
-            <strong>{{ assign.class_subject.subject.name }}</strong> - {{ assign.teacher.name }}
-            
-            <br><small class="teacher-workload">Teacher: {{ assign.current_load }}/{{ assign.max_load }}</small>
-            <br><small class="subject-workload">Subject: {{ assign.current_subject_load }}/{{ assign.required_subject_load }}</small>
-            
-            <br><em>{{ assign.section.school_class.name }} - Section {{ assign.section.name }}</em>
+            <strong>{{ assign.class_subject.subject.name }} - {{ assign.teacher.name }}</strong>
+            <small class="teacher-workload">Teacher: {{ assign.current_load }}/{{ assign.max_load }}</small>
+            <small class="subject-workload">Subject: {{ assign.current_subject_load }}/{{ assign.required_subject_load }}</small>
+            <small>{{ assign.section.sec_class.name }} - Section {{ assign.section.name }}</small>
         </div>
     {% endfor %}
 </div>
@@ -72,7 +106,9 @@
         <tr>
             <th>Day / Period</th>
             {% for p in period_numbers %}
-                <th>Period {{ p }}</th>
+                {% if p > 0 %}
+                    <th>Period {{ p }}</th>
+                {% endif %}
             {% endfor %}
         </tr>
     </thead>
@@ -81,6 +117,7 @@
         <tr data-day="{{ day.id }}">
             <td>{{ day.name }}</td>
             {% for period in period_numbers %}
+                {% if period > 0 %}
                 <td class="dropzone" data-period="{{ period }}">
                     {% for section in sections %}
                         {% for entry in timetable_lookup|get_item:day.id|get_item:period|get_item:section.id %}
@@ -89,16 +126,18 @@
                                  data-section-id="{{ entry.section.id }}"
                                  data-section-class-id="{{ entry.section.school_class.id }}"
                                  data-teacher-id="{{ entry.teacher.id }}"
-                                 data-subject-id="{{ entry.class_subject.id }}">
-                                {{ entry.class_subject.subject.name }} - {{ entry.teacher.name }}
+                                 data-subject-id="{{ entry.class_subject.id }}"
+                                 data-max-load="{{ entry.teacher_assignment.teacher.max_periods_per_week }}"
+                                 data-required-load="{{ entry.teacher_assignment.class_subject.periods_per_week }}">
+                                <strong>{{ entry.class_subject.subject.name }} - {{ entry.teacher.name }}</strong>
                                 <button class="remove-btn"
                                         data-entry-id="{{ entry.teacher_assignment.id }}"
                                         data-section-id="{{ entry.section.id }}">X</button>
-                                <br><em>{{ entry.section.school_class.name }} - Section {{ entry.section.name }}</em>
                             </div>
                         {% endfor %}
                     {% endfor %}
                 </td>
+                {% endif %}
             {% endfor %}
         </tr>
         {% endfor %}
@@ -111,64 +150,96 @@ function getCSRF() {
     return document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 }
 
-// Update workload display
-function updateWorkload(card, teacherDelta, subjectDelta) {
-    let teacherLoad = parseInt(card.dataset.currentLoad) + teacherDelta;
-    let subjectLoad = parseInt(card.dataset.currentSubjectLoad) + subjectDelta;
-
-    card.dataset.currentLoad = teacherLoad;
-    card.dataset.currentSubjectLoad = subjectLoad;
-
-    const teacherEl = card.querySelector('.teacher-workload');
-    if (teacherEl) teacherEl.textContent = `Teacher: ${teacherLoad}/${card.dataset.maxLoad}`;
-
-    const subjectEl = card.querySelector('.subject-workload');
-    if (subjectEl) subjectEl.textContent = `Subject: ${subjectLoad}/${card.dataset.requiredLoad}`;
-
-    if (teacherLoad >= card.dataset.maxLoad || subjectLoad >= card.dataset.requiredLoad) {
-        card.classList.add("disabled");
-    } else {
-        card.classList.remove("disabled");
+// Tooltip helper
+function addTooltipToSlot(card, teacherLoad, subjectLoad) {
+    if(card.parentNode.classList.contains('tooltip-container')){
+        card.parentNode.replaceWith(card);
     }
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("tooltip-container");
+    card.parentNode.insertBefore(wrapper, card);
+    wrapper.appendChild(card);
+
+    const tooltip = document.createElement("div");
+    tooltip.classList.add("tooltip-box");
+
+    const maxLoad = card.dataset.maxLoad;
+    const requiredLoad = card.dataset.requiredLoad;
+
+    const teacherClass = (teacherLoad >= maxLoad) ? "overload" : "safe";
+    const subjectClass = (subjectLoad >= requiredLoad) ? "overload" : "safe";
+
+    tooltip.innerHTML = `Teacher: <span class="${teacherClass}">${teacherLoad}/${maxLoad}</span>\n` +
+                        `Subject: <span class="${subjectClass}">${subjectLoad}/${requiredLoad}</span>`;
+    wrapper.appendChild(tooltip);
 }
 
-// Refresh visual warnings dynamically
-function refreshVisualWarnings() {
+// Recalculate workloads
+function recalculateWorkloads() {
+    const teacherLoads = {};
+    const subjectLoads = {};
+
     document.querySelectorAll('.dropzone .draggable').forEach(d => {
-        d.classList.remove('yellow-bg', 'red-bg');
+        const t = d.dataset.teacherId;
+        const s = d.dataset.subjectId;
+        teacherLoads[t] = (teacherLoads[t] || 0) + 1;
+        subjectLoads[`${t}_${s}`] = (subjectLoads[`${t}_${s}`] || 0) + 1;
     });
 
-    const allDraggables = document.querySelectorAll('.draggable');
-    const byDayPeriodTeacher = {};
+    document.querySelectorAll('.left-panel .draggable').forEach(d => {
+        const t = d.dataset.teacherId;
+        const s = d.dataset.subjectId;
 
-    allDraggables.forEach(a => {
-        const cell = a.closest('.dropzone');
-        if (!cell) return;
+        const tEl = d.querySelector('.teacher-workload');
+        const sEl = d.querySelector('.subject-workload');
+
+        if(tEl) tEl.textContent = `Teacher: ${teacherLoads[t] || 0}/${d.dataset.maxLoad}`;
+        if(sEl) sEl.textContent = `Subject: ${subjectLoads[`${t}_${s}`] || 0}/${d.dataset.requiredLoad}`;
+
+        if((teacherLoads[t] || 0) >= d.dataset.maxLoad || (subjectLoads[`${t}_${s}`] || 0) >= d.dataset.requiredLoad){
+            d.classList.add("disabled");
+        } else { d.classList.remove("disabled"); }
+    });
+
+    document.querySelectorAll('.tooltip-box').forEach(t => t.remove());
+
+    document.querySelectorAll('.dropzone .draggable').forEach(d => {
+        const t = d.dataset.teacherId;
+        const s = d.dataset.subjectId;
+        const teacherLoad = teacherLoads[t] || 0;
+        const subjectLoad = subjectLoads[`${t}_${s}`] || 0;
+        addTooltipToSlot(d, teacherLoad, subjectLoad);
+    });
+}
+
+// Conflict highlight
+function refreshVisualWarnings() {
+    document.querySelectorAll('.dropzone .draggable').forEach(d => d.classList.remove('yellow-bg','red-bg'));
+
+    const byDayPeriodTeacher = {};
+    document.querySelectorAll('.dropzone .draggable').forEach(a=>{
+        const cell = a.closest('.dropzone'); if(!cell) return;
         const day = cell.closest('tr').dataset.day;
         const period = cell.dataset.period;
         const key = `${day}_${period}_${a.dataset.teacherId}`;
-        if (!byDayPeriodTeacher[key]) byDayPeriodTeacher[key] = [];
+        if(!byDayPeriodTeacher[key]) byDayPeriodTeacher[key] = [];
         byDayPeriodTeacher[key].push(a);
     });
 
-    Object.values(byDayPeriodTeacher).forEach(group => {
-        if (group.length <= 1) return;
-        const subjects = group.map(a => a.dataset.subjectId);
-        const classes = group.map(a => a.dataset.sectionClassId);
-
-        group.forEach(a => {
-            const sameSubject = subjects.every(s => s === subjects[0]);
-            const sameClass = classes.every(c => c === classes[0]);
-            if (sameSubject && sameClass) {
-                a.classList.add('yellow-bg'); // combined class
-            } else {
-                a.classList.add('red-bg'); // conflict
-            }
+    Object.values(byDayPeriodTeacher).forEach(group=>{
+        if(group.length<=1) return;
+        const subjects = group.map(a=>a.dataset.subjectId);
+        const classes = group.map(a=>a.dataset.sectionClassId);
+        group.forEach(a=>{
+            const sameSubject = subjects.every(s=>s===subjects[0]);
+            const sameClass = classes.every(c=>c===classes[0]);
+            if(sameSubject && sameClass) a.classList.add('yellow-bg');
+            else a.classList.add('red-bg');
         });
     });
 }
 
-// Drag start
+// Drag & drop setup
 document.querySelectorAll('.draggable').forEach(el=>{
     el.addEventListener('dragstart', e=>{
         if(el.classList.contains("disabled")) { e.preventDefault(); return; }
@@ -177,7 +248,6 @@ document.querySelectorAll('.draggable').forEach(el=>{
     });
 });
 
-// Dropzone
 document.querySelectorAll('.dropzone').forEach(cell=>{
     cell.addEventListener('dragover', e=>e.preventDefault());
     cell.addEventListener('drop', e=>{
@@ -189,24 +259,26 @@ document.querySelectorAll('.dropzone').forEach(cell=>{
 
         fetch("{% url 'timetable_update' %}", {
             method:'POST',
-            headers:{
-                'X-CSRFToken': getCSRF(),
-                'Content-Type':'application/json'
-            },
+            headers:{'X-CSRFToken': getCSRF(),'Content-Type':'application/json'},
             body: JSON.stringify({entry_id:entryId, section_id:sectionId, target_day:targetDay, target_period:targetPeriod})
         }).then(res=>res.json()).then(data=>{
             if(data.success){
                 const original = document.querySelector(`.draggable[data-entry-id='${entryId}'][data-section-id='${sectionId}']`);
                 const clone = original.cloneNode(true);
+
+                clone.querySelectorAll(".teacher-workload,.subject-workload").forEach(el=>el.remove());
                 clone.querySelector(".remove-btn")?.remove();
-                clone.innerHTML += `<button class="remove-btn" data-entry-id="${entryId}" data-section-id="${sectionId}">X</button>`;
+
+                const removeBtn = document.createElement("button");
+                removeBtn.className = "remove-btn";
+                removeBtn.dataset.entryId = entryId;
+                removeBtn.dataset.sectionId = sectionId;
+                removeBtn.innerText = "X";
+                clone.appendChild(removeBtn);
+
                 cell.appendChild(clone);
 
-                // Update workload (+1)
-                updateWorkload(original, +1, +1);
-
-                // Bind remove button for clone
-                clone.querySelector(".remove-btn").addEventListener("click", function() {
+                removeBtn.addEventListener("click", function() {
                     const btn = this;
                     fetch("{% url 'timetable_remove' %}", {
                         method:'POST',
@@ -215,16 +287,15 @@ document.querySelectorAll('.dropzone').forEach(cell=>{
                     }).then(res=>res.json()).then(data=>{
                         if(data.success){
                             btn.parentElement.remove();
-                            updateWorkload(original, -1, -1);
+                            recalculateWorkloads();
                             refreshVisualWarnings();
-                        } else { alert(data.error); }
+                        } else alert(data.error);
                     });
                 });
 
+                recalculateWorkloads();
                 refreshVisualWarnings();
-            } else {
-                alert(data.error);
-            }
+            } else alert(data.error);
         });
     });
 });
@@ -241,15 +312,15 @@ document.querySelectorAll('.remove-btn').forEach(btn=>{
         }).then(res=>res.json()).then(data=>{
             if(data.success){
                 btn.parentElement.remove();
-                const original = document.querySelector(`.draggable[data-entry-id='${entryId}'][data-section-id='${sectionId}']`);
-                if(original) updateWorkload(original, -1, -1);
+                recalculateWorkloads();
                 refreshVisualWarnings();
-            } else { alert(data.error); }
+            } else alert(data.error);
         });
     });
 });
 
 // Initial refresh
+recalculateWorkloads();
 refreshVisualWarnings();
 </script>
 </body>

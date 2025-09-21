@@ -73,7 +73,7 @@
                         {% else %}
                             <td>
                                 {{ entry.teacher.name }}<br>
-                                {% with cls=entry.section.school_class %}
+                                {% with cls=entry.section.sec_class %}
                                     {{ cls.name }} - Section {{ entry.section.name }}{% if cls.stream %} ({{ cls.stream.name }}){% endif %}<br>
                                     {{ entry.class_subject.subject.name }}<br>
                                     {% if cls.medium %}

@@ -12,7 +12,7 @@
                 <option value="">-- Select Section --</option>
                 {% for s in sections %}
                     <option value="{{ s.id }}" {% if selected_section == s.id %}selected{% endif %}>
-                        {{ s.school_class.name }} → {{ s.name }}
+                        {{ s.sec_class.name }} → {{ s.name }}
                     </option>
                 {% endfor %}
             </select>
@@ -162,7 +162,7 @@
                 <tbody>
                     {% for s in subject_section_report %}
                         <tr>
-                            <td>{{ s.teacher_assignment__section__school_class__name }} → {{ s.teacher_assignment__section__name }}</td>
+                            <td>{{ s.teacher_assignment__section__sec_class__name }} → {{ s.teacher_assignment__section__name }}</td>
                             <td>{{ s.teacher_assignment__class_subject__subject__name }}</td>
                             <td>{{ s.periods_assigned }}</td>
                         </tr>
