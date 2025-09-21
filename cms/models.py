@@ -154,15 +154,15 @@ class Medium(models.Model):
     
 class Classroom(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="classrooms")
-    room_number = models.CharField(max_length=20)   # e.g., R101, Block A-2
+    name = models.CharField(max_length=20)   # e.g., R101, Block A-2
     capacity = models.PositiveIntegerField(default=40)
     floor = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        unique_together = ('school', 'room_number')
+        unique_together = ('school', 'name')
 
     def __str__(self):
-        return f"Room {self.room_number} ({self.school.name})"
+        return f"Room {self.name}"
 
 
 class Stream(models.Model):
@@ -181,45 +181,47 @@ class Class(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="classes")
     name = models.CharField(max_length=50)  # e.g., "9th"
     class_order = models.PositiveIntegerField(default=0)  # numeric ordering
-    stream = models.ForeignKey(Stream, on_delete=models.SET_NULL, null=True, blank=True, related_name="classes")
-    medium = models.ForeignKey(Medium, on_delete=models.SET_NULL, null=True, blank=True, related_name="classes")
+    # stream = models.ForeignKey(Stream, on_delete=models.SET_NULL, null=True, blank=True, related_name="classes")
+    # medium = models.ForeignKey(Medium, on_delete=models.SET_NULL, null=True, blank=True, related_name="classes")
 
     class Meta:
-        unique_together = ('school', 'name', 'stream', 'medium')
+        unique_together = ('school', 'name')
         ordering = ['class_order', 'name']
 
     def __str__(self):
-        base = f"{self.name}"
-        if self.stream:
-            base += f" ({self.stream.name})"
-        if self.medium:
-            base += f" - {self.medium.name}"
-        return base
-    def full_display(self):
-        base = f"{self.name}"
-        if self.stream:
-            base += f" ({self.stream.name})"
-        if self.medium:
-            base += f" - {self.medium.name}"
-        return f"{base} ({self.school.name})"
+        return f"{self.name}"
+    
 
 
 class Section(models.Model):
-    school_class = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="sections")
-    name = models.CharField(max_length=10)  # e.g., A, B, C
+
+
+    SUB_STREAM_CHOICES = [
+        ("Medical", "Medical"),
+        ("Non-Medical", "Non-Medical"),
+        ("Vocational", "Vocational"),
+    ]
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="sections")
+    sec_class = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="sections")
+    name = models.CharField(max_length=10)
     classroom = models.ForeignKey(Classroom, on_delete=models.SET_NULL, null=True, blank=True, related_name="sections")
+    medium = models.ForeignKey(Medium, on_delete=models.SET_NULL, null=True, blank=True, related_name="sections")
+    stream = models.ForeignKey(Stream, on_delete=models.SET_NULL, null=True, blank=True, related_name="sections")
+    sub_stream = models.CharField(max_length=100, choices=SUB_STREAM_CHOICES, null=True, blank=True)
 
     class Meta:
-        unique_together = ('school_class', 'name')
+        unique_together = ('school','sec_class', 'name', 'medium', 'stream', 'sub_stream')
 
     def __str__(self):
-        room = f" - Room {self.classroom.room_number}" if self.classroom else ""
-        return f"{self.school_class.name} {self.name}{room}"
+        base = f"{self.sec_class.name} {self.name}"
+        if self.stream:
+            base += f" ({self.stream.name})"
+        if self.sub_stream:
+            base += f" - {self.sub_stream}"
+        if self.medium:
+            base += f" - {self.medium.name}"
+        return base
 
-    def full_display(self):
-        room = f" - Room {self.classroom.room_number}" if self.classroom else ""
-        return f"{self.school_class.name} {self.name}{room} ({self.school_class.school.name})"
-    
 
     
 
@@ -286,19 +288,56 @@ class Subject(models.Model):
 
 
 class ClassSubject(models.Model):
-    class_info = models.ForeignKey("Class", on_delete=models.CASCADE, related_name="class_subjects")
+    subject_class = models.ForeignKey("Class", on_delete=models.CASCADE, related_name="class_subjects")
+        # Stream is optional for lower classes
+    stream = models.ForeignKey(
+        "Stream", on_delete=models.SET_NULL, null=True, blank=True, related_name="stream_subjects"
+    )
+
+    SUB_STREAM_CHOICES = [
+        ("Medical", "Medical"),
+        ("Non-Medical", "Non-Medical"),
+        ("Vocational", "Vocational"),
+    ]
+
+    sub_stream = models.CharField(max_length=100, choices=SUB_STREAM_CHOICES, null=True, blank=True) 
+    # e.g. "Medical", "Non-Medical" (simple text, no separate table unless needed)
     subject = models.ForeignKey("Subject", on_delete=models.CASCADE, related_name="class_subjects")
+    # Period allocations
+    theory_periods_per_week = models.PositiveIntegerField(default=0)
+    practical_periods_per_week = models.PositiveIntegerField(default=0)
+
     periods_per_week = models.PositiveIntegerField(default=0)
     is_optional = models.BooleanField(default=False)
     has_lab = models.BooleanField(default=False)
-
+    #subject is shared across multiple classes or streams
+    is_shared = models.BooleanField(default=False) 
     class Meta:
-        unique_together = ("class_info", "subject")
+        unique_together = ("subject_class", "stream", "sub_stream", "subject")
+
+
+    def clean(self):
+        # Validation: If has_lab is True, ensure practical periods > 0
+        if self.has_lab and self.practical_periods_per_week == 0:
+            raise ValidationError("Subjects with a lab must have practical_periods_per_week > 0.")
+
+    def save(self, *args, **kwargs):
+        # Auto-calculate total periods
+        self.periods_per_week = self.theory_periods_per_week + self.practical_periods_per_week
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.class_info} - {self.subject}"
+        parts = [str(self.subject_class)]
 
+        if self.stream:
+            parts.append(str(self.stream))
 
+        if self.sub_stream:
+            parts.append(str(self.sub_stream))
+
+        parts.append(str(self.subject))
+
+        return " - ".join(parts)
 
 class Day(models.Model):
     school = models.ForeignKey("School", on_delete=models.CASCADE)
@@ -444,7 +483,7 @@ class TimetableForm(forms.ModelForm):
         # If editing an existing Timetable entry
         if instance and instance.class_name and instance.subject:
             teacher_ids = TeacherSubjectAssignment.objects.filter(
-                class_subject__class_info=instance.class_name,
+                class_subject__subject_class=instance.class_name,
                 class_subject__subject=instance.subject
             ).values_list("teacher_id", flat=True)
 
@@ -915,6 +954,7 @@ class Student(models.Model):
     bpl_certificate_issuing_authority = models.CharField(max_length=255, blank=True, null=True)
 
     family_id = models.CharField(max_length=50, blank=True, null=True)
+    religion=models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return str(self.full_name_aadhar) if self.full_name_aadhar else 'Student {}'.format(self.pk)
 
