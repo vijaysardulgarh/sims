@@ -166,7 +166,8 @@ def subject_strength(request):
         english=Count("srn", filter=Q(subjects_opted__icontains="English")),
         hindi=Count("srn", filter=Q(subjects_opted__icontains="Hindi")),
         social_science=Count("srn", filter=Q(subjects_opted__icontains="Social Science")),
-        science=Count("srn", filter=Q(subjects_opted__icontains="Science") & ~Q(subjects_opted__icontains="Political Science") & ~Q(subjects_opted__icontains="Home Science")),
+        science = Count("srn",filter=Q(subjects_opted__iregex=r"\bScience(\s*(and|&)\s*Technology)?\b")),
+        #=Count("srn", filter=Q(subjects_opted__icontains="Science") & ~Q(subjects_opted__icontains="Political Science")& ~Q(subjects_opted__icontains="Computer Science") & ~Q(subjects_opted__icontains="Home Science")),
         physics=Count("srn", filter=Q(subjects_opted__icontains="Physics")),
         chemistry=Count("srn", filter=Q(subjects_opted__icontains="Chemistry")),
         biology=Count("srn", filter=Q(subjects_opted__icontains="Biology")),
@@ -174,6 +175,7 @@ def subject_strength(request):
         physical_education=Count("srn", filter=Q(subjects_opted__icontains="Physical and Health Education") | Q(subjects_opted__icontains="Physical Education")),
         automobile=Count("srn", filter=Q(subjects_opted__icontains="Automotive")),
         beauty_wellness=Count("srn", filter=Q(subjects_opted__icontains="Beauty & Wellness")),
+        computer_science=Count("srn", filter=Q(subjects_opted__icontains="Computer Science")),
         order=Case(*[When(studentclass=cls, then=pos) for cls, pos in class_order.items()])
     ).order_by("order")
 
@@ -2418,3 +2420,4 @@ def class_incharge_report(request):
         })
 
     return render(request, "reports/class_incharge_report.html", {"report_data": report_data})
+
