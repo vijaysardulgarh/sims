@@ -2261,7 +2261,7 @@ def cbse_enrollment_pdf(request):
     minority_religions = {"MUSLIM", "CHRISTIAN", "SIKH", "BUDDHIST", "JAIN", "PARSI"}
 
     # Fetch students
-    students = Student.objects.filter(studentclass__in=["Nineth"]).order_by("studentclass","section","roll_number")
+    students = Student.objects.filter(studentclass__in=["Nineth", "Eleventh"]).order_by("studentclass","section","roll_number")
 
     for s in students:
         # Convert subjects
@@ -2341,7 +2341,7 @@ def cbse_enrollment_csv(request):
 
     minority_religions = {"MUSLIM", "CHRISTIAN", "SIKH", "BUDDHIST", "JAIN", "PARSI"}
 
-    students = Student.objects.filter(studentclass__in=["Nineth"]).order_by("studentclass","section","roll_number")
+    students = Student.objects.filter(studentclass__in=["Nineth", "Eleventh"]).order_by("studentclass","section","roll_number")
 
     for idx, s in enumerate(students, start=1):
         subs = convert_subjects_to_cbse_slots((s.subjects_opted or "").split(","))
@@ -2420,3 +2420,4 @@ def class_incharge_report(request):
         })
 
     return render(request, "reports/class_incharge_report.html", {"report_data": report_data})
+
