@@ -2100,92 +2100,105 @@ def timetable_remove(request):
 # CBSE Enrollment PDF View
 # -------------------------------
 
-from django.http import HttpResponse
-from reportlab.lib.pagesizes import landscape, legal
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
-from datetime import datetime
-from .models import Student
-from .enrollment_subjects_utils import convert_subjects_to_cbse_slots
-
 def cbse_enrollment_pdf(request):
+    # Response
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="cbse_enrollment_{datetime.now().strftime("%Y%m%d")}.pdf"'
+    response['Content-Disposition'] = (
+        f'attachment; filename="cbse_enrollment_{datetime.now().strftime("%Y%m%d")}.pdf"'
+    )
 
+    # Document setup
     page_width, page_height = landscape(legal)
-    doc = SimpleDocTemplate(response, pagesize=(page_width, page_height),
-                            rightMargin=10, leftMargin=10, topMargin=10, bottomMargin=10)
+    doc = SimpleDocTemplate(
+        response,
+        pagesize=(page_width, page_height),
+        rightMargin=10, leftMargin=10, topMargin=10, bottomMargin=10
+    )
 
     elements = []
     styles = getSampleStyleSheet()
 
     headers = [
-        "CLASS", "SECTION", "ROLL_NO",
-        "CAT", "CNAME", "MNAME", "FNAME",
+        "ROLL_NO", "CAT", "CNAME", "MNAME", "FNAME",
         "SEX", "CAST", "HANDICAP",
-        "SUB1", "SUB2", "SUB3", "SUB4", "SUB5", "SUB6", "SUB7",
-        "D_O_B", "ANNUAL_INC", "ONLY_CHILD", "ADM_SRL", "ADM_DATE", "MINORITY"
+        "SUB1","MED1","SUB2","MED2","SUB3","MED3",
+        "SUB4","MED4","SUB5","MED5","SUB6","MED6","SUB7","MED7",
+        "D_O_B","ANNUAL_INC","ONLY_CHILD","ADM_SRL","ADM_DATE","MINORITY"
     ]
-    data = [[Paragraph(h, styles['Normal']) for h in headers]]
 
     minority_religions = {"MUSLIM", "CHRISTIAN", "SIKH", "BUDDHIST", "JAIN", "PARSI"}
 
-    students = Student.objects.filter(studentclass__in=["Nineth", "Eleventh"]).order_by(
-        "studentclass","section","roll_number"
-    )
+    # Group students by class + section
+    students = Student.objects.filter(
+        studentclass__in=["Nineth", "Eleventh"]
+    ).order_by("studentclass", "section", "roll_number")
 
+    grouped = {}
     for s in students:
-        student_subjects = (s.subjects_opted or "").split(",")
-        subs = convert_subjects_to_cbse_slots(student_subjects)  # important: same as CSV
+        key = (s.studentclass, s.section)
+        grouped.setdefault(key, []).append(s)
 
-        minority_flag = "N"
-        if getattr(s, "religion", None) and s.religion.upper() in minority_religions:
-            minority_flag = "Y"
+    for (studentclass, section), group_students in grouped.items():
+        # Title for section
+        title = Paragraph(f"<b>Class: {studentclass} {section}</b>", styles['Heading2'])
+        elements.append(title)
 
-        row = [
-            s.studentclass or "",
-            s.section or "",
-            s.roll_number or "",
-            s.category or "",
-            s.full_name_aadhar or "",
-            s.mother_full_name_aadhar or "",
-            s.father_full_name_aadhar or "",
-            s.gender or "",
-            s.caste or "",
-            "Y" if s.disability else "N",
+        # Table header
+        data = [[Paragraph(h, styles['Normal']) for h in headers]]
 
-            subs.get("sub1", ""),
-            subs.get("sub2", ""),
-            subs.get("sub3", ""),
-            subs.get("sub4", ""),
-            subs.get("sub5", ""),
-            subs.get("sub6", ""),
-            subs.get("sub7", ""),
+        for s in group_students:
+            student_subjects = (s.subjects_opted or "").split(",")
+            subs = convert_subjects_to_cbse_slots(student_subjects)
+            medium = get_medium_from_section(getattr(s, "section", ""))
 
-            s.date_of_birth.strftime("%d-%m-%Y") if s.date_of_birth else "",
-            str(s.family_annual_income) if s.family_annual_income else "",
-            "Y" if getattr(s, "only_child", False) else "N",
-            s.admission_number or "",
-            s.admission_date.strftime("%d-%m-%Y") if s.admission_date else "",
-            minority_flag
-        ]
-        data.append([Paragraph(str(c), styles['Normal']) for c in row])
+            minority_flag = "N"
+            if getattr(s, "religion", None) and s.religion.upper() in minority_religions:
+                minority_flag = "Y"
 
-    table_width = page_width - 20
-    col_width = table_width / len(headers)
-    col_widths = [col_width] * len(headers)
+            row = [
+                s.roll_number or "",
+                s.category or "",
+                s.full_name_aadhar or "",
+                s.mother_full_name_aadhar or "",
+                s.father_full_name_aadhar or "",
+                s.gender or "",
+                s.caste or "",
+                "Y" if s.disability else "N",
 
-    table = Table(data, colWidths=col_widths, repeatRows=1)
-    table.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
-        ('GRID', (0,0), (-1,-1), 0.25, colors.black),
-        ('FONTSIZE', (0,0), (-1,-1), 7),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
-    ]))
+                subs.get("sub1", ""), medium,
+                subs.get("sub2", ""), medium,
+                subs.get("sub3", ""), medium,
+                subs.get("sub4", ""), medium,
+                subs.get("sub5", ""), medium,
+                subs.get("sub6", ""), medium,
+                subs.get("sub7", ""), medium,
 
-    elements.append(table)
+                s.date_of_birth.strftime("%d-%m-%Y") if s.date_of_birth else "",
+                str(s.family_annual_income) if s.family_annual_income else "",
+                "Y" if getattr(s, "only_child", False) else "N",
+                s.admission_number or "",
+                s.admission_date.strftime("%d-%m-%Y") if s.admission_date else "",
+                minority_flag
+            ]
+            data.append([Paragraph(str(c), styles['Normal']) for c in row])
+
+        # Table width setup
+        table_width = page_width - 20
+        num_cols = len(headers)
+        col_widths = [table_width / num_cols] * num_cols
+
+        table = Table(data, colWidths=col_widths, repeatRows=1)
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
+            ('GRID', (0,0), (-1,-1), 0.25, colors.black),
+            ('FONTSIZE', (0,0), (-1,-1), 7),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+        ]))
+
+        elements.append(table)
+        elements.append(PageBreak())  # Force new page for next section
+
     doc.build(elements)
     return response
 
@@ -2313,4 +2326,5 @@ def class_incharge_report(request):
 
 def dashboard(request):
     return render(request, 'dashboard/dashboard.html')
+
 
