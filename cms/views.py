@@ -1,8 +1,9 @@
-from .subjects_map import SUBJECT_CODE_MAP, MEDIUM_CODE_MAP
+
+
 import csv
-import datetime
-from datetime import date, datetime
-from datetime import datetime
+#import datetime
+#from datetime import datetime
+from datetime import date
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Q, Case, When,Sum,OuterRef,IntegerField,Value,CharField
 from django.http import FileResponse, Http404
@@ -41,6 +42,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.utils.dateparse import parse_date
 from django.utils import timezone
 import re
+from .enrollment_subjects_utils import convert_subjects_to_cbse_slots, MEDIUM_CODE_MAP,get_medium_from_section
 # -------------------- Dashboard & Common --------------------
 def sims_index(request):
     if 'clear' in request.GET:
@@ -1194,7 +1196,7 @@ def subject_report(request, class_name, section_name):
 
     # --- Class Info ---
     subject_class = Table(
-        [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {datetime.date.today().strftime('%d-%m-%Y')}"]],
+        [[f"Class: {class_name}", f"Section: {section_name}", f"Date: {date.today().strftime('%d-%m-%Y')}"]],
         colWidths=[200, 200, 200],
     )
     subject_class.setStyle(TableStyle([
@@ -2086,194 +2088,70 @@ def timetable_remove(request):
 
 
 
-# def extract_subject_name(raw_subject: str) -> str:
-#     """
-#     Convert database subject string to clean subject name.
-#     Example:
-#         'Compulsory:English' -> 'English'
-#         'NSQF:Beauty & Wellness' -> 'Beauty & Wellness'
-#         'Language:Punjabi' -> 'Punjabi'
-#     """
-#     parts = raw_subject.split(":", 1)
-#     if len(parts) == 2:
-#         return parts[1].strip()
-#     return raw_subject.strip()
-
-
-# # Subjects that should not go to CBSE enrollment
-# IGNORED_SUBJECTS = {
-#     "GENERAL AWARENESS & LIFE SKILLS",
-#     "SPORTS AND GAMES",
-#     "CULTURAL LITERACY SCIENTIFIC ACTIVITIES NCC SCOUTS AND GUIDES",
-# }
-
-# def convert_subjects_to_cbse_slots(student_subjects):
-#     slots = {f"sub{i}": "" for i in range(1, 8)}
-
-#     # normalize subject list (clean + upper)
-#     cleaned_subjects = [extract_subject_name(s).strip() for s in student_subjects]
-#     cleaned_subjects_upper = [s.upper() for s in cleaned_subjects]
-
-#     # ----- enforce slot rules -----
-#     # sub1: English
-#     if "ENGLISH" in cleaned_subjects_upper:
-#         slots["sub1"] = "English"
-
-#     # sub2: Hindi only (if Hindi present), else fallback Punjabi/Sanskrit
-#     if "Hindi" in cleaned_subjects_upper:
-#         slots["sub2"] = "Hindi"
-
-
-#     # sub3: Mathematics
-#     if "MATHEMATICS" in cleaned_subjects_upper:
-#         slots["sub3"] = "Mathematics"
-
-#     # sub4: Science
-#     if "SCIENCE & TECHNOLOGY" in cleaned_subjects_upper or "Science" in cleaned_subjects_upper:
-#         slots["sub4"] = "Science"
-
-#     # sub5: Social Science
-#     if "SOCIAL SCIENCE" in cleaned_subjects_upper:
-#         slots["sub5"] = "Social Studies"
-
-#     # sub6: Vocational (first match from map)
-#     if "AUTOMOTIVE" in cleaned_subjects_upper:
-#         slots["sub6"] = "Automobile"
-#     elif "BEAUTY & WELLNESS" in cleaned_subjects_upper:
-#         slots["sub6"] = "Beauty & Wellness"
-
-#     # sub7: Optional (Punjabi/Sanskrit/Drawing/Home Science/Music etc.)
-#     if "PUNJABI" in cleaned_subjects_upper:
-#         slots["sub7"] = "Punjabi"
-#     elif "SANSKRIT" in cleaned_subjects_upper:
-#         slots["sub7"] = "Sanskrit"
-#     elif "DRAWING" in cleaned_subjects_upper or "PAINTING" in cleaned_subjects_upper:
-#         slots["sub7"] = "049"
-#     elif "HOME SCIENCE" in cleaned_subjects_upper:
-#         slots["sub7"] = "064"
-#     elif "MUSIC HINDUSTANI VOCAL (MHV)" in cleaned_subjects_upper:
-#         slots["sub7"] = "034"
-
-#     return slots
-
-
-
-def extract_subject_name(raw_subject: str) -> str:
-    """
-    Convert DB subject string to clean subject name.
-    Example:
-        'Compulsory:English' -> 'ENGLISH'
-        'NSQF:Beauty & Wellness' -> 'BEAUTY & WELLNESS'
-        'Language:Punjabi' -> 'PUNJABI'
-    """
-    if not raw_subject:
-        return ""
-
-    parts = raw_subject.split(":", 1)
-    subject = parts[1] if len(parts) == 2 else raw_subject
-    return subject.strip().upper()
-
-
-# Subjects ignored for CBSE enrollment
-IGNORED_SUBJECTS = {
-    "GENERAL AWARENESS & LIFE SKILLS",
-    "SPORTS AND GAMES",
-    "CULTURAL LITERACY SCIENTIFIC ACTIVITIES NCC SCOUTS AND GUIDES",
-}
-
-
-def convert_subjects_to_cbse_slots(student_subjects):
-    """
-    Takes student subjects and enforces CBSE slot rules.
-    Returns dict {sub1..sub7}.
-    """
-    slots = {f"sub{i}": "" for i in range(1, 8)}
-
-    if not student_subjects:
-        return slots
-
-    # normalize subjects
-    cleaned_subjects = [extract_subject_name(s) for s in student_subjects]
-    cleaned_subjects = [s for s in cleaned_subjects if s and s not in IGNORED_SUBJECTS]
-
-
-
-
-    # --- enforce slot rules ---
-    for slot, mapping in SUBJECT_CODE_MAP.items():
-        for subj in cleaned_subjects:
-            if subj in mapping:
-                slots[slot] = mapping[subj]
-                break  # assign first valid match and stop
-
-    return slots
-
-# Helper: Medium code
-def get_medium_from_section(section_name: str) -> str:
-    """
-    Extract medium from section field like 'F (Hindi)', 'A (English)'.
-    Default to Hindi if not found.
-    """
-    if not section_name:
-        return "2"  # Default Hindi
-    
-    # Regex to capture text inside parentheses
-    match = re.search(r"\((.*?)\)", section_name)
-    if match:
-        medium_text = match.group(1).strip().upper()
-        return MEDIUM_CODE_MAP.get(medium_text, "2")  # Default Hindi
-    
-    return "2"  # fallback if no parentheses found
 
 # -------------------------------
 # CBSE Enrollment PDF View
 # -------------------------------
+
+# -------------------------------
+# CBSE Enrollment PDF View with MED columns
+# -------------------------------
 # -------------------------------
 # CBSE Enrollment PDF View
 # -------------------------------
+
+from django.http import HttpResponse
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+
+from .models import Student
+from .enrollment_subjects_utils import convert_subjects_to_cbse_slots
+
+
 def cbse_enrollment_pdf(request):
-    # Response
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = (
-        f'attachment; filename="cbse_enrollment_{datetime.now().strftime("%Y%m%d")}.pdf"'
-    )
+    response['Content-Disposition'] = 'attachment; filename="cbse_enrollment.pdf"'
 
-    # Document setup
-    page_width, page_height = landscape(legal)
+    pdfmetrics.registerFont(UnicodeCIDFont('HeiseiMin-W3'))
+
     doc = SimpleDocTemplate(
         response,
-        pagesize=(page_width, page_height),
-        rightMargin=10, leftMargin=10, topMargin=10, bottomMargin=10
+        pagesize=landscape(A4),
+        leftMargin=10, rightMargin=10, topMargin=15, bottomMargin=15
     )
 
     elements = []
     styles = getSampleStyleSheet()
+    normal_style = ParagraphStyle("normal", fontSize=6, leading=7, alignment=1)
 
-    # Table header (already cleaned)
+    # Headers WITHOUT any medium columns
     headers = [
-        "CLASS", "SECTION", "ROLL_NO",
-        "CAT", "CNAME", "MNAME", "FNAME",
+        "CLASS", "SECTION", "ROLL_NO", "CAT", "CNAME", "MNAME", "FNAME",
         "SEX", "CAST", "HANDICAP",
-        "SUB1", "SUB2", "SUB3", "SUB4", "SUB5", "SUB6", "SUB7",
-        "D_O_B", "ANNUAL_INC", "ONLY_CHILD", "ADM_SRL", "ADM_DATE", "MINORITY"
+        "SUB1","SUB2","SUB3","SUB4","SUB5","SUB6","SUB7",
+        "D_O_B","ANNUAL_INC","ONLY_CHILD","ADM_SRL","ADM_DATE","MINORITY"
     ]
-    data = [[Paragraph(h, styles['Normal']) for h in headers]]
+    data = [[Paragraph(h, normal_style) for h in headers]]
 
     minority_religions = {"MUSLIM", "CHRISTIAN", "SIKH", "BUDDHIST", "JAIN", "PARSI"}
 
-    # Fetch students
-    students = Student.objects.filter(studentclass__in=["Nineth", "Eleventh"]).order_by("studentclass","section","roll_number")
+    students = Student.objects.filter(studentclass__in=["Ninth", "Eleventh"]).order_by(
+        "studentclass", "section", "roll_number"
+    )
 
-    for s in students:
-        # Convert subjects
-        subs = convert_subjects_to_cbse_slots((s.subjects_opted or "").split(","))
+    for s in students.iterator():
+        student_subjects = (s.subjects_opted or "").split(",")
+        subs = convert_subjects_to_cbse_slots(student_subjects)
 
-        # Minority flag
         minority_flag = "N"
-        if getattr(s, "religion", None):
-            if s.religion.upper() in minority_religions:
-                minority_flag = "Y"
+        if getattr(s, "religion", None) and s.religion.upper() in minority_religions:
+            minority_flag = "Y"
 
+        # Row WITHOUT any medium values
         row = [
             s.studentclass or "",
             s.section or "",
@@ -2295,34 +2173,40 @@ def cbse_enrollment_pdf(request):
             subs.get("sub7", ""),
 
             s.date_of_birth.strftime("%d-%m-%Y") if s.date_of_birth else "",
-            str(s.family_annual_income) if s.family_annual_income else "",
+            str(s.family_annual_income or ""),
             "Y" if getattr(s, "only_child", False) else "N",
             s.admission_number or "",
             s.admission_date.strftime("%d-%m-%Y") if s.admission_date else "",
             minority_flag
         ]
 
-        data.append([Paragraph(str(c), styles['Normal']) for c in row])
+        # Wrap all cells in Paragraph (replace empty with space)
+        data.append([Paragraph(str(cell) if cell else " ", normal_style) for cell in row])
 
-    # Auto-adjust column widths to fit full page width
-    table_width = page_width - 20  # account for left/right margins
-    num_cols = len(headers)
-    col_width = table_width / num_cols
-    col_widths = [col_width] * num_cols
+    # Adjust column widths for landscape A4
+    col_widths = [30]*10 + [50]*7 + [35]*6  # 10 info columns, 7 subject columns, 6 remaining
 
-    # Table style
-    table = Table(data, colWidths=col_widths, repeatRows=1)
+    table = Table(data, repeatRows=1, colWidths=col_widths)
     table.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
-        ('GRID', (0,0), (-1,-1), 0.25, colors.black),
-        ('FONTSIZE', (0,0), (-1,-1), 7),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("FONTSIZE", (0, 0), (-1, -1), 6),
+        ("GRID", (0, 0), (-1, -1), 0.25, colors.grey),
     ]))
 
+    elements.append(Paragraph("CBSE Enrollment Report", styles["Title"]))
     elements.append(table)
     doc.build(elements)
+
     return response
+
+
+
+
+
+
+
 # -------------------------------
 # CBSE Enrollment CSV View
 # -------------------------------
@@ -2331,7 +2215,7 @@ def cbse_enrollment_csv(request):
     response['Content-Disposition'] = 'attachment; filename="cbse_enrollment.csv"'
 
     writer = csv.writer(response)
-    # Updated headers (no SCH_NO, SERIAL, IREGDNO)
+    # CBSE headers
     writer.writerow([
         "CLASS", "SECTION", "ROLL_NO", "CAT", "CNAME", "MNAME", "FNAME",
         "SEX", "CAST", "HANDICAP",
@@ -2342,16 +2226,23 @@ def cbse_enrollment_csv(request):
 
     minority_religions = {"MUSLIM", "CHRISTIAN", "SIKH", "BUDDHIST", "JAIN", "PARSI"}
 
-    students = Student.objects.filter(studentclass__in=["Nineth", "Eleventh"]).order_by("studentclass","section","roll_number")
+    # Fetch all students (9th & 11th)
+    students = Student.objects.filter(studentclass__in=["Nineth", "Eleventh"]).order_by(
+        "studentclass", "section", "roll_number"
+    )
 
-    for idx, s in enumerate(students, start=1):
-        subs = convert_subjects_to_cbse_slots((s.subjects_opted or "").split(","))
-        medium = MEDIUM_CODE_MAP.get(getattr(s, "medium", "ENGLISH").upper(), "1")
+    for s in students:
+        # Convert subjects to single subject per slot
+        student_subjects = (s.subjects_opted or "").split(",")
+        subs = convert_subjects_to_cbse_slots(student_subjects)
 
-        minority_flag = "N"  # default
-        if getattr(s, "religion", None):
-            if s.religion.upper() in minority_religions:
-                minority_flag = "Y"
+        # Get medium code from section or student field
+        medium = get_medium_from_section(getattr(s, "section", ""))
+
+        # Minority flag
+        minority_flag = "N"
+        if getattr(s, "religion", None) and s.religion.upper() in minority_religions:
+            minority_flag = "Y"
 
         writer.writerow([
             s.studentclass or "",
@@ -2382,6 +2273,12 @@ def cbse_enrollment_csv(request):
         ])
 
     return response
+
+
+
+
+
+
 
 
 def class_incharge_report(request):
@@ -2423,3 +2320,7 @@ def class_incharge_report(request):
     return render(request, "reports/class_incharge_report.html", {"report_data": report_data})
 
 
+
+
+def dashboard(request):
+    return render(request, 'dashboard/dashboard.html')
