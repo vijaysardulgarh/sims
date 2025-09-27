@@ -9,27 +9,49 @@ from datetime import date
 #from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 
-#class User(AbstractUser):
-    #STUDENT = 'student'
-   # TEACHER = 'teacher'
-   # PARENT = 'parent'
-   # ADMINISTRATOR = 'administrator'
-   # STAFF = 'staff'
-   # GUEST = 'guest'
+class User(AbstractUser):
+    ROLE_CHOICES = [
+        ("admin", "Admin"),
+        ("principal", "Principal"),
+        ("teacher", "Teacher"),
+        ("clerk", "Clerk"),
+        ("student", "Student"),
+    ]
 
-   # USER_TYPE_CHOICES = [
-   #     (STUDENT, 'Student'),
-   #     (TEACHER, 'Teacher'),
-   #     (PARENT, 'Parent/Guardian'),
-   #     (ADMINISTRATOR, 'Administrator'),
-   #     (STAFF, 'Staff/Non-Teaching Personnel'),
-    #    (GUEST, 'Guest/User with Limited Access'),
-   # ]
+    # each user belongs to one school
+    school = models.ForeignKey(
+        School,
+        on_delete=models.CASCADE,
+        related_name="users",
+        null=True,
+        blank=True,
+    )
 
-    #user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
+    # assign role inside school
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default="student")
 
-    #def __str__(self):
-    #    return f"{self.username} - {self.get_user_type_display()}"
+    # optional extra fields
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.username} ({self.school} - {self.role})"
+
+    # 🔑 Helpers for role checking
+    def is_admin(self):
+        return self.role == "admin"
+
+    def is_principal(self):
+        return self.role == "principal"
+
+    def is_teacher(self):
+        return self.role == "teacher"
+
+    def is_clerk(self):
+        return self.role == "clerk"
+
+    def is_student(self):
+        return self.role == "student"
 
 
 class School(models.Model):
@@ -1231,5 +1253,6 @@ class MandatoryPublicDisclosure(models.Model):
 
     def __str__(self):
         return f"{self.section} - {self.title}"
+
 
 
