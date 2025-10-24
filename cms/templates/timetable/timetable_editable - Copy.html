@@ -39,7 +39,7 @@
             <strong>{{ assign.class_subject.subject.name }}</strong> - {{ assign.teacher.name }}
             <br><small class="teacher-workload">Teacher: {{ assign.current_load }}/{{ assign.max_load }}</small>
             <br><small class="subject-workload">Subject: {{ assign.current_subject_load }}/{{ assign.required_subject_load }}</small>
-            <br><em>{{ assign.section.school_class.name }} - Section {{ assign.section.name }}</em>
+            <br><em>{{ assign.section.sec_class.name }} - Section {{ assign.section.name }}</em>
         </div>
     {% endfor %}
 </div>
@@ -88,7 +88,7 @@
                                 <button class="remove-btn"
                                         data-entry-id="{{ entry.teacher_assignment.id }}"
                                         data-section-id="{{ entry.section.id }}">X</button>
-                                <br><em>{{ entry.section.school_class.name }} - Section {{ entry.section.name }}</em>
+                                <br><em>{{ entry.section.sec_class.name }} - Section {{ entry.section.name }}</em>
                             </div>
                         {% endfor %}
                     {% endfor %}

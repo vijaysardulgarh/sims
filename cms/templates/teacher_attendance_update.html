@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Edit Teacher Attendance</title>
+</head>
+<body>
+  <h2>Edit Attendance</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    <p>
+      <strong>Teacher:</strong> {{ record.teacher.name }}
+    </p>
+    <p>
+      <strong>Date:</strong> {{ record.date }}
+    </p>
+    <p>
+      <label>
+        <input type="checkbox" name="present" {% if record.present %}checked{% endif %}>
+        Present
+      </label>
+    </p>
+
+    <button type="submit">Update</button>
+    <a href="{% url 'teacher_attendance' %}">Cancel</a>
+  </form>
+</body>
+</html>

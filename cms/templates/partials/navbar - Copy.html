@@ -1,0 +1,204 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-warning text-dark shadow-sm">
+  <div class="container-fluid">
+
+    <!-- Logo / School Name -->
+    <a class="navbar-brand fw-bold" href="{% url 'index' %}">
+      🏫 School Information Management System (SIMS)
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#schoolNavbar"
+      aria-controls="schoolNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Items -->
+    <div class="collapse navbar-collapse" id="schoolNavbar">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        <!-- Home -->
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" 
+             href="{% url 'index' %}">Home</a>
+        </li>
+
+        <!-- About Us -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">About Us</a>
+          <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
+            <li><a class="dropdown-item" href="{% url 'about' %}">History / Vision / Mission</a></li>
+            <li><a class="dropdown-item" href="{% url 'principal_message' %}">Principal’s Message</a></li>
+            <li><a class="dropdown-item" href="{% url 'smc_members' %}">School Management Committee</a></li>
+            <li><a class="dropdown-item" href="{% url 'nodal' %}">Nodal Officer</a></li>
+            <li><a class="dropdown-item" href="{% url 'affiliation_status' %}">Affiliation Status</a></li>
+            <li><a class="dropdown-item" href="{% url 'infrastructure' %}">Infrastructure</a></li>
+            <li><a class="dropdown-item" href="{% url 'contact' %}">Contact Us</a></li>
+          </ul>
+        </li>
+
+        <!-- Academics -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="academicsDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Academics</a>
+          <ul class="dropdown-menu" aria-labelledby="academicsDropdown">
+            <li><a class="dropdown-item" href="{% url 'subjects' %}">Subjects Offered</a></li>
+            <li><a class="dropdown-item" href="{% url 'curriculum' %}">Curriculum</a></li>
+            <li><a class="dropdown-item" href="{% url 'syllabus' %}">Syllabus</a></li>
+            <li><a class="dropdown-item" href="{% url 'exams' %}">Examinations & Results</a></li>
+            <li><a class="dropdown-item" href="{% url 'time_table' %}">Time Table</a></li>
+            <li><a class="dropdown-item" href="{% url 'downloads' %}">Downloads</a></li>
+          </ul>
+        </li>
+
+        <!-- Staff -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="staffDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Staff</a>
+          <ul class="dropdown-menu" aria-labelledby="staffDropdown">
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Administrative' %}">Administration Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Teaching' %}">Teaching Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Non Teaching' %}">Non-Teaching Staff</a></li>
+            <li><a class="dropdown-item" href="{% url 'staff_by_role' 'Support' %}">Support Staff</a></li>
+          </ul>
+        </li>
+
+        <!-- Students -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="studentsDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Students</a>
+          <ul class="dropdown-menu" aria-labelledby="studentsDropdown">
+            <li><a class="dropdown-item" href="{% url 'achievement_list' %}">Achievements</a></li>
+            <li><a class="dropdown-item" href="{% url 'board_results' %}">Board Results / Toppers</a></li>
+            <li><a class="dropdown-item" href="{% url 'sports_achievements' %}">Sports & Cultural Achievements</a></li>
+            <li><a class="dropdown-item" href="{% url 'gallery' %}">Gallery</a></li>
+            <li><a class="dropdown-item" href="{% url 'notices' %}">Notices</a></li>
+            <li><a class="dropdown-item" href="{% url 'events' %}">Events</a></li>
+          </ul>
+        </li>
+
+        <!-- Admissions -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="admissionsDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Admissions</a>
+          <ul class="dropdown-menu" aria-labelledby="admissionsDropdown">
+            <li><a class="dropdown-item" href="{% url 'admission_procedure' %}">Admission Procedure</a></li>
+            <li><a class="dropdown-item" href="{% url 'admission_form' %}">Admission Form</a></li>
+            <li><a class="dropdown-item" href="{% url 'fee_structure_list' %}">Fee Structure</a></li>
+            <li><a class="dropdown-item" href="{% url 'faq' %}">FAQ</a></li>
+          </ul>
+        </li>
+
+        <!-- Mandatory Info -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="mandatoryDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">Mandatory Info</a>
+          <ul class="dropdown-menu" aria-labelledby="mandatoryDropdown">
+            <li><a class="dropdown-item" href="{% url 'mandatory_public_disclosure' %}">Mandatory Public Disclosure</a></li>
+            {% for committee in menu_committees %}
+              <li><a class="dropdown-item" href="{% url 'committee_detail' committee.id %}">{{ committee.name }}</a></li>
+            {% empty %}
+              <li><span class="dropdown-item text-muted">No Committees</span></li>
+            {% endfor %}
+          </ul>
+        </li>
+
+
+        {% if request.user.is_authenticated %}
+          <!-- Reports -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">Reports</a>
+            <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+              <li><a class="dropdown-item" href="{% url 'signin_link' %}">Signin Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'roll_call_link' %}">Student Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'subject_report_link' %}">Subject Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'bank_report_link' %}">Bank Account Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'student_strength_pdf' %}">Student Strength Report</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'cwsn_students_report' %}">CWSN Students Report</a></li>
+              <li><a class="dropdown-item" href="{% url 'bpl_students_report' %}">BPL Students Report</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'teacher_attendance' %}">Teacher Attendance</a></li>                
+              <li><a class="dropdown-item" href="{% url 'teacher_subject_section_assignment' %}">Teacher Subject Section Assignment</a></li>
+              <!-- <li><a class="dropdown-item" href="{% url 'timetable_list' %}">View Timetable</a></li>
+              <li><a class="dropdown-item" href="{% url 'create_timetable_entry' %}">Add Timetable Entry</a></li>           -->
+              <li><a class="dropdown-item" href="{% url 'timetable_dragndrop' %}">Generate Timetable by Drag n Drop</a></li>
+              <li><a class="dropdown-item" href="{% url 'reports_dashboard' %}">Timetable Reports</a></li>  
+              <li><a class="dropdown-item" href="{% url 'cbse_enrollment_csv' %}">CBSE Enrollment CSV</a></li>
+              <li><a class="dropdown-item" href="{% url 'cbse_enrollment_pdf' %}">CBSE Enrollment PDF</a></li>              
+            </ul>
+          </li>
+
+          <!-- Statistics -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="statisticsDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">Statistics</a>
+            <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
+              <li><a class="dropdown-item" href="{% url 'staff_summary' %}">Staff Vacancy</a></li>
+              <li><a class="dropdown-item" href="{% url 'student_strength' %}">Student Category Wise</a></li>
+              <li><a class="dropdown-item" href="{% url 'subject_strength' %}">Student Subject Wise</a></li>
+            </ul>
+          </li>
+
+          <!-- Welcome + Logout -->
+          <li class="nav-item d-flex align-items-center ms-3">
+            <span class="navbar-text fw-semibold text-dark">
+              👋 Welcome, {{ request.user.get_full_name|default:request.user.username }}
+            </span>
+          </li>
+          <li class="nav-item">
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="nav-link btn btn-link text-danger fw-bold" style="padding:0; margin:0;">
+                Logout
+              </button>
+            </form>
+          </li>
+        {% else %}
+          <!-- Login trigger (opens modal) -->
+          <li class="nav-item">
+            <a class="nav-link text-success fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+              Login
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- 🔑 Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-sm">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="loginModalLabel"><i class="bi bi-box-arrow-in-right"></i> Login</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+          </button>
+        </form>
+
+        <div class="mt-2 text-center">
+          <a href="#" class="small text-decoration-none">Forgot Password?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

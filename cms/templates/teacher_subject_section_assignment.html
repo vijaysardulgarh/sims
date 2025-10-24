@@ -58,7 +58,7 @@
                                                                         {% for sec_id, sec in sections.items %}
                                                                             <option value="{{ sec_id }}"
                                                                                 {% if sec_id == section_id %}selected{% endif %}>
-                                                                                {{ sec.school_class.name }} {{ sec.name }} {% if sec.school_class.medium %} ({{ sec.school_class.medium }}){% endif %}{% if sec.school_class.stream %} ({{ sec.school_class.stream }}){% endif %}
+                                                                                {{ sec.sec_class.name }} {{ sec.name }}{% if sec.medium %} ({{ sec.medium }}){% endif %}{% if sec.stream %} ({{ sec.stream }}){% endif %}
                                                                             </option>
                                                                         {% endfor %}
                                                                     </select>
@@ -86,7 +86,7 @@
                                                                 onchange="loadSubjects(this, {{ teacher.id }}, 0)">
                                                                 <option value="">Select Section</option>
                                                                 {% for sec_id, sec in sections.items %}
-                                                                    <option value="{{ sec_id }}">{{ sec.school_class.name }} {{ sec.name }} {% if sec.school_class.medium %} ({{ sec.school_class.medium }}){% endif %}{% if sec.school_class.stream %} ({{ sec.school_class.stream }}){% endif %}</option>
+                                                                    <option value="{{ sec_id }}">{{ sec.sec_class.name }} {{ sec.name }}{% if sec.medium %} ({{ sec.medium }}){% endif %}{% if sec.stream %} ({{ sec.stream }}){% endif %}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         </td>
@@ -160,7 +160,7 @@
 
             let sectionOptions = `
                 {% for sec_id, sec in sections.items %}
-                    <option value="{{ sec_id }}">{{ sec.school_class.name }} {{ sec.name }} {% if sec.school_class.medium %} ({{ sec.school_class.medium }}){% endif %}{% if sec.school_class.stream %} ({{ sec.school_class.stream }}){% endif %}</option>
+                    <option value="{{ sec_id }}">{{ sec.sec_class.name }} {{ sec.name }}{% if sec.medium %} ({{ sec.medium }}){% endif %}{% if sec.stream %} ({{ sec.stream }}){% endif %}</option>
                 {% endfor %}
             `;
 
