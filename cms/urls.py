@@ -2,11 +2,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 from .views import timetable_dragndrop
-from cms.admin import timetable_admin
+from cms.admin.admin import timetable_admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from .views import cbse_enrollment_csv, cbse_enrollment_pdf
 urlpatterns = [
+    #path('dashboard/', views.dashboard, name='dashboard'),
     path('cbse/enrollment/csv/', cbse_enrollment_csv, name='cbse_enrollment_csv'),
     path('cbse/enrollment/pdf/', cbse_enrollment_pdf, name='cbse_enrollment_pdf'),
     path('timetable_dragndrop/', views.timetable_dragndrop, name='timetable_dragndrop'),
