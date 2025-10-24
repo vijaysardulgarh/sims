@@ -32,68 +32,70 @@ MEDIUM_CODE_MAP = {
 }
 
 # -------------------------------
-# CBSE Slot Subject Mapping
+# SUBJECT_PRIORITY merged with codes (Ninth & Eleventh streams)
 # -------------------------------
-SUBJECT_CODE_MAP = {
-    "sub1": {"ENGLISH": "English"},
-    "sub2": {"HINDI": "Hindi", "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"},
-    "sub3": {
-        "MATHEMATICS": "Mathematics",
-        "PHYSICS": "Physics",
-        "CHEMISTRY": "Chemistry",
-        "BIOLOGY": "Biology",
-        "ECONOMICS": "Economics",
-        "ACCOUNTANCY": "Accountancy",
-        "BUSINESS": "Business Studies",
-        "POLITICAL SCIENCE": "Political Science",
-        "GEOGRAPHY": "Geography",
-        "PSYCHOLOGY": "Psychology",
-        "HIND MUSIC.VOCAL": "Hind Music Vocal",
-        "PAINTING": "Painting",
-        "PHYSICAL EDUCATION": "Physical Education",
-        "HOME SCIENCE": "Home Science",
+SUBJECT_PRIORITY = {
+    "Ninth": {
+        "default": {
+            "sub1": {"priority": ["ENGLISH"], "codes": {"ENGLISH": "English"}},
+            "sub2": {"priority": ["HINDI", "PUNJABI", "SANSKRIT"],
+                     "codes": {"HINDI": "Hindi", "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"}},
+            "sub3": {"priority": ["MATHEMATICS"], "codes": {"MATHEMATICS": "Mathematics"}},
+            "sub4": {"priority": ["SCIENCE & TECHNOLOGY"], "codes": {"SCIENCE & TECHNOLOGY": "Science & Technology"}},
+            "sub5": {"priority": ["SOCIAL SCIENCE"], "codes": {"SOCIAL SCIENCE": "Social Science"}},
+            "sub6": {"priority": ["HINDI (CORE)", "PUNJABI", "SANSKRIT"],
+                     "codes": {"HINDI (CORE)": "Hindi (Core)", "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"}},
+            "sub7": {"priority": ["HINDI", "PUNJABI", "SANSKRIT"],
+                     "codes": {"HINDI": "Hindi", "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"}}
+        }
     },
-    "sub4": {  # Additional academic subjects
-        "MATHEMATICS": "Mathematics",
-        "PHYSICS": "Physics",
-        "CHEMISTRY": "Chemistry",
-        "BIOLOGY": "Biology",
-        "ECONOMICS": "Economics",
-        "ACCOUNTANCY": "Accountancy",
-        "BUSINESS": "Business Studies",
-        "POLITICAL SCIENCE": "Political Science",
-        "GEOGRAPHY": "Geography",
-        "PSYCHOLOGY": "Psychology",
-        "HIND MUSIC.VOCAL": "Hind Music Vocal",
-        "PAINTING": "Painting",
-        "PHYSICAL EDUCATION": "Physical Education",
-        "HOME SCIENCE": "Home Science",
-    },
-    "sub5": {  # Optional/extra
-        "MATHEMATICS": "Mathematics",
-        "PHYSICS": "Physics",
-        "CHEMISTRY": "Chemistry",
-        "BIOLOGY": "Biology",
-        "ECONOMICS": "Economics",
-        "ACCOUNTANCY": "Accountancy",
-        "BUSINESS": "Business Studies",
-        "POLITICAL SCIENCE": "Political Science",
-        "GEOGRAPHY": "Geography",
-        "PSYCHOLOGY": "Psychology",
-        "HIND MUSIC.VOCAL": "Hind Music Vocal",
-        "PAINTING": "Painting",
-        "PHYSICAL EDUCATION": "Physical Education",
-        "HOME SCIENCE": "Home Science",
-    },
-    "sub6": {"AUTOMOTIVE": "Automotive", "BEAUTY & WELLNESS": "Beauty & Wellness"},
-    "sub7": {
-        "PUNJABI": "Punjabi",
-        "SANSKRIT": "Sanskrit",
-        "DRAWING": "Painting",
-        "PAINTING": "Painting",
-        "HOME SCIENCE": "Home Science",
-        "MUSIC HINDUSTANI VOCAL (MHV)": "Music Hindustani Vocal",
-    },
+    "Eleventh": {
+        "Science": {
+            "sub1": {"priority": ["ENGLISH (CORE)"], "codes": {"ENGLISH (CORE)": "English (Core)"}},
+            "sub2": {"priority": ["HINDI (CORE)", "CHEMISTRY", "PUNJABI", "SANSKRIT"],
+                     "codes": {"HINDI (CORE)": "Hindi (Core)", "CHEMISTRY": "Chemistry",
+                               "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"}},
+            "sub3": {"priority": ["PHYSICS"], "codes": {"PHYSICS": "Physics"}},
+            "sub4": {"priority": ["CHEMISTRY", "AUTOMOTIVE", "BEAUTY & WELLNESS"],
+                     "codes": {"CHEMISTRY": "Chemistry", "AUTOMOTIVE": "Automotive", "BEAUTY & WELLNESS": "Beauty & Wellness"}},
+            "sub5": {"priority": ["MATHEMATICS", "BIOLOGY"], "codes": {"MATHEMATICS": "Mathematics", "BIOLOGY": "Biology"}},
+            "sub6": {"priority": ["MATHEMATICS", "BIOLOGY", "HINDI (CORE)", "PUNJABI", "SANSKRIT"],
+                     "codes": {"MATHEMATICS": "Mathematics", "BIOLOGY": "Biology",
+                               "HINDI (CORE)": "Hindi (Core)", "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"}}
+        },
+        "Commerce": {
+            "sub1": {"priority": ["ENGLISH (CORE)"], "codes": {"ENGLISH (CORE)": "English (Core)"}},
+            "sub2": {"priority": ["HINDI (CORE)", "PUNJABI", "SANSKRIT"],
+                     "codes": {"HINDI (CORE)": "Hindi (Core)", "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"}},
+            "sub3": {"priority": ["ACCOUNTANCY"], "codes": {"ACCOUNTANCY": "Accountancy"}},
+            "sub4": {"priority": ["BUSINESS STUDIES"], "codes": {"BUSINESS STUDIES": "Business Studies"}},
+            "sub5": {"priority": ["ECONOMICS", "MATHEMATICS"],
+                     "codes": {"ECONOMICS": "Economics", "MATHEMATICS": "Mathematics"}},
+            "sub6": {"priority": ["HINDI (CORE)", "PUNJABI", "SANSKRIT"],
+                     "codes": {"HINDI (CORE)": "Hindi (Core)", "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"}}
+        },
+        "Arts": {
+            "sub1": {"priority": ["ENGLISH (CORE)"], "codes": {"ENGLISH (CORE)": "English (Core)"}},
+            "sub2": {"priority": ["HINDI (CORE)", "PUNJABI", "SANSKRIT"],
+                     "codes": {"HINDI (CORE)": "Hindi (Core)", "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"}},
+            "sub3": {"priority": ["POLITICAL SCIENCE", "ECONOMICS", "PSYCHOLOGY", "PHYSICAL EDUCATION", "AUTOMOTIVE", "BEAUTY & WELLNESS"],
+                     "codes": {"POLITICAL SCIENCE": "Political Science", "ECONOMICS": "Economics",
+                               "PSYCHOLOGY": "Psychology", "PHYSICAL EDUCATION": "Physical Education",
+                               "AUTOMOTIVE": "Automotive", "BEAUTY & WELLNESS": "Beauty & Wellness"}},
+            "sub4": {"priority": ["GEOGRAPHY", "ECONOMICS", "PSYCHOLOGY", "PHYSICAL EDUCATION", "AUTOMOTIVE", "BEAUTY & WELLNESS"],
+                     "codes": {"GEOGRAPHY": "Geography", "ECONOMICS": "Economics", "PSYCHOLOGY": "Psychology",
+                               "PHYSICAL EDUCATION": "Physical Education", "AUTOMOTIVE": "Automotive",
+                               "BEAUTY & WELLNESS": "Beauty & Wellness"}},
+            "sub5": {"priority": ["FINE ARTS", "AUTOMOTIVE", "BEAUTY & WELLNESS", "ECONOMICS", "PSYCHOLOGY", "PHYSICAL EDUCATION"],
+                     "codes": {"FINE ARTS": "Fine Arts", "AUTOMOTIVE": "Automotive",
+                               "BEAUTY & WELLNESS": "Beauty & Wellness", "ECONOMICS": "Economics",
+                               "PSYCHOLOGY": "Psychology", "PHYSICAL EDUCATION": "Physical Education"}},
+            "sub6": {"priority": ["POLITICAL SCIENCE", "ECONOMICS", "PSYCHOLOGY", "PHYSICAL EDUCATION", "AUTOMOTIVE", "BEAUTY & WELLNESS", "GEOGRAPHY", "FINE ARTS", "HINDI (CORE)", "PUNJABI", "SANSKRIT"],
+                     "codes": {"POLITICAL SCIENCE": "Political Science", "ECONOMICS": "Economics", "PSYCHOLOGY": "Psychology",
+                               "PHYSICAL EDUCATION": "Physical Education", "AUTOMOTIVE": "Automotive", "BEAUTY & WELLNESS": "Beauty & Wellness",
+                               "GEOGRAPHY": "Geography", "FINE ARTS": "Fine Arts", "HINDI (CORE)": "Hindi (Core)", "PUNJABI": "Punjabi", "SANSKRIT": "Sanskrit"}}
+        }
+    }
 }
 
 # -------------------------------
@@ -109,10 +111,7 @@ def extract_subject_name(raw_subject: str) -> str:
 # -------------------------------
 # Convert student's subjects to CBSE slots
 # -------------------------------
-def convert_subjects_to_cbse_slots(student_subjects):
-    """
-    Assign **only one subject per CBSE slot** for PDF and CSV.
-    """
+def convert_subjects_to_cbse_slots(student_class, stream, student_subjects):
     slots = {f"sub{i}": "" for i in range(1, 8)}
     if not student_subjects:
         return slots
@@ -120,43 +119,54 @@ def convert_subjects_to_cbse_slots(student_subjects):
     cleaned_subjects = [extract_subject_name(s) for s in student_subjects]
     used_subjects = set()
 
-    # Sub1: English
-    for s in cleaned_subjects:
-        if s == "ENGLISH" and s not in used_subjects:
-            slots["sub1"] = "English"
-            used_subjects.add(s)
-            break
+    # Determine slot mapping
+    if student_class.upper() in ("NINTH", "9TH"):
+        slot_map = SUBJECT_PRIORITY.get("Ninth", {}).get("default", {})
+    else:
+        slot_map = SUBJECT_PRIORITY.get("Eleventh", {}).get(stream, {})
 
-    # Sub2: Hindi / Punjabi / Sanskrit
-    for s in cleaned_subjects:
-        if s in ("HINDI", "PUNJABI", "SANSKRIT") and s not in used_subjects:
-            slots["sub2"] = SUBJECT_CODE_MAP["sub2"][s]
-            used_subjects.add(s)
-            break
+    for slot, info in slot_map.items():
+        priority_list = info.get("priority", [])
+        codes = info.get("codes", {})
 
-    # Sub3–Sub5: Academic / Core subjects
-    for slot in ["sub3", "sub4", "sub5"]:
-        for s in cleaned_subjects:
-            if s in SUBJECT_CODE_MAP[slot] and s not in used_subjects:
-                slots[slot] = SUBJECT_CODE_MAP[slot][s]
-                used_subjects.add(s)
+        # Pick first available from priority
+        for subj in priority_list:
+            for s in cleaned_subjects:
+                if s.upper() == subj.upper() and s not in used_subjects:
+                    slots[slot] = codes.get(subj.upper(), s)
+                    used_subjects.add(s)
+                    break
+            if slots[slot]:
                 break
 
-    # Sub6: Vocational
-    for s in cleaned_subjects:
-        if s in SUBJECT_CODE_MAP["sub6"] and s not in used_subjects:
-            slots["sub6"] = SUBJECT_CODE_MAP["sub6"][s]
-            used_subjects.add(s)
-            break
-
-    # Sub7: Optional / Art / Home Science / Music
-    for s in cleaned_subjects:
-        if s in SUBJECT_CODE_MAP["sub7"] and s not in used_subjects:
-            slots["sub7"] = SUBJECT_CODE_MAP["sub7"][s]
-            used_subjects.add(s)
-            break
+        # If nothing matched, try any code
+        if not slots[slot]:
+            for s in cleaned_subjects:
+                if s.upper() in codes and s not in used_subjects:
+                    slots[slot] = codes[s.upper()]
+                    used_subjects.add(s)
+                    break
 
     return slots
+
+# -------------------------------
+# Mark invalid subjects as ❌
+# -------------------------------
+def mark_invalid_subjects(student_class, stream, subs):
+    marked = {}
+    if student_class.upper() in ("NINTH", "9TH"):
+        rules = {k: v["priority"] for k, v in SUBJECT_PRIORITY.get("Ninth", {}).get("default", {}).items()}
+    else:
+        rules = {k: v["priority"] for k, v in SUBJECT_PRIORITY.get("Eleventh", {}).get(stream, {}).items()}
+
+    for key, val in subs.items():
+        if key not in rules or not rules[key]:
+            marked[key] = val
+        elif val.upper() not in [v.upper() for v in rules[key]]:
+            marked[key] = f"{val} ❌"
+        else:
+            marked[key] = val
+    return marked
 
 # -------------------------------
 # Get medium code from section
@@ -169,3 +179,22 @@ def get_medium_from_section(section_name: str) -> str:
         medium_text = match.group(1).strip().upper()
         return MEDIUM_CODE_MAP.get(medium_text, "1")
     return "1"
+
+
+def get_student_cbse_subjects(student, mark_invalid=False):
+    """
+    Returns CBSE slot mapping for a student ready for CSV/PDF export.
+    If mark_invalid=True, invalid subjects are flagged with ❌
+    """
+    student_class = getattr(student, "studentclass", "")
+    stream = getattr(student, "stream", "")  # For 11th
+    student_subjects = (getattr(student, "subjects_opted", "") or "").split(",")
+
+    # Convert subjects to CBSE slots
+    slots = convert_subjects_to_cbse_slots(student_class, stream, student_subjects)
+
+    # Mark invalid subjects if requested
+    if mark_invalid:
+        slots = mark_invalid_subjects(student_class, stream, slots)
+
+    return slots
