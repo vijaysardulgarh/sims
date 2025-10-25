@@ -34,7 +34,7 @@ def timetable_view(request):
         "teachers": teachers,
         "time_slots": time_slots,
     }
-    return render(request, "timetable.html", context)
+    return render(request, "timetable/timetable.html", context)
 
 
 def teacher_subject_section_assignment(request):
@@ -101,7 +101,7 @@ def teacher_subject_section_assignment(request):
         "class_subjects": class_subjects,
         "teacher_assignments": teacher_assignments,
     }
-    return render(request, "teacher_subject_section_assignment.html", context)
+    return render(request, "timetable/teacher_subject_section_assignment.html", context)
 
 
 # AJAX view for filtering subjects by section
@@ -207,7 +207,7 @@ def timetable_list(request):
     else:
         days = []
 
-    return render(request, "timetable_list.html", {
+    return render(request, "timetable/timetable_list.html", {
         "grouped_timetables": grouped_timetables,
         "periods": periods,
         "days": days,
@@ -264,7 +264,7 @@ def reports_dashboard(request):
         "subject_overall_load_report": subject_overall_load_data,
     }
 
-    return render(request, "reports/dashboard.html", context)
+    return render(request, "timetable/dashboard.html", context)
 
 
 # ---------- Helper functions ----------

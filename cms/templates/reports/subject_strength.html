@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!doctype html>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+
+
+<body>
+    <div class="container-fluid">
+
+
+<div >
+  <h1>Subject Strength for {{ school_name }}</h1>
+  <table class="table table-bordered table-hover table-striped">
+
+      <thead class="table-dark">
+          <tr align="center">
+              <th>Class</th>
+              <th>Section</th>
+              <th>Stream</th>
+              <th>English</th>
+              <th>Hindi</th>
+              <th>Punjabi</th>
+              <th>Sanskrit</th>
+              <th>Science</th>
+              <th>Social Studies</th>
+              <th>Mathematics</th>
+              <th>Music</th>
+              <th>Drawing</th>
+              <th>Physics</th>
+              <th>Chemistry</th>
+              <th>Biology</th>
+              <th>Home Science</th>
+              <th>Automobile</th>
+              <th>Beauty</th>
+              <th>Business Studies</th>
+              <th>Account</th>
+              <th>Economics</th>
+              <th>Polotical Science</th>
+              <th>Geography</th>
+              <th>Fine Art</th>
+              <th>Psychology</th>
+              <th>Physical Education</th>
+              <th>Computer Science</th>
+          </tr>
+      </thead>
+
+      <tbody>
+          {% for data in subject_strength %}
+          <tr align="center">
+              <td>{{ data.studentclass }}</td>
+              <td>{{ data.section }}</td>
+              <td>{{ data.stream }}</td>
+              <td>{{ data.english }}</td>
+              <td>{{ data.hindi}}</td>
+              <td>{{ data.punjabi }}</td>
+              <td>{{ data.sanskrit }}</td>
+              <td>{{ data.science }}</td>
+              <td>{{ data.social_science }}</td>
+              <td>{{ data.mathematics }}</td>
+              <td>{{ data.music }}</td>
+              <td>{{ data.drawing }}</td>
+              <td>{{ data.physics }}</td>
+              <td>{{ data.chemistry }}</td>
+              <td>{{ data.biology }}</td>
+              <td>{{ data.home_science }}</td>
+              <td>{{ data.automobile }}</td>
+              <td>{{ data.beauty_wellness }}</td>
+              <td>{{ data.business_studies }}</td>
+              <td>{{ data.accountancy }}</td>
+              <td>{{ data.economics }}</td>
+              <td>{{ data.political_science }}</td>
+              <td>{{ data.geography }}</td>
+              <td>{{ data.fine_arts }}</td>
+              <td>{{ data.psychology }}</td>
+              <td>{{ data.physical_education }}</td>
+              <td>{{ data.computer_science }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+  crossorigin="anonymous"></script>
+</div>
+</body>
+
+</html>
+{% endblock %}

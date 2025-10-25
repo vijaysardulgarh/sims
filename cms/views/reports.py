@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from cms.utils import get_current_school
 from ..models.student import Student
 from django.http import HttpResponse
-from reportlab.platypus import SimpleDocTemplate,Paragraph,Table, TableStyle, Spacer, PageBreak
+from reportlab.platypus import SimpleDocTemplate,Paragraph,Table, TableStyle, Spacer, PageBreak,Image
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import getSampleStyleSheet,ParagraphStyle
 from reportlab.lib import colors
@@ -39,7 +39,7 @@ def signin_link(request):
 
     return render(
         request,
-        "signin_link.html",
+        "reports/signin_link.html",
         {
             "class_sections": class_sections,
             "school": school  # ✅ also send school to template
@@ -198,7 +198,7 @@ def roll_call_link(request):
         key=lambda cs: (order_map.get(cs["studentclass"], 999), cs["section"])
     )
 
-    return render(request, "roll_call_link.html", {"class_sections": class_sections, "school": school})
+    return render(request, "reports/roll_call_link.html", {"class_sections": class_sections, "school": school})
 
 
 def roll_call(request, class_name, section_name):
@@ -353,7 +353,7 @@ def subject_report_link(request):
         key=lambda cs: (order_map.get(cs["studentclass"], 999), cs["section"])
     )
 
-    return render(request, "subject_report_link.html", {
+    return render(request, "reports/subject_report_link.html", {
         "class_sections": class_sections,
         "school": school
     })
@@ -500,7 +500,7 @@ def bank_report_link(request):
         key=lambda cs: (order_map.get(cs["studentclass"], 999), cs["section"])
     )
 
-    return render(request, "bank_report_link.html", {"class_sections": class_sections, "school": school})
+    return render(request, "reports/bank_report_link.html", {"class_sections": class_sections, "school": school})
 
 
 def bank_report(request, class_name, section_name):

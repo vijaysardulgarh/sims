@@ -120,12 +120,9 @@
               <li><a class="dropdown-item" href="{% url 'cwsn_students_report' %}">CWSN Students Report</a></li>
               <li><a class="dropdown-item" href="{% url 'bpl_students_report' %}">BPL Students Report</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="{% url 'teacher_attendance' %}">Teacher Attendance</a></li>                
-              <li><a class="dropdown-item" href="{% url 'teacher_subject_section_assignment' %}">Teacher Subject Section Assignment</a></li>
-              <!-- <li><a class="dropdown-item" href="{% url 'timetable_list' %}">View Timetable</a></li>
-              <li><a class="dropdown-item" href="{% url 'create_timetable_entry' %}">Add Timetable Entry</a></li>           -->
-              <li><a class="dropdown-item" href="{% url 'timetable_dragndrop' %}">Generate Timetable by Drag n Drop</a></li>
-              <li><a class="dropdown-item" href="{% url 'reports_dashboard' %}">Timetable Reports</a></li>  
+              <li><a class="dropdown-item" href="{% url 'staff_summary' %}">Staff Vacancy</a></li>
+              <li><a class="dropdown-item" href="{% url 'student_strength' %}">Student Category Wise</a></li>
+              <li><a class="dropdown-item" href="{% url 'subject_strength' %}">Student Subject Wise</a></li>
               <li><a class="dropdown-item" href="{% url 'cbse_enrollment_csv' %}">CBSE Enrollment CSV</a></li>
               <li><a class="dropdown-item" href="{% url 'cbse_enrollment_pdf' %}">CBSE Enrollment PDF</a></li>              
               <li><a class="dropdown-item" href="{% url 'class_incharge_report' %}">Class Incharge Report</a></li>
@@ -136,11 +133,14 @@
           <!-- Statistics -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="statisticsDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">Statistics</a>
+              aria-expanded="false">Timetable</a>
             <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
-              <li><a class="dropdown-item" href="{% url 'staff_summary' %}">Staff Vacancy</a></li>
-              <li><a class="dropdown-item" href="{% url 'student_strength' %}">Student Category Wise</a></li>
-              <li><a class="dropdown-item" href="{% url 'subject_strength' %}">Student Subject Wise</a></li>
+              <li><a class="dropdown-item" href="{% url 'teacher_attendance' %}">Teacher Attendance</a></li>                
+              <li><a class="dropdown-item" href="{% url 'teacher_subject_section_assignment' %}">Teacher Subject Section Assignment</a></li>
+              <!-- <li><a class="dropdown-item" href="{% url 'timetable_list' %}">View Timetable</a></li>
+              <li><a class="dropdown-item" href="{% url 'create_timetable_entry' %}">Add Timetable Entry</a></li>           -->
+              <li><a class="dropdown-item" href="{% url 'timetable_dragndrop' %}">Generate Timetable by Drag n Drop</a></li>
+              <li><a class="dropdown-item" href="{% url 'reports_dashboard' %}">Timetable Reports</a></li>  
             </ul>
           </li>
 

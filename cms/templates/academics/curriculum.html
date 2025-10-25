@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Curriculum{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">School Curriculum</h2>
+    <p class="text-center">Download the curriculum for your class group:</p>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow p-3">
+                <h4>Classes 1st to 5th</h4>
+                <p>Download the detailed curriculum for primary classes.</p>
+                <a href="{% static 'curriculum/1-5.pdf' %}" class="btn btn-primary" download>
+                    Download
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card shadow p-3">
+                <h4>Classes 6th to 8th</h4>
+                <p>Download the detailed curriculum for middle classes.</p>
+                <a href="{% static 'curriculum/6-8.pdf' %}" class="btn btn-primary" download>
+                    Download
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card shadow p-3">
+                <h4>Secondary (9th - 10th)</h4>
+                <p>Download the detailed curriculum for secondary classes.</p>
+                <a href="{% static 'curriculum/secondary.pdf' %}" class="btn btn-primary" download>
+                    Download
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card shadow p-3">
+                <h4>Senior Secondary (11th - 12th)</h4>
+                <p>Download the detailed curriculum for senior secondary classes.</p>
+                <a href="{% static 'curriculum/senior_secondary.pdf' %}" class="btn btn-primary" download>
+                    Download
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

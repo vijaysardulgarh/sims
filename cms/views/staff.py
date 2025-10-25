@@ -40,7 +40,7 @@ def teacher_attendance(request):
     for teacher in teachers:
         teacher.attendance_record = attendance_records.get(teacher.id)
 
-    return render(request, "teacher_attendance.html", {
+    return render(request, "staff/teacher_attendance.html", {
         "teachers": teachers,
         "date": date,
     })
@@ -52,7 +52,7 @@ def teacher_attendance_update(request, pk):
         record.present = request.POST.get("present") == "on"
         record.save()
         return redirect("teacher_attendance")
-    return render(request, "teacher_attendance_update.html", {"record": record})
+    return render(request, "staff/teacher_attendance_update.html", {"record": record})
 
 
 def teacher_attendance_delete(request, pk):
@@ -60,13 +60,13 @@ def teacher_attendance_delete(request, pk):
     if request.method == "POST":
         record.delete()
         return redirect("teacher_attendance")
-    return render(request, "teacher_attendance_delete.html", {"record": record})
+    return render(request, "staff/teacher_attendance_delete.html", {"record": record})
 
 
 
 def staff_by_role(request, role):
     staff_list = Staff.objects.filter(staff_role=role).order_by("name")
-    return render(request, "staff_by_role.html", {"role": role, "staff_list": staff_list})
+    return render(request, "staff/staff_by_role.html", {"role": role, "staff_list": staff_list})
 
 
 
@@ -188,7 +188,7 @@ def staff_summary(request):
     post_order = {name: i for i, name in enumerate(allowed_post_types)}
     merged.sort(key=lambda x: post_order.get(x["post_type__name"], 999))
 
-    return render(request, "staff_summary.html", {"summary": merged, "school": school})
+    return render(request, "reports/staff_summary.html", {"summary": merged, "school": school})
 
 
 

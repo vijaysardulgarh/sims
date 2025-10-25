@@ -25,11 +25,11 @@ def syllabus(request):
     return render(request, "syllabus.html")
 
 def management(request): return render(request, "management.html")
-def curriculum(request): return render(request, "curriculum.html")
+def curriculum(request): return render(request, "academics/curriculum.html")
 def exams_results(request): return render(request, "exams.html")
 def academic_calendar(request): return render(request, "calendar.html")
 def downloads(request): return render(request, "downloads.html")
-def admission_procedure(request): return render(request, "admission_procedure.html")
+def admission_procedure(request): return render(request, "admissions/admission_procedure.html")
 def statistics(request): return render(request, "statistics.html")
 def dashboard(request):
     return render(request, 'dashboard/dashboard.html')

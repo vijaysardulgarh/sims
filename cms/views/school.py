@@ -58,7 +58,7 @@ def faq(request):
     categories = {}
     for faq in faqs:
         categories.setdefault(faq.get_category_display(), []).append(faq)
-    return render(request, 'faq.html', {'categories': categories})
+    return render(request, 'admissions/faq.html', {'categories': categories})
 
 def achievements(request): 
     return render(request, "achievements.html")
@@ -71,8 +71,8 @@ def sports_achievements(request):
 
 def contact(request):
     school = get_current_school(request)
-    return render(request, "contact.html", {"school": school})
+    return render(request, "about_us/contact.html", {"school": school})
 
 def fee_structure_list(request):
     fee_structures = FeeStructure.objects.select_related("student_class", "stream", "student_class__school")
-    return render(request, "fees_list.html", {"fee_structures": fee_structures})
+    return render(request, "admissions/fees_list.html", {"fee_structures": fee_structures})

@@ -6,7 +6,7 @@ from django.db.models import Count, Q,Case,When
 from ..models.subject import ClassSubject
 def achievement_list(request):
     achievements = StudentAchievement.objects.select_related("exam_detail").all().order_by("-date")
-    return render(request, "achievement_list.html", {"achievements": achievements})
+    return render(request, "achievement_list.html", {"student/achievements": achievements})
 
 def achievement_detail(request, pk):
     achievement = get_object_or_404(StudentAchievement.objects.select_related("exam_detail"), pk=pk)
@@ -46,7 +46,7 @@ def student_strength(request):
         order=Case(*[When(studentclass=cls, then=pos) for cls, pos in class_order.items()])
     ).order_by("order")
 
-    return render(request, "student_strength.html", {"student_strength": student_strength, "school": school})
+    return render(request, "reports/student_strength.html", {"student_strength": student_strength, "school": school})
 
 
 def subject_strength(request):
@@ -90,7 +90,7 @@ def subject_strength(request):
         order=Case(*[When(studentclass=cls, then=pos) for cls, pos in class_order.items()])
     ).order_by("order")
 
-    return render(request, "subject_strength.html", {"subject_strength": subject_strength, "school": school})
+    return render(request, "reports/subject_strength.html", {"subject_strength": subject_strength, "school": school})
 
 
 
@@ -157,7 +157,7 @@ def subjects_offered(request):
 
     return render(
         request,
-        "subjects_offered.html",
+        "academics/subjects_offered.html",
         {"school": school, "grouped_data": grouped_data},
     )
 
