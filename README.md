@@ -12,19 +12,18 @@ pip install django
 
 Create a .gitignore File
 
-          # Environments
+          # Python/Django
           venv/
           env/
-          
-          # Python
           *.pyc
           __pycache__/
-          
-          # Django
           db.sqlite3
           *.media/
+          .env
           
-          # Secrets / Environment Variables
-          .env      
+          # Frontend (React/Vue/etc.)
+          node_modules/
+          dist/
+          build/    
 
 dfdfd          
