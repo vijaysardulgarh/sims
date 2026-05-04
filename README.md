@@ -2,6 +2,11 @@ md sims
 
 cd sims
 
+md backend
+md frontend
+
+cd backend
+
 python -m venv venv
 
 venv\bin\activate
@@ -26,4 +31,4 @@ Create a .gitignore File
           dist/
           build/    
 
-dfdfd          
+git init          
