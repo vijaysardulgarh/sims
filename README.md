@@ -7,11 +7,11 @@ md frontend
 
 cd backend
 
+python -m pip install --upgrade pip
+
 python -m venv venv
 
-venv\bin\activate
-
-python -m pip install --upgrade pip
+venv\scripts\activate
 
 pip install django
 
@@ -32,5 +32,7 @@ Create a .gitignore File
           build/    
 
 git init          
+
 git remote add origin https://github.com/vijaysardulgarh/sims.git
+
 git push -u origin main
