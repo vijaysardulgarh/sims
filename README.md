@@ -32,3 +32,4 @@ Create a .gitignore File
           build/    
 
 git init          
+git remote add origin https://github.com/vijaysardulgarh/sims.git
