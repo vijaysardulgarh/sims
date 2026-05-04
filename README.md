@@ -41,6 +41,7 @@ django-admin startproject sims .
 
 Commands for pushing files to github
 
+          git status
           git add .
-          git commit -m "your message"
+          git commit -m "Added new feature"
           git push
