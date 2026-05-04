@@ -38,3 +38,9 @@ git remote add origin https://github.com/vijaysardulgarh/sims.git
 git push -u origin main
 
 django-admin startproject sims .
+
+Commands for pushing files to github
+
+          git add .
+          git commit -m "your message"
+          git push
