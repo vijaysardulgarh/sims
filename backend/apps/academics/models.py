@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from .school import School
+from apps.schools.models import School
 
 
 # =========================
