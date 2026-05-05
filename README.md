@@ -45,3 +45,12 @@ Commands for pushing files to github
           git add .
           git commit -m "Added new feature"
           git push
+
+
+
+Creating Frontend
+
+    cd frontend
+    npm create vite@latest
+    npm install
+    npm run dev
