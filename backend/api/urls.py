@@ -26,5 +26,9 @@ urlpatterns = [
     path('associations/', include('apps.associations.urls')),
     
     # 🌐 Public Website Content (React Frontend pages)
-    path('website/', include('apps.website.urls')),
+
+    path("api/website/", include("apps.website.urls")),
+    path("api/documents/", include("apps.documents.urls")),
+    path("api/finance/", include("apps.finance.urls")),
+
 ]
