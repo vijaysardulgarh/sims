@@ -1,0 +1,31 @@
+apps/
+│
+├── core/                   # 🏗️ Layer 1: PURE AGNOSTIC
+│   ├── models.py           # ONLY BaseModel, UUIDMixins, TimeStampedMixins
+│   └── utils.py            # Global string/date formatters
+│
+├── schools/                # 🏫 Layer 2: THE TENANT ROOT
+│   ├── models.py           # School, AcademicSession, GlobalSettings
+│   ├── views.py, urls.py
+│
+├── users/                  # 🔐 Layer 3: IDENTITY & ACCESS (Depends on Layer 2)
+│   ├── models.py           # CustomUser, Role configurations
+│   ├── views.py, urls.py
+│
+├── academics/              # 📚 Layer 3: CORE BUSINESS (Depends on Layer 2 & Users)
+│   ├── models/             # Sub-grouped for cleanliness
+│   │   ├── __init__.py 
+│   │   ├── curriculum.py   # Classes, Sections, Subjects
+│   │   └── timetable.py    # Merged here! Slots, Days, Schedules
+│   ├── views.py, urls.py
+│
+├── documents/              # 📁 Layer 3: TENANT MEDIA (Depends on Layer 2 & Users)
+│   ├── models.py           # School-owned Document, S3 logic, Quotas
+│   ├── views.py, urls.py
+│
+├── staff/                  # 🧑‍🏫 Layer 3: HR DOMAIN
+├── students/               # 🎓 Layer 3: ADMISSIONS DOMAIN
+├── finance/                # 💰 Layer 3: LEDGER DOMAIN
+├── library/                # 📖 Layer 3: INVENTORY DOMAIN
+├── associations/           # 🏅 Layer 3: EXTRACURRICULAR DOMAIN
+└── website/                # 🌐 Layer 3: PUBLIC CMS DOMAIN
