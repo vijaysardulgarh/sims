@@ -1,83 +1,210 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
+export default function Navbar() {
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20 items-center">
-          
-          {/* Logo Section */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link to="/" className="text-2xl font-bold text-blue-800">
-              SIMS
-            </Link>
-          </div>
+    <header className="sticky top-0 z-50 bg-white shadow-md">
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-6 items-center">
-            <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium">Home</Link>
-            
-            {/* About Us Dropdown */}
+      <div className="max-w-7xl mx-auto px-4">
+
+        <div className="flex items-center justify-between h-20">
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3">
+
+            <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold">
+              S
+            </div>
+
+            <div>
+
+              <h1 className="text-2xl font-bold text-gray-800">
+                SIMS
+              </h1>
+
+              <p className="text-xs text-gray-500">
+                School Information Management System
+              </p>
+
+            </div>
+
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-8">
+
+            {/* Home */}
+            <Link
+              to="/"
+              className="font-medium text-gray-700 hover:text-blue-600 transition"
+            >
+              Home
+            </Link>
+
+            {/* About Dropdown */}
             <div className="relative group">
-              <button className="text-gray-700 hover:text-blue-600 font-medium flex items-center">
-                About Us <span className="ml-1">▼</span>
+
+              <button className="font-medium text-gray-700 hover:text-blue-600 transition">
+                About Us
               </button>
-              <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-100 shadow-lg rounded-md hidden group-hover:block">
-                <Link to="/about/overview" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Overview</Link>
-                <Link to="/about/leadership" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Leadership & Faculty</Link>
-                <Link to="/about/disclosure" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Mandatory Disclosure</Link>
+
+              <div className="absolute left-0 top-full pt-2 hidden group-hover:block">
+
+                <div className="bg-white shadow-xl rounded-xl w-72 p-4 border border-gray-100">
+
+                  <div className="space-y-3">
+
+                    <Link
+                      to="/about/overview"
+                      className="block hover:text-blue-600 transition"
+                    >
+                      Overview
+                    </Link>
+
+                    <Link
+                      to="/about/leadership"
+                      className="block hover:text-blue-600 transition"
+                    >
+                      Leadership & Faculty
+                    </Link>
+
+                    <Link
+                      to="/about/mandatory-disclosure"
+                      className="block hover:text-blue-600 transition"
+                    >
+                      Mandatory Disclosure
+                    </Link>
+
+                  </div>
+
+                </div>
+
               </div>
+
             </div>
 
             {/* Academics Dropdown */}
             <div className="relative group">
-              <button className="text-gray-700 hover:text-blue-600 font-medium flex items-center">
-                Academics <span className="ml-1">▼</span>
+
+              <button className="font-medium text-gray-700 hover:text-blue-600 transition">
+                Academics
               </button>
-              <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-100 shadow-lg rounded-md hidden group-hover:block">
-                <Link to="/academics/curriculum" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Curriculum</Link>
-                <Link to="/academics/structure" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Academic Structure</Link>
-                <Link to="/academics/timetable" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Time Table</Link>
+
+              <div className="absolute left-0 top-full pt-2 hidden group-hover:block">
+
+                <div className="bg-white shadow-xl rounded-xl w-72 p-4 border border-gray-100">
+
+                  <div className="space-y-3">
+
+                    <Link
+                      to="/academics/curriculum"
+                      className="block hover:text-blue-600 transition"
+                    >
+                      Curriculum & Syllabus
+                    </Link>
+
+                    <Link
+                      to="/academics/academic-structure"
+                      className="block hover:text-blue-600 transition"
+                    >
+                      Academic Structure
+                    </Link>
+
+                    <Link
+                      to="/academics/timetable"
+                      className="block hover:text-blue-600 transition"
+                    >
+                      Timetable & Schedules
+                    </Link>
+
+                  </div>
+
+                </div>
+
               </div>
+
             </div>
 
-            <Link to="/campus-life" className="text-gray-700 hover:text-blue-600 font-medium">Campus Life</Link>
-            <Link to="/contact" className="text-gray-700 hover:text-blue-600 font-medium">Contact</Link>
-          </div>
+            {/* Campus Life */}
+            <Link
+              to="/campus-life"
+              className="font-medium text-gray-700 hover:text-blue-600 transition"
+            >
+              Campus Life
+            </Link>
 
-          {/* Right Aligned CTAs */}
-          <div className="hidden md:flex space-x-4">
-            <Link to="/admissions" className="px-5 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">
+            {/* Updates Dropdown */}
+            <div className="relative group">
+
+              <button className="font-medium text-gray-700 hover:text-blue-600 transition">
+                Updates & Resources
+              </button>
+
+              <div className="absolute left-0 top-full pt-2 hidden group-hover:block">
+
+                <div className="bg-white shadow-xl rounded-xl w-72 p-4 border border-gray-100">
+
+                  <div className="space-y-3">
+
+                    <Link
+                      to="/updates/news-events"
+                      className="block hover:text-blue-600 transition"
+                    >
+                      News & Events
+                    </Link>
+
+                    <Link
+                      to="/updates/downloads"
+                      className="block hover:text-blue-600 transition"
+                    >
+                      Downloads
+                    </Link>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* Contact */}
+            <Link
+              to="/contact"
+              className="font-medium text-gray-700 hover:text-blue-600 transition"
+            >
+              Contact Us
+            </Link>
+
+          </nav>
+
+          {/* Right Buttons */}
+          <div className="hidden lg:flex items-center gap-4">
+
+            <Link
+              to="/admissions"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-medium transition"
+            >
               Apply Now
             </Link>
-            <a href="https://your-erp-portal.com" target="_blank" rel="noreferrer" className="px-5 py-2 border-2 border-blue-600 text-blue-600 font-semibold rounded-md hover:bg-blue-50 transition">
+
+            <Link
+              to="/login"
+              className="border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-5 py-3 rounded-xl font-medium transition"
+            >
               Portal Login
-            </a>
+            </Link>
+
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-gray-700 hover:text-blue-600 focus:outline-none">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-              </svg>
-            </button>
-          </div>
+          {/* Mobile Button */}
+          <button className="lg:hidden text-3xl text-gray-700">
+            ☰
+          </button>
+
         </div>
+
       </div>
-      
-      {/* Mobile Menu (simplified for brevity) */}
-      {isOpen && (
-        <div className="md:hidden bg-gray-50 px-4 pt-2 pb-4 space-y-2">
-          <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-200">Home</Link>
-          <Link to="/admissions" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-blue-600 text-center">Apply Now</Link>
-        </div>
-      )}
-    </nav>
-  );
-};
 
-export default Navbar;
+    </header>
+  );
+}
