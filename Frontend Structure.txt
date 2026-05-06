@@ -1,0 +1,241 @@
+frontend/
+│
+├── public/
+│   ├── favicon.ico
+│   ├── logo.png
+│   ├── manifest.json
+│   └── robots.txt
+│
+├── src/
+│   │
+│   ├── api/
+│   │   └── axios.js
+│   │
+│   ├── assets/
+│   │   ├── images/
+│   │   │   ├── banners/
+│   │   │   ├── gallery/
+│   │   │   ├── staff/
+│   │   │   └── achievements/
+│   │   │
+│   │   ├── icons/
+│   │   └── videos/
+│   │
+│   ├── components/
+│   │   │
+│   │   ├── common/
+│   │   │   ├── Button.jsx
+│   │   │   ├── Card.jsx
+│   │   │   ├── Loader.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   ├── SectionTitle.jsx
+│   │   │   ├── Table.jsx
+│   │   │   ├── Pagination.jsx
+│   │   │   ├── EmptyState.jsx
+│   │   │   └── SearchBar.jsx
+│   │   │
+│   │   ├── layout/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Topbar.jsx
+│   │   │   ├── DashboardSidebar.jsx
+│   │   │   └── MobileMenu.jsx
+│   │   │
+│   │   ├── cards/
+│   │   │   ├── NewsCard.jsx
+│   │   │   ├── EventCard.jsx
+│   │   │   ├── AchievementCard.jsx
+│   │   │   ├── StaffCard.jsx
+│   │   │   ├── GalleryCard.jsx
+│   │   │   └── StatisticCard.jsx
+│   │   │
+│   │   ├── forms/
+│   │   │   ├── LoginForm.jsx
+│   │   │   ├── AdmissionForm.jsx
+│   │   │   ├── InquiryForm.jsx
+│   │   │   ├── SearchForm.jsx
+│   │   │   └── SchoolSelectForm.jsx
+│   │   │
+│   │   ├── tables/
+│   │   │   ├── StudentStrengthTable.jsx
+│   │   │   ├── SubjectStrengthTable.jsx
+│   │   │   ├── StaffSummaryTable.jsx
+│   │   │   ├── TimetableTable.jsx
+│   │   │   ├── ResultsTable.jsx
+│   │   │   └── AttendanceTable.jsx
+│   │   │
+│   │   └── dashboard/
+│   │       ├── DashboardStats.jsx
+│   │       ├── DashboardCharts.jsx
+│   │       ├── DashboardNotices.jsx
+│   │       └── QuickActions.jsx
+│   │
+│   ├── context/
+│   │   ├── AuthContext.jsx
+│   │   ├── SchoolContext.jsx
+│   │   ├── ThemeContext.jsx
+│   │   └── NotificationContext.jsx
+│   │
+│   ├── hooks/
+│   │   ├── useAuth.js
+│   │   ├── useFetch.js
+│   │   ├── useSchool.js
+│   │   ├── useDebounce.js
+│   │   └── usePagination.js
+│   │
+│   ├── layouts/
+│   │   ├── MainLayout.jsx
+│   │   ├── DashboardLayout.jsx
+│   │   ├── AuthLayout.jsx
+│   │   └── BlankLayout.jsx
+│   │
+│   ├── pages/
+│   │   │
+│   │   ├── website/
+│   │   │   │
+│   │   │   ├── Home.jsx
+│   │   │   ├── CampusLife.jsx
+│   │   │   ├── Admissions.jsx
+│   │   │   ├── Contact.jsx
+│   │   │   ├── PortalLogin.jsx
+│   │   │   │
+│   │   │   ├── about/
+│   │   │   │   ├── Overview.jsx
+│   │   │   │   ├── PrincipalMessage.jsx
+│   │   │   │   ├── VisionMission.jsx
+│   │   │   │   ├── History.jsx
+│   │   │   │   ├── AffiliationStatus.jsx
+│   │   │   │   ├── Infrastructure.jsx
+│   │   │   │   ├── Leadership.jsx
+│   │   │   │   ├── SMC.jsx
+│   │   │   │   ├── Committees.jsx
+│   │   │   │   ├── TeachingStaff.jsx
+│   │   │   │   └── MandatoryDisclosure.jsx
+│   │   │   │
+│   │   │   ├── academics/
+│   │   │   │   ├── Curriculum.jsx
+│   │   │   │   ├── SubjectsOffered.jsx
+│   │   │   │   ├── AcademicStructure.jsx
+│   │   │   │   ├── Timetable.jsx
+│   │   │   │   ├── Results.jsx
+│   │   │   │   ├── Achievements.jsx
+│   │   │   │   ├── Syllabus.jsx
+│   │   │   │   └── AcademicCalendar.jsx
+│   │   │   │
+│   │   │   ├── updates/
+│   │   │   │   ├── News.jsx
+│   │   │   │   ├── Events.jsx
+│   │   │   │   ├── Notices.jsx
+│   │   │   │   ├── Downloads.jsx
+│   │   │   │   ├── HolidayList.jsx
+│   │   │   │   └── Circulars.jsx
+│   │   │   │
+│   │   │   └── auth/
+│   │   │       ├── Login.jsx
+│   │   │       ├── ForgotPassword.jsx
+│   │   │       └── ResetPassword.jsx
+│   │   │
+│   │   ├── dashboard/
+│   │   │   │
+│   │   │   ├── DashboardHome.jsx
+│   │   │   ├── StudentDashboard.jsx
+│   │   │   ├── TeacherDashboard.jsx
+│   │   │   ├── AdminDashboard.jsx
+│   │   │   └── PrincipalDashboard.jsx
+│   │   │
+│   │   ├── students/
+│   │   │   ├── StudentList.jsx
+│   │   │   ├── StudentProfile.jsx
+│   │   │   ├── StudentAttendance.jsx
+│   │   │   ├── StudentResults.jsx
+│   │   │   ├── StudentFees.jsx
+│   │   │   └── StudentCertificates.jsx
+│   │   │
+│   │   ├── staff/
+│   │   │   ├── TeachingStaff.jsx
+│   │   │   ├── NonTeachingStaff.jsx
+│   │   │   ├── StaffAttendance.jsx
+│   │   │   ├── StaffSummary.jsx
+│   │   │   ├── StaffProfile.jsx
+│   │   │   └── StaffTimetable.jsx
+│   │   │
+│   │   ├── reports/
+│   │   │   ├── StudentStrength.jsx
+│   │   │   ├── SubjectStrength.jsx
+│   │   │   ├── StaffReports.jsx
+│   │   │   ├── CBSEReports.jsx
+│   │   │   ├── TimetableReports.jsx
+│   │   │   ├── AttendanceReports.jsx
+│   │   │   ├── FinanceReports.jsx
+│   │   │   └── Analytics.jsx
+│   │   │
+│   │   ├── timetable/
+│   │   │   ├── TimetableGenerator.jsx
+│   │   │   ├── TimetableDragDrop.jsx
+│   │   │   ├── TeacherAssignment.jsx
+│   │   │   ├── ClassroomManagement.jsx
+│   │   │   └── TimetableOverview.jsx
+│   │   │
+│   │   ├── finance/
+│   │   │   ├── FeeStructure.jsx
+│   │   │   ├── FeeCollection.jsx
+│   │   │   ├── PendingFees.jsx
+│   │   │   ├── SalaryManagement.jsx
+│   │   │   └── Ledger.jsx
+│   │   │
+│   │   ├── cms/
+│   │   │   ├── NewsManagement.jsx
+│   │   │   ├── GalleryManagement.jsx
+│   │   │   ├── EventManagement.jsx
+│   │   │   ├── NoticeManagement.jsx
+│   │   │   └── DownloadsManagement.jsx
+│   │   │
+│   │   └── settings/
+│   │       ├── SchoolSettings.jsx
+│   │       ├── UserManagement.jsx
+│   │       ├── RolePermissions.jsx
+│   │       ├── ThemeSettings.jsx
+│   │       └── SystemSettings.jsx
+│   │
+│   ├── routes/
+│   │   ├── AppRoutes.jsx
+│   │   ├── PublicRoutes.jsx
+│   │   ├── ProtectedRoutes.jsx
+│   │   └── RoleBasedRoutes.jsx
+│   │
+│   ├── services/
+│   │   ├── authService.js
+│   │   ├── schoolService.js
+│   │   ├── studentService.js
+│   │   ├── staffService.js
+│   │   ├── timetableService.js
+│   │   ├── reportService.js
+│   │   ├── financeService.js
+│   │   ├── cmsService.js
+│   │   └── dashboardService.js
+│   │
+│   ├── styles/
+│   │   ├── global.css
+│   │   ├── theme.css
+│   │   ├── dashboard.css
+│   │   └── animations.css
+│   │
+│   ├── utils/
+│   │   ├── constants.js
+│   │   ├── helpers.js
+│   │   ├── permissions.js
+│   │   ├── formatters.js
+│   │   ├── validators.js
+│   │   └── dateUtils.js
+│   │
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+│
+├── .env
+├── .gitignore
+├── package.json
+├── vite.config.js
+├── tailwind.config.js
+├── postcss.config.js
+└── README.md
