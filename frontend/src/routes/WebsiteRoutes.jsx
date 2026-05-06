@@ -26,6 +26,8 @@ import Contact from "../pages/website/Contact";
 
 // Auth
 import Login from "../pages/auth/Login";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import ResetPassword from "../pages/auth/ResetPassword";
 
 export default function WebsiteRoutes() {
   return (
@@ -153,6 +155,22 @@ export default function WebsiteRoutes() {
           <WebsiteLayout>
             <Login />
           </WebsiteLayout>
+        }
+      />
+
+            {/* Forgot Password */}
+            <Route
+        path="/forgot-password"
+        element={
+          <ForgotPassword />
+        }
+      />
+
+      {/* Reset Password */}
+      <Route
+        path="/reset-password"
+        element={
+          <ResetPassword />
         }
       />
 
