@@ -55,3 +55,50 @@ Creating Frontend
     npm install
     npm run dev
 
+npm install react-router-dom axios
+npm install tailwindcss @tailwindcss/vite
+
+
+vite.config.js
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+
+
+
+src/index.css
+
+    Remove Everything and add 
+    import './index.css'
+
+
+src/main.jsx
+
+Make sure this exists:
+
+import './index.css'
+
+src/App.jsx
+
+  replace with
+
+  export default function App() {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <h1 className="text-5xl font-bold text-blue-600">
+          SIMS Frontend
+        </h1>
+      </div>
+    )
+  }
+
+  npm run dev
+  http://localhost:5173
