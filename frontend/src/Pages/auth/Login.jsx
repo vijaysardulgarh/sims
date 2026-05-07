@@ -11,25 +11,41 @@ export default function Login() {
 
     // Admin Login
     if (email === "admin" && password === "admin") {
+
+      localStorage.setItem("role", "admin");
+
       navigate("/dashboard/admin");
+
       return;
     }
 
     // Teacher Login
     if (email === "teacher" && password === "teacher") {
+
+      localStorage.setItem("role", "teacher");
+
       navigate("/dashboard/teacher");
+
       return;
     }
 
     // Student Login
     if (email === "student" && password === "student") {
+
+      localStorage.setItem("role", "student");
+
       navigate("/dashboard/student");
+
       return;
     }
 
     // Principal Login
     if (email === "principal" && password === "principal") {
+
+      localStorage.setItem("role", "principal");
+
       navigate("/dashboard/principal");
+
       return;
     }
 
