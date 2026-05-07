@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { responsibilityMenus } from "../../config/responsibilityMenus";
+import { responsibilityMenus } from "../config/responsibilityMenus";
 
 const Sidebar = () => {
 
