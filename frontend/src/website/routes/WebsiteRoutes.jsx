@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 
-import WebsiteLayout from "../../../layouts/WebsiteLayout";
+import WebsiteLayout from "../layouts/WebsiteLayout";
 
 // Home
 import Home from "../Home";
@@ -25,9 +25,9 @@ import Admissions from "../Admissions";
 import Contact from "../Contact";
 
 // Auth
-import Login from "../../../dashboard/auth/Login";
-import ForgotPassword from "../../../dashboard/auth/ForgotPassword";
-import ResetPassword from "../../../dashboard/auth/ResetPassword";
+import Login from "../../dashboard/auth/Login";
+import ForgotPassword from "../../dashboard/auth/ForgotPassword";
+import ResetPassword from "../../dashboard/auth/ResetPassword";
 
 export default function WebsiteRoutes() {
   return (

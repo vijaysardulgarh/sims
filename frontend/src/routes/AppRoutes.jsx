@@ -33,7 +33,7 @@
 
 
 
-import WebsiteRoutes from "../pages/website/routes/WebsiteRoutes";
+import WebsiteRoutes from "../website/routes/WebsiteRoutes";
 import DashboardRoutes from "../dashboard/routes/DashboardRoutes";
 import AuthRoutes from "../dashboard/routes/AuthRoutes";
 
