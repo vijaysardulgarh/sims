@@ -33,9 +33,9 @@
 
 
 
-import WebsiteRoutes from "./WebsiteRoutes";
-import DashboardRoutes from "./DashboardRoutes";
-import AuthRoutes from "./AuthRoutes";
+import WebsiteRoutes from "../pages/website/routes/WebsiteRoutes";
+import DashboardRoutes from "../dashboard/routes/DashboardRoutes";
+import AuthRoutes from "../dashboard/routes/AuthRoutes";
 
 const AppRoutes = () => {
   return (

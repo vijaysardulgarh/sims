@@ -6,41 +6,41 @@ import DashboardLayout from "../layouts/DashboardLayout";
 // SYSTEM LEVEL
 // =========================
 
-import SuperAdminDashboard from "../dashboard/super-admin/Dashboard";
-import ClusterAdminDashboard from "../dashboard/cluster-admin/Dashboard";
+import SuperAdminDashboard from "../roles/super-admin/Dashboard";
+import ClusterAdminDashboard from "../roles/cluster-admin/Dashboard";
 
 // =========================
 // SCHOOL MANAGEMENT
 // =========================
 
-import AdminDashboard from "../dashboard/admin/Dashboard";
-import PrincipalDashboard from "../dashboard/principal/Dashboard";
-import VicePrincipalDashboard from "../dashboard/vice-principal/Dashboard";
+import AdminDashboard from "../roles/admin/Dashboard";
+import PrincipalDashboard from "../roles/principal/Dashboard";
+import VicePrincipalDashboard from "../roles/vice-principal/Dashboard";
 
 // =========================
 // STAFF
 // =========================
 
-import TeacherDashboard from "../dashboard/teacher/Dashboard";
+import TeacherDashboard from "../roles/teacher/Dashboard";
 
-import AccountantDashboard from "../dashboard/accountant/Dashboard";
-import ClerkDashboard from "../dashboard/clerk/Dashboard";
-import ReceptionistDashboard from "../dashboard/receptionist/Dashboard";
+import AccountantDashboard from "../roles/accountant/Dashboard";
+import ClerkDashboard from "../roles/clerk/Dashboard";
+import ReceptionistDashboard from "../roles/receptionist/Dashboard";
 
 // =========================
 // SUPPORT & OPERATIONS
 // =========================
 
-import LibrarianDashboard from "../dashboard/librarian/Dashboard";
-import HostelWardenDashboard from "../dashboard/hostel-warden/Dashboard";
-import SecuritySupervisorDashboard from "../dashboard/security-supervisor/Dashboard";
+import LibrarianDashboard from "../roles/librarian/Dashboard";
+import HostelWardenDashboard from "../roles/hostel-warden/Dashboard";
+import SecuritySupervisorDashboard from "../roles/security-supervisor/Dashboard";
 
 // =========================
 // END USERS
 // =========================
 
-import StudentDashboard from "../dashboard/student/Dashboard";
-import ParentDashboard from "../dashboard/parent/Dashboard";
+import StudentDashboard from "../roles/student/Dashboard";
+import ParentDashboard from "../roles/parent/Dashboard";
 
 const DashboardRoutes = () => {
   return (

@@ -1,33 +1,33 @@
 import { Routes, Route } from "react-router-dom";
 
-import WebsiteLayout from "../layouts/WebsiteLayout";
+import WebsiteLayout from "../../../layouts/WebsiteLayout";
 
 // Home
-import Home from "../pages/website/Home";
+import Home from "../Home";
 
 // About
-import Overview from "../pages/website/about/Overview";
-import Leadership from "../pages/website/about/Leadership";
-import MandatoryDisclosure from "../pages/website/about/MandatoryDisclosure";
+import Overview from "../about/Overview";
+import Leadership from "../about/Leadership";
+import MandatoryDisclosure from "../about/MandatoryDisclosure";
 
 // Academics
-import Curriculum from "../pages/website/academics/Curriculum";
-import AcademicStructure from "../pages/website/academics/AcademicStructure";
-import Timetable from "../pages/website/academics/Timetable";
+import Curriculum from "../academics/Curriculum";
+import AcademicStructure from "../academics/AcademicStructure";
+import Timetable from "../academics/Timetable";
 
 // Updates
-import NewsEvents from "../pages/website/updates/NewsEvents";
-import Downloads from "../pages/website/updates/Downloads";
+import NewsEvents from "../updates/NewsEvents";
+import Downloads from "../updates/Downloads";
 
 // Other Pages
-import CampusLife from "../pages/website/CampusLife";
-import Admissions from "../pages/website/Admissions";
-import Contact from "../pages/website/Contact";
+import CampusLife from "../CampusLife";
+import Admissions from "../Admissions";
+import Contact from "../Contact";
 
 // Auth
-import Login from "../pages/auth/Login";
-import ForgotPassword from "../pages/auth/ForgotPassword";
-import ResetPassword from "../pages/auth/ResetPassword";
+import Login from "../../../dashboard/auth/Login";
+import ForgotPassword from "../../../dashboard/auth/ForgotPassword";
+import ResetPassword from "../../../dashboard/auth/ResetPassword";
 
 export default function WebsiteRoutes() {
   return (
