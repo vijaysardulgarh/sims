@@ -1,6 +1,42 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    // Admin Login
+    if (email === "admin" && password === "admin") {
+      navigate("/dashboard/admin");
+      return;
+    }
+
+    // Teacher Login
+    if (email === "teacher" && password === "teacher") {
+      navigate("/dashboard/teacher");
+      return;
+    }
+
+    // Student Login
+    if (email === "student" && password === "student") {
+      navigate("/dashboard/student");
+      return;
+    }
+
+    // Principal Login
+    if (email === "principal" && password === "principal") {
+      navigate("/dashboard/principal");
+      return;
+    }
+
+    // Invalid Login
+    alert("Invalid User ID or Password");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
 
@@ -27,6 +63,7 @@ export default function Login() {
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight mb-8">
 
                 SIMS
+
                 <span className="block text-blue-200">
                   Portal Login
                 </span>
@@ -36,9 +73,50 @@ export default function Login() {
               <p className="text-lg leading-9 text-blue-100 mb-10">
 
                 Access the School Information Management System
-                for students, teachers, parents, and administration.
+                for students, teachers, principals, and administration.
 
               </p>
+
+              {/* Demo Credentials */}
+              <div className="bg-white/10 rounded-2xl p-6 space-y-3 mb-10">
+
+                <h3 className="text-xl font-semibold mb-4">
+                  Demo Login Credentials
+                </h3>
+
+                <div className="text-blue-100 space-y-2 text-sm">
+
+                  <p>
+                    <span className="font-semibold text-white">
+                      Admin:
+                    </span>{" "}
+                    admin / admin
+                  </p>
+
+                  <p>
+                    <span className="font-semibold text-white">
+                      Teacher:
+                    </span>{" "}
+                    teacher / teacher
+                  </p>
+
+                  <p>
+                    <span className="font-semibold text-white">
+                      Student:
+                    </span>{" "}
+                    student / student
+                  </p>
+
+                  <p>
+                    <span className="font-semibold text-white">
+                      Principal:
+                    </span>{" "}
+                    principal / principal
+                  </p>
+
+                </div>
+
+              </div>
 
               {/* Features */}
               <div className="space-y-5">
@@ -108,18 +186,19 @@ export default function Login() {
               </div>
 
               {/* Form */}
-              <form className="space-y-7">
+              <form onSubmit={handleLogin} className="space-y-7">
 
-                {/* Email */}
+                {/* User ID */}
                 <div>
 
                   <label className="block text-gray-700 font-medium mb-3">
-                    Email Address
+                    User ID
                   </label>
 
                   <input
-                    type="email"
-                    placeholder="Enter your email"
+                    type="text"
+                    name="email"
+                    placeholder="Enter your user ID"
                     className="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
                   />
 
@@ -145,13 +224,14 @@ export default function Login() {
 
                   <input
                     type="password"
+                    name="password"
                     placeholder="Enter your password"
                     className="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
                   />
 
                 </div>
 
-                {/* Remember */}
+                {/* Remember Me */}
                 <div className="flex items-center justify-between">
 
                   <label className="flex items-center gap-3 text-gray-600">
@@ -167,7 +247,7 @@ export default function Login() {
 
                 </div>
 
-                {/* Button */}
+                {/* Login Button */}
                 <button
                   type="submit"
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-semibold text-lg transition"
@@ -181,6 +261,7 @@ export default function Login() {
               <div className="mt-10 text-center text-gray-600">
 
                 Need help?
+
                 <Link
                   to="/contact"
                   className="text-blue-600 hover:underline ml-2 font-medium"
