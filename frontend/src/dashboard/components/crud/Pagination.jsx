@@ -1,28 +1,51 @@
-const Pagination = () => {
+const Pagination = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}) => {
 
   return (
 
-    <div className="flex items-center justify-between mt-6">
+    <div className="flex flex-col md:flex-row items-center justify-between mt-6 gap-4">
 
+      {/* PAGE INFO */}
       <p className="text-sm text-gray-500">
-        Showing 1 to 10 of 100 entries
+
+        Page {currentPage} of {totalPages}
+
       </p>
 
+      {/* BUTTONS */}
       <div className="flex gap-2">
 
-        <button className="px-4 py-2 border rounded-lg">
+        {/* PREVIOUS */}
+        <button
+          onClick={() =>
+            onPageChange(currentPage - 1)
+          }
+          disabled={currentPage === 1}
+          className="px-4 py-2 border rounded-lg disabled:opacity-50"
+        >
           Previous
         </button>
 
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg">
-          1
+        {/* CURRENT PAGE */}
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+        >
+          {currentPage}
         </button>
 
-        <button className="px-4 py-2 border rounded-lg">
-          2
-        </button>
-
-        <button className="px-4 py-2 border rounded-lg">
+        {/* NEXT */}
+        <button
+          onClick={() =>
+            onPageChange(currentPage + 1)
+          }
+          disabled={
+            currentPage === totalPages
+          }
+          className="px-4 py-2 border rounded-lg disabled:opacity-50"
+        >
           Next
         </button>
 

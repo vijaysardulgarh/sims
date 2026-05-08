@@ -1,18 +1,34 @@
-const ActionButtons = () => {
+const ActionButtons = ({
+  onView,
+  onEdit,
+  onDelete,
+}) => {
 
   return (
 
     <div className="flex gap-2">
 
-      <button className="bg-blue-600 text-white px-3 py-1 rounded-lg">
+      {/* VIEW */}
+      <button
+        onClick={onView}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm"
+      >
         View
       </button>
 
-      <button className="bg-yellow-500 text-white px-3 py-1 rounded-lg">
+      {/* EDIT */}
+      <button
+        onClick={onEdit}
+        className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-lg text-sm"
+      >
         Edit
       </button>
 
-      <button className="bg-red-600 text-white px-3 py-1 rounded-lg">
+      {/* DELETE */}
+      <button
+        onClick={onDelete}
+        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm"
+      >
         Delete
       </button>
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AddStudent = () => {
 
@@ -97,7 +98,7 @@ const AddStudent = () => {
     // SUCCESS MESSAGE
     // =========================
 
-    alert(
+    toast.success(
       "Student Added Successfully"
     );
 

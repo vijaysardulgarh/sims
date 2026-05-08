@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import toast from "react-hot-toast";
 import {
   useParams,
   useNavigate,
@@ -35,7 +35,7 @@ const EditStudent = () => {
   const existingStudent =
     students.find(
       (student) =>
-        student.id === Number(id)
+      String(student.id) === String(id)
     );
 
   // =========================
@@ -115,7 +115,7 @@ const EditStudent = () => {
       students.map((student) => {
 
         if (
-          student.id === Number(id)
+          String(student.id) === String(id)
         ) {
 
           return {
@@ -161,7 +161,7 @@ const EditStudent = () => {
     // SUCCESS MESSAGE
     // =========================
 
-    alert(
+    toast.success(
       "Student Updated Successfully"
     );
 
