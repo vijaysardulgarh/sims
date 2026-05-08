@@ -17,27 +17,59 @@ const StudentsList = () => {
   const navigate = useNavigate();
 
   // =========================
-  // STUDENTS STATE
+  // DEFAULT STUDENTS
   // =========================
 
-  const [students, setStudents] = useState([
+  const defaultStudents = [
+
     {
       id: 1,
       admissionNo: "SIMS001",
       name: "Rahul Sharma",
       class: "10",
       section: "A",
+      phone: "9876543210",
       status: "Active",
     },
+
     {
       id: 2,
       admissionNo: "SIMS002",
       name: "Priya Verma",
       class: "9",
       section: "B",
+      phone: "9876543211",
       status: "Active",
     },
-  ]);
+
+  ];
+
+  // =========================
+  // LOAD FROM STORAGE
+  // =========================
+
+  const savedStudents =
+    JSON.parse(
+      localStorage.getItem("students")
+    );
+
+  // =========================
+  // STUDENTS STATE
+  // =========================
+
+  const [students, setStudents] =
+    useState(
+      savedStudents || defaultStudents
+    );
+
+  // =========================
+  // SAVE TO STORAGE
+  // =========================
+
+  localStorage.setItem(
+    "students",
+    JSON.stringify(students)
+  );
 
   // =========================
   // DELETE STUDENT
@@ -45,17 +77,45 @@ const StudentsList = () => {
 
   const handleDelete = (id) => {
 
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this student?"
-    );
+    const confirmDelete =
+      window.confirm(
+        "Are you sure you want to delete this student?"
+      );
 
     if (!confirmDelete) return;
 
-    const updatedStudents = students.filter(
-      (student) => student.id !== id
-    );
+    // =========================
+    // REMOVE STUDENT
+    // =========================
+
+    const updatedStudents =
+      students.filter(
+        (student) =>
+          student.id !== id
+      );
+
+    // =========================
+    // UPDATE STATE
+    // =========================
 
     setStudents(updatedStudents);
+
+    // =========================
+    // UPDATE STORAGE
+    // =========================
+
+    localStorage.setItem(
+      "students",
+      JSON.stringify(updatedStudents)
+    );
+
+    // =========================
+    // SUCCESS MESSAGE
+    // =========================
+
+    alert(
+      "Student Deleted Successfully"
+    );
 
   };
 
@@ -64,78 +124,91 @@ const StudentsList = () => {
   // =========================
 
   const columns = [
+
     {
       key: "admissionNo",
       label: "Admission No",
     },
+
     {
       key: "name",
       label: "Student Name",
     },
+
     {
       key: "class",
       label: "Class",
     },
+
     {
       key: "section",
       label: "Section",
     },
+
     {
       key: "status",
       label: "Status",
     },
+
     {
       key: "actions",
       label: "Actions",
     },
+
   ];
 
   // =========================
   // TABLE DATA
   // =========================
 
-  const tableData = students.map((student) => ({
-    ...student,
+  const tableData =
+    students.map((student) => ({
 
-    actions: (
+      ...student,
 
-      <div className="flex gap-2">
+      actions: (
 
-        {/* VIEW BUTTON */}
-        <button
-          onClick={() =>
-            navigate(`/dashboard/students/profile/${student.id}`)
-          }
-          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm"
-        >
-          View
-        </button>
+        <div className="flex gap-2">
 
-        {/* EDIT BUTTON */}
-        <button
-          onClick={() =>
-            navigate(`/dashboard/students/edit/${student.id}`)
-          }
-          className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-lg text-sm"
-        >
-          Edit
-        </button>
+          {/* VIEW BUTTON */}
+          <button
+            onClick={() =>
+              navigate(
+                `/dashboard/students/profile/${student.id}`
+              )
+            }
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm"
+          >
+            View
+          </button>
 
-        {/* DELETE BUTTON */}
-        <button
-          onClick={() =>
-            handleDelete(student.id)
-          }
-          className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm"
-        >
-          Delete
-        </button>
+          {/* EDIT BUTTON */}
+          <button
+            onClick={() =>
+              navigate(
+                `/dashboard/students/edit/${student.id}`
+              )
+            }
+            className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-lg text-sm"
+          >
+            Edit
+          </button>
 
-      </div>
+          {/* DELETE BUTTON */}
+          <button
+            onClick={() =>
+              handleDelete(student.id)
+            }
+            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm"
+          >
+            Delete
+          </button>
 
-    ),
+        </div>
 
-  }));
+      ),
+
+    }));
 
   return (
 
@@ -158,17 +231,22 @@ const StudentsList = () => {
 
         <div className="flex gap-3">
 
+          {/* ADD STUDENT */}
           <button
             onClick={() =>
-              navigate("/dashboard/students/add")
+              navigate(
+                "/dashboard/students/add"
+              )
             }
             className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-medium transition"
           >
             Add Student
           </button>
 
+          {/* IMPORT */}
           <ImportButton />
 
+          {/* EXPORT */}
           <ExportButton />
 
         </div>
@@ -176,7 +254,9 @@ const StudentsList = () => {
       </div>
 
       {/* SEARCH */}
-      <SearchBox placeholder="Search students..." />
+      <SearchBox
+        placeholder="Search students..."
+      />
 
       {/* TABLE */}
       <DataTable

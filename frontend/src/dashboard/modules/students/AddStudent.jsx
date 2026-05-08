@@ -1,6 +1,14 @@
 import { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 const AddStudent = () => {
+
+  // =========================
+  // NAVIGATION
+  // =========================
+
+  const navigate = useNavigate();
 
   // =========================
   // FORM STATE
@@ -36,9 +44,68 @@ const AddStudent = () => {
 
     e.preventDefault();
 
-    console.log(formData);
+    // =========================
+    // GET OLD STUDENTS
+    // =========================
 
-    alert("Student Added Successfully");
+    const oldStudents =
+      JSON.parse(
+        localStorage.getItem("students")
+      ) || [];
+
+    // =========================
+    // CREATE NEW STUDENT
+    // =========================
+
+    const newStudent = {
+      id: Date.now(),
+
+      admissionNo:
+        formData.admissionNo,
+
+      name:
+        formData.studentName,
+
+      class:
+        formData.className,
+
+      section:
+        formData.section,
+
+      phone:
+        formData.phone,
+
+      status:
+        formData.status,
+    };
+
+    // =========================
+    // SAVE NEW LIST
+    // =========================
+
+    const updatedStudents = [
+      ...oldStudents,
+      newStudent,
+    ];
+
+    localStorage.setItem(
+      "students",
+      JSON.stringify(updatedStudents)
+    );
+
+    // =========================
+    // SUCCESS MESSAGE
+    // =========================
+
+    alert(
+      "Student Added Successfully"
+    );
+
+    // =========================
+    // REDIRECT
+    // =========================
+
+    navigate("/dashboard/students");
 
   };
 

@@ -1,6 +1,9 @@
 import { useState } from "react";
 
-import { useParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+} from "react-router-dom";
 
 const EditStudent = () => {
 
@@ -11,29 +14,76 @@ const EditStudent = () => {
   const { id } = useParams();
 
   // =========================
-  // DUMMY EXISTING DATA
+  // NAVIGATION
   // =========================
 
-  const [formData, setFormData] = useState({
-    admissionNo: `SIMS00${id}`,
-    studentName:
-      id === "1"
-        ? "Rahul Sharma"
-        : "Priya Verma",
-    className:
-      id === "1"
-        ? "10"
-        : "9",
-    section:
-      id === "1"
-        ? "A"
-        : "B",
-    phone:
-      id === "1"
-        ? "9876543210"
-        : "9876543211",
-    status: "Active",
-  });
+  const navigate = useNavigate();
+
+  // =========================
+  // GET STUDENTS FROM STORAGE
+  // =========================
+
+  const students =
+    JSON.parse(
+      localStorage.getItem("students")
+    ) || [];
+
+  // =========================
+  // FIND CURRENT STUDENT
+  // =========================
+
+  const existingStudent =
+    students.find(
+      (student) =>
+        student.id === Number(id)
+    );
+
+  // =========================
+  // STUDENT NOT FOUND
+  // =========================
+
+  if (!existingStudent) {
+
+    return (
+
+      <div className="p-10">
+
+        <h1 className="text-3xl font-bold text-red-600">
+          Student Not Found
+        </h1>
+
+      </div>
+
+    );
+
+  }
+
+  // =========================
+  // FORM STATE
+  // =========================
+
+  const [formData, setFormData] =
+    useState({
+
+      admissionNo:
+        existingStudent.admissionNo,
+
+      studentName:
+        existingStudent.name,
+
+      className:
+        existingStudent.class,
+
+      section:
+        existingStudent.section,
+
+      phone:
+        existingStudent.phone,
+
+      status:
+        existingStudent.status,
+
+    });
 
   // =========================
   // HANDLE CHANGE
@@ -43,7 +93,8 @@ const EditStudent = () => {
 
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.value,
     });
 
   };
@@ -56,11 +107,69 @@ const EditStudent = () => {
 
     e.preventDefault();
 
-    console.log(formData);
+    // =========================
+    // UPDATE STUDENTS
+    // =========================
+
+    const updatedStudents =
+      students.map((student) => {
+
+        if (
+          student.id === Number(id)
+        ) {
+
+          return {
+
+            ...student,
+
+            admissionNo:
+              formData.admissionNo,
+
+            name:
+              formData.studentName,
+
+            class:
+              formData.className,
+
+            section:
+              formData.section,
+
+            phone:
+              formData.phone,
+
+            status:
+              formData.status,
+
+          };
+
+        }
+
+        return student;
+
+      });
+
+    // =========================
+    // SAVE UPDATED DATA
+    // =========================
+
+    localStorage.setItem(
+      "students",
+      JSON.stringify(updatedStudents)
+    );
+
+    // =========================
+    // SUCCESS MESSAGE
+    // =========================
 
     alert(
-      `Student ${id} Updated Successfully`
+      "Student Updated Successfully"
     );
+
+    // =========================
+    // REDIRECT
+    // =========================
+
+    navigate("/dashboard/students");
 
   };
 
@@ -68,7 +177,7 @@ const EditStudent = () => {
 
     <div className="space-y-6">
 
-      {/* HEADER */}
+      {/* PAGE HEADER */}
       <div>
 
         <h1 className="text-3xl font-bold text-gray-800">
@@ -81,7 +190,7 @@ const EditStudent = () => {
 
       </div>
 
-      {/* FORM */}
+      {/* FORM CARD */}
       <div className="bg-white rounded-2xl shadow p-8">
 
         <form
@@ -89,7 +198,7 @@ const EditStudent = () => {
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
 
-          {/* Student ID */}
+          {/* STUDENT ID */}
           <div>
 
             <label className="block mb-2 font-medium text-gray-700">
@@ -105,7 +214,7 @@ const EditStudent = () => {
 
           </div>
 
-          {/* Admission Number */}
+          {/* ADMISSION NUMBER */}
           <div>
 
             <label className="block mb-2 font-medium text-gray-700">
@@ -122,7 +231,7 @@ const EditStudent = () => {
 
           </div>
 
-          {/* Student Name */}
+          {/* STUDENT NAME */}
           <div>
 
             <label className="block mb-2 font-medium text-gray-700">
@@ -139,7 +248,7 @@ const EditStudent = () => {
 
           </div>
 
-          {/* Class */}
+          {/* CLASS */}
           <div>
 
             <label className="block mb-2 font-medium text-gray-700">
@@ -156,7 +265,7 @@ const EditStudent = () => {
 
           </div>
 
-          {/* Section */}
+          {/* SECTION */}
           <div>
 
             <label className="block mb-2 font-medium text-gray-700">
@@ -173,7 +282,7 @@ const EditStudent = () => {
 
           </div>
 
-          {/* Phone */}
+          {/* PHONE */}
           <div>
 
             <label className="block mb-2 font-medium text-gray-700">
@@ -190,7 +299,7 @@ const EditStudent = () => {
 
           </div>
 
-          {/* Status */}
+          {/* STATUS */}
           <div>
 
             <label className="block mb-2 font-medium text-gray-700">
@@ -216,7 +325,7 @@ const EditStudent = () => {
 
           </div>
 
-          {/* BUTTON */}
+          {/* SUBMIT BUTTON */}
           <div className="md:col-span-2">
 
             <button

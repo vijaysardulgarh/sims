@@ -9,67 +9,43 @@ const StudentProfile = () => {
   const { id } = useParams();
 
   // =========================
-  // DUMMY STUDENT DATA
+  // GET STUDENTS FROM STORAGE
   // =========================
 
-  const student = {
-    id: id,
-    admissionNo: `SIMS00${id}`,
-    name:
-      id === "1"
-        ? "Rahul Sharma"
-        : "Priya Verma",
-    class:
-      id === "1"
-        ? "10"
-        : "9",
-    section:
-      id === "1"
-        ? "A"
-        : "B",
-    rollNo:
-      id === "1"
-        ? "15"
-        : "22",
-    gender:
-      id === "1"
-        ? "Male"
-        : "Female",
-    dob:
-      id === "1"
-        ? "12 March 2010"
-        : "20 July 2011",
-    phone:
-      id === "1"
-        ? "9876543210"
-        : "9876543211",
-    email:
-      id === "1"
-        ? "rahul@example.com"
-        : "priya@example.com",
-    address:
-      id === "1"
-        ? "Sirsa, Haryana"
-        : "Delhi, India",
-    fatherName:
-      id === "1"
-        ? "Ramesh Sharma"
-        : "Amit Verma",
-    motherName:
-      id === "1"
-        ? "Sunita Sharma"
-        : "Pooja Verma",
-    parentPhone:
-      id === "1"
-        ? "9876543200"
-        : "9876543201",
-    transport:
-      id === "1"
-        ? "Bus Route 3"
-        : "Bus Route 1",
-    hostel: "No",
-    status: "Active",
-  };
+  const students =
+    JSON.parse(
+      localStorage.getItem("students")
+    ) || [];
+
+  // =========================
+  // FIND CURRENT STUDENT
+  // =========================
+
+  const student =
+    students.find(
+      (student) =>
+        student.id === Number(id)
+    );
+
+  // =========================
+  // STUDENT NOT FOUND
+  // =========================
+
+  if (!student) {
+
+    return (
+
+      <div className="p-10">
+
+        <h1 className="text-3xl font-bold text-red-600">
+          Student Not Found
+        </h1>
+
+      </div>
+
+    );
+
+  }
 
   return (
 
@@ -133,53 +109,8 @@ const StudentProfile = () => {
             />
 
             <ProfileItem
-              label="Roll Number"
-              value={student.rollNo}
-            />
-
-            <ProfileItem
-              label="Gender"
-              value={student.gender}
-            />
-
-            <ProfileItem
-              label="Date of Birth"
-              value={student.dob}
-            />
-
-            <ProfileItem
               label="Phone"
               value={student.phone}
-            />
-
-            <ProfileItem
-              label="Email"
-              value={student.email}
-            />
-
-            <ProfileItem
-              label="Father Name"
-              value={student.fatherName}
-            />
-
-            <ProfileItem
-              label="Mother Name"
-              value={student.motherName}
-            />
-
-            <ProfileItem
-              label="Parent Phone"
-              value={student.parentPhone}
-            />
-
-            <ProfileItem
-              label="Transport"
-              value={student.transport}
-            />
-
-            <ProfileItem
-              label="Hostel"
-              value={student.hostel}
             />
 
             <ProfileItem
@@ -196,7 +127,7 @@ const StudentProfile = () => {
       {/* EXTRA MODULES */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        {/* Attendance */}
+        {/* ATTENDANCE */}
         <div className="bg-white rounded-2xl shadow p-6">
 
           <h2 className="text-xl font-semibold text-gray-800 mb-3">
@@ -209,7 +140,7 @@ const StudentProfile = () => {
 
         </div>
 
-        {/* Fees */}
+        {/* FEES */}
         <div className="bg-white rounded-2xl shadow p-6">
 
           <h2 className="text-xl font-semibold text-gray-800 mb-3">
@@ -222,7 +153,7 @@ const StudentProfile = () => {
 
         </div>
 
-        {/* Exams */}
+        {/* RESULTS */}
         <div className="bg-white rounded-2xl shadow p-6">
 
           <h2 className="text-xl font-semibold text-gray-800 mb-3">
