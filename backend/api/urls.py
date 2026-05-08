@@ -8,11 +8,10 @@ from django.urls import path, include
 
 urlpatterns = [
     # 🔐 Authentication & Users
-    path('accounts/', include('apps.accounts.urls')),
+    path('users/', include('apps.users.urls')),
     
     # 📚 Core Academics & Structure
     path('academics/', include('apps.academics.urls')),
-    path('timetable/', include('apps.timetable.urls')),
     
     # 🧑‍🏫 Staff & Student Management
     path('staff/', include('apps.staff.urls')),

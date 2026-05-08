@@ -1,7 +1,7 @@
 from django.urls import path
 from .timetable_api import *
 
-urlpatterns += [
+urlpatterns = [
 
     path("timetable/generate/", TimetableGenerateAPIView.as_view()),
     path("timetable/assign/", TeacherAssignmentAPIView.as_view()),

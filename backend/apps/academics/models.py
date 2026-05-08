@@ -180,7 +180,7 @@ class Section(models.Model):
 
             # 🔥 FINAL ADDITION
             models.CheckConstraint(
-                check=Q(sub_stream__isnull=True) | Q(stream__isnull=False),
+                condition=Q(sub_stream__isnull=True) | Q(stream__isnull=False),
                 name="substream_requires_stream"
             ),
         ]
@@ -314,27 +314,27 @@ class ClassSubject(models.Model):
             ),
 
             models.CheckConstraint(
-                check=models.Q(theory_periods_per_week__gte=0),
+                condition=models.Q(theory_periods_per_week__gte=0),
                 name="theory_periods_non_negative"
             ),
             models.CheckConstraint(
-                check=models.Q(practical_periods_per_week__gte=0),
+                condition=models.Q(practical_periods_per_week__gte=0),
                 name="practical_periods_non_negative"
             ),
 
             models.CheckConstraint(
-                check=models.Q(theory_periods_per_week__gt=0) | models.Q(practical_periods_per_week__gt=0),
+                condition=models.Q(theory_periods_per_week__gt=0) | models.Q(practical_periods_per_week__gt=0),
                 name="at_least_one_period"
             ),
 
             models.CheckConstraint(
-                check=models.Q(sub_stream__in=["Medical", "Non-Medical", "Vocational"]) | models.Q(sub_stream__isnull=True),
+                condition=models.Q(sub_stream__in=["Medical", "Non-Medical", "Vocational"]) | models.Q(sub_stream__isnull=True),
                 name="valid_sub_stream"
             ),
 
             # 🔥 Lab constraint at DB level
             models.CheckConstraint(
-                check=(
+                condition=(
                     models.Q(has_lab=False) |
                     models.Q(practical_periods_per_week__gt=0)
                 ),
@@ -448,7 +448,7 @@ class TimetableSlot(models.Model):
 
             # Time must be valid
             models.CheckConstraint(
-                check=Q(start_time__lt=models.F("end_time")),
+                condition=Q(start_time__lt=models.F("end_time")),
                 name="valid_time_range"
             ),
         ]

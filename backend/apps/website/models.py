@@ -2,8 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db.models import Q
-from .school import School
-from .utils import generate_unique_slug
+from apps.schools.models import School
+from api.utils.slug import generate_unique_slug
 
 
 class AboutSchool(models.Model):
@@ -137,7 +137,7 @@ class MandatoryPublicDisclosure(models.Model):
                 name="unique_disclosure_per_school"
             ),
             models.CheckConstraint(
-                check=~((Q(value="") | Q(value__isnull=True)) & Q(file__isnull=True)),
+                condition=~((Q(value="") | Q(value__isnull=True)) & Q(file__isnull=True)),
                 name="disclosure_value_or_file_required"
             ),
         ]
