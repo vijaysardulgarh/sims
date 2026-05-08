@@ -1,24 +1,72 @@
+import { useParams } from "react-router-dom";
+
 const StudentProfile = () => {
+
+  // =========================
+  // GET STUDENT ID FROM URL
+  // =========================
+
+  const { id } = useParams();
 
   // =========================
   // DUMMY STUDENT DATA
   // =========================
 
   const student = {
-    admissionNo: "SIMS001",
-    name: "Rahul Sharma",
-    class: "10",
-    section: "A",
-    rollNo: "15",
-    gender: "Male",
-    dob: "12 March 2010",
-    phone: "9876543210",
-    email: "rahul@example.com",
-    address: "Sirsa, Haryana",
-    fatherName: "Ramesh Sharma",
-    motherName: "Sunita Sharma",
-    parentPhone: "9876543200",
-    transport: "Bus Route 3",
+    id: id,
+    admissionNo: `SIMS00${id}`,
+    name:
+      id === "1"
+        ? "Rahul Sharma"
+        : "Priya Verma",
+    class:
+      id === "1"
+        ? "10"
+        : "9",
+    section:
+      id === "1"
+        ? "A"
+        : "B",
+    rollNo:
+      id === "1"
+        ? "15"
+        : "22",
+    gender:
+      id === "1"
+        ? "Male"
+        : "Female",
+    dob:
+      id === "1"
+        ? "12 March 2010"
+        : "20 July 2011",
+    phone:
+      id === "1"
+        ? "9876543210"
+        : "9876543211",
+    email:
+      id === "1"
+        ? "rahul@example.com"
+        : "priya@example.com",
+    address:
+      id === "1"
+        ? "Sirsa, Haryana"
+        : "Delhi, India",
+    fatherName:
+      id === "1"
+        ? "Ramesh Sharma"
+        : "Amit Verma",
+    motherName:
+      id === "1"
+        ? "Sunita Sharma"
+        : "Pooja Verma",
+    parentPhone:
+      id === "1"
+        ? "9876543200"
+        : "9876543201",
+    transport:
+      id === "1"
+        ? "Bus Route 3"
+        : "Bus Route 1",
     hostel: "No",
     status: "Active",
   };
@@ -50,7 +98,7 @@ const StudentProfile = () => {
 
             <div className="w-40 h-40 rounded-2xl bg-blue-100 flex items-center justify-center text-5xl font-bold text-blue-700">
 
-              R
+              {student.name.charAt(0)}
 
             </div>
 
@@ -58,6 +106,11 @@ const StudentProfile = () => {
 
           {/* DETAILS */}
           <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <ProfileItem
+              label="Student ID"
+              value={student.id}
+            />
 
             <ProfileItem
               label="Admission No"

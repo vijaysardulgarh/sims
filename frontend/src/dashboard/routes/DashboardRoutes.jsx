@@ -169,11 +169,11 @@ const DashboardRoutes = () => {
           element={<AddStudent />}
         />
         <Route
-          path="students/edit"
+          path="students/edit/:id"
           element={<EditStudent />}
         />
         <Route
-          path="students/profile"
+          path="students/profile/:id"
           element={<StudentProfile />}
         />        
 

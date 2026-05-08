@@ -1,17 +1,37 @@
 import { useState } from "react";
 
+import { useParams } from "react-router-dom";
+
 const EditStudent = () => {
+
+  // =========================
+  // GET STUDENT ID
+  // =========================
+
+  const { id } = useParams();
 
   // =========================
   // DUMMY EXISTING DATA
   // =========================
 
   const [formData, setFormData] = useState({
-    admissionNo: "SIMS001",
-    studentName: "Rahul Sharma",
-    className: "10",
-    section: "A",
-    phone: "9876543210",
+    admissionNo: `SIMS00${id}`,
+    studentName:
+      id === "1"
+        ? "Rahul Sharma"
+        : "Priya Verma",
+    className:
+      id === "1"
+        ? "10"
+        : "9",
+    section:
+      id === "1"
+        ? "A"
+        : "B",
+    phone:
+      id === "1"
+        ? "9876543210"
+        : "9876543211",
     status: "Active",
   });
 
@@ -38,7 +58,9 @@ const EditStudent = () => {
 
     console.log(formData);
 
-    alert("Student Updated Successfully");
+    alert(
+      `Student ${id} Updated Successfully`
+    );
 
   };
 
@@ -66,6 +88,22 @@ const EditStudent = () => {
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
+
+          {/* Student ID */}
+          <div>
+
+            <label className="block mb-2 font-medium text-gray-700">
+              Student ID
+            </label>
+
+            <input
+              type="text"
+              value={id}
+              disabled
+              className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3"
+            />
+
+          </div>
 
           {/* Admission Number */}
           <div>

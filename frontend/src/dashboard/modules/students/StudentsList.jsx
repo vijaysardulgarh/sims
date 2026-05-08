@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import DataTable from "../../components/crud/DataTable";
 import SearchBox from "../../components/crud/SearchBox";
 import Pagination from "../../components/crud/Pagination";
@@ -7,6 +9,12 @@ import ImportButton from "../../components/crud/ImportButton";
 import ExportButton from "../../components/crud/ExportButton";
 
 const StudentsList = () => {
+
+  // =========================
+  // NAVIGATION
+  // =========================
+
+  const navigate = useNavigate();
 
   // =========================
   // STUDENTS STATE
@@ -37,17 +45,15 @@ const StudentsList = () => {
 
   const handleDelete = (id) => {
 
-    const confirmDelete =
-      window.confirm(
-        "Are you sure you want to delete this student?"
-      );
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this student?"
+    );
 
     if (!confirmDelete) return;
 
-    const updatedStudents =
-      students.filter(
-        (student) => student.id !== id
-      );
+    const updatedStudents = students.filter(
+      (student) => student.id !== id
+    );
 
     setStudents(updatedStudents);
 
@@ -95,21 +101,27 @@ const StudentsList = () => {
 
       <div className="flex gap-2">
 
-        {/* VIEW */}
+        {/* VIEW BUTTON */}
         <button
+          onClick={() =>
+            navigate(`/dashboard/students/profile/${student.id}`)
+          }
           className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm"
         >
           View
         </button>
 
-        {/* EDIT */}
+        {/* EDIT BUTTON */}
         <button
+          onClick={() =>
+            navigate(`/dashboard/students/edit/${student.id}`)
+          }
           className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-lg text-sm"
         >
           Edit
         </button>
 
-        {/* DELETE */}
+        {/* DELETE BUTTON */}
         <button
           onClick={() =>
             handleDelete(student.id)
@@ -145,6 +157,15 @@ const StudentsList = () => {
         </div>
 
         <div className="flex gap-3">
+
+          <button
+            onClick={() =>
+              navigate("/dashboard/students/add")
+            }
+            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-medium transition"
+          >
+            Add Student
+          </button>
 
           <ImportButton />
 
