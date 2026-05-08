@@ -42,6 +42,16 @@ import SecuritySupervisorDashboard from "../roles/security-supervisor/Dashboard"
 import StudentDashboard from "../roles/student/Dashboard";
 import ParentDashboard from "../roles/parent/Dashboard";
 
+
+
+// =========================
+// Module LEVEL
+// =========================
+import StudentsList from "../modules/students/StudentsList";
+import AddStudent from "../modules/students/AddStudent";
+import EditStudent from "../modules/students/EditStudent";
+import StudentProfile from "../modules/students/StudentProfile";
+
 const DashboardRoutes = () => {
   return (
     <Routes>
@@ -144,6 +154,28 @@ const DashboardRoutes = () => {
           path="parent"
           element={<ParentDashboard />}
         />
+
+        {/* =========================
+            Module
+        ========================= */}
+
+
+        <Route
+          path="students"
+          element={<StudentsList />}
+        />
+        <Route
+          path="students/add"
+          element={<AddStudent />}
+        />
+        <Route
+          path="students/edit"
+          element={<EditStudent />}
+        />
+        <Route
+          path="students/profile"
+          element={<StudentProfile />}
+        />        
 
       </Route>
 
