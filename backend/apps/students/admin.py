@@ -5,7 +5,10 @@ from .models import (
     ExamDetail,
 )
 
-
+from import_export.admin import ImportExportModelAdmin
+from apps.students.student_resource import (
+    StudentResource
+)
 # ==========================================
 # STUDENT ADMIN
 # ==========================================
@@ -248,3 +251,28 @@ class ExamDetailAdmin(admin.ModelAdmin):
     )
 
     list_per_page = 25
+
+
+class StudentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = StudentResource
+    list_display = (
+        'srn',
+        'stream',
+        'studentclass',
+        'section',
+        'roll_number',
+        'full_name_aadhar',
+        'father_full_name_aadhar',
+        'mother_full_name_aadhar',
+        'date_of_birth',
+        'gender',
+        'aadhaar_number',
+        'category',
+        'admission_number',
+        'father_mobile',
+        'family_id',  # ✅ Added family_id here
+        'subjects_opted',
+        'subjects',
+        'below_poverty_line_certificate_number',
+        'religion',
+    )    

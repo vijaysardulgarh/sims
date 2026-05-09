@@ -15,7 +15,12 @@ from .report_subject_wise import (
     SubjectWiseLinkAPIView,
     SubjectWiseStudentsPDFAPIView
 )
+from apps.students.api import (
 
+    StudentImportAPIView,
+
+    StudentExportAPIView,
+)
 urlpatterns = [
 
     # LINK APIs
@@ -39,6 +44,16 @@ path("cbse/pdf/", CBSEEnrollmentPDFAPIView.as_view()),
 path("cbse/csv/", CBSEEnrollmentCSVAPIView.as_view()),
 path("subject-wise/options/", SubjectWiseLinkAPIView.as_view()),
 path("subject-wise/<str:class_name>/<str:subject_name>/", SubjectWiseStudentsPDFAPIView.as_view()),
+
+path(
+    "students/import/",
+    StudentImportAPIView.as_view(),
+),
+
+path(
+    "students/export/",
+    StudentExportAPIView.as_view(),
+),
 
 
 ]
