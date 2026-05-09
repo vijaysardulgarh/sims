@@ -23,7 +23,7 @@ def school_document_path(instance, filename):
 
 class Document(models.Model):
     school = models.ForeignKey(
-        "School",
+        "schools.School",
         on_delete=models.CASCADE,
         related_name="documents",
         db_index=True

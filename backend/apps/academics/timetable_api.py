@@ -4,7 +4,8 @@ from django.shortcuts import get_object_or_404
 
 from collections import defaultdict
 from django.db.models import Count
-from api.utils.helpers import get_current_school
+
+from apps.core.utils.helpers import get_current_school
 from apps.staff.models import Staff, TeacherSubjectAssignment
 from apps.academics.models import Subject, ClassSubject, Class, Section, Classroom
 from apps.academics.models import Day, TimetableSlot, Timetable

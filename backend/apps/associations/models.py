@@ -14,8 +14,8 @@ class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    created_by = models.ForeignKey("Staff", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
-    updated_by = models.ForeignKey("Staff", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+    created_by = models.ForeignKey("staff.Staff", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+    updated_by = models.ForeignKey("staff.Staff", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
 
     class Meta:
         abstract = True
@@ -33,12 +33,12 @@ class Association(BaseModel):
         ("Nodal", "Nodal"),
     ]
 
-    school = models.ForeignKey("School", on_delete=models.CASCADE, related_name="associations", db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="associations", db_index=True)
     name = models.CharField(max_length=255, db_index=True)
     association_type = models.CharField(max_length=20, choices=TYPE_CHOICES, db_index=True)
 
     chairperson = models.ForeignKey(
-        'Staff',
+        'staff.Staff',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -46,7 +46,7 @@ class Association(BaseModel):
     )
 
     tasks = models.TextField(blank=True)
-    documents = models.ManyToManyField('Document', related_name='associations', blank=True)
+    documents = models.ManyToManyField('documents.Document', related_name='associations', blank=True)
 
     show_on_website = models.BooleanField(default=True)
     description = models.TextField(blank=True, null=True)
@@ -63,7 +63,7 @@ class Association(BaseModel):
         indexes = [
             models.Index(fields=["school", "association_type"]),
         ]
-        ordering = ["name"]
+        ordering = ['name']
 
     def clean(self):
         if self.chairperson and self.chairperson.school != self.school:
@@ -119,7 +119,7 @@ class AssociationRole(BaseModel):
 
 class StaffAssociationRoleAssignment(BaseModel):
 
-    staff = models.ForeignKey("Staff", on_delete=models.CASCADE, related_name="association_roles", db_index=True)
+    staff = models.ForeignKey("staff.Staff", on_delete=models.CASCADE, related_name="association_roles", db_index=True)
     role = models.ForeignKey(AssociationRole, on_delete=models.CASCADE, related_name="assigned_staff", db_index=True)
 
     class Meta:
@@ -143,7 +143,7 @@ class StaffAssociationRoleAssignment(BaseModel):
 
 class StudentAssociationRoleAssignment(BaseModel):
 
-    student = models.ForeignKey("Student", on_delete=models.CASCADE, related_name="association_roles", db_index=True)
+    student = models.ForeignKey("students.Student", on_delete=models.CASCADE, related_name="association_roles", db_index=True)
     role = models.ForeignKey(AssociationRole, on_delete=models.CASCADE, related_name="assigned_students", db_index=True)
 
     class Meta:
@@ -168,7 +168,7 @@ class StudentAssociationRoleAssignment(BaseModel):
 class AssociationMember(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name='members', db_index=True)
-    staff = models.ForeignKey('Staff', on_delete=models.CASCADE, related_name='association_memberships', db_index=True)
+    staff = models.ForeignKey('staff.Staff', on_delete=models.CASCADE, related_name='association_memberships', db_index=True)
 
     designation = models.CharField(max_length=50)
     email = models.EmailField(blank=True)
@@ -203,7 +203,7 @@ class AssociationMeeting(BaseModel):
     location = models.CharField(max_length=100)
 
     minutes_document = models.ForeignKey(
-        'Document',
+        'documents.Document',
         on_delete=models.SET_NULL,
         null=True,
         blank=True
@@ -227,7 +227,7 @@ class AssociationMeeting(BaseModel):
 
 class SMCMember(BaseModel):
 
-    school = models.ForeignKey("School", on_delete=models.CASCADE, related_name="smc_members", db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="smc_members", db_index=True)
 
     POSITION_CHOICES = [
         ('President', 'President'),
@@ -269,7 +269,7 @@ class ExtracurricularActivity(BaseModel):
         ('Other', 'Other'),
     ]
 
-    school = models.ForeignKey('School', on_delete=models.CASCADE, related_name='activities', db_index=True)
+    school = models.ForeignKey('schools.School', on_delete=models.CASCADE, related_name='activities', db_index=True)
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField()
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, db_index=True)
@@ -280,13 +280,13 @@ class ExtracurricularActivity(BaseModel):
     location = models.CharField(max_length=255, blank=True)
 
     coordinator = models.ForeignKey(
-        'Staff',
+        'staff.Staff',
         on_delete=models.SET_NULL,
         null=True,
         related_name='coordinated_activities'
     )
 
-    participants = models.ManyToManyField('Student', related_name='participated_activities', blank=True)
+    participants = models.ManyToManyField('students.Student', related_name='participated_activities', blank=True)
 
     cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 

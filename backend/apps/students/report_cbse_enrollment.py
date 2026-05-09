@@ -5,10 +5,10 @@ from django.http import HttpResponse
 import csv
 
 from apps.students.models import Student
-from apps.students.enrollment_subjects_utils import (
-    get_student_cbse_subjects,
-    get_medium_from_section
-)
+# from apps.students.enrollment_subjects_utils import (
+#     get_student_cbse_subjects,
+#     get_medium_from_section
+# )
 
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.pagesizes import A4, landscape

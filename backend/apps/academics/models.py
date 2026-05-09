@@ -8,7 +8,7 @@ from apps.schools.models import School
 # CLASS
 # =========================
 class Class(models.Model):
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="classes", db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="classes", db_index=True)
     name = models.CharField(max_length=50)
     class_order = models.PositiveIntegerField(default=0)
 
@@ -35,7 +35,7 @@ class Class(models.Model):
 # =========================
 class Stream(models.Model):
     name = models.CharField(max_length=100)
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="streams", db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="streams", db_index=True)
 
     def clean(self):
         if self.name:
@@ -59,7 +59,7 @@ class Stream(models.Model):
 # =========================
 class Medium(models.Model):
     name = models.CharField(max_length=50)
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="mediums", db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="mediums", db_index=True)
 
     def clean(self):
         if self.name:
@@ -82,7 +82,7 @@ class Medium(models.Model):
 # CLASSROOM
 # =========================
 class Classroom(models.Model):
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="classrooms", db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="classrooms", db_index=True)
     name = models.CharField(max_length=20)
     capacity = models.PositiveIntegerField(default=40)
     floor = models.CharField(max_length=20, blank=True, null=True)
@@ -118,7 +118,7 @@ class Section(models.Model):
         ("Vocational", "Vocational"),
     ]
 
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="sections", db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="sections", db_index=True)
     class_obj = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="sections", db_index=True)
     name = models.CharField(max_length=10)
 
@@ -220,7 +220,7 @@ from django.db.models.functions import Lower
 # -----------------------------------------------------------------------------
 
 class Subject(models.Model):
-    school = models.ForeignKey("School", on_delete=models.CASCADE, db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, db_index=True)
     name = models.CharField(max_length=100, db_index=True)
 
     class Meta:
@@ -395,7 +395,7 @@ from django.db.models import Q
 # -----------------------------------------------------------------------------
 
 class Day(models.Model):
-    school = models.ForeignKey("School", on_delete=models.CASCADE, db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, db_index=True)
     name = models.CharField(max_length=20)  # e.g., Monday / Cycle Day 1
     sequence = models.PositiveIntegerField()
 
@@ -416,7 +416,7 @@ class Day(models.Model):
 # -----------------------------------------------------------------------------
 
 class TimetableSlot(models.Model):
-    school = models.ForeignKey("School", on_delete=models.CASCADE, db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, db_index=True)
     day = models.ForeignKey("Day", on_delete=models.CASCADE, db_index=True)
 
     sequence_number = models.PositiveIntegerField()
@@ -512,10 +512,10 @@ class TimetableSlot(models.Model):
 # -----------------------------------------------------------------------------
 
 class Timetable(models.Model):
-    school = models.ForeignKey("School", on_delete=models.CASCADE, related_name="timetable_entries", db_index=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="timetable_entries", db_index=True)
 
     teacher_subject_assignment = models.ForeignKey(
-        "TeacherSubjectAssignment",
+        "staff.TeacherSubjectAssignment",
         on_delete=models.CASCADE,
         related_name="timetable_entries",
         db_index=True
@@ -537,7 +537,7 @@ class Timetable(models.Model):
     )
 
     substitute_teacher = models.ForeignKey(
-        "Staff",
+        "staff.Staff",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

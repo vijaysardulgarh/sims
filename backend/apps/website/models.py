@@ -3,8 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db.models import Q
 from apps.schools.models import School
-from api.utils.slug import generate_unique_slug
-
+from apps.core.utils.slug import generate_unique_slug
 
 class AboutSchool(models.Model):
     school = models.OneToOneField(School, on_delete=models.CASCADE, related_name='about')

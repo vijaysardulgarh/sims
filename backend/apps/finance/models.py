@@ -9,9 +9,9 @@ import uuid
 # 📊 FEE STRUCTURE
 # =========================
 class FeeStructure(models.Model):
-    school = models.ForeignKey("School", on_delete=models.CASCADE, related_name="fee_structures")
-    class_obj = models.ForeignKey("Class", on_delete=models.CASCADE, related_name="fee_structures")
-    stream = models.ForeignKey("Stream", on_delete=models.CASCADE, null=True, blank=True)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="fee_structures")
+    class_obj = models.ForeignKey("academics.Class", on_delete=models.CASCADE, related_name="fee_structures")
+    stream = models.ForeignKey("academics.Stream", on_delete=models.CASCADE, null=True, blank=True)
 
     session = models.CharField(max_length=20, db_index=True)
 
@@ -68,7 +68,7 @@ class FeeStructure(models.Model):
 # 🎓 STUDENT FEE (LEDGER)
 # =========================
 class StudentFee(models.Model):
-    student = models.ForeignKey("Student", on_delete=models.CASCADE, related_name="fees")
+    student = models.ForeignKey("students.Student", on_delete=models.CASCADE, related_name="fees")
     fee_structure = models.ForeignKey("FeeStructure", on_delete=models.CASCADE, related_name="student_fees")
 
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)

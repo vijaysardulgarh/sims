@@ -30,7 +30,7 @@ class User(AbstractUser):
     )
 
     school = models.ForeignKey(
-        "School",
+        "schools.School",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -39,7 +39,7 @@ class User(AbstractUser):
     )
 
     staff = models.OneToOneField(
-        "Staff",
+        "staff.Staff",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -47,7 +47,7 @@ class User(AbstractUser):
     )
 
     student = models.OneToOneField(
-        "Student",
+        "students.Student",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

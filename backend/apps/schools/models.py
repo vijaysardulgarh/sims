@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.core.exceptions import ValidationError
-from api.utils.slug import generate_unique_slug
+from apps.core.utils.slug import generate_unique_slug
 
 # =========================
 # 🔹 FILE PATH

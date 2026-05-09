@@ -4,7 +4,7 @@ from django.http import HttpResponse
 
 from collections import defaultdict
 
-from apps.core.utils import get_current_school
+from apps.core.utils.helpers import get_current_school
 from apps.students.models import Student
 
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer, PageBreak

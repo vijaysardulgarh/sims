@@ -2,8 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.db.models import Prefetch
-
-from apps.core.utils import get_current_school
+from apps.core.utils.helpers import get_current_school
 from apps.associations.models import SMCMember, Association, StaffAssociationRoleAssignment
 from apps.staff.models import Staff
 

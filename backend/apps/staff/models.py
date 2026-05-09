@@ -41,7 +41,7 @@ class Staff(models.Model):
         MDM = "MDMWorker", "MDM Worker"
         OTHER = "Other", "Other"
 
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="staff")
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="staff")
 
     employee_id = models.CharField(max_length=20, db_index=True)
     name = models.CharField(max_length=50, db_index=True)
@@ -71,7 +71,7 @@ class Staff(models.Model):
     qualification = models.CharField(max_length=255, blank=True, null=True)
 
     subject = models.ForeignKey(
-        "Subject",
+        "academics.Subject",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -213,7 +213,7 @@ class ClassIncharge(models.Model):
 # =========================
 class SanctionedPost(models.Model):
     school = models.ForeignKey(
-        School,
+        "schools.School",
         on_delete=models.CASCADE,
         related_name="sanctioned_posts"
     )
@@ -223,7 +223,7 @@ class SanctionedPost(models.Model):
     designation = models.CharField(max_length=50, blank=True, null=True)
 
     subject = models.ForeignKey(
-        "Subject",
+        "academics.Subject",
         on_delete=models.SET_NULL,
         null=True,
         blank=True
@@ -262,7 +262,7 @@ class TeacherSubjectAssignment(models.Model):
     )
 
     class_subject = models.ForeignKey(
-        "ClassSubject",
+        "academics.ClassSubject",
         on_delete=models.CASCADE,
         related_name="teacher_assignments"
     )
@@ -306,7 +306,7 @@ class TeacherSubjectAssignment(models.Model):
 # =========================
 class TeacherAttendance(models.Model):
 
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE)
 
     teacher = models.ForeignKey(
         Staff,

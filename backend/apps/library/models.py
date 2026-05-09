@@ -9,7 +9,7 @@ from datetime import timedelta
 # 📚 BOOK MODEL
 # =========================
 class Book(models.Model):
-    school = models.ForeignKey("School", on_delete=models.CASCADE, related_name="books")
+    school = models.ForeignKey("schools.School", on_delete=models.CASCADE, related_name="books")
 
     title = models.CharField(max_length=150, db_index=True)
     author = models.CharField(max_length=100, db_index=True)
@@ -68,7 +68,7 @@ class Book(models.Model):
 # 📖 BOOK ISSUE MODEL
 # =========================
 class BookIssue(models.Model):
-    student = models.ForeignKey("Student", on_delete=models.CASCADE, related_name="book_issues")
+    student = models.ForeignKey("students.Student", on_delete=models.CASCADE, related_name="book_issues")
     book = models.ForeignKey("Book", on_delete=models.CASCADE, related_name="issues")
 
     issue_date = models.DateField(default=timezone.now)

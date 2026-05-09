@@ -1,5 +1,4 @@
 from django.urls import path
-from .report_views import *
 from .report_signin import SigninLinkAPIView, SigninPDFAPIView
 from .report_rollcall import RollCallLinkAPIView, RollCallPDFAPIView
 from .report_subject import SubjectReportLinkAPIView, SubjectReportPDFAPIView

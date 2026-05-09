@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
 
-from apps.core.utils import get_current_school
+from apps.core.utils.helpers import get_current_school
 from apps.students.models import Student
 
 from reportlab.platypus import (
