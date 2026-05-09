@@ -7,32 +7,37 @@ from .models import (
 
 
 # ==========================================
-# STUDENT
+# STUDENT ADMIN
 # ==========================================
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
 
-    # Table display
+    # --------------------------------------
+    # TABLE DISPLAY
+    # --------------------------------------
+
     list_display = (
         'srn',
         'full_name_aadhar',
+        'school',
         'student_class',
         'section',
         'roll_number',
         'gender',
         'category',
         'father_mobile',
-        'school',
     )
 
-    # Clickable fields
     list_display_links = (
         'srn',
         'full_name_aadhar',
     )
 
-    # Search
+    # --------------------------------------
+    # SEARCH
+    # --------------------------------------
+
     search_fields = (
         'srn',
         'full_name_aadhar',
@@ -42,42 +47,74 @@ class StudentAdmin(admin.ModelAdmin):
         'admission_number',
         'father_mobile',
         'mother_mobile',
-        'school',
+
+        # ForeignKey searches
+        'school__name',
+        'student_class__name',
+        'stream__name',
+        'section__name',
     )
 
-    # Filters
+    # --------------------------------------
+    # FILTERS
+    # --------------------------------------
+
     list_filter = (
+        'school',
         'student_class',
+        'stream',
         'section',
         'gender',
         'category',
         'religion',
-        'school',
     )
 
-    # Ordering
+    # --------------------------------------
+    # ORDERING
+    # --------------------------------------
+
     ordering = (
+        'school',
         'student_class',
         'section',
         'roll_number',
     )
 
-    # Pagination
+    # --------------------------------------
+    # AUTOCOMPLETE FIELDS
+    # --------------------------------------
+
+    autocomplete_fields = (
+        'school',
+        'student_class',
+        'stream',
+        'section',
+    )
+
+    # --------------------------------------
+    # PAGINATION
+    # --------------------------------------
+
     list_per_page = 25
 
-    # Read only fields
+    # --------------------------------------
+    # READONLY
+    # --------------------------------------
+
     readonly_fields = (
         'subjects',
     )
 
-    # Field grouping
+    # --------------------------------------
+    # FIELDSETS
+    # --------------------------------------
+
     fieldsets = (
 
         ('School Information', {
             'fields': (
-                'srn',
-                'school_code',
                 'school',
+                'school_code',
                 'admission_date',
                 'admission_number',
             )
@@ -96,6 +133,7 @@ class StudentAdmin(admin.ModelAdmin):
 
         ('Student Personal Information', {
             'fields': (
+                'srn',
                 'full_name_aadhar',
                 'date_of_birth',
                 'gender',
@@ -153,7 +191,7 @@ class StudentAdmin(admin.ModelAdmin):
 
 
 # ==========================================
-# STUDENT ACHIEVEMENT
+# STUDENT ACHIEVEMENT ADMIN
 # ==========================================
 
 @admin.register(StudentAchievement)
@@ -187,7 +225,7 @@ class StudentAchievementAdmin(admin.ModelAdmin):
 
 
 # ==========================================
-# EXAM DETAIL
+# EXAM DETAIL ADMIN
 # ==========================================
 
 @admin.register(ExamDetail)
