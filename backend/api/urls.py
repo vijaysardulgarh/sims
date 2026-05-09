@@ -7,6 +7,10 @@ from django.urls import path, include
 # ==========================================
 
 urlpatterns = [
+    
+    # ✅ Django Admin
+    path('admin/', admin.site.urls),
+
     # 🔐 Authentication & Users
     path('users/', include('apps.users.urls')),
     

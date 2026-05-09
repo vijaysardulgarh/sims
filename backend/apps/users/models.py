@@ -1,18 +1,74 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.core.exceptions import ValidationError
 
 
+# ==========================================
+# CUSTOM USER MANAGER
+# ==========================================
+
+class UserManager(BaseUserManager):
+
+    def create_user(self, email, password=None, **extra_fields):
+
+        if not email:
+            raise ValueError("Email is required")
+
+        email = self.normalize_email(email)
+
+        user = self.model(
+            email=email,
+            username=email,
+            **extra_fields
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("role", "admin")
+
+        return self.create_user(
+            email,
+            password,
+            **extra_fields
+        )
+
+
+# ==========================================
+# USER MODEL
+# ==========================================
+
 class User(AbstractUser):
 
-    # Username optional but must NOT be NULL
-    username = models.CharField(max_length=150, blank=True, unique=True)
+    # Custom manager
+    objects = UserManager()
 
-    # Email is login field
-    email = models.EmailField(unique=True, db_index=True)
+    # Username optional but unique
+    username = models.CharField(
+        max_length=150,
+        blank=True,
+        unique=True
+    )
+
+    # Email login
+    email = models.EmailField(
+        unique=True,
+        db_index=True
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    # ------------------------------------------
+    # ROLES
+    # ------------------------------------------
 
     ROLE_CHOICES = [
         ("principal", "Principal"),
@@ -28,6 +84,10 @@ class User(AbstractUser):
         default="teacher",
         db_index=True
     )
+
+    # ------------------------------------------
+    # RELATIONS
+    # ------------------------------------------
 
     school = models.ForeignKey(
         "schools.School",
@@ -54,9 +114,10 @@ class User(AbstractUser):
         related_name="user"
     )
 
-    # -------------------------
+    # ------------------------------------------
     # VALIDATION
-    # -------------------------
+    # ------------------------------------------
+
     def clean(self):
 
         if not self.email:
@@ -65,72 +126,108 @@ class User(AbstractUser):
         # Superuser handling
         if self.is_superuser:
             self.role = "admin"
+
             if self.staff and self.student:
-                raise ValidationError("User cannot be both staff and student")
+                raise ValidationError(
+                    "User cannot be both staff and student"
+                )
+
             return
 
         if not self.school:
-            raise ValidationError("School is required for all users")
+            raise ValidationError(
+                "School is required for all users"
+            )
 
         if self.role in ["teacher", "principal", "clerk"] and not self.staff:
-            raise ValidationError(f"{self.role} user must be linked to staff")
+            raise ValidationError(
+                f"{self.role} user must be linked to staff"
+            )
 
         if self.role == "student" and not self.student:
-            raise ValidationError("Student user must be linked to student")
+            raise ValidationError(
+                "Student user must be linked to student"
+            )
 
         if self.role == "admin" and (self.staff or self.student):
-            raise ValidationError("Admin should not be linked to staff or student")
+            raise ValidationError(
+                "Admin should not be linked to staff or student"
+            )
 
         if self.staff and self.student:
-            raise ValidationError("User cannot be both staff and student")
+            raise ValidationError(
+                "User cannot be both staff and student"
+            )
 
         if self.staff and self.role == "student":
-            raise ValidationError("Student role cannot be linked to staff")
+            raise ValidationError(
+                "Student role cannot be linked to staff"
+            )
 
         if self.student and self.role != "student":
-            raise ValidationError("Only student role can link to student")
+            raise ValidationError(
+                "Only student role can link to student"
+            )
 
         if self.staff and self.school != self.staff.school:
-            raise ValidationError("User school must match staff school")
+            raise ValidationError(
+                "User school must match staff school"
+            )
 
         if self.student and self.school != self.student.school:
-            raise ValidationError("User school must match student school")
+            raise ValidationError(
+                "User school must match student school"
+            )
 
-    # -------------------------
+    # ------------------------------------------
     # SAVE
-    # -------------------------
+    # ------------------------------------------
+
     def save(self, *args, **kwargs):
 
         # Normalize email
         if self.email:
             self.email = self.email.lower().strip()
 
-        # Ensure username always exists and normalized
+        # Ensure username always exists
         if not self.username:
             self.username = self.email
         else:
             self.username = self.username.lower().strip()
 
-        # Deterministic admin access
-        self.is_staff = bool(self.is_superuser or self.role in ["admin", "principal"])
+        # Admin access handling
+        self.is_staff = bool(
+            self.is_superuser or self.role in ["admin", "principal"]
+        )
 
         self.full_clean()
+
         super().save(*args, **kwargs)
 
-    # -------------------------
+    # ------------------------------------------
     # STRING
-    # -------------------------
+    # ------------------------------------------
+
     def __str__(self):
-        school_name = self.school.name if self.school else "No School"
+
+        school_name = (
+            self.school.name
+            if self.school
+            else "No School"
+        )
+
         return f"{self.email} ({school_name} - {self.role})"
 
-    # -------------------------
+    # ------------------------------------------
     # META
-    # -------------------------
+    # ------------------------------------------
+
     class Meta:
+
         indexes = [
             models.Index(fields=["role"]),
             models.Index(fields=["school"]),
             models.Index(fields=["email"]),
         ]
+
         ordering = ["school", "role", "email"]
