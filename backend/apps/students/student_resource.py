@@ -1,9 +1,14 @@
-import datetime
 import logging
+
+from datetime import datetime
 
 from import_export import (
     resources,
     fields
+)
+
+from import_export.widgets import (
+    ForeignKeyWidget
 )
 
 from apps.students.models import (
@@ -25,6 +30,22 @@ from apps.academics.models import (
 class StudentResource(resources.ModelResource):
 
     # =========================================
+    # SCHOOL FK
+    # =========================================
+
+    school = fields.Field(
+
+        attribute='school',
+
+        column_name='SchoolName',
+
+        widget=ForeignKeyWidget(
+            School,
+            'name'
+        )
+    )
+
+    # =========================================
     # BASIC INFO
     # =========================================
 
@@ -36,11 +57,6 @@ class StudentResource(resources.ModelResource):
     school_code = fields.Field(
         attribute='school_code',
         column_name='SchoolCode'
-    )
-
-    school_name = fields.Field(
-        attribute='school_name',
-        column_name='SchoolName'
     )
 
     admission_date = fields.Field(
@@ -206,6 +222,10 @@ class StudentResource(resources.ModelResource):
             'srn'
         ]
 
+        skip_unchanged = True
+
+        report_skipped = False
+
     # =========================================
     # BEFORE IMPORT
     # =========================================
@@ -260,6 +280,30 @@ class StudentResource(resources.ModelResource):
         try:
 
             # =====================================
+            # SCHOOL AUTO CREATE
+            # =====================================
+
+            school_name = (
+                row.get("SchoolName") or ""
+            ).strip()
+
+            if not school_name:
+
+                school_name = "Default School"
+
+            school = School.objects.filter(
+                name__iexact=school_name
+            ).first()
+
+            if not school:
+
+                school = School.objects.create(
+                    name=school_name
+                )
+
+            row["SchoolName"] = school.name
+
+            # =====================================
             # DATE FORMATTING
             # =====================================
 
@@ -279,24 +323,75 @@ class StudentResource(resources.ModelResource):
             # CLASS CONVERSION
             # =====================================
 
+
             class_mapping = {
 
-                "First": "1ST",
-                "Second": "2ND",
-                "Third": "3RD",
-                "Fourth": "4TH",
-                "Fifth": "5TH",
+            # =====================================
+            # PRIMARY
+            # =====================================
 
-                "Sixth": "6TH",
-                "Seventh": "7TH",
-                "Eighth": "8TH",
+            "First": "1ST",
+            "FIRST": "1ST",
+            "1ST": "1ST",
 
-                "Ninth": "9TH",
-                "Tenth": "10TH",
+            "Second": "2ND",
+            "SECOND": "2ND",
+            "2ND": "2ND",
 
-                "Eleventh": "11TH",
-                "Twelfth": "12TH",
-            }
+            "Third": "3RD",
+            "THIRD": "3RD",
+            "3RD": "3RD",
+
+            "Fourth": "4TH",
+            "FOURTH": "4TH",
+            "4TH": "4TH",
+
+            "Fifth": "5TH",
+            "FIFTH": "5TH",
+            "5TH": "5TH",
+
+            # =====================================
+            # MIDDLE
+            # =====================================
+
+            "Sixth": "6TH",
+            "SIXTH": "6TH",
+            "6TH": "6TH",
+
+            "Seventh": "7TH",
+            "SEVENTH": "7TH",
+            "7TH": "7TH",
+
+            "Eighth": "8TH",
+            "EIGHTH": "8TH",
+            "8TH": "8TH",
+
+            # =====================================
+            # SECONDARY
+            # =====================================
+
+            "Ninth": "9TH",
+            "NINTH": "9TH",
+            "NINETH": "9TH",
+            "9TH": "9TH",
+            "Nineth": "9TH",
+
+            "Tenth": "10TH",
+            "TENTH": "10TH",
+            "10TH": "10TH",
+
+            # =====================================
+            # SENIOR SECONDARY
+            # =====================================
+
+            "Eleventh": "11TH",
+            "ELEVENTH": "11TH",
+            "11TH": "11TH",
+
+            "Twelfth": "12TH",
+            "TWELFTH": "12TH",
+            "12TH": "12TH",
+        }
 
             excel_class = row.get("Class")
 
@@ -312,26 +407,144 @@ class StudentResource(resources.ModelResource):
 
             excel_section = row.get("Section")
 
-            if excel_section:
+            if excel_section and "(" in excel_section:
 
-                if "(" in excel_section:
+                section_name = (
+                    excel_section
+                    .split("(")[0]
+                    .strip()
+                )
 
-                    section_name = (
-                        excel_section
-                        .split("(")[0]
-                        .strip()
+                medium_name = (
+                    excel_section
+                    .split("(")[1]
+                    .replace(")", "")
+                    .strip()
+                )
+
+                row["Section"] = section_name
+
+                row["Medium"] = medium_name
+
+            # =====================================
+            # CLASS AUTO CREATE
+            # =====================================
+
+            class_name = row.get("Class")
+
+            student_class = None
+
+            if class_name:
+
+                student_class = Class.objects.filter(
+
+                    name__iexact=class_name,
+
+                    school=school
+
+                ).first()
+
+                if not student_class:
+
+                    student_class = Class.objects.create(
+
+                        name=class_name,
+
+                        school=school
                     )
 
-                    medium_name = (
-                        excel_section
-                        .split("(")[1]
-                        .replace(")", "")
-                        .strip()
+            # =====================================
+            # STREAM AUTO CREATE
+            # =====================================
+
+            stream = None
+
+            stream_name = (
+                row.get("Stream") or ""
+            ).strip()
+
+            if stream_name:
+
+                stream = Stream.objects.filter(
+
+                    name__iexact=stream_name,
+
+                    school=school
+
+                ).first()
+
+                if not stream:
+
+                    stream = Stream.objects.create(
+
+                        name=stream_name,
+
+                        school=school
                     )
 
-                    row["Section"] = section_name
+            # =====================================
+            # MEDIUM AUTO CREATE
+            # =====================================
 
-                    row["Medium"] = medium_name
+            medium = None
+
+            medium_name = (
+                row.get("Medium") or ""
+            ).strip()
+
+            if medium_name:
+
+                medium = Medium.objects.filter(
+
+                    name__iexact=medium_name,
+
+                    school=school
+
+                ).first()
+
+                if not medium:
+
+                    medium = Medium.objects.create(
+
+                        name=medium_name,
+
+                        school=school
+                    )
+
+            # =====================================
+            # SECTION AUTO CREATE
+            # =====================================
+
+            section_name = (
+                row.get("Section") or ""
+            ).strip()
+
+            if section_name and student_class:
+
+                section = Section.objects.filter(
+
+                    name__iexact=section_name,
+
+                    class_obj=student_class,
+
+                    school=school
+
+                ).first()
+
+                if not section:
+
+                    section = Section.objects.create(
+
+                        name=section_name,
+
+                        class_obj=student_class,
+
+                        stream=stream,
+
+                        medium=medium,
+
+                        school=school
+                    )
 
         except Exception as e:
 
@@ -351,21 +564,15 @@ class StudentResource(resources.ModelResource):
         **kwargs
     ):
 
-        # =====================================
-        # SCHOOL
-        # =====================================
+        school_name = (
+            row.get("SchoolName") or ""
+        ).strip()
 
-        school_name = row.get("SchoolName")
+        school = School.objects.filter(
+            name__iexact=school_name
+        ).first()
 
-        school = None
-
-        if school_name:
-
-            school = School.objects.filter(
-                name=school_name
-            ).first()
-
-            instance.school = school
+        instance.school = school
 
         # =====================================
         # CLASS
@@ -373,12 +580,14 @@ class StudentResource(resources.ModelResource):
 
         class_name = row.get("Class")
 
-        student_class = None
-
         if class_name:
 
             student_class = Class.objects.filter(
-                name=class_name
+
+                name__iexact=class_name,
+
+                school=school
+
             ).first()
 
             instance.student_class = student_class
@@ -387,14 +596,18 @@ class StudentResource(resources.ModelResource):
         # STREAM
         # =====================================
 
-        stream_name = row.get("Stream")
-
-        stream = None
+        stream_name = (
+            row.get("Stream") or ""
+        ).strip()
 
         if stream_name:
 
             stream = Stream.objects.filter(
-                name=stream_name
+
+                name__iexact=stream_name,
+
+                school=school
+
             ).first()
 
             instance.stream = stream
@@ -403,14 +616,18 @@ class StudentResource(resources.ModelResource):
         # MEDIUM
         # =====================================
 
-        medium_name = row.get("Medium")
-
-        medium = None
+        medium_name = (
+            row.get("Medium") or ""
+        ).strip()
 
         if medium_name:
 
             medium = Medium.objects.filter(
-                name=medium_name
+
+                name__iexact=medium_name,
+
+                school=school
+
             ).first()
 
             instance.medium = medium
@@ -419,30 +636,21 @@ class StudentResource(resources.ModelResource):
         # SECTION
         # =====================================
 
-        section_name = row.get("Section")
+        section_name = (
+            row.get("Section") or ""
+        ).strip()
 
-        if section_name and student_class:
+        if section_name and instance.student_class:
 
-            section_query = Section.objects.filter(
+            section = Section.objects.filter(
 
-                name=section_name,
+                name__iexact=section_name,
 
-                class_obj=student_class
-            )
+                class_obj=instance.student_class,
 
-            if medium:
+                school=school
 
-                section_query = section_query.filter(
-                    medium=medium
-                )
-
-            if stream:
-
-                section_query = section_query.filter(
-                    stream=stream
-                )
-
-            section = section_query.first()
+            ).first()
 
             instance.section = section
 
@@ -450,13 +658,16 @@ class StudentResource(resources.ModelResource):
     # DATE FORMATTER
     # =========================================
 
-    def reformat_date(self, date_str):
+    def reformat_date(
+        self,
+        date_str
+    ):
 
         try:
 
             original_format = "%Y-%m-%d"
 
-            date_obj = datetime.datetime.strptime(
+            date_obj = datetime.strptime(
                 str(date_str),
                 original_format
             )
@@ -469,7 +680,7 @@ class StudentResource(resources.ModelResource):
 
                 original_format = "%b %d, %Y"
 
-                date_obj = datetime.datetime.strptime(
+                date_obj = datetime.strptime(
                     str(date_str),
                     original_format
                 )
