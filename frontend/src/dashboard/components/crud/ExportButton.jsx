@@ -1,15 +1,36 @@
-const ExportButton = () => {
+const ExportButton = ({
+
+  onClick,
+
+  label = "Export",
+
+}) => {
 
   return (
 
-    <button className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 rounded-xl font-medium transition">
+    <button
 
-      Export
+      type="button"
+
+      onClick={onClick}
+
+      className="
+
+        bg-blue-600
+        hover:bg-blue-700
+        text-white
+        px-5
+        py-3
+        rounded-xl
+        font-medium
+        transition
+      "
+    >
+
+      {label}
 
     </button>
-
   );
-
 };
 
 export default ExportButton;

@@ -19,7 +19,7 @@ urlpatterns = [
     
     # 🧑‍🏫 Staff & Student Management
     path('staff/', include('apps.staff.urls')),
-    path('students/', include('apps.students.urls')),
+    path('api/students/', include('apps.students.urls')),
     
     # 💰 Finance & Operations
     path('finance/', include('apps.finance.urls')),

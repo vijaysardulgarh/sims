@@ -275,15 +275,4 @@ class Section(models.Model):
 
     def __str__(self):
 
-        base = f"{self.class_obj.name} {self.name}"
-
-        if self.stream:
-            base += f" ({self.stream.name})"
-
-        if self.sub_stream:
-            base += f" - {self.sub_stream}"
-
-        if self.medium:
-            base += f" - {self.medium.name}"
-
-        return base
+        return self.name

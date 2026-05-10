@@ -46,12 +46,12 @@ path("subject-wise/options/", SubjectWiseLinkAPIView.as_view()),
 path("subject-wise/<str:class_name>/<str:subject_name>/", SubjectWiseStudentsPDFAPIView.as_view()),
 
 path(
-    "students/import/",
+    "import/",
     StudentImportAPIView.as_view(),
 ),
 
 path(
-    "students/export/",
+    "export/",
     StudentExportAPIView.as_view(),
 ),
 

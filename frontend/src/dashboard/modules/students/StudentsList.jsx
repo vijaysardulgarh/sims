@@ -18,6 +18,10 @@ import StatusToggle from "../../components/crud/StatusToggle";
 import TableFilters from "../../components/crud/TableFilters";
 import BulkActions from "../../components/crud/BulkActions";
 
+import studentService
+from "../../services/studentService";
+
+
 const StudentsList = () => {
 
   // =========================
@@ -126,6 +130,17 @@ const StudentsList = () => {
     useState("");
 
   // =========================
+  // IMPORT EXPORT
+  // =========================
+
+  const [file, setFile] =
+    useState(null);
+
+  const [importLoading,
+    setImportLoading] =
+    useState(false);
+
+  // =========================
   // SAVE TO STORAGE
   // =========================
 
@@ -133,6 +148,147 @@ const StudentsList = () => {
     "students",
     JSON.stringify(students)
   );
+
+  // =========================
+  // FILE CHANGE
+  // =========================
+
+  const handleFileChange = (e) => {
+
+    setFile(
+      e.target.files[0]
+    );
+  };
+
+  // =========================
+  // IMPORT STUDENTS
+  // =========================
+
+  const handleImport = async () => {
+
+    // =========================
+    // FILE REQUIRED
+    // =========================
+  
+    if (!file) {
+  
+      toast.error(
+        "Please select Excel file"
+      );
+  
+      return;
+    }
+  
+    try {
+  
+      // =========================
+      // START LOADING
+      // =========================
+  
+      setImportLoading(true);
+  
+      console.log(
+        "IMPORT STARTED"
+      );
+  
+      // =========================
+      // API CALL
+      // =========================
+  
+      const response =
+        await studentService.importStudents(
+          file
+        );
+  
+      console.log(
+        "IMPORT RESPONSE:",
+        response
+      );
+  
+      // =========================
+      // SUCCESS RESPONSE
+      // =========================
+  
+      if (response?.success) {
+  
+        toast.success(
+  
+          response.message ||
+  
+          "Students Imported Successfully"
+        );
+  
+        console.log(
+          "IMPORT SUCCESS"
+        );
+  
+      }
+  
+      // =========================
+      // FAILED RESPONSE
+      // =========================
+  
+      else {
+  
+        toast.error(
+  
+          response?.error ||
+  
+          "Import Failed"
+        );
+  
+        console.log(
+          "IMPORT FAILED RESPONSE"
+        );
+      }
+  
+    } catch (error) {
+  
+      console.error(
+        "IMPORT ERROR:",
+        error
+      );
+  
+      // =========================
+      // SERVER ERROR
+      // =========================
+  
+      toast.error(
+  
+        error?.response?.data?.error ||
+  
+        error?.message ||
+  
+        "Import Failed"
+      );
+  
+    } finally {
+  
+      // =========================
+      // STOP LOADING
+      // =========================
+  
+      setImportLoading(false);
+  
+      console.log(
+        "IMPORT FINISHED"
+      );
+  
+    }
+  };
+
+  // =========================
+  // EXPORT STUDENTS
+  // =========================
+
+  const handleExport = () => {
+
+    studentService.exportStudents();
+
+    toast.success(
+      "Export Started"
+    );
+  };
 
   // =========================
   // DELETE STUDENT
@@ -165,10 +321,6 @@ const StudentsList = () => {
 
   const handleBulkDelete = () => {
 
-    // =========================
-    // NO SELECTION
-    // =========================
-
     if (
       selectedStudents.length === 0
     ) {
@@ -180,10 +332,6 @@ const StudentsList = () => {
       return;
 
     }
-
-    // =========================
-    // STRONG CONFIRMATION
-    // =========================
 
     if (
       selectedStudents.length > 20
@@ -210,10 +358,6 @@ Type DELETE to continue.`
 
     }
 
-    // =========================
-    // DELETE STUDENTS
-    // =========================
-
     const updatedStudents =
       students.filter(
         (student) =>
@@ -222,30 +366,14 @@ Type DELETE to continue.`
           )
       );
 
-    // =========================
-    // UPDATE STATE
-    // =========================
-
     setStudents(updatedStudents);
-
-    // =========================
-    // UPDATE STORAGE
-    // =========================
 
     localStorage.setItem(
       "students",
       JSON.stringify(updatedStudents)
     );
 
-    // =========================
-    // RESET SELECTION
-    // =========================
-
     setSelectedStudents([]);
-
-    // =========================
-    // SUCCESS MESSAGE
-    // =========================
 
     toast.success(
       `${selectedStudents.length} Students Deleted`
@@ -572,6 +700,7 @@ Type DELETE to continue.`
     <div className="space-y-6">
 
       {/* HEADER */}
+
       <CrudHeader
         title="Students Management"
         description="Manage students records"
@@ -581,13 +710,55 @@ Type DELETE to continue.`
         }
       >
 
-        <ImportButton />
+        <div className="flex items-center gap-3">
 
-        <ExportButton />
+          {/* FILE INPUT */}
+
+          <input
+            type="file"
+            accept=".xlsx,.xls"
+            onChange={handleFileChange}
+            className="
+              border
+              rounded
+              px-2
+              py-1
+              text-sm
+            "
+          />
+
+          {/* IMPORT */}
+
+          <ImportButton
+
+            onClick={handleImport}
+
+            disabled={importLoading}
+
+            label={
+              importLoading
+                ? "Importing..."
+                : "Import"
+            }
+
+          />
+
+          {/* EXPORT */}
+
+          <ExportButton
+
+            onClick={handleExport}
+
+            label="Export"
+
+          />
+
+        </div>
 
       </CrudHeader>
 
       {/* BULK ACTIONS */}
+
       <BulkActions
         selectedCount={
           selectedStudents.length
@@ -599,6 +770,7 @@ Type DELETE to continue.`
       />
 
       {/* SEARCH */}
+
       <SearchBox
         placeholder="Search students..."
         value={search}
@@ -608,6 +780,7 @@ Type DELETE to continue.`
       />
 
       {/* TABLE FILTERS */}
+
       <TableFilters
         classFilter={classFilter}
         setClassFilter={setClassFilter}
@@ -616,12 +789,14 @@ Type DELETE to continue.`
       />
 
       {/* TABLE */}
+
       <DataTable
         columns={columns}
         data={tableData}
       />
 
       {/* PAGINATION */}
+
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
@@ -629,6 +804,7 @@ Type DELETE to continue.`
       />
 
       {/* CONFIRM MODAL */}
+
       <ConfirmModal
         isOpen={isModalOpen}
         title="Delete Student"
