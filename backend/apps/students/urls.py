@@ -69,27 +69,27 @@ urlpatterns = [
 
     path(
 
-        "students/",
+        "",
 
         StudentListCreateAPIView.as_view(),
     ),
 
     path(
 
-        "students/import/",
+        "import/",
 
         StudentImportAPIView.as_view(),
     ),
 
     path(
 
-        "students/export/",
+        "export/",
 
         StudentExportAPIView.as_view(),
     ),
     path(
 
-        "students/<str:srn>/",
+        "<str:srn>/",
 
         StudentRetrieveUpdateDestroyAPIView.as_view(),
     ),

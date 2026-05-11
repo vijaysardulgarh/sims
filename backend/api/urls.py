@@ -23,7 +23,7 @@ urlpatterns = [
     # ======================================
 
     path(
-        "users/",
+        "api/users/",
         include("apps.users.urls")
     ),
 
@@ -32,7 +32,7 @@ urlpatterns = [
     # ======================================
 
     path(
-        "academics/",
+        "api/academics/",
         include("apps.academics.urls")
     ),
 
@@ -41,7 +41,7 @@ urlpatterns = [
     # ======================================
 
     path(
-        "staff/",
+        "api/staff/",
         include("apps.staff.urls")
     ),
 
@@ -51,7 +51,7 @@ urlpatterns = [
 
     path(
 
-        "api/",
+        "api/students/",
 
         include("apps.students.urls")
     ),
@@ -61,12 +61,12 @@ urlpatterns = [
     # ======================================
 
     path(
-        "finance/",
+        "api/finance/",
         include("apps.finance.urls")
     ),
 
     path(
-        "library/",
+        "api/library/",
         include("apps.library.urls")
     ),
 
@@ -75,7 +75,7 @@ urlpatterns = [
     # ======================================
 
     path(
-        "associations/",
+        "api/associations/",
         include("apps.associations.urls")
     ),
 
