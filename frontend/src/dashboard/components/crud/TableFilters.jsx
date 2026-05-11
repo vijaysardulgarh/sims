@@ -8,6 +8,14 @@ const TableFilters = ({
 
   setSectionFilter,
 
+  genderFilter,
+
+  setGenderFilter,
+
+  categoryFilter,
+
+  setCategoryFilter,
+
   statusFilter,
 
   setStatusFilter,
@@ -83,12 +91,64 @@ const TableFilters = ({
   // UNIQUE SECTIONS
   // =========================
 
+  const filteredStudentsByClass =
+
+    classFilter === ""
+  
+      ? students
+  
+      : students.filter(
+  
+          (student) =>
+  
+            student.class === classFilter
+        );
+  
   const uniqueSections = [
+  
+    ...new Set(
+  
+      filteredStudentsByClass.map(
+        (student) => student.section
+      )
+    ),
+  
+  ]
+  
+    .filter(Boolean)
+  
+    .sort();
+
+
+  // =========================
+  // UNIQUE GENDERS
+  // =========================
+
+  const uniqueGenders = [
 
     ...new Set(
 
       students.map(
-        (student) => student.section
+        (student) => student.gender
+      )
+    ),
+
+  ]
+
+    .filter(Boolean)
+
+    .sort();
+
+  // =========================
+  // UNIQUE CATEGORIES
+  // =========================
+
+  const uniqueCategories = [
+
+    ...new Set(
+
+      students.map(
+        (student) => student.category
       )
     ),
 
@@ -100,7 +160,7 @@ const TableFilters = ({
 
   return (
 
-    <div className="flex flex-col md:flex-row gap-4">
+    <div className="flex flex-wrap gap-4">
 
       {/* CLASS FILTER */}
 
@@ -178,6 +238,90 @@ const TableFilters = ({
               >
 
                 {sectionName}
+
+              </option>
+            )
+          )
+        }
+
+      </select>
+
+      {/* GENDER FILTER */}
+
+      <select
+
+        value={genderFilter}
+
+        onChange={(e) =>
+          setGenderFilter(e.target.value)
+        }
+
+        className="
+          border
+          border-gray-300
+          rounded-xl
+          px-4
+          py-3
+        "
+      >
+
+        <option value="">
+          All Genders
+        </option>
+
+        {
+
+          uniqueGenders.map(
+            (gender, index) => (
+
+              <option
+                key={index}
+                value={gender}
+              >
+
+                {gender}
+
+              </option>
+            )
+          )
+        }
+
+      </select>
+
+      {/* CATEGORY FILTER */}
+
+      <select
+
+        value={categoryFilter}
+
+        onChange={(e) =>
+          setCategoryFilter(e.target.value)
+        }
+
+        className="
+          border
+          border-gray-300
+          rounded-xl
+          px-4
+          py-3
+        "
+      >
+
+        <option value="">
+          All Categories
+        </option>
+
+        {
+
+          uniqueCategories.map(
+            (category, index) => (
+
+              <option
+                key={index}
+                value={category}
+              >
+
+                {category}
 
               </option>
             )

@@ -64,6 +64,12 @@ const StudentsList = () => {
   const [sectionFilter, setSectionFilter] =
     useState("");
 
+  const [genderFilter, setGenderFilter] =
+  useState("");
+  
+  const [categoryFilter, setCategoryFilter] =
+    useState("");  
+
   const [statusFilter, setStatusFilter] =
     useState("");
 
@@ -155,6 +161,12 @@ const StudentsList = () => {
             student.class_name ||
 
             "",
+
+          gender:
+            student.gender || "",
+      
+          category:
+            student.category || "",  
 
           section:
 
@@ -321,11 +333,84 @@ const StudentsList = () => {
   // BULK DELETE
   // =========================
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
 
-    toast.success(
-      "Bulk Delete Feature Coming Soon"
-    );
+    // =====================================
+    // NO RECORD SELECTED
+    // =====================================
+  
+    if (
+      selectedStudents.length === 0
+    ) {
+  
+      toast.error(
+        "No students selected"
+      );
+  
+      return;
+    }
+  
+    // =====================================
+    // CONFIRM DELETE
+    // =====================================
+  
+    const confirmDelete =
+      window.confirm(
+  
+        `Are you sure you want to delete ${selectedStudents.length} students?`
+      );
+  
+    if (!confirmDelete) {
+  
+      return;
+    }
+  
+    try {
+  
+      // =====================================
+      // DELETE ALL SELECTED
+      // =====================================
+  
+      await Promise.all(
+  
+        selectedStudents.map((id) =>
+  
+          studentService.deleteStudent(id)
+        )
+      );
+  
+      // =====================================
+      // SUCCESS
+      // =====================================
+  
+      toast.success(
+  
+        `${selectedStudents.length} students deleted successfully`
+      );
+  
+      // =====================================
+      // CLEAR SELECTION
+      // =====================================
+  
+      setSelectedStudents([]);
+  
+      // =====================================
+      // REFRESH LIST
+      // =====================================
+  
+      fetchStudents();
+  
+    } catch (error) {
+  
+      console.error(
+        "BULK DELETE ERROR:",
+        error
+      );
+  
+      toast.error(
+        "Failed to delete selected students"
+      );
+    }
   };
 
   // =========================
@@ -440,6 +525,18 @@ const StudentsList = () => {
           student.section
             .toLowerCase()
             .includes(searchValue)
+
+          ||
+
+          student.gender
+            .toLowerCase()
+            .includes(searchValue)
+          
+          ||
+          
+          student.category
+            .toLowerCase()
+            .includes(searchValue)  
         )
 
         &&
@@ -458,6 +555,22 @@ const StudentsList = () => {
           student.section === sectionFilter
         )
 
+        &&
+
+        (
+          genderFilter === "" ||
+
+          student.gender === genderFilter
+        )
+
+        &&
+
+        (
+          categoryFilter === "" ||
+
+          student.category === categoryFilter
+        )
+        
         &&
 
         (
@@ -757,6 +870,14 @@ const StudentsList = () => {
         sectionFilter={sectionFilter}
 
         setSectionFilter={setSectionFilter}
+
+        genderFilter={genderFilter}
+
+        setGenderFilter={setGenderFilter}
+
+        categoryFilter={categoryFilter}
+
+        setCategoryFilter={setCategoryFilter}
 
         statusFilter={statusFilter}
 
