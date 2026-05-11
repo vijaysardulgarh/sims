@@ -1,204 +1,501 @@
-import { useParams } from "react-router-dom";
+import {
+  useEffect,
+  useState
+} from "react";
+
+import {
+  useParams,
+  useNavigate
+} from "react-router-dom";
+
+import toast from "react-hot-toast";
+
+import studentService
+from "../../services/studentService";
+
 
 const StudentProfile = () => {
 
-  // =========================
-  // GET STUDENT ID FROM URL
-  // =========================
+  // =====================================
+  // PARAMS
+  // =====================================
 
   const { id } = useParams();
 
-  // =========================
-  // GET STUDENTS FROM STORAGE
-  // =========================
+  const navigate = useNavigate();
 
-  const students =
-    JSON.parse(
-      localStorage.getItem("students")
-    ) || [];
+  // =====================================
+  // STATES
+  // =====================================
 
-  // =========================
-  // FIND CURRENT STUDENT
-  // =========================
+  const [student, setStudent] =
+    useState(null);
 
-  const student =
-    students.find(
-      (student) =>
-        student.id === Number(id)
+  const [loading, setLoading] =
+    useState(true);
+
+  // =====================================
+  // FETCH STUDENT
+  // =====================================
+
+  useEffect(() => {
+
+    fetchStudent();
+
+  }, [id]);
+
+  const fetchStudent = async () => {
+
+    try {
+
+      setLoading(true);
+
+      const data =
+        await studentService.getStudent(id);
+
+      setStudent(data);
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error(
+        "Failed to load student"
+      );
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
+  // =====================================
+  // LOADING
+  // =====================================
+
+  if (loading) {
+
+    return (
+
+      <div className="p-6">
+
+        Loading student profile...
+
+      </div>
     );
+  }
 
-  // =========================
-  // STUDENT NOT FOUND
-  // =========================
+  // =====================================
+  // NO STUDENT
+  // =====================================
 
   if (!student) {
 
     return (
 
-      <div className="p-10">
+      <div className="p-6">
 
-        <h1 className="text-3xl font-bold text-red-600">
-          Student Not Found
-        </h1>
+        Student not found
 
       </div>
-
     );
-
   }
 
   return (
 
     <div className="space-y-6">
 
-      {/* PAGE HEADER */}
-      <div>
+      {/* ================================= */}
+      {/* HEADER */}
+      {/* ================================= */}
 
-        <h1 className="text-3xl font-bold text-gray-800">
-          Student Profile
-        </h1>
+      <div className="
+        bg-white
+        rounded-2xl
+        shadow
+        p-6
+        flex
+        flex-col
+        md:flex-row
+        justify-between
+        gap-4
+      ">
 
-        <p className="text-gray-500 mt-1">
-          View complete student information
-        </p>
+        <div>
 
-      </div>
+          <h1 className="
+            text-3xl
+            font-bold
+            text-gray-800
+          ">
 
-      {/* PROFILE CARD */}
-      <div className="bg-white rounded-2xl shadow p-8">
+            {student.full_name_aadhar}
 
-        <div className="flex flex-col md:flex-row gap-8">
+          </h1>
 
-          {/* PHOTO */}
-          <div className="flex justify-center">
+          <p className="text-gray-500 mt-2">
 
-            <div className="w-40 h-40 rounded-2xl bg-blue-100 flex items-center justify-center text-5xl font-bold text-blue-700">
+            SRN: {student.srn}
 
-              {student.name.charAt(0)}
+          </p>
 
-            </div>
+        </div>
 
-          </div>
+        <div className="flex gap-3">
 
-          {/* DETAILS */}
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <button
+            onClick={() =>
+              navigate(
+                `/dashboard/students/edit/${student.srn}`
+              )
+            }
+            className="
+              bg-blue-600
+              hover:bg-blue-700
+              text-white
+              px-5
+              py-2
+              rounded-xl
+              font-medium
+            "
+          >
 
-            <ProfileItem
-              label="Student ID"
-              value={student.id}
-            />
+            Edit Student
 
-            <ProfileItem
-              label="Admission No"
-              value={student.admissionNo}
-            />
+          </button>
 
-            <ProfileItem
-              label="Student Name"
-              value={student.name}
-            />
+          <button
+            onClick={() =>
+              navigate(
+                "/dashboard/students"
+              )
+            }
+            className="
+              border
+              px-5
+              py-2
+              rounded-xl
+              font-medium
+            "
+          >
 
-            <ProfileItem
-              label="Class"
-              value={student.class}
-            />
+            Back
 
-            <ProfileItem
-              label="Section"
-              value={student.section}
-            />
-
-            <ProfileItem
-              label="Phone"
-              value={student.phone}
-            />
-
-            <ProfileItem
-              label="Status"
-              value={student.status}
-            />
-
-          </div>
+          </button>
 
         </div>
 
       </div>
 
-      {/* EXTRA MODULES */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* ================================= */}
+      {/* ACADEMIC INFO */}
+      {/* ================================= */}
 
-        {/* ATTENDANCE */}
-        <div className="bg-white rounded-2xl shadow p-6">
+      <div className="
+        bg-white
+        rounded-2xl
+        shadow
+        p-6
+      ">
 
-          <h2 className="text-xl font-semibold text-gray-800 mb-3">
-            Attendance
-          </h2>
+        <h2 className="
+          text-2xl
+          font-bold
+          mb-6
+        ">
 
-          <p className="text-4xl font-bold text-blue-600">
-            92%
-          </p>
+          Academic Information
+
+        </h2>
+
+        <div className="
+          grid
+          grid-cols-1
+          md:grid-cols-2
+          gap-6
+        ">
+
+          <ProfileItem
+            label="School Code"
+            value={student.school_code}
+          />
+
+          <ProfileItem
+            label="Admission Number"
+            value={student.admission_number}
+          />
+
+          <ProfileItem
+            label="Roll Number"
+            value={student.roll_number}
+          />
+
+          <ProfileItem
+            label="Class"
+            value={
+              student.student_class_data?.name
+            }
+          />
+
+          <ProfileItem
+            label="Section"
+            value={
+              student.section_data?.name
+            }
+          />
+
+          <ProfileItem
+            label="Stream"
+            value={
+              student.stream_data?.name
+            }
+          />
+
+          <ProfileItem
+            label="Medium"
+            value={
+              student.medium_data?.name
+            }
+          />
+
+          <ProfileItem
+            label="Status"
+            value={
+              student.is_active
+                ? "Active"
+                : "Inactive"
+            }
+          />
 
         </div>
 
-        {/* FEES */}
-        <div className="bg-white rounded-2xl shadow p-6">
+      </div>
 
-          <h2 className="text-xl font-semibold text-gray-800 mb-3">
-            Fees Status
-          </h2>
+      {/* ================================= */}
+      {/* PERSONAL INFO */}
+      {/* ================================= */}
 
-          <p className="text-4xl font-bold text-green-600">
-            Paid
-          </p>
+      <div className="
+        bg-white
+        rounded-2xl
+        shadow
+        p-6
+      ">
+
+        <h2 className="
+          text-2xl
+          font-bold
+          mb-6
+        ">
+
+          Personal Information
+
+        </h2>
+
+        <div className="
+          grid
+          grid-cols-1
+          md:grid-cols-2
+          gap-6
+        ">
+
+          <ProfileItem
+            label="Full Name"
+            value={student.full_name_aadhar}
+          />
+
+          <ProfileItem
+            label="Date of Birth"
+            value={student.date_of_birth}
+          />
+
+          <ProfileItem
+            label="Gender"
+            value={student.gender}
+          />
+
+          <ProfileItem
+            label="Aadhaar Number"
+            value={student.aadhaar_number}
+          />
+
+          <ProfileItem
+            label="Religion"
+            value={student.religion}
+          />
+
+          <ProfileItem
+            label="Category"
+            value={student.category}
+          />
+
+          <ProfileItem
+            label="Family ID"
+            value={student.family_id}
+          />
 
         </div>
 
-        {/* RESULTS */}
-        <div className="bg-white rounded-2xl shadow p-6">
+      </div>
 
-          <h2 className="text-xl font-semibold text-gray-800 mb-3">
-            Latest Result
-          </h2>
+      {/* ================================= */}
+      {/* PARENTS INFO */}
+      {/* ================================= */}
 
-          <p className="text-4xl font-bold text-purple-600">
-            A+
-          </p>
+      <div className="
+        bg-white
+        rounded-2xl
+        shadow
+        p-6
+      ">
+
+        <h2 className="
+          text-2xl
+          font-bold
+          mb-6
+        ">
+
+          Parent Information
+
+        </h2>
+
+        <div className="
+          grid
+          grid-cols-1
+          md:grid-cols-2
+          gap-6
+        ">
+
+          <ProfileItem
+            label="Father Name"
+            value={
+              student.father_full_name_aadhar
+            }
+          />
+
+          <ProfileItem
+            label="Mother Name"
+            value={
+              student.mother_full_name_aadhar
+            }
+          />
+
+          <ProfileItem
+            label="Father Mobile"
+            value={student.father_mobile}
+          />
+
+          <ProfileItem
+            label="Mother Mobile"
+            value={student.mother_mobile}
+          />
+
+        </div>
+
+      </div>
+
+      {/* ================================= */}
+      {/* ADDRESS INFO */}
+      {/* ================================= */}
+
+      <div className="
+        bg-white
+        rounded-2xl
+        shadow
+        p-6
+      ">
+
+        <h2 className="
+          text-2xl
+          font-bold
+          mb-6
+        ">
+
+          Address Information
+
+        </h2>
+
+        <div className="
+          grid
+          grid-cols-1
+          md:grid-cols-2
+          gap-6
+        ">
+
+          <ProfileItem
+            label="State"
+            value={student.state}
+          />
+
+          <ProfileItem
+            label="District"
+            value={student.district}
+          />
+
+          <ProfileItem
+            label="Block"
+            value={student.block}
+          />
+
+          <ProfileItem
+            label="City"
+            value={student.city_village_town}
+          />
+
+          <ProfileItem
+            label="Postal Code"
+            value={student.postal_code}
+          />
+
+          <ProfileItem
+            label="Address"
+            value={student.address}
+          />
 
         </div>
 
       </div>
 
     </div>
-
   );
-
 };
 
-// =========================
-// PROFILE ITEM COMPONENT
-// =========================
+
+// =========================================
+// PROFILE ITEM
+// =========================================
 
 const ProfileItem = ({
   label,
-  value,
+  value
 }) => {
 
   return (
 
     <div>
 
-      <p className="text-sm text-gray-500 mb-1">
+      <p className="
+        text-sm
+        text-gray-500
+        mb-1
+      ">
+
         {label}
+
       </p>
 
-      <p className="font-semibold text-gray-800">
-        {value}
+      <p className="
+        text-lg
+        font-semibold
+        text-gray-800
+      ">
+
+        {value || "-"}
+
       </p>
 
     </div>
-
   );
-
 };
 
 export default StudentProfile;
