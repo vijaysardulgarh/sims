@@ -17,7 +17,6 @@ from apps.academics.serializers.class_serializers import (
     SectionSerializer
 )
 
-
 # =========================================
 # CLASS API
 # =========================================

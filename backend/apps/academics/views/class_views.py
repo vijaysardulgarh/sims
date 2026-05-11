@@ -1,89 +1,98 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
 from apps.academics.models import (
     Class,
     Stream,
     Medium,
     Classroom,
-    Section
+    Section,
 )
 
+from apps.academics.serializers.class_serializers import (
+    ClassSerializer,
+    StreamSerializer,
+    MediumSerializer,
+    ClassroomSerializer,
+    SectionSerializer,
+)
 
 # =========================================
-# CLASS LIST
+# CLASS API VIEWSET
 # =========================================
 
-def class_list_view(request):
+class ClassViewSet(
+    viewsets.ModelViewSet
+):
 
-    classes = Class.objects.all()
+    queryset = (
+        Class.objects.all()
+    )
 
-    return render(
-        request,
-        "academics/classes/list.html",
-        {
-            "classes": classes
-        }
+    serializer_class = (
+        ClassSerializer
     )
 
 
 # =========================================
-# STREAM LIST
+# STREAM API VIEWSET
 # =========================================
 
-def stream_list_view(request):
+class StreamViewSet(
+    viewsets.ModelViewSet
+):
 
-    streams = Stream.objects.all()
+    queryset = (
+        Stream.objects.all()
+    )
 
-    return render(
-        request,
-        "academics/streams/list.html",
-        {
-            "streams": streams
-        }
+    serializer_class = (
+        StreamSerializer
     )
 
 
 # =========================================
-# MEDIUM LIST
+# MEDIUM API VIEWSET
 # =========================================
 
-def medium_list_view(request):
+class MediumViewSet(
+    viewsets.ModelViewSet
+):
 
-    mediums = Medium.objects.all()
+    queryset = (
+        Medium.objects.all()
+    )
 
-    return render(
-        request,
-        "academics/mediums/list.html",
-        {
-            "mediums": mediums
-        }
+    serializer_class = (
+        MediumSerializer
     )
 
 
 # =========================================
-# CLASSROOM LIST
+# CLASSROOM API VIEWSET
 # =========================================
 
-def classroom_list_view(request):
+class ClassroomViewSet(
+    viewsets.ModelViewSet
+):
 
-    classrooms = Classroom.objects.all()
+    queryset = (
+        Classroom.objects.all()
+    )
 
-    return render(
-        request,
-        "academics/classrooms/list.html",
-        {
-            "classrooms": classrooms
-        }
+    serializer_class = (
+        ClassroomSerializer
     )
 
 
 # =========================================
-# SECTION LIST
+# SECTION API VIEWSET
 # =========================================
 
-def section_list_view(request):
+class SectionViewSet(
+    viewsets.ModelViewSet
+):
 
-    sections = (
+    queryset = (
         Section.objects.select_related(
             "class_obj",
             "stream",
@@ -92,10 +101,6 @@ def section_list_view(request):
         )
     )
 
-    return render(
-        request,
-        "academics/sections/list.html",
-        {
-            "sections": sections
-        }
+    serializer_class = (
+        SectionSerializer
     )

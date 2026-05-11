@@ -3,17 +3,33 @@ from rest_framework import serializers
 from apps.students.models import Student
 
 
-class StudentSerializer(serializers.ModelSerializer):
+class StudentSerializer(
+    serializers.ModelSerializer
+):
 
-    student_class = serializers.SerializerMethodField()
+    # =====================================
+    # DISPLAY FIELDS
+    # =====================================
 
-    section = serializers.SerializerMethodField()
+    student_class_data = (
+        serializers.SerializerMethodField()
+    )
 
-    stream = serializers.SerializerMethodField()
+    section_data = (
+        serializers.SerializerMethodField()
+    )
 
-    medium = serializers.SerializerMethodField()
+    stream_data = (
+        serializers.SerializerMethodField()
+    )
 
-    school = serializers.SerializerMethodField()
+    medium_data = (
+        serializers.SerializerMethodField()
+    )
+
+    school_data = (
+        serializers.SerializerMethodField()
+    )
 
     class Meta:
 
@@ -25,12 +41,20 @@ class StudentSerializer(serializers.ModelSerializer):
     # CLASS
     # =====================================
 
-    def get_student_class(self, obj):
+    def get_student_class_data(
+        self,
+        obj
+    ):
 
         if obj.student_class:
 
             return {
-                "name": obj.student_class.name
+
+                "id":
+                    obj.student_class.id,
+
+                "name":
+                    obj.student_class.name,
             }
 
         return None
@@ -39,12 +63,20 @@ class StudentSerializer(serializers.ModelSerializer):
     # SECTION
     # =====================================
 
-    def get_section(self, obj):
+    def get_section_data(
+        self,
+        obj
+    ):
 
         if obj.section:
 
             return {
-                "name": obj.section.name
+
+                "id":
+                    obj.section.id,
+
+                "name":
+                    obj.section.name,
             }
 
         return None
@@ -53,12 +85,20 @@ class StudentSerializer(serializers.ModelSerializer):
     # STREAM
     # =====================================
 
-    def get_stream(self, obj):
+    def get_stream_data(
+        self,
+        obj
+    ):
 
         if obj.stream:
 
             return {
-                "name": obj.stream.name
+
+                "id":
+                    obj.stream.id,
+
+                "name":
+                    obj.stream.name,
             }
 
         return None
@@ -67,7 +107,10 @@ class StudentSerializer(serializers.ModelSerializer):
     # MEDIUM
     # =====================================
 
-    def get_medium(self, obj):
+    def get_medium_data(
+        self,
+        obj
+    ):
 
         if (
 
@@ -77,7 +120,12 @@ class StudentSerializer(serializers.ModelSerializer):
         ):
 
             return {
-                "name": obj.section.medium.name
+
+                "id":
+                    obj.section.medium.id,
+
+                "name":
+                    obj.section.medium.name,
             }
 
         return None
@@ -86,12 +134,20 @@ class StudentSerializer(serializers.ModelSerializer):
     # SCHOOL
     # =====================================
 
-    def get_school(self, obj):
+    def get_school_data(
+        self,
+        obj
+    ):
 
         if obj.school:
 
             return {
-                "name": obj.school.name
+
+                "id":
+                    obj.school.id,
+
+                "name":
+                    obj.school.name,
             }
 
         return None

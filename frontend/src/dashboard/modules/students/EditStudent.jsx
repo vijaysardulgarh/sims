@@ -1,55 +1,140 @@
-import { useState } from "react";
-import toast from "react-hot-toast";
 import {
-  useParams,
+  useEffect,
+  useState,
+} from "react";
+
+import {
   useNavigate,
+  useParams,
 } from "react-router-dom";
+
+import toast
+from "react-hot-toast";
+
+import StudentForm from
+"../../components/forms/StudentForm";
+
+import studentService from
+"../../services/studentService";
 
 const EditStudent = () => {
 
-  // =========================
-  // GET STUDENT ID
-  // =========================
+  // =====================================
+  // PARAMS
+  // =====================================
 
   const { id } = useParams();
 
-  // =========================
+  // =====================================
   // NAVIGATION
-  // =========================
+  // =====================================
 
   const navigate = useNavigate();
 
-  // =========================
-  // GET STUDENTS FROM STORAGE
-  // =========================
+  // =====================================
+  // STATES
+  // =====================================
 
-  const students =
-    JSON.parse(
-      localStorage.getItem("students")
-    ) || [];
+  const [student, setStudent] =
+    useState(null);
 
-  // =========================
-  // FIND CURRENT STUDENT
-  // =========================
+  const [loading, setLoading] =
+    useState(true);
 
-  const existingStudent =
-    students.find(
-      (student) =>
-      String(student.id) === String(id)
-    );
+  // =====================================
+  // FETCH STUDENT
+  // =====================================
 
-  // =========================
-  // STUDENT NOT FOUND
-  // =========================
+  useEffect(() => {
 
-  if (!existingStudent) {
+    fetchStudent();
+
+  }, []);
+
+  const fetchStudent = async () => {
+
+    try {
+
+      const data =
+        await studentService.getStudent(id);
+
+      setStudent(data);
+
+    } catch (error) {
+
+      console.log(error);
+
+      toast.error(
+        "Failed to load student"
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  // =====================================
+  // UPDATE STUDENT
+  // =====================================
+
+  const handleSubmit = async (
+    formData
+  ) => {
+
+    try {
+
+      setLoading(true);
+
+      await studentService.updateStudent(
+
+        id,
+
+        formData
+
+      );
+
+      toast.success(
+        "Student Updated Successfully"
+      );
+
+      navigate(
+        "/dashboard/students"
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+      toast.error(
+        "Failed to update student"
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  // =====================================
+  // LOADING
+  // =====================================
+
+  if (loading && !student) {
 
     return (
 
       <div className="p-10">
 
-        <h1 className="text-3xl font-bold text-red-600">
-          Student Not Found
+        <h1 className="
+          text-2xl
+          font-bold
+        ">
+          Loading...
         </h1>
 
       </div>
@@ -58,288 +143,46 @@ const EditStudent = () => {
 
   }
 
-  // =========================
-  // FORM STATE
-  // =========================
-
-  const [formData, setFormData] =
-    useState({
-
-      admissionNo:
-        existingStudent.admissionNo,
-
-      studentName:
-        existingStudent.name,
-
-      className:
-        existingStudent.class,
-
-      section:
-        existingStudent.section,
-
-      phone:
-        existingStudent.phone,
-
-      status:
-        existingStudent.status,
-
-    });
-
-  // =========================
-  // HANDLE CHANGE
-  // =========================
-
-  const handleChange = (e) => {
-
-    setFormData({
-      ...formData,
-      [e.target.name]:
-        e.target.value,
-    });
-
-  };
-
-  // =========================
-  // HANDLE UPDATE
-  // =========================
-
-  const handleSubmit = (e) => {
-
-    e.preventDefault();
-
-    // =========================
-    // UPDATE STUDENTS
-    // =========================
-
-    const updatedStudents =
-      students.map((student) => {
-
-        if (
-          String(student.id) === String(id)
-        ) {
-
-          return {
-
-            ...student,
-
-            admissionNo:
-              formData.admissionNo,
-
-            name:
-              formData.studentName,
-
-            class:
-              formData.className,
-
-            section:
-              formData.section,
-
-            phone:
-              formData.phone,
-
-            status:
-              formData.status,
-
-          };
-
-        }
-
-        return student;
-
-      });
-
-    // =========================
-    // SAVE UPDATED DATA
-    // =========================
-
-    localStorage.setItem(
-      "students",
-      JSON.stringify(updatedStudents)
-    );
-
-    // =========================
-    // SUCCESS MESSAGE
-    // =========================
-
-    toast.success(
-      "Student Updated Successfully"
-    );
-
-    // =========================
-    // REDIRECT
-    // =========================
-
-    navigate("/dashboard/students");
-
-  };
+  // =====================================
+  // UI
+  // =====================================
 
   return (
 
     <div className="space-y-6">
 
-      {/* PAGE HEADER */}
+      {/* HEADER */}
+
       <div>
 
-        <h1 className="text-3xl font-bold text-gray-800">
+        <h1 className="
+          text-3xl
+          font-bold
+          text-gray-800
+        ">
           Edit Student
         </h1>
 
-        <p className="text-gray-500 mt-1">
+        <p className="
+          text-gray-500
+          mt-1
+        ">
           Update student details
         </p>
 
       </div>
 
-      {/* FORM CARD */}
-      <div className="bg-white rounded-2xl shadow p-8">
+      {/* REUSABLE FORM */}
 
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
+      <StudentForm
 
-          {/* STUDENT ID */}
-          <div>
+        initialData={student}
 
-            <label className="block mb-2 font-medium text-gray-700">
-              Student ID
-            </label>
+        onSubmit={handleSubmit}
 
-            <input
-              type="text"
-              value={id}
-              disabled
-              className="w-full bg-gray-100 border border-gray-300 rounded-xl px-4 py-3"
-            />
+        loading={loading}
 
-          </div>
-
-          {/* ADMISSION NUMBER */}
-          <div>
-
-            <label className="block mb-2 font-medium text-gray-700">
-              Admission Number
-            </label>
-
-            <input
-              type="text"
-              name="admissionNo"
-              value={formData.admissionNo}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-
-          </div>
-
-          {/* STUDENT NAME */}
-          <div>
-
-            <label className="block mb-2 font-medium text-gray-700">
-              Student Name
-            </label>
-
-            <input
-              type="text"
-              name="studentName"
-              value={formData.studentName}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-
-          </div>
-
-          {/* CLASS */}
-          <div>
-
-            <label className="block mb-2 font-medium text-gray-700">
-              Class
-            </label>
-
-            <input
-              type="text"
-              name="className"
-              value={formData.className}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-
-          </div>
-
-          {/* SECTION */}
-          <div>
-
-            <label className="block mb-2 font-medium text-gray-700">
-              Section
-            </label>
-
-            <input
-              type="text"
-              name="section"
-              value={formData.section}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-
-          </div>
-
-          {/* PHONE */}
-          <div>
-
-            <label className="block mb-2 font-medium text-gray-700">
-              Phone Number
-            </label>
-
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
-
-          </div>
-
-          {/* STATUS */}
-          <div>
-
-            <label className="block mb-2 font-medium text-gray-700">
-              Status
-            </label>
-
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-
-              <option value="Active">
-                Active
-              </option>
-
-              <option value="Inactive">
-                Inactive
-              </option>
-
-            </select>
-
-          </div>
-
-          {/* SUBMIT BUTTON */}
-          <div className="md:col-span-2">
-
-            <button
-              type="submit"
-              className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-xl font-semibold transition"
-            >
-              Update Student
-            </button>
-
-          </div>
-
-        </form>
-
-      </div>
+      />
 
     </div>
 
