@@ -54,14 +54,15 @@ const studentService = {
     data
   ) => {
 
-    const response = await api.put(
+    const response = await api.patch(
+
       `/students/${id}/`,
+
       data
     );
 
     return response.data;
   },
-
 
   // =========================================
   // DELETE STUDENT

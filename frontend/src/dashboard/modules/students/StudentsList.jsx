@@ -1,4 +1,7 @@
-import { useState } from "react";
+import {
+  useState,
+  useEffect
+} from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -31,50 +34,18 @@ const StudentsList = () => {
   const navigate = useNavigate();
 
   // =========================
-  // DEFAULT STUDENTS
-  // =========================
-
-  const defaultStudents = [
-
-    {
-      id: 1,
-      admissionNo: "SIMS001",
-      name: "Rahul Sharma",
-      class: "10",
-      section: "A",
-      phone: "9876543210",
-      status: "Active",
-    },
-
-    {
-      id: 2,
-      admissionNo: "SIMS002",
-      name: "Priya Verma",
-      class: "9",
-      section: "B",
-      phone: "9876543211",
-      status: "Active",
-    },
-
-  ];
-
-  // =========================
-  // LOAD FROM STORAGE
-  // =========================
-
-  const savedStudents =
-    JSON.parse(
-      localStorage.getItem("students")
-    );
-
-  // =========================
   // STUDENTS STATE
   // =========================
 
   const [students, setStudents] =
-    useState(
-      savedStudents || defaultStudents
-    );
+    useState([]);
+
+  // =========================
+  // LOADING STATE
+  // =========================
+
+  const [loading, setLoading] =
+    useState(true);
 
   // =========================
   // SEARCH STATE
@@ -84,10 +55,13 @@ const StudentsList = () => {
     useState("");
 
   // =========================
-  // TABLE FILTER STATES
+  // FILTER STATES
   // =========================
 
   const [classFilter, setClassFilter] =
+    useState("");
+
+  const [sectionFilter, setSectionFilter] =
     useState("");
 
   const [statusFilter, setStatusFilter] =
@@ -100,10 +74,10 @@ const StudentsList = () => {
   const [currentPage, setCurrentPage] =
     useState(1);
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 40;
 
   // =========================
-  // CONFIRMATION MODAL
+  // CONFIRM MODAL
   // =========================
 
   const [isModalOpen, setIsModalOpen] =
@@ -122,14 +96,6 @@ const StudentsList = () => {
     useState([]);
 
   // =========================
-  // STRONG CONFIRMATION
-  // =========================
-
-  const [confirmText,
-    setConfirmText] =
-    useState("");
-
-  // =========================
   // IMPORT EXPORT
   // =========================
 
@@ -141,13 +107,105 @@ const StudentsList = () => {
     useState(false);
 
   // =========================
-  // SAVE TO STORAGE
+  // FETCH STUDENTS
   // =========================
 
-  localStorage.setItem(
-    "students",
-    JSON.stringify(students)
-  );
+  const fetchStudents = async () => {
+
+    try {
+
+      setLoading(true);
+
+      const response =
+        await studentService.getStudents();
+
+      const studentsData =
+
+        Array.isArray(response)
+
+          ? response
+
+          : response.results || [];
+
+      // =========================
+      // FORMAT STUDENTS
+      // =========================
+
+      const formattedStudents =
+        studentsData.map((student) => ({
+
+          id:
+
+            student.srn ||
+
+            student.id,
+
+          admissionNo:
+            student.admission_number || "",
+
+          name:
+            student.full_name_aadhar || "",
+
+          class:
+
+            student.student_class_data?.name ||
+
+            student.student_class?.name ||
+
+            student.class_name ||
+
+            "",
+
+          section:
+
+            student.section_data?.name ||
+
+            student.section?.name ||
+
+            student.section_name ||
+
+            "",
+
+          phone:
+            student.father_mobile || "",
+
+          status:
+
+            student.is_active
+              ? "Active"
+              : "Inactive",
+        }));
+
+      setStudents(
+        formattedStudents
+      );
+
+    } catch (error) {
+
+      console.error(
+        "FETCH ERROR:",
+        error
+      );
+
+      toast.error(
+        "Failed to load students"
+      );
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
+  // =========================
+  // LOAD STUDENTS
+  // =========================
+
+  useEffect(() => {
+
+    fetchStudents();
+
+  }, []);
 
   // =========================
   // FILE CHANGE
@@ -166,114 +224,59 @@ const StudentsList = () => {
 
   const handleImport = async () => {
 
-    // =========================
-    // FILE REQUIRED
-    // =========================
-  
     if (!file) {
-  
+
       toast.error(
         "Please select Excel file"
       );
-  
+
       return;
     }
-  
+
     try {
-  
-      // =========================
-      // START LOADING
-      // =========================
-  
+
       setImportLoading(true);
-  
-      console.log(
-        "IMPORT STARTED"
-      );
-  
-      // =========================
-      // API CALL
-      // =========================
-  
+
       const response =
         await studentService.importStudents(
           file
         );
-  
-      console.log(
-        "IMPORT RESPONSE:",
-        response
-      );
-  
-      // =========================
-      // SUCCESS RESPONSE
-      // =========================
-  
+
       if (response?.success) {
-  
+
         toast.success(
-  
+
           response.message ||
-  
+
           "Students Imported Successfully"
         );
-  
-        console.log(
-          "IMPORT SUCCESS"
-        );
-  
-      }
-  
-      // =========================
-      // FAILED RESPONSE
-      // =========================
-  
-      else {
-  
+
+        fetchStudents();
+
+      } else {
+
         toast.error(
-  
+
           response?.error ||
-  
+
           "Import Failed"
         );
-  
-        console.log(
-          "IMPORT FAILED RESPONSE"
-        );
       }
-  
+
     } catch (error) {
-  
-      console.error(
-        "IMPORT ERROR:",
-        error
-      );
-  
-      // =========================
-      // SERVER ERROR
-      // =========================
-  
+
       toast.error(
-  
+
         error?.response?.data?.error ||
-  
+
         error?.message ||
-  
+
         "Import Failed"
       );
-  
+
     } finally {
-  
-      // =========================
-      // STOP LOADING
-      // =========================
-  
+
       setImportLoading(false);
-  
-      console.log(
-        "IMPORT FINISHED"
-      );
-  
     }
   };
 
@@ -294,25 +297,24 @@ const StudentsList = () => {
   // DELETE STUDENT
   // =========================
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
 
-    const updatedStudents =
-      students.filter(
-        (student) =>
-          student.id !== id
+    try {
+
+      await studentService.deleteStudent(id);
+
+      toast.success(
+        "Student Deleted Successfully"
       );
 
-    setStudents(updatedStudents);
+      fetchStudents();
 
-    localStorage.setItem(
-      "students",
-      JSON.stringify(updatedStudents)
-    );
+    } catch (error) {
 
-    toast.success(
-      "Student Deleted Successfully"
-    );
-
+      toast.error(
+        "Delete Failed"
+      );
+    }
   };
 
   // =========================
@@ -321,68 +323,13 @@ const StudentsList = () => {
 
   const handleBulkDelete = () => {
 
-    if (
-      selectedStudents.length === 0
-    ) {
-
-      toast.error(
-        "No Students Selected"
-      );
-
-      return;
-
-    }
-
-    if (
-      selectedStudents.length > 20
-    ) {
-
-      const userInput =
-        window.prompt(
-
-          `You are about to delete ${selectedStudents.length} students.
-
-Type DELETE to continue.`
-
-        );
-
-      if (userInput !== "DELETE") {
-
-        toast.error(
-          "Bulk Delete Cancelled"
-        );
-
-        return;
-
-      }
-
-    }
-
-    const updatedStudents =
-      students.filter(
-        (student) =>
-          !selectedStudents.includes(
-            student.id
-          )
-      );
-
-    setStudents(updatedStudents);
-
-    localStorage.setItem(
-      "students",
-      JSON.stringify(updatedStudents)
-    );
-
-    setSelectedStudents([]);
-
     toast.success(
-      `${selectedStudents.length} Students Deleted`
+      "Bulk Delete Feature Coming Soon"
     );
-
   };
 
   // =========================
-  // SELECT ALL RECORDS
+  // SELECT ALL
   // =========================
 
   const handleSelectAllRecords = () => {
@@ -399,48 +346,64 @@ Type DELETE to continue.`
     toast.success(
       `${allStudentIds.length} Records Selected`
     );
-
   };
 
   // =========================
   // TOGGLE STATUS
   // =========================
 
-  const handleStatusToggle = (id) => {
+  const handleStatusToggle = async (id) => {
 
-    const updatedStudents =
-      students.map((student) => {
+    try {
 
-        if (student.id === id) {
+      const currentStudent =
+        students.find(
+          (student) => student.id === id
+        );
 
-          return {
+      if (!currentStudent) {
 
-            ...student,
+        toast.error(
+          "Student not found"
+        );
 
-            status:
-              student.status === "Active"
-                ? "Inactive"
-                : "Active",
+        return;
+      }
 
-          };
+      const updatedStatus =
 
+        currentStudent.status === "Active"
+
+          ? false
+
+          : true;
+
+      await studentService.updateStudent(
+
+        id,
+
+        {
+          is_active: updatedStatus
         }
+      );
 
-        return student;
+      fetchStudents();
 
-      });
+      toast.success(
+        "Status Updated Successfully"
+      );
 
-    setStudents(updatedStudents);
+    } catch (error) {
 
-    localStorage.setItem(
-      "students",
-      JSON.stringify(updatedStudents)
-    );
+      console.error(
+        "STATUS UPDATE ERROR:",
+        error
+      );
 
-    toast.success(
-      "Status Updated Successfully"
-    );
-
+      toast.error(
+        "Failed to update status"
+      );
+    }
   };
 
   // =========================
@@ -471,28 +434,43 @@ Type DELETE to continue.`
           student.class
             .toLowerCase()
             .includes(searchValue)
+
+          ||
+
+          student.section
+            .toLowerCase()
+            .includes(searchValue)
         )
 
         &&
 
         (
           classFilter === "" ||
+
           student.class === classFilter
         )
 
         &&
 
         (
-          statusFilter === "" ||
-          student.status === statusFilter
+          sectionFilter === "" ||
+
+          student.section === sectionFilter
         )
 
+        &&
+
+        (
+          statusFilter === "" ||
+
+          student.status === statusFilter
+        )
       );
 
     });
 
   // =========================
-  // PAGINATION LOGIC
+  // PAGINATION
   // =========================
 
   const totalPages =
@@ -570,12 +548,9 @@ Type DELETE to continue.`
                 )
 
               );
-
             }
-
           }}
         />
-
       ),
     },
 
@@ -608,7 +583,6 @@ Type DELETE to continue.`
       key: "actions",
       label: "Actions",
     },
-
   ];
 
   // =========================
@@ -624,7 +598,9 @@ Type DELETE to continue.`
 
         <input
           type="checkbox"
+
           checked={selectedStudents.includes(student.id)}
+
           onChange={(e) => {
 
             if (e.target.checked) {
@@ -641,12 +617,9 @@ Type DELETE to continue.`
                   (id) => id !== student.id
                 )
               );
-
             }
-
           }}
         />
-
       ),
 
       status: (
@@ -658,9 +631,7 @@ Type DELETE to continue.`
           onToggle={() =>
             handleStatusToggle(student.id)
           }
-
         />
-
       ),
 
       actions: (
@@ -686,20 +657,30 @@ Type DELETE to continue.`
             );
 
             setIsModalOpen(true);
-
           }}
-
         />
-
       ),
-
     }));
+
+  // =========================
+  // LOADING UI
+  // =========================
+
+  if (loading) {
+
+    return (
+
+      <div className="p-6">
+
+        Loading students...
+
+      </div>
+    );
+  }
 
   return (
 
     <div className="space-y-6">
-
-      {/* HEADER */}
 
       <CrudHeader
         title="Students Management"
@@ -711,8 +692,6 @@ Type DELETE to continue.`
       >
 
         <div className="flex items-center gap-3">
-
-          {/* FILE INPUT */}
 
           <input
             type="file"
@@ -727,8 +706,6 @@ Type DELETE to continue.`
             "
           />
 
-          {/* IMPORT */}
-
           <ImportButton
 
             onClick={handleImport}
@@ -740,24 +717,18 @@ Type DELETE to continue.`
                 ? "Importing..."
                 : "Import"
             }
-
           />
-
-          {/* EXPORT */}
 
           <ExportButton
 
             onClick={handleExport}
 
             label="Export"
-
           />
 
         </div>
 
       </CrudHeader>
-
-      {/* BULK ACTIONS */}
 
       <BulkActions
         selectedCount={
@@ -769,8 +740,6 @@ Type DELETE to continue.`
         }
       />
 
-      {/* SEARCH */}
-
       <SearchBox
         placeholder="Search students..."
         value={search}
@@ -779,31 +748,33 @@ Type DELETE to continue.`
         }
       />
 
-      {/* TABLE FILTERS */}
-
       <TableFilters
-        classFilter={classFilter}
-        setClassFilter={setClassFilter}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-      />
 
-      {/* TABLE */}
+        classFilter={classFilter}
+
+        setClassFilter={setClassFilter}
+
+        sectionFilter={sectionFilter}
+
+        setSectionFilter={setSectionFilter}
+
+        statusFilter={statusFilter}
+
+        setStatusFilter={setStatusFilter}
+
+        students={students}
+      />
 
       <DataTable
         columns={columns}
         data={tableData}
       />
 
-      {/* PAGINATION */}
-
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
-
-      {/* CONFIRM MODAL */}
 
       <ConfirmModal
         isOpen={isModalOpen}
@@ -824,9 +795,7 @@ Type DELETE to continue.`
       />
 
     </div>
-
   );
-
 };
 
 export default StudentsList;
