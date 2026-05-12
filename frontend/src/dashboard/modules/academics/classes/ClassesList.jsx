@@ -3,8 +3,9 @@ import {
   useState
 } from "react";
 
-import { useNavigate }
-from "react-router-dom";
+import {
+  useNavigate
+} from "react-router-dom";
 
 import toast
 from "react-hot-toast";
@@ -79,6 +80,10 @@ const ClassesList = () => {
       const response =
         await classService.getClasses();
 
+      // =========================
+      // SAFE ARRAY
+      // =========================
+
       const classesData =
 
         Array.isArray(response)
@@ -87,9 +92,55 @@ const ClassesList = () => {
 
           : response.results || [];
 
-      setClasses(classesData);
+      // =========================
+      // CUSTOM CLASS ORDER
+      // =========================
+
+      const classOrder = {
+
+        "Sixth": 1,
+        "Seventh": 2,
+        "Eighth": 3,
+        "Nineth": 4,
+        "Ninth": 4,
+        "Tenth": 5,
+        "Eleventh": 6,
+        "Twelfth": 7,
+
+        "6TH": 1,
+        "7TH": 2,
+        "8TH": 3,
+        "9TH": 4,
+        "10TH": 5,
+        "11TH": 6,
+        "12TH": 7,
+      };
+
+      // =========================
+      // SORT CLASSES
+      // =========================
+
+      const sortedClasses = [
+
+        ...classesData
+
+      ].sort((a, b) => {
+
+        return (
+
+          (classOrder[a.name] || 999)
+
+          -
+
+          (classOrder[b.name] || 999)
+        );
+      });
+
+      setClasses(sortedClasses);
 
     } catch (error) {
+
+      console.error(error);
 
       toast.error(
         "Failed to load classes"
@@ -128,6 +179,8 @@ const ClassesList = () => {
       fetchClasses();
 
     } catch (error) {
+
+      console.error(error);
 
       toast.error(
         "Delete failed"
@@ -269,8 +322,14 @@ const ClassesList = () => {
       />
 
       <DataTable
+
         columns={columns}
+
         data={tableData}
+
+        currentPage={currentPage}
+
+        itemsPerPage={itemsPerPage}
       />
 
       <Pagination

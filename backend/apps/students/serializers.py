@@ -31,11 +31,19 @@ class StudentSerializer(
         serializers.SerializerMethodField()
     )
 
+    # =====================================
+    # META
+    # =====================================
+
     class Meta:
 
         model = Student
 
         fields = "__all__"
+
+        read_only_fields = [
+            "school"
+        ]
 
     # =====================================
     # CLASS

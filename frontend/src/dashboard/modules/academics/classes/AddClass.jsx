@@ -47,8 +47,19 @@ const AddClass = () => {
 
       console.error(error);
 
+      console.log(
+        error.response?.data
+      );
+      
       toast.error(
-        "Failed to create class"
+      
+        error.response?.data
+      
+          ? JSON.stringify(
+              error.response.data
+            )
+      
+          : "Failed to create class"
       );
 
     } finally {

@@ -83,6 +83,35 @@ class SchoolFilteredViewSet(
 
         return queryset
 
+    # =====================================
+    # AUTO ASSIGN SCHOOL
+    # =====================================
+
+    def perform_create(
+        self,
+        serializer
+    ):
+
+        school = self.get_school()
+
+        # =================================
+        # DEVELOPMENT FALLBACK
+        # =================================
+
+        if not school:
+
+            from apps.schools.models import (
+                School
+            )
+
+            school = (
+                School.objects.first()
+            )
+
+        serializer.save(
+            school=school
+        )
+
 
 # =========================================
 # CLASS API

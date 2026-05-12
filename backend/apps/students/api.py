@@ -41,6 +41,39 @@ class StudentListCreateAPIView(
 
     serializer_class = StudentSerializer
 
+    # =====================================
+    # AUTO ASSIGN SCHOOL
+    # =====================================
+
+    def perform_create(
+        self,
+        serializer
+    ):
+
+        school = getattr(
+            self.request.user,
+            "school",
+            None
+        )
+
+        # =================================
+        # DEVELOPMENT FALLBACK
+        # =================================
+
+        if not school:
+
+            from apps.schools.models import (
+                School
+            )
+
+            school = (
+                School.objects.first()
+            )
+
+        serializer.save(
+            school=school
+        )
+
 
 # =========================================
 # STUDENT DETAIL API
@@ -61,7 +94,12 @@ class StudentRetrieveUpdateDestroyAPIView(
     # PATCH UPDATE
     # =====================================
 
-    def patch(self, request, *args, **kwargs):
+    def patch(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
 
         try:
 
@@ -121,7 +159,12 @@ class StudentRetrieveUpdateDestroyAPIView(
     # NORMAL UPDATE
     # =====================================
 
-    def update(self, request, *args, **kwargs):
+    def update(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
 
         partial = True
 
@@ -140,7 +183,33 @@ class StudentRetrieveUpdateDestroyAPIView(
             raise_exception=True
         )
 
-        serializer.save()
+        # =================================
+        # GET SCHOOL
+        # =================================
+
+        school = getattr(
+            request.user,
+            "school",
+            None
+        )
+
+        # =================================
+        # DEVELOPMENT FALLBACK
+        # =================================
+
+        if not school:
+
+            from apps.schools.models import (
+                School
+            )
+
+            school = (
+                School.objects.first()
+            )
+
+        serializer.save(
+            school=school
+        )
 
         return Response(
             serializer.data
@@ -158,13 +227,18 @@ class StudentImportAPIView(APIView):
         FormParser
     )
 
-    def post(self, request):
+    def post(
+        self,
+        request
+    ):
 
         print("\n====================")
         print("IMPORT API CALLED")
         print("====================\n")
 
-        file = request.FILES.get("file")
+        file = request.FILES.get(
+            "file"
+        )
 
         # =========================================
         # FILE REQUIRED
@@ -189,15 +263,24 @@ class StudentImportAPIView(APIView):
             # FILE INFO
             # =========================================
 
-            print("FILE NAME:", file.name)
+            print(
+                "FILE NAME:",
+                file.name
+            )
 
             file_format = (
+
                 file.name
+
                 .split(".")[-1]
+
                 .lower()
             )
 
-            print("FILE FORMAT:", file_format)
+            print(
+                "FILE FORMAT:",
+                file_format
+            )
 
             # =========================================
             # ALLOWED FORMATS
@@ -211,7 +294,9 @@ class StudentImportAPIView(APIView):
 
             if file_format not in allowed_formats:
 
-                print("INVALID FILE FORMAT")
+                print(
+                    "INVALID FILE FORMAT"
+                )
 
                 return Response({
 
@@ -236,7 +321,9 @@ class StudentImportAPIView(APIView):
             )
 
             print(
+
                 "ROWS FOUND:",
+
                 len(imported_data)
             )
 
@@ -255,7 +342,9 @@ class StudentImportAPIView(APIView):
                 raise_errors=False
             )
 
-            print("IMPORT SUCCESS")
+            print(
+                "IMPORT SUCCESS"
+            )
 
             # =========================================
             # SHOW ERRORS IF ANY
@@ -267,7 +356,9 @@ class StudentImportAPIView(APIView):
                 print("ROW ERRORS")
                 print("====================\n")
 
-                print(result.row_errors())
+                print(
+                    result.row_errors()
+                )
 
             if result.has_validation_errors():
 
@@ -275,7 +366,9 @@ class StudentImportAPIView(APIView):
                 print("VALIDATION ERRORS")
                 print("====================\n")
 
-                print(result.invalid_rows)
+                print(
+                    result.invalid_rows
+                )
 
             # =========================================
             # SUCCESS RESPONSE
@@ -326,7 +419,10 @@ class StudentImportAPIView(APIView):
 
 class StudentExportAPIView(APIView):
 
-    def get(self, request):
+    def get(
+        self,
+        request
+    ):
 
         print("\n====================")
         print("EXPORT API CALLED")
@@ -338,7 +434,9 @@ class StudentExportAPIView(APIView):
 
             dataset = resource.export()
 
-            print("EXPORT SUCCESS")
+            print(
+                "EXPORT SUCCESS"
+            )
 
             response = HttpResponse(
 
@@ -347,6 +445,7 @@ class StudentExportAPIView(APIView):
                 content_type=(
 
                     "application/vnd.openxmlformats-"
+
                     "officedocument.spreadsheetml.sheet"
                 )
             )

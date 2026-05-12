@@ -84,8 +84,20 @@ const AddStudent = () => {
 
       }
 
+      console.log(
+        "BACKEND ERROR:",
+        error.response?.data
+      );
+      
       toast.error(
-        "Failed to add student"
+      
+        error.response?.data
+      
+          ? JSON.stringify(
+              error.response.data
+            )
+      
+          : "Failed to add student"
       );
 
     } finally {
