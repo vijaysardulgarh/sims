@@ -1,8 +1,8 @@
 from django.contrib import admin
 from .models import (
     Student,
-    StudentAchievement,
-    ExamDetail,
+    Achievement,
+    Achiever,
 )
 
 from import_export.admin import ImportExportModelAdmin
@@ -197,8 +197,8 @@ class StudentAdmin(admin.ModelAdmin):
 # STUDENT ACHIEVEMENT ADMIN
 # ==========================================
 
-@admin.register(StudentAchievement)
-class StudentAchievementAdmin(admin.ModelAdmin):
+@admin.register(Achievement)
+class AchievementAdmin(admin.ModelAdmin):
 
     list_display = (
         'id',
@@ -231,8 +231,8 @@ class StudentAchievementAdmin(admin.ModelAdmin):
 # EXAM DETAIL ADMIN
 # ==========================================
 
-@admin.register(ExamDetail)
-class ExamDetailAdmin(admin.ModelAdmin):
+@admin.register(Achiever)
+class Achiever(admin.ModelAdmin):
 
     list_display = (
         'id',
