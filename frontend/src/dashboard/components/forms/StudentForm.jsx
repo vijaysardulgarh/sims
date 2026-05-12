@@ -148,7 +148,14 @@ const StudentForm = ({
 
         const classData = await classRes.json();
 
-        setClasses(classData.results || classData);
+        setClasses(
+
+          Array.isArray(classData)
+        
+            ? classData
+        
+            : classData.results || []
+        );
 
         // STREAMS
         const streamRes = await fetch(
@@ -157,7 +164,14 @@ const StudentForm = ({
 
         const streamData = await streamRes.json();
 
-        setStreams(streamData.results || streamData);
+        setStreams(
+
+          Array.isArray(streamData)
+        
+            ? streamData
+        
+            : streamData.results || []
+        );
 
         // SECTIONS
         const sectionRes = await fetch(
@@ -166,7 +180,14 @@ const StudentForm = ({
 
         const sectionData = await sectionRes.json();
 
-        setSections(sectionData.results || sectionData);
+        setSections(
+
+          Array.isArray(sectionData)
+        
+            ? sectionData
+        
+            : sectionData.results || []
+        );
 
       } catch (error) {
 
@@ -226,7 +247,15 @@ const StudentForm = ({
   // FILTERED SECTIONS
   // =========================================
 
-  const filteredSections = sections.filter((section) => {
+  const filteredSections = (
+
+    Array.isArray(sections)
+  
+      ? sections
+  
+      : []
+  
+  ).filter((section) => {
 
     const sectionClassId =
       section.sec_class?.id ||
@@ -409,16 +438,22 @@ const StudentForm = ({
                 Select Class
               </option>
 
-              {classes.map((item) => (
 
-                <option
-                  key={item.id}
-                  value={String(item.id)}
-                >
-                  {item.name}
-                </option>
+                {(Array.isArray(classes)
+                  ? classes
+                  : []
+                ).map((item) => (
 
-              ))}
+                  <option
+                    key={item.id}
+                    value={String(item.id)}
+                  >
+
+                    {item.name}
+
+                  </option>
+
+                ))}
 
             </select>
 
@@ -449,7 +484,13 @@ const StudentForm = ({
                 Select Stream
               </option>
 
-              {streams.map((item) => (
+              {(Array.isArray(streams)
+
+                ? streams
+
+                : []
+
+              ).map((item) => (
 
                 <option
                   key={item.id}
@@ -483,22 +524,33 @@ const StudentForm = ({
                 Select Section
               </option>
 
-              {filteredSections.map((item) => (
 
-                <option
-                  key={item.id}
-                  value={String(item.id)}
-                >
+              {(Array.isArray(filteredSections)
 
-                  {item.name}
+              ? filteredSections
 
-                  {item.stream?.name
-                    ? ` (${item.stream.name})`
-                    : ""}
+              : []
 
-                </option>
+              ).map((item) => (
+
+              <option
+                key={item.id}
+                value={String(item.id)}
+              >
+
+                {item.name}
+
+                {item.stream?.name
+                  ? ` (${item.stream.name})`
+                  : ""}
+
+              </option>
 
               ))}
+
+
+
+
 
             </select>
 
@@ -792,7 +844,7 @@ const StudentForm = ({
 
             <textarea
               name="address"
-              value={formData.address}
+              value={formData.address || ""}
               onChange={handleChange}
               rows="4"
               className="w-full border rounded-xl px-4 py-3"
@@ -822,7 +874,7 @@ const StudentForm = ({
 
           <textarea
             name="subjects_opted"
-            value={formData.subjects_opted}
+            value={formData.subjects_opted || ""}
             onChange={handleChange}
             rows="4"
             className="w-full border rounded-xl px-4 py-3"

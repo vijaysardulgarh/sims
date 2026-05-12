@@ -1,3 +1,5 @@
+import React from "react";
+
 const DataTable = ({
   columns = [],
   data = [],
@@ -17,24 +19,23 @@ const DataTable = ({
 
           <tr>
 
-            {/* SELECT BOX HEADER */}
-
             {
+
               columns.map((column, index) => {
 
                 // =========================
                 // AFTER SELECT ADD SR NO
                 // =========================
 
-                if (
-                  index === 1
-                ) {
+                if (index === 1) {
 
                   return (
 
-                    <>
+                    <React.Fragment
+                      key={`header-${column.key}`}
+                    >
+
                       <th
-                        key="sr_no"
                         className="
                           px-6
                           py-4
@@ -48,7 +49,6 @@ const DataTable = ({
                       </th>
 
                       <th
-                        key={column.key}
                         className="
                           px-6
                           py-4
@@ -58,9 +58,12 @@ const DataTable = ({
                           text-gray-700
                         "
                       >
+
                         {column.label}
+
                       </th>
-                    </>
+
+                    </React.Fragment>
                   );
                 }
 
@@ -77,7 +80,9 @@ const DataTable = ({
                       text-gray-700
                     "
                   >
+
                     {column.label}
+
                   </th>
                 );
               })
@@ -91,92 +96,101 @@ const DataTable = ({
 
         <tbody>
 
-          {data.map((row, index) => (
+          {
 
-            <tr
-              key={index}
-              className="border-b"
-            >
+            data.map((row, index) => (
 
-              {
-                columns.map((column, columnIndex) => {
+              <tr
+                key={row.id || index}
+                className="border-b"
+              >
 
-                  // =========================
-                  // INSERT SR NO COLUMN
-                  // =========================
+                {
 
-                  if (
-                    columnIndex === 1
-                  ) {
+                  columns.map((column, columnIndex) => {
+
+                    // =====================
+                    // INSERT SR NO COLUMN
+                    // =====================
+
+                    if (columnIndex === 1) {
+
+                      return (
+
+                        <React.Fragment
+                          key={`body-${index}-${column.key}`}
+                        >
+
+                          <td
+                            className="
+                              px-6
+                              py-4
+                              text-sm
+                              font-semibold
+                              text-gray-700
+                            "
+                          >
+
+                            {
+
+                              (
+                                (currentPage - 1)
+
+                                *
+
+                                itemsPerPage
+                              )
+
+                              +
+
+                              index
+
+                              +
+
+                              1
+                            }
+
+                          </td>
+
+                          <td
+                            className="
+                              px-6
+                              py-4
+                              text-sm
+                              text-gray-600
+                            "
+                          >
+
+                            {row[column.key]}
+
+                          </td>
+
+                        </React.Fragment>
+                      );
+                    }
 
                     return (
 
-                      <>
-                        <td
-                          key={`sr-${index}`}
-                          className="
-                            px-6
-                            py-4
-                            text-sm
-                            font-semibold
-                            text-gray-700
-                          "
-                        >
+                      <td
+                        key={`${index}-${column.key}`}
+                        className="
+                          px-6
+                          py-4
+                          text-sm
+                          text-gray-600
+                        "
+                      >
 
-                          {
+                        {row[column.key]}
 
-                            (
-                              (currentPage - 1)
-                              *
-                              itemsPerPage
-                            )
-
-                            +
-
-                            index
-
-                            +
-
-                            1
-                          }
-
-                        </td>
-
-                        <td
-                          key={column.key}
-                          className="
-                            px-6
-                            py-4
-                            text-sm
-                            text-gray-600
-                          "
-                        >
-                          {row[column.key]}
-                        </td>
-                      </>
+                      </td>
                     );
-                  }
+                  })
+                }
 
-                  return (
-
-                    <td
-                      key={column.key}
-                      className="
-                        px-6
-                        py-4
-                        text-sm
-                        text-gray-600
-                      "
-                    >
-                      {row[column.key]}
-                    </td>
-                  );
-                })
-              }
-
-            </tr>
-
-          ))}
+              </tr>
+            ))
+          }
 
         </tbody>
 

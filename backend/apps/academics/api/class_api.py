@@ -1,6 +1,5 @@
 from rest_framework import viewsets
 from rest_framework import filters
-from rest_framework.permissions import IsAuthenticated
 
 from django_filters.rest_framework import (
     DjangoFilterBackend
@@ -22,22 +21,32 @@ from apps.academics.serializers.class_serializers import (
     SectionSerializer
 )
 
-
 # =========================================
 # BASE SCHOOL FILTER MIXIN
 # =========================================
 
-class SchoolFilteredViewSet(viewsets.ModelViewSet):
+class SchoolFilteredViewSet(
+    viewsets.ModelViewSet
+):
 
-    permission_classes = [
-        IsAuthenticated
-    ]
+    # =====================================
+    # TEMP DEVELOPMENT MODE
+    # =====================================
+
+    permission_classes = []
 
     filter_backends = [
+
         DjangoFilterBackend,
+
         filters.SearchFilter,
+
         filters.OrderingFilter,
     ]
+
+    # =====================================
+    # GET SCHOOL
+    # =====================================
 
     def get_school(self):
 
@@ -47,6 +56,10 @@ class SchoolFilteredViewSet(viewsets.ModelViewSet):
             None
         )
 
+    # =====================================
+    # FILTER BY SCHOOL
+    # =====================================
+
     def filter_queryset_by_school(
         self,
         queryset
@@ -54,19 +67,30 @@ class SchoolFilteredViewSet(viewsets.ModelViewSet):
 
         school = self.get_school()
 
+        # =================================
+        # FILTER BY SCHOOL
+        # =================================
+
         if school:
+
             return queryset.filter(
                 school=school
             )
 
-        return queryset.none()
+        # =================================
+        # DEVELOPMENT FALLBACK
+        # =================================
+
+        return queryset
 
 
 # =========================================
 # CLASS API
 # =========================================
 
-class ClassViewSet(SchoolFilteredViewSet):
+class ClassViewSet(
+    SchoolFilteredViewSet
+):
 
     serializer_class = ClassSerializer
 
@@ -96,7 +120,9 @@ class ClassViewSet(SchoolFilteredViewSet):
 # STREAM API
 # =========================================
 
-class StreamViewSet(SchoolFilteredViewSet):
+class StreamViewSet(
+    SchoolFilteredViewSet
+):
 
     serializer_class = StreamSerializer
 
@@ -121,7 +147,9 @@ class StreamViewSet(SchoolFilteredViewSet):
 # MEDIUM API
 # =========================================
 
-class MediumViewSet(SchoolFilteredViewSet):
+class MediumViewSet(
+    SchoolFilteredViewSet
+):
 
     serializer_class = MediumSerializer
 
@@ -146,7 +174,9 @@ class MediumViewSet(SchoolFilteredViewSet):
 # CLASSROOM API
 # =========================================
 
-class ClassroomViewSet(SchoolFilteredViewSet):
+class ClassroomViewSet(
+    SchoolFilteredViewSet
+):
 
     serializer_class = ClassroomSerializer
 
@@ -178,35 +208,51 @@ class ClassroomViewSet(SchoolFilteredViewSet):
 # SECTION API
 # =========================================
 
-class SectionViewSet(SchoolFilteredViewSet):
+class SectionViewSet(
+    SchoolFilteredViewSet
+):
 
     serializer_class = SectionSerializer
 
     search_fields = [
+
         "name",
+
         "class_obj__name",
+
         "stream__name",
+
         "medium__name",
     ]
 
     ordering_fields = [
+
         "name",
+
         "class_obj__class_order"
     ]
 
     filterset_fields = [
+
         "class_obj",
+
         "stream",
+
         "medium",
+
         "sub_stream"
     ]
 
     def get_queryset(self):
 
         queryset = Section.objects.select_related(
+
             "class_obj",
+
             "stream",
+
             "medium",
+
             "classroom"
         )
 

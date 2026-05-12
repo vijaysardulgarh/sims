@@ -7,6 +7,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 // =========================
 
 import SuperAdminDashboard from "../roles/super-admin/Dashboard";
+
 import ClusterAdminDashboard from "../roles/cluster-admin/Dashboard";
 
 // =========================
@@ -14,7 +15,9 @@ import ClusterAdminDashboard from "../roles/cluster-admin/Dashboard";
 // =========================
 
 import AdminDashboard from "../roles/admin/Dashboard";
+
 import PrincipalDashboard from "../roles/principal/Dashboard";
+
 import VicePrincipalDashboard from "../roles/vice-principal/Dashboard";
 
 // =========================
@@ -24,7 +27,9 @@ import VicePrincipalDashboard from "../roles/vice-principal/Dashboard";
 import TeacherDashboard from "../roles/teacher/Dashboard";
 
 import AccountantDashboard from "../roles/accountant/Dashboard";
+
 import ClerkDashboard from "../roles/clerk/Dashboard";
+
 import ReceptionistDashboard from "../roles/receptionist/Dashboard";
 
 // =========================
@@ -32,7 +37,9 @@ import ReceptionistDashboard from "../roles/receptionist/Dashboard";
 // =========================
 
 import LibrarianDashboard from "../roles/librarian/Dashboard";
+
 import HostelWardenDashboard from "../roles/hostel-warden/Dashboard";
+
 import SecuritySupervisorDashboard from "../roles/security-supervisor/Dashboard";
 
 // =========================
@@ -40,26 +47,35 @@ import SecuritySupervisorDashboard from "../roles/security-supervisor/Dashboard"
 // =========================
 
 import StudentDashboard from "../roles/student/Dashboard";
+
 import ParentDashboard from "../roles/parent/Dashboard";
 
-
-
 // =========================
-// Module LEVEL
+// STUDENTS MODULE
 // =========================
+
 import StudentsList from "../modules/students/StudentsList";
+
 import AddStudent from "../modules/students/AddStudent";
+
 import EditStudent from "../modules/students/EditStudent";
+
 import StudentProfile from "../modules/students/StudentProfile";
 
-import ClassesList from "../modules/academics/classes/ClassesList";
+// =========================
+// ACADEMICS ROUTES
+// =========================
 
-import AddClass from "../modules/academics/classes/AddClass";
+import academicsRoutes from "../modules/academics/academicsRoutes";
 
-import EditClass from "../modules/academics/classes/EditClass";
+// =========================
+// DASHBOARD ROUTES
+// =========================
 
 const DashboardRoutes = () => {
+
   return (
+
     <Routes>
 
       {/* =========================
@@ -162,41 +178,34 @@ const DashboardRoutes = () => {
         />
 
         {/* =========================
-            Module
+            STUDENTS MODULE
         ========================= */}
-
 
         <Route
           path="students"
           element={<StudentsList />}
         />
+
         <Route
           path="students/add"
           element={<AddStudent />}
         />
+
         <Route
           path="students/edit/:id"
           element={<EditStudent />}
         />
+
         <Route
           path="students/profile/:id"
           element={<StudentProfile />}
-        />        
-
-        <Route
-          path="/dashboard/academics/classes"
-          element={<ClassesList />}
         />
 
-        <Route
-          path="/dashboard/academics/classes/add"
-          element={<AddClass />}
-        />
+        {/* =========================
+            ACADEMICS MODULE
+        ========================= */}
 
-        <Route
-          path="/dashboard/academics/classes/edit/:id"
-          element={<EditClass />}
-        />
+        {academicsRoutes}
 
       </Route>
 
