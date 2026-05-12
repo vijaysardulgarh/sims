@@ -46,6 +46,17 @@ from apps.academics.api.class_api import (
 )
 
 # =========================================
+# SUBJECT API IMPORTS
+# =========================================
+
+from apps.academics.api.subject_api import (
+
+    SubjectViewSet,
+
+    ClassSubjectViewSet,
+)
+
+# =========================================
 # ROUTER
 # =========================================
 
@@ -57,17 +68,20 @@ router = DefaultRouter()
 
 router.register(
     r"days",
-    DayViewSet
+    DayViewSet,
+    basename="days"
 )
 
 router.register(
     r"timetable-slots",
-    TimetableSlotViewSet
+    TimetableSlotViewSet,
+    basename="timetable-slots"
 )
 
 router.register(
     r"timetable",
-    TimetableViewSet
+    TimetableViewSet,
+    basename="timetable"
 )
 
 # =========================================
@@ -76,7 +90,8 @@ router.register(
 
 router.register(
     r"classes",
-    ClassViewSet
+    ClassViewSet,
+    basename="classes"
 )
 
 # =========================================
@@ -85,7 +100,8 @@ router.register(
 
 router.register(
     r"streams",
-    StreamViewSet
+    StreamViewSet,
+    basename="streams"
 )
 
 # =========================================
@@ -94,7 +110,8 @@ router.register(
 
 router.register(
     r"mediums",
-    MediumViewSet
+    MediumViewSet,
+    basename="mediums"
 )
 
 # =========================================
@@ -103,7 +120,8 @@ router.register(
 
 router.register(
     r"classrooms",
-    ClassroomViewSet
+    ClassroomViewSet,
+    basename="classrooms"
 )
 
 # =========================================
@@ -112,7 +130,28 @@ router.register(
 
 router.register(
     r"sections",
-    SectionViewSet
+    SectionViewSet,
+    basename="sections"
+)
+
+# =========================================
+# SUBJECT ROUTES
+# =========================================
+
+router.register(
+    r"subjects",
+    SubjectViewSet,
+    basename="subjects"
+)
+
+# =========================================
+# CLASS SUBJECT ROUTES
+# =========================================
+
+router.register(
+    r"class-subjects",
+    ClassSubjectViewSet,
+    basename="class-subjects"
 )
 
 # =========================================
@@ -136,7 +175,8 @@ urlpatterns = [
 
     path(
         "generate/",
-        TimetableGenerateAPIView.as_view()
+        TimetableGenerateAPIView.as_view(),
+        name="generate-timetable"
     ),
 
     # =====================================
@@ -145,7 +185,8 @@ urlpatterns = [
 
     path(
         "teacher-assignment/",
-        TeacherAssignmentAPIView.as_view()
+        TeacherAssignmentAPIView.as_view(),
+        name="teacher-assignment"
     ),
 
     # =====================================
@@ -154,7 +195,8 @@ urlpatterns = [
 
     path(
         "timetable-list/",
-        TimetableListAPIView.as_view()
+        TimetableListAPIView.as_view(),
+        name="timetable-list"
     ),
 
     # =====================================
@@ -163,6 +205,7 @@ urlpatterns = [
 
     path(
         "teacher-workload/",
-        TeacherWorkloadAPIView.as_view()
+        TeacherWorkloadAPIView.as_view(),
+        name="teacher-workload"
     ),
 ]

@@ -16,16 +16,47 @@ class Day(models.Model):
     school = models.ForeignKey(
         "schools.School",
         on_delete=models.CASCADE,
+        related_name="days",
         db_index=True
     )
 
-    name = models.CharField(max_length=20)
+    name = models.CharField(
+        max_length=20
+    )
 
     sequence = models.PositiveIntegerField()
 
     class Meta:
 
         ordering = ["sequence"]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "name"
+                ],
+                name="unique_day_per_school"
+            ),
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "sequence"
+                ],
+                name="unique_day_sequence_per_school"
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+
+        if self.name:
+            self.name = self.name.strip().title()
+
+        self.full_clean()
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
 
@@ -41,12 +72,14 @@ class TimetableSlot(models.Model):
     school = models.ForeignKey(
         "schools.School",
         on_delete=models.CASCADE,
+        related_name="timetable_slots",
         db_index=True
     )
 
     day = models.ForeignKey(
-        "Day",
+        "academics.Day",
         on_delete=models.CASCADE,
+        related_name="slots",
         db_index=True
     )
 
@@ -77,12 +110,49 @@ class TimetableSlot(models.Model):
         default=False
     )
 
+    title = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+
+        ordering = [
+            "day__sequence",
+            "sequence_number"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "day",
+                    "sequence_number"
+                ],
+                name="unique_slot_sequence_per_day"
+            ),
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "day",
+                    "period_number"
+                ],
+                condition=Q(
+                    period_number__isnull=False
+                ),
+                name="unique_period_per_day"
+            )
+        ]
+
     def clean(self):
 
         if self.start_time >= self.end_time:
 
             raise ValidationError(
-                "End time must be greater."
+                "End time must be greater than start time."
             )
 
     def save(self, *args, **kwargs):
@@ -93,9 +163,15 @@ class TimetableSlot(models.Model):
 
     def __str__(self):
 
+        if self.period_number:
+            return (
+                f"{self.day.name}"
+                f" - Period {self.period_number}"
+            )
+
         return (
             f"{self.day.name}"
-            f" ({self.period_number})"
+            f" - Special Slot"
         )
 
 
@@ -115,7 +191,7 @@ class Timetable(models.Model):
     teacher_subject_assignment = (
         models.ForeignKey(
 
-            "staff.TeacherSubjectAssignment",
+            "academics.TeacherSubjectAssignment",
 
             on_delete=models.CASCADE,
 
@@ -126,17 +202,18 @@ class Timetable(models.Model):
     )
 
     slot = models.ForeignKey(
-        "TimetableSlot",
+        "academics.TimetableSlot",
         on_delete=models.CASCADE,
         related_name="timetable_entries",
         db_index=True
     )
 
     classroom = models.ForeignKey(
-        "Classroom",
+        "academics.Classroom",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        related_name="timetable_entries"
     )
 
     substitute_teacher = (
@@ -154,6 +231,11 @@ class Timetable(models.Model):
         )
     )
 
+    remarks = models.TextField(
+        blank=True,
+        null=True
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )
@@ -165,9 +247,84 @@ class Timetable(models.Model):
     class Meta:
 
         ordering = [
-            "slot__day",
+            "slot__day__sequence",
             "slot__sequence_number"
         ]
+
+        constraints = [
+
+            # One section per slot
+            models.UniqueConstraint(
+                fields=[
+                    "slot",
+                    "teacher_subject_assignment"
+                ],
+                name="unique_assignment_per_slot"
+            )
+        ]
+
+    def clean(self):
+
+        teacher = (
+            self.teacher_subject_assignment.teacher
+        )
+
+        section = (
+            self.teacher_subject_assignment.section
+        )
+
+        # ---------------------------------
+        # Prevent teacher collision
+        # ---------------------------------
+
+        teacher_conflict = Timetable.objects.exclude(
+            pk=self.pk
+        ).filter(
+            slot=self.slot,
+            teacher_subject_assignment__teacher=teacher
+        )
+
+        if teacher_conflict.exists():
+
+            raise ValidationError(
+                "Teacher already assigned in this slot."
+            )
+
+        # ---------------------------------
+        # Prevent section collision
+        # ---------------------------------
+
+        section_conflict = Timetable.objects.exclude(
+            pk=self.pk
+        ).filter(
+            slot=self.slot,
+            teacher_subject_assignment__section=section
+        )
+
+        if section_conflict.exists():
+
+            raise ValidationError(
+                "Section already has timetable in this slot."
+            )
+
+        # ---------------------------------
+        # Prevent classroom collision
+        # ---------------------------------
+
+        if self.classroom:
+
+            classroom_conflict = Timetable.objects.exclude(
+                pk=self.pk
+            ).filter(
+                slot=self.slot,
+                classroom=self.classroom
+            )
+
+            if classroom_conflict.exists():
+
+                raise ValidationError(
+                    "Classroom already occupied."
+                )
 
     def save(self, *args, **kwargs):
 
@@ -194,4 +351,12 @@ class Timetable(models.Model):
 
         return (
             self.teacher_subject_assignment.class_subject
+        )
+
+    def __str__(self):
+
+        return (
+            f"{self.teacher} - "
+            f"{self.section} - "
+            f"{self.slot}"
         )

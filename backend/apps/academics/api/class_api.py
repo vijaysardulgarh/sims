@@ -1,5 +1,10 @@
 from rest_framework import viewsets
 from rest_framework import filters
+from rest_framework.permissions import IsAuthenticated
+
+from django_filters.rest_framework import (
+    DjangoFilterBackend
+)
 
 from apps.academics.models import (
     Class,
@@ -17,93 +22,165 @@ from apps.academics.serializers.class_serializers import (
     SectionSerializer
 )
 
+
+# =========================================
+# BASE SCHOOL FILTER MIXIN
+# =========================================
+
+class SchoolFilteredViewSet(viewsets.ModelViewSet):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+
+    def get_school(self):
+
+        return getattr(
+            self.request.user,
+            "school",
+            None
+        )
+
+    def filter_queryset_by_school(
+        self,
+        queryset
+    ):
+
+        school = self.get_school()
+
+        if school:
+            return queryset.filter(
+                school=school
+            )
+
+        return queryset.none()
+
+
 # =========================================
 # CLASS API
 # =========================================
 
-class ClassViewSet(viewsets.ModelViewSet):
-
-    queryset = Class.objects.all()
+class ClassViewSet(SchoolFilteredViewSet):
 
     serializer_class = ClassSerializer
-
-    filter_backends = [filters.SearchFilter]
 
     search_fields = [
         "name"
     ]
+
+    ordering_fields = [
+        "name",
+        "class_order"
+    ]
+
+    filterset_fields = [
+        "class_order"
+    ]
+
+    def get_queryset(self):
+
+        queryset = Class.objects.all()
+
+        return self.filter_queryset_by_school(
+            queryset
+        )
 
 
 # =========================================
 # STREAM API
 # =========================================
 
-class StreamViewSet(viewsets.ModelViewSet):
-
-    queryset = Stream.objects.all()
+class StreamViewSet(SchoolFilteredViewSet):
 
     serializer_class = StreamSerializer
-
-    filter_backends = [filters.SearchFilter]
 
     search_fields = [
         "name"
     ]
+
+    ordering_fields = [
+        "name"
+    ]
+
+    def get_queryset(self):
+
+        queryset = Stream.objects.all()
+
+        return self.filter_queryset_by_school(
+            queryset
+        )
 
 
 # =========================================
 # MEDIUM API
 # =========================================
 
-class MediumViewSet(viewsets.ModelViewSet):
-
-    queryset = Medium.objects.all()
+class MediumViewSet(SchoolFilteredViewSet):
 
     serializer_class = MediumSerializer
-
-    filter_backends = [filters.SearchFilter]
 
     search_fields = [
         "name"
     ]
+
+    ordering_fields = [
+        "name"
+    ]
+
+    def get_queryset(self):
+
+        queryset = Medium.objects.all()
+
+        return self.filter_queryset_by_school(
+            queryset
+        )
 
 
 # =========================================
 # CLASSROOM API
 # =========================================
 
-class ClassroomViewSet(viewsets.ModelViewSet):
-
-    queryset = Classroom.objects.all()
+class ClassroomViewSet(SchoolFilteredViewSet):
 
     serializer_class = ClassroomSerializer
-
-    filter_backends = [filters.SearchFilter]
 
     search_fields = [
         "name",
         "floor"
     ]
 
+    ordering_fields = [
+        "name",
+        "capacity",
+        "floor"
+    ]
+
+    filterset_fields = [
+        "floor"
+    ]
+
+    def get_queryset(self):
+
+        queryset = Classroom.objects.all()
+
+        return self.filter_queryset_by_school(
+            queryset
+        )
+
 
 # =========================================
 # SECTION API
 # =========================================
 
-class SectionViewSet(viewsets.ModelViewSet):
-
-    queryset = (
-        Section.objects.select_related(
-            "class_obj",
-            "stream",
-            "medium",
-            "classroom"
-        )
-    )
+class SectionViewSet(SchoolFilteredViewSet):
 
     serializer_class = SectionSerializer
-
-    filter_backends = [filters.SearchFilter]
 
     search_fields = [
         "name",
@@ -111,3 +188,28 @@ class SectionViewSet(viewsets.ModelViewSet):
         "stream__name",
         "medium__name",
     ]
+
+    ordering_fields = [
+        "name",
+        "class_obj__class_order"
+    ]
+
+    filterset_fields = [
+        "class_obj",
+        "stream",
+        "medium",
+        "sub_stream"
+    ]
+
+    def get_queryset(self):
+
+        queryset = Section.objects.select_related(
+            "class_obj",
+            "stream",
+            "medium",
+            "classroom"
+        )
+
+        return self.filter_queryset_by_school(
+            queryset
+        )

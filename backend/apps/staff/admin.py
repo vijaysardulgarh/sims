@@ -4,7 +4,6 @@ from .models import (
     Staff,
     ClassIncharge,
     SanctionedPost,
-    TeacherSubjectAssignment,
     TeacherAttendance,
 )
 
@@ -223,30 +222,6 @@ class SanctionedPostAdmin(admin.ModelAdmin):
 # TEACHER SUBJECT ASSIGNMENT
 # ==========================================
 
-@admin.register(TeacherSubjectAssignment)
-class TeacherSubjectAssignmentAdmin(admin.ModelAdmin):
-
-    list_display = (
-        'id',
-        'teacher',
-        'section',
-        'class_subject',
-    )
-
-    search_fields = (
-        'teacher__name',
-        'section__name',
-    )
-
-    list_filter = (
-        'section',
-    )
-
-    ordering = (
-        'teacher',
-    )
-
-    list_per_page = 25
 
 
 # ==========================================

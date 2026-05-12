@@ -52,6 +52,12 @@ import AddStudent from "../modules/students/AddStudent";
 import EditStudent from "../modules/students/EditStudent";
 import StudentProfile from "../modules/students/StudentProfile";
 
+import ClassesList from "../modules/academics/classes/ClassesList";
+
+import AddClass from "../modules/academics/classes/AddClass";
+
+import EditClass from "../modules/academics/classes/EditClass";
+
 const DashboardRoutes = () => {
   return (
     <Routes>
@@ -176,6 +182,21 @@ const DashboardRoutes = () => {
           path="students/profile/:id"
           element={<StudentProfile />}
         />        
+
+        <Route
+          path="/dashboard/academics/classes"
+          element={<ClassesList />}
+        />
+
+        <Route
+          path="/dashboard/academics/classes/add"
+          element={<AddClass />}
+        />
+
+        <Route
+          path="/dashboard/academics/classes/edit/:id"
+          element={<EditClass />}
+        />
 
       </Route>
 

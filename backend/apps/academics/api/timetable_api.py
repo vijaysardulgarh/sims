@@ -15,7 +15,10 @@ from apps.core.utils.helpers import (
 )
 
 from apps.staff.models import (
-    Staff,
+    Staff
+)
+
+from apps.academics.models import (
     TeacherSubjectAssignment
 )
 

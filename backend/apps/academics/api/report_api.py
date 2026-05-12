@@ -1,11 +1,16 @@
+from collections import defaultdict
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import (
+    IsAuthenticated
+)
 
 from django.db.models import (
     Count,
     Q,
     Case,
-    When
+    When,
 )
 
 from apps.core.utils.helpers import (
@@ -15,25 +20,64 @@ from apps.core.utils.helpers import (
 from apps.students.models import Student
 
 from apps.academics.models import (
-    ClassSubject
+    ClassSubject,
+    Subject
 )
+
+
+# =========================================
+# BASE REPORT API
+# =========================================
+
+class BaseReportAPIView(APIView):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get_school(self, request):
+
+        return get_current_school(request)
+
+    def school_error_response(self):
+
+        return Response({
+
+            "success": False,
+
+            "message":
+            "School not selected."
+
+        }, status=400)
+
+    def success_response(self, data):
+
+        return Response({
+
+            "success": True,
+
+            "data": data
+        })
 
 
 # =========================================
 # SUBJECT STRENGTH REPORT
 # =========================================
 
-class SubjectStrengthAPIView(APIView):
+class SubjectStrengthAPIView(
+    BaseReportAPIView
+):
 
     def get(self, request):
 
-        school = get_current_school(request)
+        school = self.get_school(request)
 
         if not school:
-            return Response(
-                {"error": "School not selected"},
-                status=400
-            )
+            return self.school_error_response()
+
+        # ---------------------------------
+        # CLASS ORDER
+        # ---------------------------------
 
         class_order = {
             "Sixth": 1,
@@ -45,7 +89,19 @@ class SubjectStrengthAPIView(APIView):
             "Twelfth": 7,
         }
 
-        data = list(
+        # ---------------------------------
+        # GET ALL SUBJECTS
+        # ---------------------------------
+
+        subjects = Subject.objects.filter(
+            school=school
+        ).order_by("name")
+
+        # ---------------------------------
+        # BASE QUERY
+        # ---------------------------------
+
+        student_groups = (
 
             Student.objects.filter(
                 school_name=school.name
@@ -59,69 +115,15 @@ class SubjectStrengthAPIView(APIView):
 
             .annotate(
 
-                punjabi=Count(
-                    "srn",
-                    filter=Q(
-                        subjects_opted__icontains="Punjabi"
-                    )
-                ),
-
-                english=Count(
-                    "srn",
-                    filter=Q(
-                        subjects_opted__icontains="English"
-                    )
-                ),
-
-                mathematics=Count(
-                    "srn",
-                    filter=Q(
-                        subjects_opted__icontains="Mathematics"
-                    )
-                ),
-
-                science=Count(
-                    "srn",
-                    filter=Q(
-                        subjects_opted__icontains="Science"
-                    )
-                ),
-
-                physics=Count(
-                    "srn",
-                    filter=Q(
-                        subjects_opted__icontains="Physics"
-                    )
-                ),
-
-                chemistry=Count(
-                    "srn",
-                    filter=Q(
-                        subjects_opted__icontains="Chemistry"
-                    )
-                ),
-
-                biology=Count(
-                    "srn",
-                    filter=Q(
-                        subjects_opted__icontains="Biology"
-                    )
-                ),
-
-                computer_science=Count(
-                    "srn",
-                    filter=Q(
-                        subjects_opted__icontains="Computer Science"
-                    )
-                ),
-
                 order=Case(
+
                     *[
                         When(
                             studentclass=cls,
                             then=pos
                         )
-                        for cls, pos in class_order.items()
+                        for cls, pos
+                        in class_order.items()
                     ]
                 )
             )
@@ -129,24 +131,79 @@ class SubjectStrengthAPIView(APIView):
             .order_by("order")
         )
 
-        return Response(data)
+        final_data = []
+
+        # ---------------------------------
+        # DYNAMIC SUBJECT COUNTS
+        # ---------------------------------
+
+        for group in student_groups:
+
+            row = {
+
+                "studentclass":
+                    group["studentclass"],
+
+                "section":
+                    group["section"],
+
+                "stream":
+                    group["stream"],
+
+                "subjects": {}
+            }
+
+            base_queryset = Student.objects.filter(
+
+                school_name=school.name,
+
+                studentclass=group[
+                    "studentclass"
+                ],
+
+                section=group[
+                    "section"
+                ],
+
+                stream=group[
+                    "stream"
+                ]
+            )
+
+            for subject in subjects:
+
+                count = base_queryset.filter(
+
+                    subjects_opted__icontains=
+                    subject.name
+
+                ).count()
+
+                row["subjects"][
+                    subject.name
+                ] = count
+
+            final_data.append(row)
+
+        return self.success_response(
+            final_data
+        )
 
 
 # =========================================
 # SUBJECTS OFFERED REPORT
 # =========================================
 
-class SubjectsOfferedAPIView(APIView):
+class SubjectsOfferedAPIView(
+    BaseReportAPIView
+):
 
     def get(self, request):
 
-        school = get_current_school(request)
+        school = self.get_school(request)
 
         if not school:
-            return Response(
-                {"error": "School not selected"},
-                status=400
-            )
+            return self.school_error_response()
 
         class_subjects = (
 
@@ -159,38 +216,47 @@ class SubjectsOfferedAPIView(APIView):
             )
 
             .filter(
-                class_obj__school=school
+                school=school
             )
 
             .order_by(
-                "class_obj__name",
+                "class_obj__class_order",
                 "subject__name"
             )
         )
 
-        grouped_data = {}
+        grouped_data = defaultdict(list)
 
         for cs in class_subjects:
 
-            class_name = cs.class_obj.name
-
-            if cs.stream:
-                class_name += f" - {cs.stream.name}"
-
-            if cs.sub_stream:
-                class_name += f" - {cs.sub_stream}"
-
-            grouped_data.setdefault(
-                class_name,
-                []
+            class_name = (
+                cs.class_obj.name
             )
 
-            grouped_data[class_name].append({
+            if cs.stream:
+                class_name += (
+                    f" - {cs.stream.name}"
+                )
+
+            if cs.sub_stream:
+                class_name += (
+                    f" - {cs.sub_stream}"
+                )
+
+            grouped_data[
+                class_name
+            ].append({
 
                 "subject":
                     cs.subject.name,
 
-                "periods_per_week":
+                "theory_periods":
+                    cs.theory_periods_per_week,
+
+                "practical_periods":
+                    cs.practical_periods_per_week,
+
+                "total_periods":
                     cs.periods_per_week,
 
                 "is_optional":
@@ -198,6 +264,11 @@ class SubjectsOfferedAPIView(APIView):
 
                 "has_lab":
                     cs.has_lab,
+
+                "is_shared":
+                    cs.is_shared,
             })
 
-        return Response(grouped_data)
+        return self.success_response(
+            grouped_data
+        )

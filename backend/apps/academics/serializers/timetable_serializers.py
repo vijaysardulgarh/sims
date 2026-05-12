@@ -6,7 +6,7 @@ from apps.academics.models import (
     Timetable
 )
 
-from apps.staff.models import (
+from apps.academics.models import (
     TeacherSubjectAssignment
 )
 
