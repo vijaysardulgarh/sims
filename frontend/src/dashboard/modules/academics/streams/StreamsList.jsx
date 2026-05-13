@@ -32,8 +32,11 @@ import ActionButtons from
 import ConfirmModal from
 "../../../components/modals/ConfirmModal";
 
+// import streamService from
+// "../../../services/academics/streamService";
+
 import streamService from
-"../../../services/academics/streamService";
+"./streamService";
 
 const StreamsList = () => {
 

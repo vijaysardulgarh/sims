@@ -32,8 +32,11 @@ import ActionButtons from
 import ConfirmModal from
 "../../../components/modals/ConfirmModal";
 
+// import timetableSlotService from
+// "../../../services/academics/timetableSlotService";
+
 import timetableSlotService from
-"../../../services/academics/timetableSlotService";
+"./timetableSlotService";
 
 const TimetableSlotsList = () => {
 

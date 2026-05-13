@@ -15,8 +15,11 @@ import toast from "react-hot-toast";
 
 import SectionForm from "./SectionForm";
 
+// import sectionService from
+// "../../../services/academics/sectionService";
+
 import sectionService from
-"../../../services/academics/sectionService";
+"./sectionService";
 
 const AddSection = () => {
 

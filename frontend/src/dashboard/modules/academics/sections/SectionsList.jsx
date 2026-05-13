@@ -32,8 +32,11 @@ import ActionButtons from
 import ConfirmModal from
 "../../../components/modals/ConfirmModal";
 
+// import sectionService from
+// "../../../services/academics/sectionService";
+
 import sectionService from
-"../../../services/academics/sectionService";
+"./sectionService";
 
 const SectionsList = () => {
 

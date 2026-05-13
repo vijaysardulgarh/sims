@@ -17,8 +17,11 @@ import toast from "react-hot-toast";
 
 import StreamForm from "./StreamForm";
 
+// import streamService from
+// "../../../services/academics/streamService";
+
 import streamService from
-"../../../services/academics/streamService";
+"./streamService";
 
 const EditStream = () => {
 

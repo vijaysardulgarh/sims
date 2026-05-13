@@ -15,8 +15,11 @@ import toast from "react-hot-toast";
 
 import SubjectForm from "./SubjectForm";
 
+// import subjectService from
+// "../../../services/academics/subjectService";
+
 import subjectService from
-"../../../services/academics/subjectService";
+"./subjectService";
 
 const AddSubject = () => {
 

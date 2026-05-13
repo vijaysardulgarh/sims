@@ -32,8 +32,11 @@ import ActionButtons from
 import ConfirmModal from
 "../../../components/modals/ConfirmModal";
 
+// import classSubjectService from
+// "../../../services/academics/classSubjectService";
+
 import classSubjectService from
-"../../../services/academics/classSubjectService";
+"./classSubjectService";
 
 const ClassSubjectsList = () => {
 

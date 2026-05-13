@@ -13,10 +13,16 @@ import {
 
 import toast from "react-hot-toast";
 
-import TimetableForm from "./TimetableForm";
+// import TimetableForm from "./TimetableForm";
+
+// import timetableService from
+// "../../../services/academics/timetableService";
+
+import TimetableForm from
+"./TimetableForm";
 
 import timetableService from
-"../../../services/academics/timetableService";
+"./timetableService";
 
 const AddTimetable = () => {
 
