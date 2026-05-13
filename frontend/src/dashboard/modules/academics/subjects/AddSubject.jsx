@@ -1,13 +1,78 @@
+// ============================================
+// ADD SUBJECT
+// File: AddSubject.jsx
+// ============================================
+
+import {
+  useState
+} from "react";
+
+import {
+  useNavigate
+} from "react-router-dom";
+
+import toast from "react-hot-toast";
+
+import SubjectForm from "./SubjectForm";
+
+import subjectService from
+"../../../services/academics/subjectService";
+
 const AddSubject = () => {
 
-    return (
-  
-      <div>
-  
-        Add Subject
-  
-      </div>
-    );
+  const navigate = useNavigate();
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const handleSubmit = async (data) => {
+
+    try {
+
+      setLoading(true);
+
+      await subjectService.createSubject(
+        data
+      );
+
+      toast.success(
+        "Subject created successfully"
+      );
+
+      navigate(
+        "/dashboard/academics/subjects"
+      );
+
+    } catch (error) {
+
+      toast.error(
+        "Failed to create subject"
+      );
+
+    } finally {
+
+      setLoading(false);
+    }
   };
-  
-  export default AddSubject;
+
+  return (
+
+    <div className="space-y-6">
+
+      <h1 className="
+        text-3xl
+        font-bold
+      ">
+        Add Subject
+      </h1>
+
+      <SubjectForm
+        onSubmit={handleSubmit}
+        loading={loading}
+      />
+
+    </div>
+  );
+};
+
+export default AddSubject;

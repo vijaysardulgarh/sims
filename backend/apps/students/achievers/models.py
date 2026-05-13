@@ -2,9 +2,9 @@ from django.db import models
 
 class Achiever(models.Model):
     achievement = models.OneToOneField(
-        "achievements.Achievement",
+        "students.Achievement",
         on_delete=models.CASCADE,
-        related_name="exam_detail"
+        related_name="students_Achievement"
     )
     obtained_marks = models.DecimalField(max_digits=7, decimal_places=2)
     total_marks = models.DecimalField(max_digits=7, decimal_places=2)
