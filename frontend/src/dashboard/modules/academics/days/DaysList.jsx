@@ -35,8 +35,7 @@ import ConfirmModal from
 // import dayService from
 // "../../../services/academics/dayService";
 
-import dayService from
-"../../../services/academics/dayService";
+import dayService from "./dayService";
 
 const DaysList = () => {
 

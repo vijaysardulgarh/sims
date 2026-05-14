@@ -17,8 +17,11 @@ import toast from "react-hot-toast";
 
 import DayForm from "./DayForm";
 
-import dayService from
-"../../../services/academics/dayService";
+// import dayService from
+// "../../../services/academics/dayService";
+
+
+import dayService from "./dayService";
 
 const EditDay = () => {
 

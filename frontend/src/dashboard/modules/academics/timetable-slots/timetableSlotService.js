@@ -1,49 +1,51 @@
 // ============================================
-// CLASS SUBJECT SERVICE
-// File: classSubjectService.js
+// TIMETABLE SLOT SERVICE
+// File: timetableSlotService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../utils/api";
 
 // ============================================
-// GET ALL CLASS SUBJECTS
+// GET ALL TIMETABLE SLOTS
 // ============================================
 
-const getClassSubjects = async () => {
+const getTimetableSlots = async () => {
 
   const response =
     await api.get(
-      "/academics/class-subjects/"
+      "/academics/timetable-slots/"
     );
 
   return response.data;
 };
 
 // ============================================
-// GET SINGLE CLASS SUBJECT
+// GET SINGLE TIMETABLE SLOT
 // ============================================
 
-const getClassSubject = async (id) => {
+const getTimetableSlot = async (
+  id
+) => {
 
   const response =
     await api.get(
-      `/academics/class-subjects/${id}/`
+      `/academics/timetable-slots/${id}/`
     );
 
   return response.data;
 };
 
 // ============================================
-// CREATE CLASS SUBJECT
+// CREATE TIMETABLE SLOT
 // ============================================
 
-const createClassSubject = async (
+const createTimetableSlot = async (
   data
 ) => {
 
   const response =
     await api.post(
-      "/academics/class-subjects/",
+      "/academics/timetable-slots/",
       data
     );
 
@@ -51,17 +53,17 @@ const createClassSubject = async (
 };
 
 // ============================================
-// UPDATE CLASS SUBJECT
+// UPDATE TIMETABLE SLOT
 // ============================================
 
-const updateClassSubject = async (
+const updateTimetableSlot = async (
   id,
   data
 ) => {
 
   const response =
     await api.put(
-      `/academics/class-subjects/${id}/`,
+      `/academics/timetable-slots/${id}/`,
       data
     );
 
@@ -69,16 +71,16 @@ const updateClassSubject = async (
 };
 
 // ============================================
-// DELETE CLASS SUBJECT
+// DELETE TIMETABLE SLOT
 // ============================================
 
-const deleteClassSubject = async (
+const deleteTimetableSlot = async (
   id
 ) => {
 
   const response =
     await api.delete(
-      `/academics/class-subjects/${id}/`
+      `/academics/timetable-slots/${id}/`
     );
 
   return response.data;
@@ -88,17 +90,17 @@ const deleteClassSubject = async (
 // EXPORT SERVICE
 // ============================================
 
-const classSubjectService = {
+const timetableSlotService = {
 
-  getClassSubjects,
+  getTimetableSlots,
 
-  getClassSubject,
+  getTimetableSlot,
 
-  createClassSubject,
+  createTimetableSlot,
 
-  updateClassSubject,
+  updateTimetableSlot,
 
-  deleteClassSubject,
+  deleteTimetableSlot,
 };
 
-export default classSubjectService;
+export default timetableSlotService;

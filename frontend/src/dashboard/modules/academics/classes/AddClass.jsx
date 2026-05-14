@@ -12,8 +12,7 @@ from "react-hot-toast";
 import ClassForm
 from "../../../components/forms/academics/ClassForm";
 
-import classService
-from "../../../services/academics/classService";
+import classService from "./classService";
 
 
 const AddClass = () => {

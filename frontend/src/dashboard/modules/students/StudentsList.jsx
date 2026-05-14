@@ -21,8 +21,7 @@ import StatusToggle from "../../components/crud/StatusToggle";
 import TableFilters from "../../components/crud/TableFilters";
 import BulkActions from "../../components/crud/BulkActions";
 
-import studentService
-from "../../services/studentService";
+import studentService from "./studentService";
 
 
 const StudentsList = () => {

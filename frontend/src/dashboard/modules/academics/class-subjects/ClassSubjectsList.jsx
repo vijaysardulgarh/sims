@@ -35,8 +35,7 @@ import ConfirmModal from
 // import classSubjectService from
 // "../../../services/academics/classSubjectService";
 
-import classSubjectService from
-"./classSubjectService";
+import classSubjectService from "./classSubjectService";
 
 const ClassSubjectsList = () => {
 

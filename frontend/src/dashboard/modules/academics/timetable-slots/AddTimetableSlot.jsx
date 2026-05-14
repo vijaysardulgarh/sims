@@ -15,8 +15,10 @@ import toast from "react-hot-toast";
 
 import TimetableSlotForm from "./TimetableSlotForm";
 
-import timetableSlotService from
-"../../../services/academics/timetableSlotService";
+// import timetableSlotService from
+// "../../../services/academics/timetableSlotService";
+
+import timetableSlotService from "./timetableSlotService";
 
 const AddTimetableSlot = () => {
 

@@ -1,47 +1,49 @@
 // ============================================
-// MEDIUM SERVICE
-// File: mediumService.js
+// TIMETABLE SERVICE
+// File: timetableService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../utils/api";
 
 // ============================================
-// GET ALL MEDIUMS
+// GET ALL TIMETABLES
 // ============================================
 
-const getMediums = async () => {
+const getTimetables = async () => {
 
   const response =
     await api.get(
-      "/academics/mediums/"
+      "/academics/timetable/"
     );
 
   return response.data;
 };
 
 // ============================================
-// GET SINGLE MEDIUM
+// GET SINGLE TIMETABLE
 // ============================================
 
-const getMedium = async (id) => {
+const getTimetable = async (id) => {
 
   const response =
     await api.get(
-      `/academics/mediums/${id}/`
+      `/academics/timetable/${id}/`
     );
 
   return response.data;
 };
 
 // ============================================
-// CREATE MEDIUM
+// CREATE TIMETABLE
 // ============================================
 
-const createMedium = async (data) => {
+const createTimetable = async (
+  data
+) => {
 
   const response =
     await api.post(
-      "/academics/mediums/",
+      "/academics/timetable/",
       data
     );
 
@@ -49,17 +51,17 @@ const createMedium = async (data) => {
 };
 
 // ============================================
-// UPDATE MEDIUM
+// UPDATE TIMETABLE
 // ============================================
 
-const updateMedium = async (
+const updateTimetable = async (
   id,
   data
 ) => {
 
   const response =
     await api.put(
-      `/academics/mediums/${id}/`,
+      `/academics/timetable/${id}/`,
       data
     );
 
@@ -67,14 +69,33 @@ const updateMedium = async (
 };
 
 // ============================================
-// DELETE MEDIUM
+// DELETE TIMETABLE
 // ============================================
 
-const deleteMedium = async (id) => {
+const deleteTimetable = async (
+  id
+) => {
 
   const response =
     await api.delete(
-      `/academics/mediums/${id}/`
+      `/academics/timetable/${id}/`
+    );
+
+  return response.data;
+};
+
+// ============================================
+// GENERATE TIMETABLE
+// ============================================
+
+const generateTimetable = async (
+  data
+) => {
+
+  const response =
+    await api.post(
+      "/academics/timetable/generate/",
+      data
     );
 
   return response.data;
@@ -84,17 +105,19 @@ const deleteMedium = async (id) => {
 // EXPORT SERVICE
 // ============================================
 
-const mediumService = {
+const timetableService = {
 
-  getMediums,
+  getTimetables,
 
-  getMedium,
+  getTimetable,
 
-  createMedium,
+  createTimetable,
 
-  updateMedium,
+  updateTimetable,
 
-  deleteMedium,
+  deleteTimetable,
+
+  generateTimetable,
 };
 
-export default mediumService;
+export default timetableService;

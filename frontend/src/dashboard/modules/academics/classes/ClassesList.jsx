@@ -28,8 +28,7 @@ from "../../../components/crud/ActionButtons";
 import ConfirmModal
 from "../../../components/modals/ConfirmModal";
 
-import classService
-from "../../../services/academics/classService";
+import classService from "./classService";
 
 
 const ClassesList = () => {

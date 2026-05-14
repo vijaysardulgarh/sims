@@ -1,49 +1,47 @@
 // ============================================
-// TIMETABLE SERVICE
-// File: timetableService.js
+// SUBJECT SERVICE
+// File: subjectService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../utils/api";
 
 // ============================================
-// GET ALL TIMETABLES
+// GET ALL SUBJECTS
 // ============================================
 
-const getTimetables = async () => {
+const getSubjects = async () => {
 
   const response =
     await api.get(
-      "/academics/timetable/"
+      "/academics/subjects/"
     );
 
   return response.data;
 };
 
 // ============================================
-// GET SINGLE TIMETABLE
+// GET SINGLE SUBJECT
 // ============================================
 
-const getTimetable = async (id) => {
+const getSubject = async (id) => {
 
   const response =
     await api.get(
-      `/academics/timetable/${id}/`
+      `/academics/subjects/${id}/`
     );
 
   return response.data;
 };
 
 // ============================================
-// CREATE TIMETABLE
+// CREATE SUBJECT
 // ============================================
 
-const createTimetable = async (
-  data
-) => {
+const createSubject = async (data) => {
 
   const response =
     await api.post(
-      "/academics/timetable/",
+      "/academics/subjects/",
       data
     );
 
@@ -51,17 +49,17 @@ const createTimetable = async (
 };
 
 // ============================================
-// UPDATE TIMETABLE
+// UPDATE SUBJECT
 // ============================================
 
-const updateTimetable = async (
+const updateSubject = async (
   id,
   data
 ) => {
 
   const response =
     await api.put(
-      `/academics/timetable/${id}/`,
+      `/academics/subjects/${id}/`,
       data
     );
 
@@ -69,33 +67,14 @@ const updateTimetable = async (
 };
 
 // ============================================
-// DELETE TIMETABLE
+// DELETE SUBJECT
 // ============================================
 
-const deleteTimetable = async (
-  id
-) => {
+const deleteSubject = async (id) => {
 
   const response =
     await api.delete(
-      `/academics/timetable/${id}/`
-    );
-
-  return response.data;
-};
-
-// ============================================
-// GENERATE TIMETABLE
-// ============================================
-
-const generateTimetable = async (
-  data
-) => {
-
-  const response =
-    await api.post(
-      "/academics/timetable/generate/",
-      data
+      `/academics/subjects/${id}/`
     );
 
   return response.data;
@@ -105,19 +84,17 @@ const generateTimetable = async (
 // EXPORT SERVICE
 // ============================================
 
-const timetableService = {
+const subjectService = {
 
-  getTimetables,
+  getSubjects,
 
-  getTimetable,
+  getSubject,
 
-  createTimetable,
+  createSubject,
 
-  updateTimetable,
+  updateSubject,
 
-  deleteTimetable,
-
-  generateTimetable,
+  deleteSubject,
 };
 
-export default timetableService;
+export default subjectService;

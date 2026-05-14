@@ -1,47 +1,47 @@
 // ============================================
-// DAY SERVICE
-// File: dayService.js
+// STREAM SERVICE
+// File: streamService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../utils/api";
 
 // ============================================
-// GET ALL DAYS
+// GET ALL STREAMS
 // ============================================
 
-const getDays = async () => {
+const getStreams = async () => {
 
   const response =
     await api.get(
-      "/academics/days/"
+      "/academics/streams/"
     );
 
   return response.data;
 };
 
 // ============================================
-// GET SINGLE DAY
+// GET SINGLE STREAM
 // ============================================
 
-const getDay = async (id) => {
+const getStream = async (id) => {
 
   const response =
     await api.get(
-      `/academics/days/${id}/`
+      `/academics/streams/${id}/`
     );
 
   return response.data;
 };
 
 // ============================================
-// CREATE DAY
+// CREATE STREAM
 // ============================================
 
-const createDay = async (data) => {
+const createStream = async (data) => {
 
   const response =
     await api.post(
-      "/academics/days/",
+      "/academics/streams/",
       data
     );
 
@@ -49,17 +49,17 @@ const createDay = async (data) => {
 };
 
 // ============================================
-// UPDATE DAY
+// UPDATE STREAM
 // ============================================
 
-const updateDay = async (
+const updateStream = async (
   id,
   data
 ) => {
 
   const response =
     await api.put(
-      `/academics/days/${id}/`,
+      `/academics/streams/${id}/`,
       data
     );
 
@@ -67,14 +67,14 @@ const updateDay = async (
 };
 
 // ============================================
-// DELETE DAY
+// DELETE STREAM
 // ============================================
 
-const deleteDay = async (id) => {
+const deleteStream = async (id) => {
 
   const response =
     await api.delete(
-      `/academics/days/${id}/`
+      `/academics/streams/${id}/`
     );
 
   return response.data;
@@ -84,17 +84,17 @@ const deleteDay = async (id) => {
 // EXPORT SERVICE
 // ============================================
 
-const dayService = {
+const streamService = {
 
-  getDays,
+  getStreams,
 
-  getDay,
+  getStream,
 
-  createDay,
+  createStream,
 
-  updateDay,
+  updateStream,
 
-  deleteDay,
+  deleteStream,
 };
 
-export default dayService;
+export default streamService;

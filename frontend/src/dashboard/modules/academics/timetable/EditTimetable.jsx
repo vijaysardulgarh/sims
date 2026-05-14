@@ -17,8 +17,10 @@ import toast from "react-hot-toast";
 
 import TimetableForm from "./TimetableForm";
 
-import timetableService from
-"../../../services/academics/timetableService";
+// import timetableService from
+// "../../../services/academics/timetableService";
+
+import timetableService from "./timetableService";
 
 const EditTimetable = () => {
 

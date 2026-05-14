@@ -17,8 +17,9 @@ import toast from "react-hot-toast";
 
 import ClassroomForm from "./ClassroomForm";
 
-import classroomService from
-"../../../services/academics/classroomService";
+import classroomService from "./classroomService";
+
+
 
 const EditClassroom = () => {
 

@@ -35,8 +35,7 @@ import ConfirmModal from
 // import subjectService from
 // "../../../services/academics/subjectService";
 
-import subjectService from
-"./subjectService";
+import subjectService from "./subjectService";
 
 const SubjectsList = () => {
 

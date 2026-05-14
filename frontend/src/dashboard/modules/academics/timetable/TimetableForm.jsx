@@ -8,8 +8,8 @@ import {
   useState
 } from "react";
 
-import classService from
-"../../../services/academics/classService";
+
+import classService from "../classes/classService";
 
 // import sectionService from
 // "../../../services/academics/sectionService";

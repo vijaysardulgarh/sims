@@ -18,8 +18,7 @@ import StreamForm from "./StreamForm";
 // import streamService from
 // "../../../services/academics/streamService";
 
-import streamService from
-"./streamService";
+import streamService from "./streamService";
 
 
 

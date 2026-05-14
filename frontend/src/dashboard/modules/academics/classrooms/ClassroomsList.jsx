@@ -32,8 +32,7 @@ import ActionButtons from
 import ConfirmModal from
 "../../../components/modals/ConfirmModal";
 
-import classroomService from
-"../../../services/academics/classroomService";
+import classroomService from "./classroomService";
 
 const ClassroomsList = () => {
 

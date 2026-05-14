@@ -32,8 +32,7 @@ import ActionButtons from
 import ConfirmModal from
 "../../../components/modals/ConfirmModal";
 
-import mediumService from
-"../../../services/academics/mediumService";
+import mediumService from "./mediumService";
 
 const MediumsList = () => {
 

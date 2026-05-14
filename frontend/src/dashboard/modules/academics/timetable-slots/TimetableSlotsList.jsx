@@ -35,8 +35,7 @@ import ConfirmModal from
 // import timetableSlotService from
 // "../../../services/academics/timetableSlotService";
 
-import timetableSlotService from
-"./timetableSlotService";
+import timetableSlotService from "./timetableSlotService";
 
 const TimetableSlotsList = () => {
 

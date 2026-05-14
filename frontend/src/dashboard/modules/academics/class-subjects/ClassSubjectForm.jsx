@@ -8,14 +8,19 @@ import {
   useState
 } from "react";
 
-import classService from
-"../../../services/academics/classService";
+// import classService from
+// "../../../services/academics/classService";
 
-import subjectService from
-"../../../services/academics/subjectService";
+// import subjectService from
+// "../../../services/academics/subjectService";
 
-import streamService from
-"../../../services/academics/streamService";
+// import streamService from
+// "../../../services/academics/streamService";
+
+
+import classService from "../classes/classService";
+import subjectService from "../subjects/subjectService";
+import streamService from "../streams/streamService";
 
 const ClassSubjectForm = ({
 

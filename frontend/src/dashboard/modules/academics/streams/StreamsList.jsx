@@ -35,8 +35,7 @@ import ConfirmModal from
 // import streamService from
 // "../../../services/academics/streamService";
 
-import streamService from
-"./streamService";
+import streamService from "./streamService";
 
 const StreamsList = () => {
 

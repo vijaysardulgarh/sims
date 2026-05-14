@@ -17,8 +17,7 @@ import toast from "react-hot-toast";
 
 import ClassSubjectForm from "./ClassSubjectForm";
 
-import classSubjectService from
-"../../../services/academics/classSubjectService";
+import classSubjectService from "./classSubjectService";
 
 const EditClassSubject = () => {
 

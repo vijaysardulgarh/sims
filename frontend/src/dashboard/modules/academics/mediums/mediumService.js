@@ -1,51 +1,47 @@
 // ============================================
-// TIMETABLE SLOT SERVICE
-// File: timetableSlotService.js
+// MEDIUM SERVICE
+// File: mediumService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../utils/api";
 
 // ============================================
-// GET ALL TIMETABLE SLOTS
+// GET ALL MEDIUMS
 // ============================================
 
-const getTimetableSlots = async () => {
+const getMediums = async () => {
 
   const response =
     await api.get(
-      "/academics/timetable-slots/"
+      "/academics/mediums/"
     );
 
   return response.data;
 };
 
 // ============================================
-// GET SINGLE TIMETABLE SLOT
+// GET SINGLE MEDIUM
 // ============================================
 
-const getTimetableSlot = async (
-  id
-) => {
+const getMedium = async (id) => {
 
   const response =
     await api.get(
-      `/academics/timetable-slots/${id}/`
+      `/academics/mediums/${id}/`
     );
 
   return response.data;
 };
 
 // ============================================
-// CREATE TIMETABLE SLOT
+// CREATE MEDIUM
 // ============================================
 
-const createTimetableSlot = async (
-  data
-) => {
+const createMedium = async (data) => {
 
   const response =
     await api.post(
-      "/academics/timetable-slots/",
+      "/academics/mediums/",
       data
     );
 
@@ -53,17 +49,17 @@ const createTimetableSlot = async (
 };
 
 // ============================================
-// UPDATE TIMETABLE SLOT
+// UPDATE MEDIUM
 // ============================================
 
-const updateTimetableSlot = async (
+const updateMedium = async (
   id,
   data
 ) => {
 
   const response =
     await api.put(
-      `/academics/timetable-slots/${id}/`,
+      `/academics/mediums/${id}/`,
       data
     );
 
@@ -71,16 +67,14 @@ const updateTimetableSlot = async (
 };
 
 // ============================================
-// DELETE TIMETABLE SLOT
+// DELETE MEDIUM
 // ============================================
 
-const deleteTimetableSlot = async (
-  id
-) => {
+const deleteMedium = async (id) => {
 
   const response =
     await api.delete(
-      `/academics/timetable-slots/${id}/`
+      `/academics/mediums/${id}/`
     );
 
   return response.data;
@@ -90,17 +84,17 @@ const deleteTimetableSlot = async (
 // EXPORT SERVICE
 // ============================================
 
-const timetableSlotService = {
+const mediumService = {
 
-  getTimetableSlots,
+  getMediums,
 
-  getTimetableSlot,
+  getMedium,
 
-  createTimetableSlot,
+  createMedium,
 
-  updateTimetableSlot,
+  updateMedium,
 
-  deleteTimetableSlot,
+  deleteMedium,
 };
 
-export default timetableSlotService;
+export default mediumService;

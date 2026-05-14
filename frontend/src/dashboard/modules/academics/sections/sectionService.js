@@ -3,7 +3,7 @@
 // File: sectionService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../utils/api";
 
 // ============================================
 // GET ALL SECTIONS

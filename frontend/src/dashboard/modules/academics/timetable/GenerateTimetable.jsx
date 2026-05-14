@@ -16,8 +16,9 @@ import classService from
 import sectionService from
 "../../../services/academics/sectionService";
 
-import timetableService from
-"../../../services/academics/timetableService";
+import timetableService from "./timetableService";
+
+
 
 const GenerateTimetable = () => {
 

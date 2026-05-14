@@ -1,47 +1,49 @@
 // ============================================
-// SUBJECT SERVICE
-// File: subjectService.js
+// CLASS SUBJECT SERVICE
+// File: classSubjectService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../utils/api";
 
 // ============================================
-// GET ALL SUBJECTS
+// GET ALL CLASS SUBJECTS
 // ============================================
 
-const getSubjects = async () => {
+const getClassSubjects = async () => {
 
   const response =
     await api.get(
-      "/academics/subjects/"
+      "/academics/class-subjects/"
     );
 
   return response.data;
 };
 
 // ============================================
-// GET SINGLE SUBJECT
+// GET SINGLE CLASS SUBJECT
 // ============================================
 
-const getSubject = async (id) => {
+const getClassSubject = async (id) => {
 
   const response =
     await api.get(
-      `/academics/subjects/${id}/`
+      `/academics/class-subjects/${id}/`
     );
 
   return response.data;
 };
 
 // ============================================
-// CREATE SUBJECT
+// CREATE CLASS SUBJECT
 // ============================================
 
-const createSubject = async (data) => {
+const createClassSubject = async (
+  data
+) => {
 
   const response =
     await api.post(
-      "/academics/subjects/",
+      "/academics/class-subjects/",
       data
     );
 
@@ -49,17 +51,17 @@ const createSubject = async (data) => {
 };
 
 // ============================================
-// UPDATE SUBJECT
+// UPDATE CLASS SUBJECT
 // ============================================
 
-const updateSubject = async (
+const updateClassSubject = async (
   id,
   data
 ) => {
 
   const response =
     await api.put(
-      `/academics/subjects/${id}/`,
+      `/academics/class-subjects/${id}/`,
       data
     );
 
@@ -67,14 +69,16 @@ const updateSubject = async (
 };
 
 // ============================================
-// DELETE SUBJECT
+// DELETE CLASS SUBJECT
 // ============================================
 
-const deleteSubject = async (id) => {
+const deleteClassSubject = async (
+  id
+) => {
 
   const response =
     await api.delete(
-      `/academics/subjects/${id}/`
+      `/academics/class-subjects/${id}/`
     );
 
   return response.data;
@@ -84,17 +88,17 @@ const deleteSubject = async (id) => {
 // EXPORT SERVICE
 // ============================================
 
-const subjectService = {
+const classSubjectService = {
 
-  getSubjects,
+  getClassSubjects,
 
-  getSubject,
+  getClassSubject,
 
-  createSubject,
+  createClassSubject,
 
-  updateSubject,
+  updateClassSubject,
 
-  deleteSubject,
+  deleteClassSubject,
 };
 
-export default subjectService;
+export default classSubjectService;
