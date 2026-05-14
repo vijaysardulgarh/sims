@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+
 import { responsibilityMenus } from "../config/responsibilityMenus";
 
 const Sidebar = () => {
@@ -260,9 +261,26 @@ const Sidebar = () => {
   });
 
   return (
-    <aside className="w-64 min-h-screen bg-gradient-to-b from-blue-950 to-blue-900 text-white shadow-2xl">
 
-      {/* Logo */}
+    <aside
+      className="
+        w-64
+        h-screen
+        overflow-hidden
+        bg-gradient-to-b
+        from-blue-950
+        to-blue-900
+        text-white
+        shadow-2xl
+        flex
+        flex-col
+      "
+    >
+
+      {/* ===================================== */}
+      {/* LOGO */}
+      {/* ===================================== */}
+
       <div className="p-6 border-b border-blue-800">
 
         <h1 className="text-3xl font-bold tracking-wide">
@@ -273,34 +291,70 @@ const Sidebar = () => {
           School ERP System
         </p>
 
-        <div className="mt-4 inline-block bg-white/10 px-3 py-1 rounded-full text-xs uppercase tracking-wider text-blue-100">
+        <div
+          className="
+            mt-4
+            inline-block
+            bg-white/10
+            px-3
+            py-1
+            rounded-full
+            text-xs
+            uppercase
+            tracking-wider
+            text-blue-100
+          "
+        >
           {role}
         </div>
 
       </div>
 
-      {/* Navigation */}
-      <nav className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-120px)]">
+      {/* ===================================== */}
+      {/* NAVIGATION */}
+      {/* ===================================== */}
+
+      <nav
+        className="
+          flex-1
+          p-4
+          space-y-2
+          overflow-y-auto
+          scroll-smooth
+          custom-scrollbar
+        "
+      >
 
         {menuItems.map((item) => (
+
           <NavLink
             key={item.name}
             to={item.path}
             className={({ isActive }) =>
-              `block px-4 py-3 rounded-xl transition-all duration-200 ${
-                isActive
-                  ? "bg-white text-blue-900 font-semibold shadow-md"
-                  : "hover:bg-blue-800 text-blue-100"
-              }`
+              `
+                block
+                px-4
+                py-3
+                rounded-xl
+                transition-all
+                duration-200
+                ${
+                  isActive
+                    ? "bg-white text-blue-900 font-semibold shadow-md"
+                    : "hover:bg-blue-800 text-blue-100"
+                }
+              `
             }
           >
             {item.name}
           </NavLink>
+
         ))}
 
       </nav>
 
     </aside>
+
   );
 };
 

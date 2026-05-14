@@ -11,49 +11,64 @@ from rest_framework.routers import (
 # TIMETABLE API IMPORTS
 # =========================================
 
-from apps.academics.api.timetable_api import (
+from apps.academics.days.api import (
+    DayViewSet
+)
 
-    DayViewSet,
+from apps.academics.timetable_slots.api import (
+    TimetableSlotViewSet
+)
 
-    TimetableSlotViewSet,
+from apps.academics.timetables.api import (
+    TimetableViewSet
+)
 
-    TimetableViewSet,
+from apps.academics.timetable_generator.api import (
+    TimetableGenerateAPIView
+)
 
-    TimetableGenerateAPIView,
+from apps.academics.teacher_subject_assignments.api import (
+    TeacherAssignmentAPIView
+)
 
-    TeacherAssignmentAPIView,
-
-    TimetableListAPIView,
-
-    TeacherWorkloadAPIView,
+from apps.academics.reports.teacher_workload.api import (
+    TeacherWorkloadAPIView
 )
 
 # =========================================
 # CLASS / STREAM / SECTION API IMPORTS
 # =========================================
 
-from apps.academics.api.class_api import (
+from apps.academics.classes.api import (
+    ClassViewSet
+)
 
-    ClassViewSet,
+from apps.academics.streams.api import (
+    StreamViewSet
+)
 
-    StreamViewSet,
+from apps.academics.mediums.api import (
+    MediumViewSet
+)
 
-    MediumViewSet,
+from apps.academics.classrooms.api import (
+    ClassroomViewSet
+)
 
-    ClassroomViewSet,
-
-    SectionViewSet,
+from apps.academics.sections.api import (
+    SectionViewSet
 )
 
 # =========================================
 # SUBJECT API IMPORTS
 # =========================================
 
-from apps.academics.api.subject_api import (
+from apps.academics.subjects.api import (
+    SubjectViewSet
+)
 
-    SubjectViewSet,
-
-    ClassSubjectViewSet,
+from apps.academics.class_subjects.api import (
+    ClassSubjectViewSet
 )
 
 # =========================================
@@ -187,16 +202,6 @@ urlpatterns = [
         "teacher-assignment/",
         TeacherAssignmentAPIView.as_view(),
         name="teacher-assignment"
-    ),
-
-    # =====================================
-    # TIMETABLE LIST
-    # =====================================
-
-    path(
-        "timetable-list/",
-        TimetableListAPIView.as_view(),
-        name="timetable-list"
     ),
 
     # =====================================

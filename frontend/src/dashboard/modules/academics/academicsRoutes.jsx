@@ -6,6 +6,14 @@ import { Route } from "react-router-dom";
 
 
 // =========================================
+// ACADEMICS DASHBOARD
+// =========================================
+
+import AcademicDashboard from
+"./dashboard/AcademicDashboard";
+
+
+// =========================================
 // CLASSES
 // =========================================
 
@@ -124,6 +132,16 @@ import EditTimetable from
 const academicsRoutes = (
 
   <>
+
+    {/* ===================================== */}
+    {/* ACADEMICS DASHBOARD */}
+    {/* ===================================== */}
+
+    <Route
+      path="academics"
+      element={<AcademicDashboard />}
+    />
+
 
     {/* ===================================== */}
     {/* CLASSES */}

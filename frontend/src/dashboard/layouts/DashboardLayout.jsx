@@ -1,22 +1,69 @@
 import { Outlet } from "react-router-dom";
+
 import Sidebar from "../components/Sidebar";
+
 import TopNavbar from "../components/TopNavbar";
 
 const DashboardLayout = () => {
+
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
-      {/* Sidebar */}
+
+    <div
+      className="
+        h-screen
+        overflow-hidden
+        bg-gray-100
+        flex
+      "
+    >
+
+      {/* ===================================== */}
+      {/* SIDEBAR */}
+      {/* ===================================== */}
+
       <Sidebar />
 
-      {/* Main Area */}
-      <div className="flex flex-col flex-1 overflow-hidden">
+      {/* ===================================== */}
+      {/* MAIN CONTENT */}
+      {/* ===================================== */}
+
+      <div
+        className="
+          flex-1
+          flex
+          flex-col
+          overflow-hidden
+        "
+      >
+
+        {/* ===================================== */}
+        {/* TOP NAVBAR */}
+        {/* ===================================== */}
+
         <TopNavbar />
 
-        <main className="flex-1 overflow-y-auto p-6">
+        {/* ===================================== */}
+        {/* PAGE CONTENT */}
+        {/* ===================================== */}
+
+        <main
+          className="
+            flex-1
+            overflow-y-auto
+            overflow-x-hidden
+            p-6
+            custom-scrollbar
+          "
+        >
+
           <Outlet />
+
         </main>
+
       </div>
+
     </div>
+
   );
 };
 
