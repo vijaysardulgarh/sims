@@ -1,7 +1,3 @@
-# ============================================
-# finance/fee_structures/models.py
-# ============================================
-
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -38,25 +34,19 @@ class FeeStructure(models.Model):
         default=0
     )
 
-    tuition_fee = models.DecimalField(
+    rcf = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0
     )
 
-    examination_fee = models.DecimalField(
+    cwf = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0
     )
 
-    transport_fee = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=0
-    )
-
-    library_fee = models.DecimalField(
+    ccwf = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0
@@ -83,33 +73,34 @@ class FeeStructure(models.Model):
 
     @property
     def total_fee(self):
+
         return (
             self.admission_fee +
-            self.tuition_fee +
-            self.examination_fee +
-            self.transport_fee +
-            self.library_fee +
+            self.rcf +
+            self.cwf +
+            self.ccwf +
             self.other_fee
         )
 
     def clean(self):
 
-        fee_fields = [
+        fields = [
             self.admission_fee,
-            self.tuition_fee,
-            self.examination_fee,
-            self.transport_fee,
-            self.library_fee,
+            self.rcf,
+            self.cwf,
+            self.ccwf,
             self.other_fee,
         ]
 
-        if any(f < 0 for f in fee_fields):
+        if any(f < 0 for f in fields):
             raise ValidationError(
                 "Fee values cannot be negative"
             )
 
     def save(self, *args, **kwargs):
+
         self.full_clean()
+
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -120,18 +111,6 @@ class FeeStructure(models.Model):
                 f"({self.stream}) - {self.session}"
             )
 
-        return f"{self.class_obj} - {self.session}"
-
-    class Meta:
-        ordering = ["-session"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=[
-                    "school",
-                    "class_obj",
-                    "stream",
-                    "session"
-                ],
-                name="unique_fee_structure"
-            )
-        ]
+        return (
+            f"{self.class_obj} - {self.session}"
+        )

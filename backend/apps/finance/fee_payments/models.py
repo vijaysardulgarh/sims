@@ -2,12 +2,22 @@
 # finance/fee_payments/models.py
 # ============================================
 
-from django.db import models, transaction
-from django.db.models import F
-from django.core.exceptions import ValidationError
-from django.utils import timezone
+# from django.db import models, transaction
+# from django.db.models import F
+# from django.core.exceptions import ValidationError
+# from django.utils import timezone
+# import uuid
+
 import uuid
 
+from django.db import models, transaction
+from django.db.models import F, Q
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+
+# from apps.finance.fee_structures.models import FeeStructure
+# from apps.finance.student_fees.models import StudentFee
+# from apps.finance.fee_payments.models import FeePayment
 
 class FeePayment(models.Model):
 
