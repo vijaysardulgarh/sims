@@ -1,22 +1,38 @@
-from rest_framework import viewsets
+from apps.academics.common.base_api import (
+    SchoolFilteredViewSet
+)
 
-from apps.academics.mediums import (
+from apps.academics.mediums.models import (
     Medium
 )
 
-from apps.academics.mediums.serializer import (
+from apps.academics.mediums.serializers import (
     MediumSerializer
 )
 
 
 class MediumViewSet(
-    viewsets.ModelViewSet
+    SchoolFilteredViewSet
 ):
-
-    queryset = (
-        Medium.objects.all()
-    )
 
     serializer_class = (
         MediumSerializer
     )
+
+    search_fields = [
+        "name"
+    ]
+
+    ordering_fields = [
+        "name"
+    ]
+
+    def get_queryset(self):
+
+        queryset = (
+            Medium.objects.all()
+        )
+
+        return self.filter_queryset_by_school(
+            queryset
+        )

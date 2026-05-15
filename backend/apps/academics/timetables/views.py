@@ -1,32 +1,115 @@
-from django.shortcuts import render
+from rest_framework.views import (
+    APIView
+)
 
-from apps.academics.timetables import (
-    Timetable
+from rest_framework.response import (
+    Response
+)
+
+from apps.core.utils.helpers import (
+    get_current_school
+)
+
+from apps.staff.models import (
+    Staff
+)
+
+from apps.academics.classes.models import (
+    Class
+)
+
+from apps.academics.subjects.models import (
+    Subject
+)
+
+from apps.academics.timetable_slots.models import (
+    TimetableSlot
 )
 
 
-def timetable_list_view(request):
+class TimetableGenerateAPIView(
+    APIView
+):
 
-    timetables = (
+    def get(self, request):
 
-        Timetable.objects
-
-        .select_related(
-            "teacher_subject_assignment__teacher",
-            "teacher_subject_assignment__class_subject__subject",
-            "teacher_subject_assignment__section",
-            "slot",
+        school = (
+            get_current_school(request)
         )
-    )
 
-    return render(
+        if not school:
 
-        request,
+            return Response({
 
-        "academics/timetable/list.html",
+                "error":
+                    "School not selected"
 
-        {
-            "timetables":
-                timetables
-        }
-    )
+            }, status=400)
+
+        classes = (
+            Class.objects.filter(
+                school=school
+            )
+        )
+
+        subjects = (
+            Subject.objects.filter(
+                school=school
+            )
+        )
+
+        teachers = (
+            Staff.objects.filter(
+                school=school
+            )
+        )
+
+        time_slots = (
+
+            TimetableSlot.objects
+
+            .filter(
+                school=school
+            )
+
+            .select_related(
+                "day"
+            )
+        )
+
+        return Response({
+
+            "classes":
+                list(
+                    classes.values(
+                        "id",
+                        "name"
+                    )
+                ),
+
+            "subjects":
+                list(
+                    subjects.values(
+                        "id",
+                        "name",
+                        "code"
+                    )
+                ),
+
+            "teachers":
+                list(
+                    teachers.values(
+                        "id",
+                        "name"
+                    )
+                ),
+
+            "time_slots":
+                list(
+                    time_slots.values(
+                        "id",
+                        "day__name",
+                        "period_number"
+                    )
+                ),
+        })

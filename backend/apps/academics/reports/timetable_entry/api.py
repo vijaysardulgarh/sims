@@ -10,7 +10,7 @@ from apps.academics.timetables import (
     Timetable
 )
 
-from apps.academics.reports.timetable_entry.serializer import (
+from backend.apps.academics.reports.timetable_entry.serializers import (
     TimetableEntryReportSerializer
 )
 

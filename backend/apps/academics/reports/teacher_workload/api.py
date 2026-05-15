@@ -14,7 +14,7 @@ from apps.academics.timetables import (
     Timetable
 )
 
-from apps.academics.reports.teacher_workload.serializer import (
+from backend.apps.academics.reports.teacher_workload.serializers import (
     TeacherWorkloadSerializer
 )
 

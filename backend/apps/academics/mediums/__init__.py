@@ -1,11 +1,9 @@
-from .model import Medium
-
-from .serializer import (
-    MediumSerializer
+from .models import (
+    Medium
 )
 
-from .api import (
-    MediumViewSet
+from .serializers import (
+    MediumSerializer
 )
 
 from .views import (

@@ -1,12 +1,14 @@
 from django.contrib import admin
 
-from apps.academics.streams import (
+from apps.academics.streams.models import (
     Stream
 )
 
 
 @admin.register(Stream)
-class StreamAdmin(admin.ModelAdmin):
+class StreamAdmin(
+    admin.ModelAdmin
+):
 
     list_display = (
         "id",

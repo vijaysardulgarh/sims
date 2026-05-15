@@ -33,7 +33,7 @@ urlpatterns = [
 
     path(
         "api/academics/",
-        include("apps.academics.api_urls")
+        include("apps.academics.urls")
     ),
 
     # ======================================

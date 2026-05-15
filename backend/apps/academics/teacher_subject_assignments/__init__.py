@@ -1,15 +1,11 @@
-from .model import (
+from .models import (
     TeacherSubjectAssignment
 )
 
-from .serializer import (
+from .serializers import (
     TeacherSubjectAssignmentSerializer
 )
 
-from .api import (
-    TeacherAssignmentAPIView
-)
-
 from .views import (
-    teacher_assignment_view
+    TeacherAssignmentAPIView
 )

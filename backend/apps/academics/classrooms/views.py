@@ -1,22 +1,45 @@
-from rest_framework import viewsets
+from apps.academics.common.base_api import (
+    SchoolFilteredViewSet
+)
 
-from apps.academics.classrooms import (
+from apps.academics.classrooms.models import (
     Classroom
 )
 
-from apps.academics.classrooms.serializer import (
+from apps.academics.classrooms.serializers import (
     ClassroomSerializer
 )
 
 
 class ClassroomViewSet(
-    viewsets.ModelViewSet
+    SchoolFilteredViewSet
 ):
-
-    queryset = (
-        Classroom.objects.all()
-    )
 
     serializer_class = (
         ClassroomSerializer
     )
+
+    search_fields = [
+        "name",
+        "floor"
+    ]
+
+    ordering_fields = [
+        "name",
+        "capacity",
+        "floor"
+    ]
+
+    filterset_fields = [
+        "floor"
+    ]
+
+    def get_queryset(self):
+
+        queryset = (
+            Classroom.objects.all()
+        )
+
+        return self.filter_queryset_by_school(
+            queryset
+        )

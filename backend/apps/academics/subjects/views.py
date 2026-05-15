@@ -1,23 +1,46 @@
-from django.shortcuts import render
+from apps.academics.common.base_api import (
+    SchoolFilteredViewSet
+)
 
-from apps.academics.subjects import (
+from apps.academics.subjects.models import (
     Subject
 )
 
+from apps.academics.subjects.serializers import (
+    SubjectSerializer
+)
 
-def subject_list_view(request):
 
-    subjects = (
-        Subject.objects.all()
+class SubjectViewSet(
+    SchoolFilteredViewSet
+):
+
+    serializer_class = (
+        SubjectSerializer
     )
 
-    return render(
+    search_fields = [
+        "name",
+        "code"
+    ]
 
-        request,
+    ordering_fields = [
+        "name",
+        "code"
+    ]
 
-        "academics/subjects/list.html",
+    filterset_fields = [
+        "is_language",
+        "is_optional",
+        "has_lab",
+    ]
 
-        {
-            "subjects": subjects
-        }
-    )
+    def get_queryset(self):
+
+        queryset = (
+            Subject.objects.all()
+        )
+
+        return self.filter_queryset_by_school(
+            queryset
+        )

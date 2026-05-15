@@ -19,13 +19,19 @@ from apps.schools.models import (
     School
 )
 
-from apps.academics.models import (
+from apps.academics.classes.models import (
     Class,
-    Section,
-    Medium,
-    Stream
 )
 
+from apps.academics.sections.models import (
+    Section,
+)
+from apps.academics.mediums.models import (
+    Medium,
+)
+from apps.academics.streams.models import (
+    Stream
+)
 
 class StudentResource(resources.ModelResource):
 

@@ -2,6 +2,6 @@ from .api import (
     SubjectsOfferedAPIView
 )
 
-from .view import (
+from .views import (
     subjects_offered_view
 )

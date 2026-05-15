@@ -1,13 +1,11 @@
-from .model import Subject
+from .models import (
+    Subject
+)
 
-from .serializer import (
+from .serializers import (
     SubjectSerializer
 )
 
-from .api import (
-    SubjectViewSet
-)
-
 from .views import (
-    subject_list_view
+    SubjectViewSet
 )

@@ -1,11 +1,9 @@
-from .model import Class
-
-from .serializer import (
-    ClassSerializer
+from .models import (
+    Class
 )
 
-from .api import (
-    ClassViewSet
+from .serializers import (
+    ClassSerializer
 )
 
 from .views import (

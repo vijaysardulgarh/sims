@@ -1,13 +1,11 @@
-from .model import Day
+from .models import (
+    Day
+)
 
-from .serializer import (
+from .serializers import (
     DaySerializer
 )
 
-from .api import (
-    DayViewSet
-)
-
 from .views import (
-    day_list_view
+    DayViewSet
 )

@@ -1,91 +1,110 @@
-from django.urls import path
-
-from apps.academics.api.timetable_api import (
-
-    TimetableGenerateAPIView,
-
-    TeacherAssignmentAPIView,
-
-    SubjectsBySectionAPIView,
-
-    TimetableCreateAPIView,
-
-    TimetableListAPIView,
-
-    TimetableDashboardAPIView,
-
-    SectionReportAPIView,
-
-    TeacherReportAPIView,
-
-    TeacherWorkloadAPIView,
-
-    TimetableDragAPIView,
-
-    TimetableUpdateAPIView,
-
-    TimetableRemoveAPIView,
+from django.urls import (
+    include,
+    path
 )
 
 urlpatterns = [
 
+    # =====================================
+    # CORE ACADEMICS
+    # =====================================
+
     path(
-        "timetable/generate/",
-        TimetableGenerateAPIView.as_view(),
+        "classes/",
+        include(
+            "apps.academics.classes.urls"
+        )
     ),
 
     path(
-        "timetable/assign/",
-        TeacherAssignmentAPIView.as_view(),
+        "streams/",
+        include(
+            "apps.academics.streams.urls"
+        )
     ),
 
     path(
-        "timetable/subjects/",
-        SubjectsBySectionAPIView.as_view(),
+        "mediums/",
+        include(
+            "apps.academics.mediums.urls"
+        )
     ),
 
     path(
-        "timetable/create/",
-        TimetableCreateAPIView.as_view(),
+        "classrooms/",
+        include(
+            "apps.academics.classrooms.urls"
+        )
     ),
 
     path(
-        "timetable/list/",
-        TimetableListAPIView.as_view(),
+        "sections/",
+        include(
+            "apps.academics.sections.urls"
+        )
     ),
 
     path(
-        "timetable/dashboard/",
-        TimetableDashboardAPIView.as_view(),
+        "subjects/",
+        include(
+            "apps.academics.subjects.urls"
+        )
     ),
 
     path(
-        "timetable/section/<int:section_id>/",
-        SectionReportAPIView.as_view(),
+        "class-subjects/",
+        include(
+            "apps.academics.class_subjects.urls"
+        )
     ),
 
     path(
-        "timetable/teacher/<int:teacher_id>/",
-        TeacherReportAPIView.as_view(),
+        "days/",
+        include(
+            "apps.academics.days.urls"
+        )
+    ),
+
+    # =====================================
+    # TIMETABLE MANAGEMENT
+    # =====================================
+
+    path(
+        "teacher-subject-assignments/",
+        include(
+            "apps.academics.teacher_subject_assignments.urls"
+        )
     ),
 
     path(
-        "timetable/workload/",
-        TeacherWorkloadAPIView.as_view(),
+        "timetable-slots/",
+        include(
+            "apps.academics.timetable_slots.urls"
+        )
     ),
 
     path(
-        "timetable/drag/",
-        TimetableDragAPIView.as_view(),
+        "timetables/",
+        include(
+            "apps.academics.timetables.urls"
+        )
     ),
 
     path(
-        "timetable/update/",
-        TimetableUpdateAPIView.as_view(),
+        "timetable-generator/",
+        include(
+            "apps.academics.timetable_generator.urls"
+        )
     ),
 
+    # =====================================
+    # REPORTS
+    # =====================================
+
     path(
-        "timetable/remove/",
-        TimetableRemoveAPIView.as_view(),
+        "reports/",
+        include(
+            "apps.academics.reports.urls"
+        )
     ),
 ]

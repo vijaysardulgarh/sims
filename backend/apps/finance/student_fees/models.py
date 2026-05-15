@@ -1,23 +1,35 @@
-# ============================================
-# finance/student_fees/models.py
-# ============================================
-
 from django.db import models
-from django.core.exceptions import ValidationError
+
+from django.db.models import (
+    Q
+)
+
+from django.core.exceptions import (
+    ValidationError
+)
 
 
 class StudentFee(models.Model):
 
+    school = models.ForeignKey(
+        "schools.School",
+        on_delete=models.CASCADE,
+        related_name="student_fees",
+        db_index=True
+    )
+
     student = models.ForeignKey(
         "students.Student",
         on_delete=models.CASCADE,
-        related_name="fees"
+        related_name="fees",
+        db_index=True
     )
 
     fee_structure = models.ForeignKey(
         "fee_structures.FeeStructure",
         on_delete=models.CASCADE,
-        related_name="student_fees"
+        related_name="student_fees",
+        db_index=True
     )
 
     total_amount = models.DecimalField(
@@ -59,27 +71,94 @@ class StudentFee(models.Model):
         auto_now=True
     )
 
+    class Meta:
+
+        ordering = [
+            "-created_at"
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=["session"]
+            ),
+
+            models.Index(
+                fields=["school"]
+            ),
+
+            models.Index(
+                fields=["is_closed"]
+            ),
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "student",
+                    "session"
+                ],
+                name="unique_student_fee"
+            ),
+
+            models.CheckConstraint(
+                check=Q(total_amount__gte=0),
+                name="student_fee_total_positive"
+            ),
+
+            models.CheckConstraint(
+                check=Q(paid_amount__gte=0),
+                name="student_fee_paid_positive"
+            ),
+
+            models.CheckConstraint(
+                check=Q(due_amount__gte=0),
+                name="student_fee_due_positive"
+            ),
+        ]
+
     def clean(self):
 
         if self.total_amount < 0:
-            raise ValidationError(
-                "Total amount cannot be negative"
-            )
+
+            raise ValidationError({
+                "total_amount":
+                    (
+                        "Total amount cannot "
+                        "be negative"
+                    )
+            })
 
         if self.paid_amount < 0:
-            raise ValidationError(
-                "Paid amount cannot be negative"
-            )
 
-        if self.paid_amount > self.total_amount:
-            raise ValidationError(
-                "Paid amount cannot exceed total"
-            )
+            raise ValidationError({
+                "paid_amount":
+                    (
+                        "Paid amount cannot "
+                        "be negative"
+                    )
+            })
+
+        if (
+            self.paid_amount >
+            self.total_amount
+        ):
+
+            raise ValidationError({
+                "paid_amount":
+                    (
+                        "Paid amount cannot "
+                        "exceed total amount"
+                    )
+            })
 
     def save(self, *args, **kwargs):
 
-        # Auto populate
-        if not self.pk and self.fee_structure:
+        if (
+            not self.pk and
+            self.fee_structure
+        ):
 
             self.total_amount = (
                 self.fee_structure.total_fee
@@ -89,11 +168,18 @@ class StudentFee(models.Model):
                 self.fee_structure.session
             )
 
+            self.school = (
+                self.fee_structure.school
+            )
+
         self.due_amount = (
-            self.total_amount - self.paid_amount
+            self.total_amount -
+            self.paid_amount
         )
 
-        self.is_closed = self.due_amount <= 0
+        self.is_closed = (
+            self.due_amount <= 0
+        )
 
         self.full_clean()
 
@@ -101,17 +187,15 @@ class StudentFee(models.Model):
 
     @property
     def payment_count(self):
-        return self.payments.count()
+
+        return (
+            self.payments.count()
+        )
 
     def __str__(self):
-        return f"{self.student} - {self.session}"
 
-    class Meta:
-        ordering = ["-created_at"]
-
-        constraints = [
-            models.UniqueConstraint(
-                fields=["student", "session"],
-                name="unique_student_fee"
-            )
-        ]
+        return (
+            f"{self.student} "
+            f"- "
+            f"{self.session}"
+        )

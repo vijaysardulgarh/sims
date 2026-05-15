@@ -1,4 +1,4 @@
-from .serializer import (
+from .serializers import (
     TimetableEntryReportSerializer
 )
 

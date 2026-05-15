@@ -1,9 +1,13 @@
-from .api import (
-    TimetableDragAPIView,
-    TimetableUpdateAPIView,
-    TimetableRemoveAPIView
+from timetables.models import (
+    Timetable
+)
+
+from .serializers import (
+    TimetableSerializer
 )
 
 from .views import (
-    timetable_drag_view
+    TimetableDragAPIView,
+    TimetableUpdateAPIView,
+    TimetableRemoveAPIView,
 )

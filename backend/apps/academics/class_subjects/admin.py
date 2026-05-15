@@ -1,12 +1,14 @@
 from django.contrib import admin
 
-from apps.academics.class_subjects import (
+from apps.academics.class_subjects.models import (
     ClassSubject
 )
 
 
 @admin.register(ClassSubject)
-class ClassSubjectAdmin(admin.ModelAdmin):
+class ClassSubjectAdmin(
+    admin.ModelAdmin
+):
 
     list_display = (
         "id",

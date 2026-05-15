@@ -1,15 +1,11 @@
-from .model import (
+from .models import (
     ClassSubject
 )
 
-from .serializer import (
+from .serializers import (
     ClassSubjectSerializer
 )
 
-from .api import (
-    ClassSubjectViewSet
-)
-
 from .views import (
-    class_subject_list_view
+    ClassSubjectViewSet
 )

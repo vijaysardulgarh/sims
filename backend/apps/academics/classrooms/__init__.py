@@ -1,11 +1,9 @@
-from .model import Classroom
-
-from .serializer import (
-    ClassroomSerializer
+from .models import (
+    Classroom
 )
 
-from .api import (
-    ClassroomViewSet
+from .serializers import (
+    ClassroomSerializer
 )
 
 from .views import (

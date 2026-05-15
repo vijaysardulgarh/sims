@@ -4,7 +4,7 @@ from apps.academics.timetable_slots import (
     TimetableSlot
 )
 
-from apps.academics.timetable_slots.serializer import (
+from apps.academics.timetable_slots.serializers import (
     TimetableSlotSerializer
 )
 

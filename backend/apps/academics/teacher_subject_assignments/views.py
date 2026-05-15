@@ -1,69 +1,103 @@
-from django.shortcuts import render
+from rest_framework.views import (
+    APIView
+)
+
+from rest_framework.response import (
+    Response
+)
 
 from apps.staff.models import (
     Staff
 )
 
-from apps.academics.sections import (
+from apps.academics.sections.models import (
     Section
 )
 
-from apps.academics.class_subjects import (
+from apps.academics.class_subjects.models import (
     ClassSubject
 )
 
-from apps.academics.teacher_subject_assignments import (
+from apps.academics.teacher_subject_assignments.models import (
     TeacherSubjectAssignment
 )
 
+from apps.academics.teacher_subject_assignments.serializers import (
+    TeacherSubjectAssignmentSerializer
+)
 
-def teacher_assignment_view(request):
 
-    teachers = (
+class TeacherAssignmentAPIView(
+    APIView
+):
 
-        Staff.objects.filter(
-            staff_role="Teaching"
+    def get(self, request):
+
+        teachers = (
+
+            Staff.objects.filter(
+                staff_role="Teaching"
+            )
         )
-    )
 
-    sections = (
-        Section.objects.all()
-    )
-
-    subjects = (
-
-        ClassSubject.objects
-
-        .select_related(
-            "subject"
+        sections = (
+            Section.objects.all()
         )
-    )
 
-    assignments = (
+        subjects = (
 
-        TeacherSubjectAssignment.objects
+            ClassSubject.objects
 
-        .select_related(
-            "teacher",
-            "class_subject__subject",
-            "section"
+            .select_related(
+                "subject"
+            )
         )
-    )
 
-    return render(
+        assignments = (
 
-        request,
+            TeacherSubjectAssignment.objects
 
-        "academics/timetable/"
-        "teacher_assignment.html",
+            .select_related(
+                "teacher",
+                "class_subject__subject",
+                "section"
+            )
+        )
 
-        {
-            "teachers": teachers,
+        serializer = (
 
-            "sections": sections,
+            TeacherSubjectAssignmentSerializer(
+                assignments,
+                many=True
+            )
+        )
 
-            "subjects": subjects,
+        return Response({
 
-            "assignments": assignments,
-        }
-    )
+            "teachers":
+                list(
+                    teachers.values(
+                        "id",
+                        "name"
+                    )
+                ),
+
+            "sections":
+                list(
+                    sections.values(
+                        "id",
+                        "name"
+                    )
+                ),
+
+            "subjects":
+                list(
+                    subjects.values(
+                        "id",
+                        "subject__name"
+                    )
+                ),
+
+            "assignments":
+                serializer.data,
+        })

@@ -1,12 +1,14 @@
 from django.contrib import admin
 
-from apps.academics.mediums import (
+from apps.academics.mediums.models import (
     Medium
 )
 
 
 @admin.register(Medium)
-class MediumAdmin(admin.ModelAdmin):
+class MediumAdmin(
+    admin.ModelAdmin
+):
 
     list_display = (
         "id",

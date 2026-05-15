@@ -1,11 +1,9 @@
-from .model import Section
-
-from .serializer import (
-    SectionSerializer
+from .models import (
+    Section
 )
 
-from .api import (
-    SectionViewSet
+from .serializers import (
+    SectionSerializer
 )
 
 from .views import (

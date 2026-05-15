@@ -1,13 +1,14 @@
-from .model import Timetable
+from .models import (
+    Timetable
+)
 
-from .serializer import (
+from .serializers import (
     TimetableSerializer
 )
 
-from .api import (
-    TimetableViewSet
-)
-
 from .views import (
-    timetable_list_view
+    TimetableGenerateAPIView,
+    TimetableDragAPIView,
+    TimetableUpdateAPIView,
+    TimetableRemoveAPIView,
 )

@@ -1,15 +1,11 @@
-from .model import (
-    TimetableSlot
+from .models import (
+    Timetable
 )
 
-from .serializer import (
-    TimetableSlotSerializer
-)
-
-from .api import (
-    TimetableSlotViewSet
+from .serializers import (
+    TimetableSerializer
 )
 
 from .views import (
-    timetable_slot_list_view
+    TimetableGenerateAPIView
 )

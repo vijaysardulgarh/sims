@@ -1,37 +1,58 @@
-# ============================================
-# finance/fee_payments/models.py
-# ============================================
-
-# from django.db import models, transaction
-# from django.db.models import F
-# from django.core.exceptions import ValidationError
-# from django.utils import timezone
-# import uuid
-
 import uuid
 
-from django.db import models, transaction
-from django.db.models import F, Q
-from django.core.exceptions import ValidationError
+from django.db import (
+    models,
+    transaction
+)
+
+from django.db.models import (
+    F,
+    Q
+)
+
+from django.core.exceptions import (
+    ValidationError
+)
+
 from django.utils import timezone
 
-# from apps.finance.fee_structures.models import FeeStructure
-# from apps.finance.student_fees.models import StudentFee
-# from apps.finance.fee_payments.models import FeePayment
 
 class FeePayment(models.Model):
 
     PAYMENT_MODE_CHOICES = [
+
         ("Cash", "Cash"),
+
         ("UPI", "UPI"),
+
         ("Online", "Online"),
+
         ("Cheque", "Cheque"),
     ]
+
+    PAYMENT_STATUS_CHOICES = [
+
+        ("Pending", "Pending"),
+
+        ("Success", "Success"),
+
+        ("Failed", "Failed"),
+
+        ("Refunded", "Refunded"),
+    ]
+
+    school = models.ForeignKey(
+        "schools.School",
+        on_delete=models.CASCADE,
+        related_name="fee_payments",
+        db_index=True
+    )
 
     student_fee = models.ForeignKey(
         "student_fees.StudentFee",
         on_delete=models.CASCADE,
-        related_name="payments"
+        related_name="payments",
+        db_index=True
     )
 
     amount = models.DecimalField(
@@ -44,6 +65,12 @@ class FeePayment(models.Model):
         choices=PAYMENT_MODE_CHOICES
     )
 
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PAYMENT_STATUS_CHOICES,
+        default="Success"
+    )
+
     transaction_id = models.CharField(
         max_length=100,
         blank=True,
@@ -53,7 +80,8 @@ class FeePayment(models.Model):
     receipt_number = models.CharField(
         max_length=50,
         unique=True,
-        editable=False
+        editable=False,
+        db_index=True
     )
 
     payment_date = models.DateField(
@@ -69,32 +97,75 @@ class FeePayment(models.Model):
         "accounts.User",
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name="created_fee_payments"
     )
 
     created_at = models.DateTimeField(
         auto_now_add=True
     )
 
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+
+        ordering = [
+            "-created_at"
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=["payment_date"]
+            ),
+
+            models.Index(
+                fields=["receipt_number"]
+            ),
+
+            models.Index(
+                fields=["school"]
+            ),
+        ]
+
+        constraints = [
+
+            models.CheckConstraint(
+                check=Q(amount__gt=0),
+                name="fee_payment_amount_positive"
+            )
+        ]
+
     def clean(self):
 
         if self.amount <= 0:
-            raise ValidationError(
-                "Payment amount must be greater than 0"
-            )
+
+            raise ValidationError({
+                "amount":
+                    (
+                        "Payment amount must "
+                        "be greater than 0"
+                    )
+            })
 
         if self.student_fee.is_closed:
-            raise ValidationError(
-                "Fee already fully paid"
-            )
+
+            raise ValidationError({
+                "student_fee":
+                    "Fee already fully paid"
+            })
 
         if (
             self.amount >
             self.student_fee.due_amount
         ):
-            raise ValidationError(
-                "Payment exceeds due amount"
-            )
+
+            raise ValidationError({
+                "amount":
+                    "Payment exceeds due amount"
+            })
 
     def save(self, *args, **kwargs):
 
@@ -104,10 +175,15 @@ class FeePayment(models.Model):
 
             self.full_clean()
 
-            if is_new and not self.receipt_number:
+            if (
+                is_new and
+                not self.receipt_number
+            ):
 
                 self.receipt_number = (
+
                     f"RCPT-"
+
                     f"{uuid.uuid4().hex[:10].upper()}"
                 )
 
@@ -119,24 +195,24 @@ class FeePayment(models.Model):
                     self.student_fee
                 )
 
-                student_fee.paid_amount = (
-                    F("paid_amount") + self.amount
-                )
+                type(student_fee).objects.filter(
+                    pk=student_fee.pk
+                ).update(
 
-                student_fee.save()
+                    paid_amount=(
+                        F("paid_amount") + self.amount
+                    )
+                )
 
                 student_fee.refresh_from_db()
 
     def __str__(self):
 
         return (
-            f"{self.student_fee.student} "
-            f"paid {self.amount}"
+
+            f"{self.student_fee.student}"
+
+            f" paid "
+
+            f"{self.amount}"
         )
-
-    class Meta:
-        ordering = ["-created_at"]
-
-        indexes = [
-            models.Index(fields=["payment_date"]),
-        ]

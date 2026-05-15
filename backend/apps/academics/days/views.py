@@ -1,23 +1,43 @@
-from django.shortcuts import render
+from apps.academics.common.base_api import (
+    SchoolFilteredViewSet
+)
 
-from apps.academics.days import (
+from apps.academics.days.models import (
     Day
 )
 
+from apps.academics.days.serializers import (
+    DaySerializer
+)
 
-def day_list_view(request):
 
-    days = (
-        Day.objects.all()
+class DayViewSet(
+    SchoolFilteredViewSet
+):
+
+    serializer_class = (
+        DaySerializer
     )
 
-    return render(
+    search_fields = [
+        "name"
+    ]
 
-        request,
+    ordering_fields = [
+        "sequence",
+        "name"
+    ]
 
-        "academics/timetable/days.html",
+    filterset_fields = [
+        "sequence"
+    ]
 
-        {
-            "days": days
-        }
-    )
+    def get_queryset(self):
+
+        queryset = (
+            Day.objects.all()
+        )
+
+        return self.filter_queryset_by_school(
+            queryset
+        )

@@ -2,7 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from apps.schools.models import School
-from apps.academics.models import Section
+from apps.academics.sections.models import Section
 
 
 # =========================

@@ -2,6 +2,6 @@ from .api import (
     SubjectStrengthAPIView
 )
 
-from .view import (
+from .views import (
     subject_strength_view
 )

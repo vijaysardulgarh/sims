@@ -1,12 +1,9 @@
-from .model import Stream
-from .model import Stream
-
-from .serializer import (
-    StreamSerializer
+from .models import (
+    Stream
 )
 
-from .api import (
-    StreamViewSet
+from .serializers import (
+    StreamSerializer
 )
 
 from .views import (
