@@ -11,7 +11,7 @@ from apps.academics.subjects.models import (
     Subject
 )
 
-from apps.academics.common.views import (
+from apps.core.common.views import (
     BaseReportAPIView
 )
 

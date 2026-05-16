@@ -137,7 +137,7 @@ class FeePayment(models.Model):
         constraints = [
 
             models.CheckConstraint(
-                check=Q(amount__gt=0),
+                condition=Q(amount__gt=0),
                 name="fee_payment_amount_positive"
             )
         ]

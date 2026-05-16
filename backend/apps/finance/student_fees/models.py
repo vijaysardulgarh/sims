@@ -106,17 +106,17 @@ class StudentFee(models.Model):
             ),
 
             models.CheckConstraint(
-                check=Q(total_amount__gte=0),
+                condition=Q(total_amount__gte=0),
                 name="student_fee_total_positive"
             ),
 
             models.CheckConstraint(
-                check=Q(paid_amount__gte=0),
+                condition=Q(paid_amount__gte=0),
                 name="student_fee_paid_positive"
             ),
 
             models.CheckConstraint(
-                check=Q(due_amount__gte=0),
+                condition=Q(due_amount__gte=0),
                 name="student_fee_due_positive"
             ),
         ]

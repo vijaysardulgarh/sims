@@ -6,6 +6,8 @@ from rest_framework.response import Response
 
 from apps.staff.staff.models import (
     Staff,
+)
+from apps.staff.sanctioned_post.models import (
     SanctionedPost
 )
 

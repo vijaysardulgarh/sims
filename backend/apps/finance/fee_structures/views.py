@@ -1,4 +1,4 @@
-from apps.finance.common.base_api import (
+from apps.core.common.views import (
     SchoolFilteredViewSet
 )
 

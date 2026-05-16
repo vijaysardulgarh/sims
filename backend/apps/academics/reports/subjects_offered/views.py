@@ -1,74 +1,64 @@
-from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from collections import defaultdict
 
-from apps.academics.class_subjects import (
+from apps.academics.class_subjects.models import (
     ClassSubject
 )
 
 
-def subjects_offered_view(request):
+class SubjectsOfferedAPIView(APIView):
 
-    class_subjects = (
+    def get(self, request):
 
-        ClassSubject.objects
+        class_subjects = (
 
-        .select_related(
-            "class_obj",
-            "stream",
-            "subject"
-        )
+            ClassSubject.objects
 
-        .order_by(
-            "class_obj__name",
-            "subject__name"
-        )
-    )
-
-    grouped_data = defaultdict(list)
-
-    for cs in class_subjects:
-
-        class_name = (
-            cs.class_obj.name
-        )
-
-        if cs.stream:
-
-            class_name += (
-                f" - {cs.stream.name}"
+            .select_related(
+                "class_obj",
+                "stream",
+                "subject"
             )
 
-        if cs.sub_stream:
-
-            class_name += (
-                f" - {cs.sub_stream}"
+            .order_by(
+                "class_obj__name",
+                "subject__name"
             )
+        )
 
-        grouped_data[class_name].append({
+        grouped_data = defaultdict(list)
 
-            "subject":
-                cs.subject.name,
+        for cs in class_subjects:
 
-            "periods_per_week":
-                cs.periods_per_week,
+            class_name = cs.class_obj.name
 
-            "is_optional":
-                cs.is_optional,
+            if cs.stream:
 
-            "has_lab":
-                cs.has_lab,
-        })
+                class_name += (
+                    f" - {cs.stream.name}"
+                )
 
-    return render(
+            if cs.sub_stream:
 
-        request,
+                class_name += (
+                    f" - {cs.sub_stream}"
+                )
 
-        "academics/reports/"
-        "subjects_offered.html",
+            grouped_data[class_name].append({
 
-        {
-            "grouped_data":
-                dict(grouped_data)
-        }
-    )
+                "subject":
+                    cs.subject.name,
+
+                "periods_per_week":
+                    cs.periods_per_week,
+
+                "is_optional":
+                    cs.is_optional,
+
+                "has_lab":
+                    cs.has_lab,
+            })
+
+        return Response(grouped_data)

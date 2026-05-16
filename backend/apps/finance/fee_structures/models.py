@@ -122,27 +122,27 @@ class FeeStructure(models.Model):
             ),
 
             models.CheckConstraint(
-                check=Q(admission_fee__gte=0),
+                condition=Q(admission_fee__gte=0),
                 name="admission_fee_positive"
             ),
 
             models.CheckConstraint(
-                check=Q(rcf__gte=0),
+                condition=Q(rcf__gte=0),
                 name="rcf_positive"
             ),
 
             models.CheckConstraint(
-                check=Q(cwf__gte=0),
+                condition=Q(cwf__gte=0),
                 name="cwf_positive"
             ),
 
             models.CheckConstraint(
-                check=Q(ccwf__gte=0),
+                condition=Q(ccwf__gte=0),
                 name="ccwf_positive"
             ),
 
             models.CheckConstraint(
-                check=Q(other_fee__gte=0),
+                condition=Q(other_fee__gte=0),
                 name="other_fee_positive"
             ),
         ]

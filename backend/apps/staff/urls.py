@@ -5,35 +5,35 @@ urlpatterns = [
     path(
         "post-types/",
         include(
-            "apps.staff.api.post_type.urls"
+            "apps.staff.post_type.urls"
         )
     ),
 
     path(
         "teacher-attendance/",
         include(
-            "apps.staff.api.teacher_attendance.urls"
+            "apps.staff.teacher_attendance.urls"
         )
     ),
 
     path(
         "staff/",
         include(
-            "apps.staff.api.staff.urls"
+            "apps.staff.staff.urls"
         )
     ),
 
     path(
         "class-incharge/",
         include(
-            "apps.staff.api.class_incharge.urls"
+            "apps.staff.class_incharge.urls"
         )
     ),
 
     path(
         "sanctioned-post/",
         include(
-            "apps.staff.api.sanctioned_post.urls"
+            "apps.staff.sanctioned_post.urls"
         )
     ),
 ]

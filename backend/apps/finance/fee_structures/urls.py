@@ -1,23 +1,17 @@
-# apps/finance/fee_structures/urls.py
-
-from django.urls import path
-
-from .views import (
-    FeeStructureListCreateView,
-    FeeStructureDetailView,
+from rest_framework.routers import (
+    DefaultRouter
 )
 
-urlpatterns = [
+from .views import (
+    FeeStructureViewSet
+)
 
-    path(
-        "",
-        FeeStructureListCreateView.as_view(),
-        name="fee-structure-list-create"
-    ),
+router = DefaultRouter()
 
-    path(
-        "<int:pk>/",
-        FeeStructureDetailView.as_view(),
-        name="fee-structure-detail"
-    ),
-]
+router.register(
+    r"",
+    FeeStructureViewSet,
+    basename="fee-structure"
+)
+
+urlpatterns = router.urls

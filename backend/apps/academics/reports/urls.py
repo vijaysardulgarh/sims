@@ -42,10 +42,4 @@ urlpatterns = [
     # TIMETABLE ENTRY REPORT
     # =====================================
 
-    path(
-        "timetable-entry/",
-        include(
-            "apps.academics.reports.timetable_entry.urls"
-        )
-    ),
 ]

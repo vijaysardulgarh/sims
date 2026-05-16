@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Q
 
 from apps.academics.sections.models import Section
-from apps.staff.models import Staff
+from apps.staff.staff.models import Staff
 
 
 class ClassIncharge(models.Model):
