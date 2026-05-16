@@ -11,7 +11,7 @@ from apps.academics.reports.subject_strength.views import (
 # =========================================
 
 from apps.academics.reports.subjects_offered.views import (
-    SubjectsOfferedAPIView
+    subjects_offered_view
 )
 
 # =========================================
@@ -21,4 +21,3 @@ from apps.academics.reports.subjects_offered.views import (
 from apps.academics.reports.teacher_workload.views import (
     TeacherWorkloadAPIView
 )
-

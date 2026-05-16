@@ -6,7 +6,7 @@ from apps.academics.timetables.models import (
     Timetable
 )
 
-from apps.academics.reports.common.base_api import (
+from apps.academics.common.views import (
     BaseReportAPIView
 )
 

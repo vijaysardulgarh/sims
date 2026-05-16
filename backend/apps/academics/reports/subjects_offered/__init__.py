@@ -3,5 +3,5 @@ from .serializers import (
 )
 
 from .views import (
-    SubjectsOfferedAPIView
+    subjects_offered_view
 )
