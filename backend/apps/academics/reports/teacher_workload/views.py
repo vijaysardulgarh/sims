@@ -1,38 +1,70 @@
-from django.shortcuts import render
-
 from django.db.models import (
     Count
 )
 
-from apps.academics.timetables import (
+from apps.academics.timetables.models import (
     Timetable
 )
 
+from apps.academics.reports.common.base_api import (
+    BaseReportAPIView
+)
 
-def teacher_workload_view(request):
+from apps.academics.reports.teacher_workload.serializers import (
+    TeacherWorkloadSerializer
+)
 
-    data = (
 
-        Timetable.objects
+class TeacherWorkloadAPIView(
+    BaseReportAPIView
+):
 
-        .values(
-            "teacher_subject_assignment"
-            "__teacher__name"
+    def get(self, request):
+
+        school = self.get_school(
+            request
         )
 
-        .annotate(
-            total=Count("id")
+        if not school:
+
+            return (
+                self.school_error_response()
+            )
+
+        queryset = (
+
+            Timetable.objects
+
+            .filter(
+                school=school
+            )
+
+            .values(
+
+                "teacher_subject_assignment"
+                "__teacher__id",
+
+                "teacher_subject_assignment"
+                "__teacher__name",
+            )
+
+            .annotate(
+                total_periods=Count("id")
+            )
+
+            .order_by(
+                "-total_periods"
+            )
         )
-    )
 
-    return render(
+        serializer = (
 
-        request,
+            TeacherWorkloadSerializer(
+                queryset,
+                many=True
+            )
+        )
 
-        "academics/reports/"
-        "teacher_workload.html",
-
-        {
-            "data": data
-        }
-    )
+        return self.success_response(
+            serializer.data
+        )

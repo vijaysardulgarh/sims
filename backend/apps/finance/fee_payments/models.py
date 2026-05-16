@@ -16,6 +16,10 @@ from django.core.exceptions import (
 
 from django.utils import timezone
 
+from apps.finance.student_fees.models import StudentFee
+from apps.schools.models import School
+from apps.users.models import User
+
 
 class FeePayment(models.Model):
 
@@ -42,14 +46,14 @@ class FeePayment(models.Model):
     ]
 
     school = models.ForeignKey(
-        "schools.School",
+        School,
         on_delete=models.CASCADE,
         related_name="fee_payments",
         db_index=True
     )
 
     student_fee = models.ForeignKey(
-        "student_fees.StudentFee",
+        StudentFee,
         on_delete=models.CASCADE,
         related_name="payments",
         db_index=True
@@ -94,7 +98,7 @@ class FeePayment(models.Model):
     )
 
     created_by = models.ForeignKey(
-        "accounts.User",
+        User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -140,7 +144,7 @@ class FeePayment(models.Model):
 
     def clean(self):
 
-        if self.amount <= 0:
+        if self.amount is None or self.amount <= 0:
 
             raise ValidationError({
                 "amount":

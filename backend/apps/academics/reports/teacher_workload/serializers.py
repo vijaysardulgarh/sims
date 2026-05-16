@@ -5,8 +5,14 @@ class TeacherWorkloadSerializer(
     serializers.Serializer
 ):
 
+    teacher_subject_assignment__teacher__id = (
+        serializers.IntegerField()
+    )
+
     teacher_subject_assignment__teacher__name = (
         serializers.CharField()
     )
 
-    total = serializers.IntegerField()
+    total_periods = (
+        serializers.IntegerField()
+    )

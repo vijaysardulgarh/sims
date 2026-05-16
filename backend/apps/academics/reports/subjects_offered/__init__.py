@@ -1,7 +1,7 @@
-from .api import (
-    SubjectsOfferedAPIView
+from .serializers import (
+    SubjectsOfferedSerializer
 )
 
 from .views import (
-    subjects_offered_view
+    SubjectsOfferedAPIView
 )

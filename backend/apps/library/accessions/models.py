@@ -1,5 +1,5 @@
 from django.db import models
-
+from apps.library.books.models import Book
 
 class BookAccession(models.Model):
 
@@ -16,7 +16,7 @@ class BookAccession(models.Model):
     )
 
     book = models.ForeignKey(
-        "books.Book",
+        Book,
         on_delete=models.CASCADE,
         related_name="accessions"
     )

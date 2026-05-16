@@ -1,55 +1,140 @@
-from django.shortcuts import render
-
-from apps.academics.sections import (
-    Section
+from rest_framework.views import (
+    APIView
 )
 
-from apps.academics.teacher_subject_assignments import (
-    TeacherSubjectAssignment
+from rest_framework.response import (
+    Response
 )
 
-from apps.academics.timetable_slots import (
+from apps.core.utils.helpers import (
+    get_current_school
+)
+
+from apps.staff.models import (
+    Staff
+)
+
+from apps.academics.classes.models import (
+    Class
+)
+
+from apps.academics.subjects.models import (
+    Subject
+)
+
+from apps.academics.timetable_slots.models import (
     TimetableSlot
 )
 
 
-def timetable_generate_view(request):
+class TimetableGenerateAPIView(
+    APIView
+):
 
-    sections = (
-        Section.objects.all()
-    )
+    def get(self, request):
 
-    assignments = (
-
-        TeacherSubjectAssignment.objects
-
-        .select_related(
-            "teacher",
-            "class_subject__subject",
-            "section"
+        school = (
+            get_current_school(request)
         )
-    )
 
-    slots = (
+        if not school:
 
-        TimetableSlot.objects
+            return Response({
 
-        .select_related(
-            "day"
+                "error":
+                    "School not selected"
+
+            }, status=400)
+
+        classes = (
+
+            Class.objects.filter(
+                school=school
+            )
+
+            .order_by(
+                "class_order"
+            )
         )
-    )
 
-    return render(
+        subjects = (
 
-        request,
+            Subject.objects.filter(
+                school=school
+            )
 
-        "academics/timetable/generate.html",
+            .order_by(
+                "name"
+            )
+        )
 
-        {
-            "sections": sections,
+        teachers = (
 
-            "assignments": assignments,
+            Staff.objects.filter(
+                school=school,
+                staff_role="Teaching"
+            )
 
-            "slots": slots,
-        }
-    )
+            .order_by(
+                "name"
+            )
+        )
+
+        time_slots = (
+
+            TimetableSlot.objects
+
+            .filter(
+                school=school
+            )
+
+            .select_related(
+                "day"
+            )
+
+            .order_by(
+                "day__sequence",
+                "period_number"
+            )
+        )
+
+        return Response({
+
+            "classes":
+                list(
+                    classes.values(
+                        "id",
+                        "name"
+                    )
+                ),
+
+            "subjects":
+                list(
+                    subjects.values(
+                        "id",
+                        "name",
+                        "code"
+                    )
+                ),
+
+            "teachers":
+                list(
+                    teachers.values(
+                        "id",
+                        "name"
+                    )
+                ),
+
+            "time_slots":
+                list(
+
+                    time_slots.values(
+
+                        "id",
+
+                        "day__name",
+
+                        "period_number"
+                    )
+                ),
+        })

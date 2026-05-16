@@ -4,9 +4,9 @@ from django.urls import (
 
 from apps.academics.timetables.views import (
     TimetableGenerateAPIView,
-    TimetableDragAPIView,
-    TimetableUpdateAPIView,
-    TimetableRemoveAPIView,
+    # TimetableDragAPIView,
+    # TimetableUpdateAPIView,
+    # TimetableRemoveAPIView,
 )
 
 urlpatterns = [
@@ -17,21 +17,22 @@ urlpatterns = [
         name="timetable-generate"
     ),
 
-    path(
-        "drag/",
-        TimetableDragAPIView.as_view(),
-        name="timetable-drag"
-    ),
+    # path(
+    #     "drag/",
+    #     TimetableDragAPIView.as_view(),
+    #     name="timetable-drag"
+    # ),
 
-    path(
-        "update/",
-        TimetableUpdateAPIView.as_view(),
-        name="timetable-update"
-    ),
+    # path(
+    #     "update/",
+    #     TimetableUpdateAPIView.as_view(),
+    #     name="timetable-update"
+    # ),
 
-    path(
-        "remove/",
-        TimetableRemoveAPIView.as_view(),
-        name="timetable-remove"
-    ),
+    # path(
+    #     "remove/",
+    #     TimetableRemoveAPIView.as_view(),
+    #     name="timetable-remove"
+    # ),
 ]
+

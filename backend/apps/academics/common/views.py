@@ -50,8 +50,11 @@ class SchoolFilteredViewSet(
     def get_school(self):
 
         return getattr(
+
             self.request.user,
+
             "school",
+
             None
         )
 
@@ -75,6 +78,20 @@ class SchoolFilteredViewSet(
         return queryset.none()
 
     # =====================================
+    # GET QUERYSET
+    # =====================================
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        return (
+            self.filter_queryset_by_school(
+                queryset
+            )
+        )
+
+    # =====================================
     # AUTO ASSIGN SCHOOL
     # =====================================
 
@@ -96,7 +113,7 @@ class SchoolFilteredViewSet(
             serializer.save()
 
     # =====================================
-    # AUTO ASSIGN SCHOOL UPDATE
+    # UPDATE OBJECT
     # =====================================
 
     def perform_update(
@@ -105,6 +122,17 @@ class SchoolFilteredViewSet(
     ):
 
         serializer.save()
+
+    # =====================================
+    # DESTROY OBJECT
+    # =====================================
+
+    def perform_destroy(
+        self,
+        instance
+    ):
+
+        instance.delete()
 
 
 # =========================================

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.academics.timetable_slots import (
+from apps.academics.timetable_slots.models import (
     TimetableSlot
 )
 

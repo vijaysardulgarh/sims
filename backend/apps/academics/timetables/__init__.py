@@ -8,7 +8,7 @@ from .serializers import (
 
 from .views import (
     TimetableGenerateAPIView,
-    TimetableDragAPIView,
-    TimetableUpdateAPIView,
-    TimetableRemoveAPIView,
+    # TimetableDragAPIView,
+    # TimetableUpdateAPIView,
+    # TimetableRemoveAPIView,
 )

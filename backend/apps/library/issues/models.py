@@ -10,6 +10,10 @@ from django.core.exceptions import (
 
 from django.utils import timezone
 
+from apps.schools.models import School
+from apps.library.accessions.models import BookAccession
+from apps.users.models import User
+
 
 class BookIssue(models.Model):
 
@@ -25,25 +29,20 @@ class BookIssue(models.Model):
     ]
 
     school = models.ForeignKey(
-        "schools.School",
+        School,
         on_delete=models.CASCADE,
         related_name="book_issues",
         db_index=True
     )
 
     accession = models.ForeignKey(
-        "accessions.BookAccession",
+        BookAccession,
         on_delete=models.CASCADE,
         related_name="issues",
         db_index=True
     )
 
-    member = models.ForeignKey(
-        "members.LibraryMember",
-        on_delete=models.CASCADE,
-        related_name="borrowed_books",
-        db_index=True
-    )
+
 
     issue_date = models.DateField(
         default=timezone.now
@@ -64,7 +63,7 @@ class BookIssue(models.Model):
     )
 
     issued_by = models.ForeignKey(
-        "accounts.User",
+        User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -72,7 +71,7 @@ class BookIssue(models.Model):
     )
 
     returned_by = models.ForeignKey(
-        "accounts.User",
+        User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -187,13 +186,3 @@ class BookIssue(models.Model):
 
             self.accession.save()
 
-    def __str__(self):
-
-        return (
-
-            f"{self.accession.accession_number}"
-
-            f" - "
-
-            f"{self.member}"
-        )

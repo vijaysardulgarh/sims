@@ -16,13 +16,14 @@ from apps.academics.classrooms.models import (
     Classroom
 )
 
+from apps.staff.staff.models import Staff
 
-class Timetable(
-    models.Model
-):
+from apps.schools.models import School
+
+class Timetable(models.Model):
 
     school = models.ForeignKey(
-        "schools.School",
+        School,
         on_delete=models.CASCADE,
         related_name="timetable_entries",
         db_index=True
@@ -59,7 +60,7 @@ class Timetable(
     substitute_teacher = (
         models.ForeignKey(
 
-            "staff.Staff",
+            Staff,
 
             on_delete=models.SET_NULL,
 

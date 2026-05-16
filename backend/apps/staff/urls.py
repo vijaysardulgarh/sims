@@ -1,15 +1,39 @@
-from django.urls import path
-from .views import *
+from django.urls import path, include
 
 urlpatterns = [
 
-    path("attendance/", TeacherAttendanceAPIView.as_view()),
-    path("attendance/<int:pk>/", TeacherAttendanceUpdateAPIView.as_view()),
-    path("attendance/<int:pk>/delete/", TeacherAttendanceDeleteAPIView.as_view()),
+    path(
+        "post-types/",
+        include(
+            "apps.staff.api.post_type.urls"
+        )
+    ),
 
-    path("role/<str:role>/", StaffByRoleAPIView.as_view()),
-    path("class-incharge/", ClassInchargeReportAPIView.as_view()),
-    path("summary/", StaffSummaryAPIView.as_view()),
+    path(
+        "teacher-attendance/",
+        include(
+            "apps.staff.api.teacher_attendance.urls"
+        )
+    ),
 
-    path("static/", StaffStaticAPIView.as_view()),
+    path(
+        "staff/",
+        include(
+            "apps.staff.api.staff.urls"
+        )
+    ),
+
+    path(
+        "class-incharge/",
+        include(
+            "apps.staff.api.class_incharge.urls"
+        )
+    ),
+
+    path(
+        "sanctioned-post/",
+        include(
+            "apps.staff.api.sanctioned_post.urls"
+        )
+    ),
 ]

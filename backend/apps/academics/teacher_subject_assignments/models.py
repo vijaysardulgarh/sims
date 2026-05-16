@@ -12,13 +12,14 @@ from apps.academics.class_subjects.models import (
     ClassSubject
 )
 
+from apps.staff.staff.models import Staff
 
 class TeacherSubjectAssignment(
     models.Model
 ):
 
     teacher = models.ForeignKey(
-        "staff.Staff",
+        Staff,
         on_delete=models.CASCADE,
         related_name="subject_assignments",
         limit_choices_to={

@@ -1,11 +1,11 @@
 from .models import (
-    Timetable
+    TimetableSlot
 )
 
 from .serializers import (
-    TimetableSerializer
+    TimetableSlotSerializer
 )
 
 from .views import (
-    TimetableGenerateAPIView
+    TimetableSlotViewSet
 )

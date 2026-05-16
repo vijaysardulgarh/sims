@@ -1,4 +1,4 @@
-from apps.academics.common.base_api import (
+from apps.academics.common.views import (
     SchoolFilteredViewSet
 )
 

@@ -8,25 +8,28 @@ from django.core.exceptions import (
     ValidationError
 )
 
+from apps.schools.models import School
+from apps.academics.classes.models import Class
+from apps.academics.streams.models import Stream
 
 class FeeStructure(models.Model):
 
     school = models.ForeignKey(
-        "schools.School",
+        School,
         on_delete=models.CASCADE,
         related_name="fee_structures",
         db_index=True
     )
 
     class_obj = models.ForeignKey(
-        "academics.Class",
+        Class,
         on_delete=models.CASCADE,
         related_name="fee_structures",
         db_index=True
     )
 
     stream = models.ForeignKey(
-        "academics.Stream",
+        Stream,
         on_delete=models.CASCADE,
         null=True,
         blank=True,

@@ -1,8 +1,4 @@
-from django.shortcuts import render
-
 from django.db.models import (
-    Count,
-    Q,
     Case,
     When
 )
@@ -11,105 +7,158 @@ from apps.students.models import (
     Student
 )
 
+from apps.academics.subjects.models import (
+    Subject
+)
 
-def subject_strength_view(request):
+from apps.academics.reports.common.base_api import (
+    BaseReportAPIView
+)
 
-    class_order = {
 
-        "Sixth": 1,
+class SubjectStrengthAPIView(
+    BaseReportAPIView
+):
 
-        "Seventh": 2,
+    def get(self, request):
 
-        "Eighth": 3,
-
-        "Nineth": 4,
-
-        "Tenth": 5,
-
-        "Eleventh": 6,
-
-        "Twelfth": 7,
-    }
-
-    data = list(
-
-        Student.objects
-
-        .values(
-            "studentclass",
-            "section",
-            "stream"
+        school = self.get_school(
+            request
         )
 
-        .annotate(
+        if not school:
 
-            english=Count(
-                "srn",
-                filter=Q(
-                    subjects_opted__icontains="English"
-                )
-            ),
+            return (
+                self.school_error_response()
+            )
 
-            mathematics=Count(
-                "srn",
-                filter=Q(
-                    subjects_opted__icontains="Mathematics"
-                )
-            ),
+        class_order = {
 
-            science=Count(
-                "srn",
-                filter=Q(
-                    subjects_opted__icontains="Science"
-                )
-            ),
+            "Sixth": 1,
 
-            physics=Count(
-                "srn",
-                filter=Q(
-                    subjects_opted__icontains="Physics"
-                )
-            ),
+            "Seventh": 2,
 
-            chemistry=Count(
-                "srn",
-                filter=Q(
-                    subjects_opted__icontains="Chemistry"
-                )
-            ),
+            "Eighth": 3,
 
-            biology=Count(
-                "srn",
-                filter=Q(
-                    subjects_opted__icontains="Biology"
-                )
-            ),
+            "Ninth": 4,
 
-            order=Case(
-                *[
-                    When(
-                        studentclass=cls,
-                        then=pos
-                    )
+            "Tenth": 5,
 
-                    for cls, pos in (
-                        class_order.items()
-                    )
-                ]
+            "Eleventh": 6,
+
+            "Twelfth": 7,
+        }
+
+        subjects = (
+
+            Subject.objects
+
+            .filter(
+                school=school
+            )
+
+            .order_by(
+                "name"
             )
         )
 
-        .order_by("order")
-    )
+        student_groups = (
 
-    return render(
+            Student.objects
 
-        request,
+            .filter(
+                school_name=school.name
+            )
 
-        "academics/reports/"
-        "subject_strength.html",
+            .values(
 
-        {
-            "data": data
-        }
-    )
+                "studentclass",
+
+                "section",
+
+                "stream",
+            )
+
+            .annotate(
+
+                order=Case(
+
+                    *[
+                        When(
+                            studentclass=cls,
+                            then=pos
+                        )
+
+                        for cls, pos in (
+                            class_order.items()
+                        )
+                    ]
+                )
+            )
+
+            .order_by(
+                "order"
+            )
+        )
+
+        final_data = []
+
+        for group in student_groups:
+
+            row = {
+
+                "studentclass":
+                    group["studentclass"],
+
+                "section":
+                    group["section"],
+
+                "stream":
+                    group["stream"],
+
+                "subjects": {}
+            }
+
+            base_queryset = (
+
+                Student.objects.filter(
+
+                    school_name=school.name,
+
+                    studentclass=group[
+                        "studentclass"
+                    ],
+
+                    section=group[
+                        "section"
+                    ],
+
+                    stream=group[
+                        "stream"
+                    ]
+                )
+            )
+
+            for subject in subjects:
+
+                count = (
+
+                    base_queryset.filter(
+
+                        subjects_opted__icontains=
+                        subject.name
+
+                    ).count()
+                )
+
+                row["subjects"][
+                    subject.name
+                ] = count
+
+            final_data.append(
+                row
+            )
+
+        return self.success_response(
+            final_data
+        )

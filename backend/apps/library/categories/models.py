@@ -4,11 +4,12 @@ from django.core.exceptions import (
     ValidationError
 )
 
+from apps.schools.models import School
 
 class BookCategory(models.Model):
 
     school = models.ForeignKey(
-        "schools.School",
+        School,
         on_delete=models.CASCADE,
         related_name="book_categories",
         db_index=True

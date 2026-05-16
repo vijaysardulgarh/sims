@@ -1,11 +1,7 @@
-from .api import (
-    TeacherWorkloadAPIView
+from .serializers import (
+    TeacherWorkloadSerializer
 )
 
 from .views import (
-    teacher_workload_view
-)
-
-from .serializers import (
-    TeacherWorkloadSerializer
+    TeacherWorkloadAPIView
 )

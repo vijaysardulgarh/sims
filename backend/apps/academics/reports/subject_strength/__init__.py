@@ -1,7 +1,7 @@
-from .api import (
-    SubjectStrengthAPIView
+from .serializers import (
+    SubjectStrengthSerializer
 )
 
 from .views import (
-    subject_strength_view
+    SubjectStrengthAPIView
 )
