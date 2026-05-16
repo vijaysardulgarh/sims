@@ -1,4 +1,4 @@
-from backend.apps.academics.common.views import (
+from apps.academics.common.views import (
     SchoolFilteredViewSet
 )
 

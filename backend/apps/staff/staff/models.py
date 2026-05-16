@@ -2,8 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 
-from apps.staff.models.post_type import PostType
-
+from apps.staff.post_type.models import PostType
+from apps.schools.models import School
 
 class Staff(models.Model):
 
@@ -13,7 +13,7 @@ class Staff(models.Model):
         OTHER = "Other", "Other"
 
     school = models.ForeignKey(
-        "schools.School",
+        School,
         on_delete=models.CASCADE,
         related_name="staff"
     )

@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from apps.staff.models import PostType
+from apps.staff.post_type.models import (
+    PostType
+)
 
 
 class PostTypeSerializer(

@@ -1,16 +1,19 @@
 from django.db import models
 
-
+from apps.schools.models import School
+from apps.academics.classes.models import Class
+from apps.academics.streams.models import Stream
+from apps.academics.sections.models import Section
 
 class Student(models.Model):
     #user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     srn = models.CharField(primary_key=True, max_length=11)
     school_code = models.CharField(max_length=20, blank=True, null=True)
-    school = models.ForeignKey("schools.School",on_delete=models.CASCADE,related_name="students")
+    school = models.ForeignKey(School,on_delete=models.CASCADE,related_name="students")
     admission_date = models.DateField(blank=True, null=True)
-    student_class = models.ForeignKey("academics.Class",on_delete=models.SET_NULL,related_name="students",null=True,blank=True,db_index=True)
-    stream = models.ForeignKey("academics.Stream",on_delete=models.SET_NULL,related_name="students",null=True,blank=True,db_index=True)
-    section = models.ForeignKey("academics.Section",on_delete=models.SET_NULL,related_name="students",null=True,blank=True,db_index=True)
+    student_class = models.ForeignKey(Class,on_delete=models.SET_NULL,related_name="students",null=True,blank=True,db_index=True)
+    stream = models.ForeignKey(Stream,on_delete=models.SET_NULL,related_name="students",null=True,blank=True,db_index=True)
+    section = models.ForeignKey(Section,on_delete=models.SET_NULL,related_name="students",null=True,blank=True,db_index=True)
     roll_number = models.IntegerField(blank=True, null=True)
     admission_number = models.CharField(max_length=20, blank=True, null=True)
 

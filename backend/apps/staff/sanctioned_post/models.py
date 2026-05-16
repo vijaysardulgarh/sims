@@ -1,12 +1,14 @@
 from django.db import models
 
-from apps.staff.models.post_type import PostType
+from apps.staff.post_type.models import PostType
 
+from apps.schools.models import School
+from apps.academics.subjects.models import Subject
 
 class SanctionedPost(models.Model):
 
     school = models.ForeignKey(
-        "schools.School",
+        School,
         on_delete=models.CASCADE,
         related_name="sanctioned_posts"
     )
@@ -25,7 +27,7 @@ class SanctionedPost(models.Model):
     )
 
     subject = models.ForeignKey(
-        "academics.Subject",
+        Subject,
         on_delete=models.SET_NULL,
         null=True,
         blank=True

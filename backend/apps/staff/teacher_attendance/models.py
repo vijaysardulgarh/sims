@@ -1,12 +1,12 @@
 from django.db import models
 
-from apps.staff.models import Staff
-
+from apps.staff.staff.models import Staff
+from apps.schools.models import School
 
 class TeacherAttendance(models.Model):
 
     school = models.ForeignKey(
-        "schools.School",
+        School,
         on_delete=models.CASCADE
     )
 

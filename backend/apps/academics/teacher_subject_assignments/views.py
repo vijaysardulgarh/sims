@@ -6,7 +6,7 @@ from rest_framework.response import (
     Response
 )
 
-from apps.staff.models import (
+from apps.staff.staff.models import (
     Staff
 )
 

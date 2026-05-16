@@ -6,34 +6,33 @@ from apps.library.issues.models import (
 
 
 @admin.register(BookIssue)
-class BookIssueAdmin(
-    admin.ModelAdmin
-):
+class BookIssueAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
         "accession",
-        "member",
         "issue_date",
         "due_date",
         "return_date",
         "status",
         "school",
+        "issued_by",
+        "returned_by",
     )
 
     search_fields = (
-
         "accession__accession_number",
-
-        "member__user__first_name",
-
-        "member__user__last_name",
+        "issued_by__first_name",
+        "issued_by__last_name",
+        "returned_by__first_name",
+        "returned_by__last_name",
     )
 
     list_filter = (
         "school",
         "status",
         "issue_date",
+        "due_date",
     )
 
     ordering = (
@@ -42,7 +41,6 @@ class BookIssueAdmin(
 
     autocomplete_fields = (
         "accession",
-        "member",
         "issued_by",
         "returned_by",
     )
@@ -50,7 +48,8 @@ class BookIssueAdmin(
     list_select_related = (
         "school",
         "accession",
-        "member",
+        "issued_by",
+        "returned_by",
     )
 
     readonly_fields = (
