@@ -3,26 +3,26 @@ import { Routes, Route } from "react-router-dom";
 import WebsiteLayout from "../layouts/WebsiteLayout";
 
 // Home
-import Home from "../Home";
+import Home from "../pages/Home";
 
 // About
-import Overview from "../about/Overview";
-import Leadership from "../about/Leadership";
-import MandatoryDisclosure from "../about/MandatoryDisclosure";
+import Overview from "../pages/about/Overview";
+import Leadership from "../pages/about/Leadership";
+import MandatoryDisclosure from "../pages/about/MandatoryDisclosure";
 
 // Academics
-import Curriculum from "../academics/Curriculum";
-import AcademicStructure from "../academics/AcademicStructure";
-import Timetable from "../academics/Timetable";
+import Curriculum from "../pages/academics/Curriculum";
+import AcademicStructure from "../pages/academics/AcademicStructure";
+import Timetable from "../pages/academics/Timetable";
 
 // Updates
-import NewsEvents from "../updates/NewsEvents";
-import Downloads from "../updates/Downloads";
+import NewsEvents from "../pages/updates/NewsEvents";
+import Downloads from "../pages/updates/Downloads";
 
 // Other Pages
-import CampusLife from "../CampusLife";
-import Admissions from "../Admissions";
-import Contact from "../Contact";
+import CampusLife from "../pages/CampusLife";
+import Admissions from "../pages/Admissions";
+import Contact from "../pages/Contact";
 
 // Auth
 import Login from "../../dashboard/auth/Login";

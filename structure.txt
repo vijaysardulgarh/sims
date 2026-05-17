@@ -1,5 +1,5 @@
 Folder PATH listing
-Volume serial number is 000000A1 D446:10E2
+Volume serial number is D446-10E2
 C:.
 |   Backend Structure.txt
 |   Frontend Structure.txt
@@ -23,67 +23,52 @@ C:.
 |   +---apps
 |   |   +---academics
 |   |   |   |   admin.py
-|   |   |   |   api.py
-|   |   |   |   api_urls.py
 |   |   |   |   apps.py
-|   |   |   |   models.py
 |   |   |   |   tests.py
 |   |   |   |   urls.py
 |   |   |   |   __init__.py
 |   |   |   |   
 |   |   |   +---classes
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
-|   |   |   |   |   services.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---classrooms
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
-|   |   |   |   |   services.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---class_subjects
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
-|   |   |   |   |   services.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
-|   |   |   |   |   __init__.py
-|   |   |   |   |   
-|   |   |   |           
-|   |   |   +---common
-|   |   |   |   |   admin.py
-|   |   |   |   |   base_api.py
-|   |   |   |   |   serializers.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---days
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
-|   |   |   |   |   services.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---mediums
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
-|   |   |   |   |   services.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
@@ -92,97 +77,87 @@ C:.
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---reports
-|   |   |   |   |   views.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |   +---subjects_offered
-|   |   |   |   |       api.py
-|   |   |   |   |       serializers.py
-|   |   |   |   |       views.py
-|   |   |   |   |       __init__.py
-|   |   |   |   |       
-|   |   |   |   +---subject_strength
-|   |   |   |   |       api.py
-|   |   |   |   |       serializers.py
-|   |   |   |   |       views.py
-|   |   |   |   |       __init__.py
-|   |   |   |   |       
-|   |   |   |   +---teacher_workload
-|   |   |   |   |   |   api.py
 |   |   |   |   |   |   serializers.py
+|   |   |   |   |   |   to be removed api.py
+|   |   |   |   |   |   urls.py
 |   |   |   |   |   |   views.py
 |   |   |   |   |   |   __init__.py
 |   |   |   |   |   |   
 |   |   |   |   |           
-|   |   |   |   +---timetable_entry
-|   |   |   |   |       api.py
-|   |   |   |   |       serializers.py
-|   |   |   |   |       __init__.py
-|   |   |   |   |       
+|   |   |   |   +---subject_strength
+|   |   |   |   |   |   serializers.py
+|   |   |   |   |   |   urls.py
+|   |   |   |   |   |   views.py
+|   |   |   |   |   |   __init__.py
+|   |   |   |   |   |   
+|   |   |   |   |           
+|   |   |   |   +---teacher_workload
+|   |   |   |   |   |   serializers.py
+|   |   |   |   |   |   urls.py
+|   |   |   |   |   |   views.py
+|   |   |   |   |   |   __init__.py
+|   |   |   |   |   |   
+|   |   |   |   |           
 |   |   |   |           
 |   |   |   +---sections
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
-|   |   |   |   |   __init__.py
-|   |   |   |   |   
-|   |   |   |           
-|   |   |   +---serializers
-|   |   |   |   |   analytics_serializers.py
-|   |   |   |   |   class_serializers.py
-|   |   |   |   |   report_serializers.py
-|   |   |   |   |   subject_serializers.py
-|   |   |   |   |   timetable_serializers.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---streams
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---subjects
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---teacher_subject_assignments
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---timetables
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
 |   |   |   +---timetable_drag_drop
 |   |   |   |       admin.py
-|   |   |   |       api.py
+|   |   |   |       serializers.py
+|   |   |   |       urls.py
 |   |   |   |       views.py
 |   |   |   |       __init__.py
 |   |   |   |       
 |   |   |   +---timetable_generator
 |   |   |   |   |   admin.py
-|   |   |   |   |   api.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
@@ -192,9 +167,12 @@ C:.
 |   |   |   |   |   api.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
 |   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
+|   |   |   |           
+|   |   |   +---z temp serializers
 |   |   |   |           
 |   |   |           
 |   |   +---associations
@@ -218,6 +196,12 @@ C:.
 |   |   |   |   views.py
 |   |   |   |   __init__.py
 |   |   |   |   
+|   |   |   +---common
+|   |   |   |   |   serializers.py
+|   |   |   |   |   views.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |           
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
@@ -242,26 +226,26 @@ C:.
 |   |   |   |           
 |   |   |           
 |   |   +---finance
-|   |   |   |   admin.py
 |   |   |   |   apps.py
-|   |   |   |   models.py
 |   |   |   |   tests.py
 |   |   |   |   urls.py
-|   |   |   |   views.py
 |   |   |   |   __init__.py
 |   |   |   |   
 |   |   |   +---fee_payments
-|   |   |   |       admin.py
-|   |   |   |       models.py
-|   |   |   |       serializers.py
-|   |   |   |       urls.py
-|   |   |   |       __init__.py
-|   |   |   |       
+|   |   |   |   |   admin.py
+|   |   |   |   |   models.py
+|   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
+|   |   |   |   |   views.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |           
 |   |   |   +---fee_structures
 |   |   |   |   |   admin.py
 |   |   |   |   |   models.py
 |   |   |   |   |   serializers.py
 |   |   |   |   |   urls.py
+|   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           
@@ -275,22 +259,24 @@ C:.
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |   +---analytics
-|   |   |   |   |       charts.py
-|   |   |   |   |       selectors.py
-|   |   |   |   |       serializers.py
-|   |   |   |   |       services.py
-|   |   |   |   |       urls.py
-|   |   |   |   |       views.py
-|   |   |   |   |       __init__.py
-|   |   |   |   |       
+|   |   |   |   |   |   charts.py
+|   |   |   |   |   |   selectors.py
+|   |   |   |   |   |   serializers.py
+|   |   |   |   |   |   services.py
+|   |   |   |   |   |   urls.py
+|   |   |   |   |   |   views.py
+|   |   |   |   |   |   __init__.py
+|   |   |   |   |   |   
+|   |   |   |   |           
 |   |   |   |   +---dashboard
-|   |   |   |   |       selectors.py
-|   |   |   |   |       serializers.py
-|   |   |   |   |       services.py
-|   |   |   |   |       urls.py
-|   |   |   |   |       views.py
-|   |   |   |   |       __init__.py
-|   |   |   |   |       
+|   |   |   |   |   |   selectors.py
+|   |   |   |   |   |   serializers.py
+|   |   |   |   |   |   services.py
+|   |   |   |   |   |   urls.py
+|   |   |   |   |   |   views.py
+|   |   |   |   |   |   __init__.py
+|   |   |   |   |   |   
+|   |   |   |   |           
 |   |   |   |   +---exports
 |   |   |   |   |       csv_export.py
 |   |   |   |   |       excel_export.py
@@ -308,55 +294,75 @@ C:.
 |   |   |   |   |       fee_filters.py
 |   |   |   |   |       
 |   |   |   |   +---payment_reports
-|   |   |   |   |       selectors.py
-|   |   |   |   |       serializers.py
-|   |   |   |   |       services.py
-|   |   |   |   |       urls.py
-|   |   |   |   |       views.py
-|   |   |   |   |       __init__.py
-|   |   |   |   |       
+|   |   |   |   |   |   selectors.py
+|   |   |   |   |   |   serializers.py
+|   |   |   |   |   |   services.py
+|   |   |   |   |   |   urls.py
+|   |   |   |   |   |   views.py
+|   |   |   |   |   |   __init__.py
+|   |   |   |   |   |   
+|   |   |   |   |           
 |   |   |   |   +---permissions
 |   |   |   |   |       report_permissions.py
 |   |   |   |   |       
-|   |   |   |   \---student_fee_reports
-|   |   |   |           selectors.py
-|   |   |   |           serializers.py
-|   |   |   |           services.py
-|   |   |   |           urls.py
-|   |   |   |           views.py
-|   |   |   |           __init__.py
+|   |   |   |   +---student_fee_reports
+|   |   |   |   |   |   selectors.py
+|   |   |   |   |   |   serializers.py
+|   |   |   |   |   |   services.py
+|   |   |   |   |   |   urls.py
+|   |   |   |   |   |   views.py
+|   |   |   |   |   |   __init__.py
+|   |   |   |   |   |   
+|   |   |   |   |           
 |   |   |   |           
 |   |   |   +---student_fees
-|   |   |   |       admin.py
-|   |   |   |       models.py
-|   |   |   |       urls.py
-|   |   |   |       __init__.py
-|   |   |   |       
+|   |   |   |   |   admin.py
+|   |   |   |   |   models.py
+|   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
+|   |   |   |   |   views.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |           
 |   |   |           
 |   |   +---library
-|   |   |   |   admin.py
 |   |   |   |   apps.py
-|   |   |   |   models.py
 |   |   |   |   tests.py
 |   |   |   |   urls.py
-|   |   |   |   views.py
 |   |   |   |   __init__.py
 |   |   |   |   
 |   |   |   +---accessions
+|   |   |   |       admin.py
 |   |   |   |       models.py
+|   |   |   |       serializers.py
+|   |   |   |       urls.py
+|   |   |   |       views.py
+|   |   |   |       __init__.py
 |   |   |   |       
 |   |   |   +---books
+|   |   |   |       admin.py
 |   |   |   |       models.py
 |   |   |   |       serializers.py
-|   |   |   |       services.py
+|   |   |   |       urls.py
+|   |   |   |       views.py
+|   |   |   |       __init__.py
 |   |   |   |       
 |   |   |   +---categories
+|   |   |   |       admin.py
 |   |   |   |       models.py
+|   |   |   |       serializers.py
+|   |   |   |       urls.py
+|   |   |   |       views.py
+|   |   |   |       __init__.py
 |   |   |   |       
 |   |   |   +---issues
+|   |   |   |       admin.py
 |   |   |   |       models.py
 |   |   |   |       serializers.py
 |   |   |   |       services.py
+|   |   |   |       urls.py
+|   |   |   |       views.py
+|   |   |   |       __init__.py
 |   |   |   |       
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
@@ -389,14 +395,57 @@ C:.
 |   |   |   |           
 |   |   |           
 |   |   +---staff
-|   |   |   |   admin.py
 |   |   |   |   apps.py
-|   |   |   |   models.py
 |   |   |   |   tests.py
 |   |   |   |   urls.py
 |   |   |   |   views.py
 |   |   |   |   __init__.py
 |   |   |   |   
+|   |   |   +---class_incharge
+|   |   |   |   |   admin.py
+|   |   |   |   |   models.py
+|   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
+|   |   |   |   |   views.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |           
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |           
+|   |   |   +---post_type
+|   |   |   |   |   admin.py
+|   |   |   |   |   models.py
+|   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
+|   |   |   |   |   views.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |           
+|   |   |   +---sanctioned_post
+|   |   |   |   |   admin.py
+|   |   |   |   |   models.py
+|   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
+|   |   |   |   |   views.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |           
+|   |   |   +---staff
+|   |   |   |   |   admin.py
+|   |   |   |   |   models.py
+|   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
+|   |   |   |   |   views.py
+|   |   |   |   |   __init__.py
+|   |   |   |   |   
+|   |   |   |           
+|   |   |   +---teacher_attendance
+|   |   |   |   |   admin.py
+|   |   |   |   |   models.py
+|   |   |   |   |   serializers.py
+|   |   |   |   |   urls.py
+|   |   |   |   |   views.py
 |   |   |   |   |   __init__.py
 |   |   |   |   |   
 |   |   |   |           

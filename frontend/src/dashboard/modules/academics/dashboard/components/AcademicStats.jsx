@@ -5,7 +5,7 @@ import {
     Users,
   } from "lucide-react";
   
-  import StatCard from "../../../../components/cards/StatsCard";
+  import StatCard from "../../../../shared/components/cards/StatsCard";
   
   const AcademicStats = () => {
   

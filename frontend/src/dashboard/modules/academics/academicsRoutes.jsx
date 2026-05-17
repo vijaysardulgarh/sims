@@ -21,7 +21,7 @@ import ClassesList from
 "./classes/ClassesList";
 
 import AddClass from
-"./classes/AddClass";
+"./classes/pages/AddClass";
 
 import EditClass from
 "./classes/EditClass";
@@ -35,7 +35,7 @@ import StreamsList from
 "./streams/StreamsList";
 
 import AddStream from
-"./streams/AddStream";
+"./streams/pages/AddStream";
 
 import EditStream from
 "./streams/EditStream";
@@ -49,7 +49,7 @@ import SectionsList from
 "./sections/SectionsList";
 
 import AddSection from
-"./sections/AddSection";
+"./sections/pages/AddSection";
 
 import EditSection from
 "./sections/EditSection";
@@ -63,7 +63,7 @@ import SubjectsList from
 "./subjects/SubjectsList";
 
 import AddSubject from
-"./subjects/AddSubject";
+"./subjects/pages/AddSubject";
 
 import EditSubject from
 "./subjects/EditSubject";
@@ -74,13 +74,13 @@ import EditSubject from
 // =========================================
 
 import ClassSubjectsList from
-"./class-subjects/ClassSubjectsList";
+"./class-subjects/pages/ClassSubjectsList";
 
 import AddClassSubject from
-"./class-subjects/AddClassSubject";
+"./class-subjects/pages/AddClassSubject";
 
 import EditClassSubject from
-"./class-subjects/EditClassSubject";
+"./class-subjects/pages/EditClassSubject";
 
 
 // =========================================
@@ -91,7 +91,7 @@ import DaysList from
 "./days/DaysList";
 
 import AddDay from
-"./days/AddDay";
+"./days/pages/AddDay";
 
 import EditDay from
 "./days/EditDay";
@@ -105,7 +105,7 @@ import TimetableSlotsList from
 "./timetable-slots/TimetableSlotsList";
 
 import AddTimetableSlot from
-"./timetable-slots/AddTimetableSlot";
+"./timetable-slots/pages/AddTimetableSlot";
 
 import EditTimetableSlot from
 "./timetable-slots/EditTimetableSlot";
@@ -119,7 +119,7 @@ import TimetableList from
 "./timetable/TimetableList";
 
 import AddTimetable from
-"./timetable/AddTimetable";
+"./timetable/pages/AddTimetable";
 
 import EditTimetable from
 "./timetable/EditTimetable";
