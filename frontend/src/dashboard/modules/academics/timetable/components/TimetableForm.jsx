@@ -10,38 +10,13 @@ import {
 
 
 import classService from "../../classes/services/classService";
+import sectionService from "../../sections/services/sectionService";
+import subjectService from "../../subjects/services/subjectService";
 
-// import sectionService from
-// "../../../services/academics/sectionService";
+import staffService from "../../../staff/staff/services/staffService";
 
-// import subjectService from
-// "../../../services/academics/subjectService";
-
-// import staffService from
-// "../../../services/staff/staffService";
-
-// import dayService from
-// "../../../services/academics/dayService";
-
-// import classroomService from
-// "../../../services/academics/classroomService";
-
-
-
-import sectionService from
-"../../sections/services/sectionService";
-
-import subjectService from
-"../../subjects/services/subjectService";
-
-import staffService from
-"../../../staff/staff/staffService";
-
-import dayService from
-"../../days/services/dayService";
-
-import classroomService from
-"../../classrooms/services/classroomService";
+import dayService from "../../days/services/dayService";
+import classroomService from "../../classrooms/services/classroomService";
 
 const TimetableForm = ({
 

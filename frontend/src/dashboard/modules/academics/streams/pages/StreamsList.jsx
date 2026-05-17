@@ -14,28 +14,13 @@ import {
 
 import toast from "react-hot-toast";
 
-import DataTable from
-"../../../shared/components/crud/DataTable";
-
-import SearchBox from
-"../../../shared/components/crud/SearchBox";
-
-import Pagination from
-"../../../shared/components/crud/Pagination";
-
-import CrudHeader from
-"../../../shared/components/crud/CrudHeader";
-
-import ActionButtons from
-"../../../shared/components/crud/ActionButtons";
-
-import ConfirmModal from
-"../../../components/modals/ConfirmModal";
-
-// import streamService from
-// "../../../services/academics/streamService";
-
-import streamService from "./streamService";
+import DataTable from "../../../../shared/components/crud/DataTable";
+import SearchBox from "../../../../shared/components/crud/SearchBox";
+import Pagination from "../../../../shared/components/crud/Pagination";
+import CrudHeader from "../../../../shared/components/crud/CrudHeader";
+import ActionButtons from "../../../../shared/components/crud/ActionButtons";
+import ConfirmModal from "../../../../shared/components/modals/ConfirmModal";
+import streamService from "../services/streamService";
 
 const StreamsList = () => {
 

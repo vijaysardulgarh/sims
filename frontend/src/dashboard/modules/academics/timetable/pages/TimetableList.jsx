@@ -15,27 +15,26 @@ import {
 import toast from "react-hot-toast";
 
 import DataTable from
-"../../../shared/components/crud/DataTable";
+"../../../../shared/components/crud/DataTable";
 
 import SearchBox from
-"../../../shared/components/crud/SearchBox";
+"../../../../shared/components/crud/SearchBox";
 
 import Pagination from
-"../../../shared/components/crud/Pagination";
+"../../../../shared/components/crud/Pagination";
 
 import CrudHeader from
-"../../../shared/components/crud/CrudHeader";
+"../../../../shared/components/crud/CrudHeader";
 
 import ActionButtons from
-"../../../shared/components/crud/ActionButtons";
+"../../../../shared/components/crud/ActionButtons";
 
-import ConfirmModal from
-"../../../components/modals/ConfirmModal";
+import ConfirmModal from "../../../../shared/components/modals/ConfirmModal";
 
 // import timetableService from
 // "../../../services/academics/timetableService";
 
-import timetableService from "./timetableService";
+import timetableService from "../services/timetableService";
 
 const TimetableList = () => {
 

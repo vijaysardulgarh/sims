@@ -11,10 +11,8 @@ import {
 import toast
 from "react-hot-toast";
 
-import ClassForm
-from "./ClassForm";
-
-import classService from "./classService";
+import ClassForm from "../components/ClassForm";
+import classService from "../services/classService";
 
 
 const EditClass = () => {

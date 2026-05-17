@@ -15,9 +15,8 @@ import {
 
 import toast from "react-hot-toast";
 
-import SubjectForm from "./SubjectForm";
-
-import subjectService from "./subjectService";
+import SubjectForm from "../components/SubjectForm";
+import subjectService from "../services/subjectService";
 
 const EditSubject = () => {
 

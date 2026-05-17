@@ -54,13 +54,10 @@ import ParentDashboard from "../roles/parent/Dashboard";
 // STUDENTS MODULE
 // =========================
 
-import StudentsList from "../modules/students/StudentsList";
-
-import AddStudent from "../modules/students/AddStudent";
-
-import EditStudent from "../modules/students/EditStudent";
-
-import StudentProfile from "../modules/students/StudentProfile";
+import StudentsList from "../modules/students/pages/StudentsList";
+import AddStudent from "../modules/students/pages/AddStudent";
+import EditStudent from "../modules/students/pages/EditStudent";
+import StudentProfile from "../modules/students/pages/StudentProfile";
 
 // =========================
 // ACADEMICS ROUTES

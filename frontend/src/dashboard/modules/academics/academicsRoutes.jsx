@@ -17,14 +17,9 @@ import AcademicDashboard from
 // CLASSES
 // =========================================
 
-import ClassesList from
-"./classes/ClassesList";
-
-import AddClass from
-"./classes/pages/AddClass";
-
-import EditClass from
-"./classes/EditClass";
+import ClassesList from "./classes/pages/ClassesList";
+import AddClass from "./classes/pages/AddClass";
+import EditClass from "./classes/pages/EditClass";
 
 
 // =========================================
@@ -32,13 +27,13 @@ import EditClass from
 // =========================================
 
 import StreamsList from
-"./streams/StreamsList";
+"./streams/pages/StreamsList";
 
 import AddStream from
 "./streams/pages/AddStream";
 
 import EditStream from
-"./streams/EditStream";
+"./streams/pages/EditStream";
 
 
 // =========================================
@@ -46,13 +41,13 @@ import EditStream from
 // =========================================
 
 import SectionsList from
-"./sections/SectionsList";
+"./sections/pages/SectionsList";
 
 import AddSection from
 "./sections/pages/AddSection";
 
 import EditSection from
-"./sections/EditSection";
+"./sections/pages/EditSection";
 
 
 // =========================================
@@ -60,13 +55,13 @@ import EditSection from
 // =========================================
 
 import SubjectsList from
-"./subjects/SubjectsList";
+"./subjects/pages/SubjectsList";
 
 import AddSubject from
 "./subjects/pages/AddSubject";
 
 import EditSubject from
-"./subjects/EditSubject";
+"./subjects/pages/EditSubject";
 
 
 // =========================================
@@ -88,13 +83,13 @@ import EditClassSubject from
 // =========================================
 
 import DaysList from
-"./days/DaysList";
+"./days/pages/DaysList";
 
 import AddDay from
 "./days/pages/AddDay";
 
 import EditDay from
-"./days/EditDay";
+"./days/pages/EditDay";
 
 
 // =========================================
@@ -102,13 +97,13 @@ import EditDay from
 // =========================================
 
 import TimetableSlotsList from
-"./timetable-slots/TimetableSlotsList";
+"./timetable-slots/pages/TimetableSlotsList";
 
 import AddTimetableSlot from
 "./timetable-slots/pages/AddTimetableSlot";
 
 import EditTimetableSlot from
-"./timetable-slots/EditTimetableSlot";
+"./timetable-slots/pages/EditTimetableSlot";
 
 
 // =========================================
@@ -116,13 +111,13 @@ import EditTimetableSlot from
 // =========================================
 
 import TimetableList from
-"./timetable/TimetableList";
+"./timetable/pages/TimetableList";
 
 import AddTimetable from
 "./timetable/pages/AddTimetable";
 
 import EditTimetable from
-"./timetable/EditTimetable";
+"./timetable/pages/EditTimetable";
 
 
 // =========================================

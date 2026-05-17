@@ -15,9 +15,8 @@ import {
 
 import toast from "react-hot-toast";
 
-import SectionForm from "./SectionForm";
-
-import sectionService from "./sectionService";
+import SectionForm from "../components/SectionForm";
+import sectionService from "../services/sectionService";
 
 const EditSection = () => {
 

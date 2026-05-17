@@ -13,7 +13,7 @@ import Pagination from "../../../shared/components/crud/Pagination";
 import ImportButton from "../../../shared/components/crud/ImportButton";
 import ExportButton from "../../../shared/components/crud/ExportButton";
 
-import ConfirmModal from "../../components/modals/ConfirmModal";
+import ConfirmModal from "../../../shared/components/modals/ConfirmModal";
 
 import ActionButtons from "../../../shared/components/crud/ActionButtons";
 import CrudHeader from "../../../shared/components/crud/CrudHeader";

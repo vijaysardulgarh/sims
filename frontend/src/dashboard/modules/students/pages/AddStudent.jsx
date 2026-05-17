@@ -9,7 +9,7 @@ from "react-hot-toast";
 import StudentForm from
 "../components/StudentForm";
 
-import studentService from "../studentService";
+import studentService from "../services/studentService";
 
 const AddStudent = () => {
 

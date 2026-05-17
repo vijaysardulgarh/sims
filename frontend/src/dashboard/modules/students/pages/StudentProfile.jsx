@@ -10,7 +10,7 @@ import {
 
 import toast from "react-hot-toast";
 
-import studentService from "./studentService";
+import studentService from "../services/studentService";
 
 
 const StudentProfile = () => {

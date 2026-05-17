@@ -14,28 +14,15 @@ import {
 
 import toast from "react-hot-toast";
 
-import DataTable from
-"../../../shared/components/crud/DataTable";
+import DataTable from "../../../../shared/components/crud/DataTable";
+import SearchBox from "../../../../shared/components/crud/SearchBox";
+import CrudHeader from "../../../../shared/components/crud/CrudHeader";
 
-import SearchBox from
-"../../../shared/components/crud/SearchBox";
+import Pagination from "../../../../shared/components/crud/Pagination";
+import ActionButtons from "../../../../shared/components/crud/ActionButtons";
+import ConfirmModal from "../../../../shared/components/modals/ConfirmModal";
 
-import CrudHeader from
-"../../../shared/components/crud/CrudHeader";
-
-import Pagination from
-"../../../shared/components/crud/Pagination";
-
-import ActionButtons from
-"../../../shared/components/crud/ActionButtons";
-
-import ConfirmModal from
-"../../../components/modals/ConfirmModal";
-
-// import subjectService from
-// "../../../services/academics/subjectService";
-
-import subjectService from "./subjectService";
+import subjectService from "../services/subjectService";
 
 const SubjectsList = () => {
 

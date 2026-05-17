@@ -11,10 +11,8 @@ import {
 import toast
 from "react-hot-toast";
 
-import StudentForm from
-"./StudentForm";
-
-import studentService from "./studentService";
+import StudentForm from "../components/StudentForm";
+import studentService from "../services/studentService";
 
 const EditStudent = () => {
 
