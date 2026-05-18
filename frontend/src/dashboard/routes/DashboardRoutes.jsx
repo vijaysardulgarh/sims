@@ -2,207 +2,21 @@ import { Routes, Route } from "react-router-dom";
 
 import DashboardLayout from "../layouts/DashboardLayout";
 
-// =========================
-// SYSTEM LEVEL
-// =========================
-
-import SuperAdminDashboard from "../roles/super-admin/Dashboard";
-
-import ClusterAdminDashboard from "../roles/cluster-admin/Dashboard";
-
-// =========================
-// SCHOOL MANAGEMENT
-// =========================
-
-import AdminDashboard from "../roles/admin/Dashboard";
-
-import PrincipalDashboard from "../roles/principal/Dashboard";
-
-import VicePrincipalDashboard from "../roles/vice-principal/Dashboard";
-
-// =========================
-// STAFF
-// =========================
-
-import TeacherDashboard from "../roles/teacher/Dashboard";
-
-import AccountantDashboard from "../roles/accountant/Dashboard";
-
-import ClerkDashboard from "../roles/clerk/Dashboard";
-
-import ReceptionistDashboard from "../roles/receptionist/Dashboard";
-
-// =========================
-// SUPPORT & OPERATIONS
-// =========================
-
-import LibrarianDashboard from "../roles/librarian/Dashboard";
-
-import HostelWardenDashboard from "../roles/hostel-warden/Dashboard";
-
-import SecuritySupervisorDashboard from "../roles/security-supervisor/Dashboard";
-
-// =========================
-// END USERS
-// =========================
-
-import StudentDashboard from "../roles/student/Dashboard";
-
-import ParentDashboard from "../roles/parent/Dashboard";
-
-// =========================
-// STUDENTS MODULE
-// =========================
-
-import StudentsList from "../modules/students/pages/StudentsList";
-import AddStudent from "../modules/students/pages/AddStudent";
-import EditStudent from "../modules/students/pages/EditStudent";
-import StudentProfile from "../modules/students/pages/StudentProfile";
-
-// =========================
-// ACADEMICS ROUTES
-// =========================
-
-import academicsRoutes from "../modules/academics/academicsRoutes";
-
-// =========================
-// DASHBOARD ROUTES
-// =========================
+import roleRoutes from "../roles/roleRoutes";
+import moduleRoutes from "../modules/moduleRoutes";
 
 const DashboardRoutes = () => {
-
   return (
-
     <Routes>
-
-      {/* =========================
-          COMMON DASHBOARD LAYOUT
-      ========================= */}
 
       <Route
         path="/dashboard"
         element={<DashboardLayout />}
       >
 
-        {/* =========================
-            SYSTEM LEVEL
-        ========================= */}
+        {roleRoutes}
 
-        <Route
-          path="super-admin"
-          element={<SuperAdminDashboard />}
-        />
-
-        <Route
-          path="cluster-admin"
-          element={<ClusterAdminDashboard />}
-        />
-
-        {/* =========================
-            SCHOOL MANAGEMENT
-        ========================= */}
-
-        <Route
-          path="admin"
-          element={<AdminDashboard />}
-        />
-
-        <Route
-          path="principal"
-          element={<PrincipalDashboard />}
-        />
-
-        <Route
-          path="vice-principal"
-          element={<VicePrincipalDashboard />}
-        />
-
-        {/* =========================
-            STAFF
-        ========================= */}
-
-        <Route
-          path="teacher"
-          element={<TeacherDashboard />}
-        />
-
-        <Route
-          path="accountant"
-          element={<AccountantDashboard />}
-        />
-
-        <Route
-          path="clerk"
-          element={<ClerkDashboard />}
-        />
-
-        <Route
-          path="receptionist"
-          element={<ReceptionistDashboard />}
-        />
-
-        {/* =========================
-            SUPPORT & OPERATIONS
-        ========================= */}
-
-        <Route
-          path="librarian"
-          element={<LibrarianDashboard />}
-        />
-
-        <Route
-          path="hostel-warden"
-          element={<HostelWardenDashboard />}
-        />
-
-        <Route
-          path="security-supervisor"
-          element={<SecuritySupervisorDashboard />}
-        />
-
-        {/* =========================
-            END USERS
-        ========================= */}
-
-        <Route
-          path="student"
-          element={<StudentDashboard />}
-        />
-
-        <Route
-          path="parent"
-          element={<ParentDashboard />}
-        />
-
-        {/* =========================
-            STUDENTS MODULE
-        ========================= */}
-
-        <Route
-          path="students"
-          element={<StudentsList />}
-        />
-
-        <Route
-          path="students/add"
-          element={<AddStudent />}
-        />
-
-        <Route
-          path="students/edit/:id"
-          element={<EditStudent />}
-        />
-
-        <Route
-          path="students/profile/:id"
-          element={<StudentProfile />}
-        />
-
-        {/* =========================
-            ACADEMICS MODULE
-        ========================= */}
-
-        {academicsRoutes}
+        {moduleRoutes}
 
       </Route>
 
