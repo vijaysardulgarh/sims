@@ -1,16 +1,11 @@
 from django.db import models
-
+from apps.core.models import SchoolBaseModel
 
 class Day(
-    models.Model
+    SchoolBaseModel
 ):
 
-    school = models.ForeignKey(
-        "schools.School",
-        on_delete=models.CASCADE,
-        related_name="days",
-        db_index=True
-    )
+
 
     name = models.CharField(
         max_length=20,

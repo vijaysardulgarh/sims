@@ -2,13 +2,9 @@ from django.db import models
 
 from apps.staff.staff.models import Staff
 from apps.schools.models import School
+from apps.core.models import SchoolBaseModel
 
-class TeacherAttendance(models.Model):
-
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE
-    )
+class TeacherAttendance(SchoolBaseModel):
 
     teacher = models.ForeignKey(
         Staff,

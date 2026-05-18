@@ -1,7 +1,21 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import User
 
+from django.contrib.auth.admin import (
+    UserAdmin
+)
+
+from .models import (
+    User,
+    Role,
+    Permission,
+    UserRole,
+    RolePermission
+)
+
+
+# ==========================================
+# USER ADMIN
+# ==========================================
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
@@ -11,18 +25,16 @@ class CustomUserAdmin(UserAdmin):
     # ==========================================
 
     list_display = (
-        'id',
-        'email',
-        'role',
-        'school',
-        'is_staff',
-        'is_superuser',
-        'is_active',
+        "id",
+        "email",
+        "is_staff",
+        "is_superuser",
+        "is_active",
     )
 
     list_display_links = (
-        'id',
-        'email',
+        "id",
+        "email",
     )
 
     # ==========================================
@@ -30,9 +42,8 @@ class CustomUserAdmin(UserAdmin):
     # ==========================================
 
     search_fields = (
-        'email',
-        'username',
-        'school__name',
+        "email",
+        "username",
     )
 
     # ==========================================
@@ -40,11 +51,9 @@ class CustomUserAdmin(UserAdmin):
     # ==========================================
 
     list_filter = (
-        'role',
-        'is_staff',
-        'is_superuser',
-        'is_active',
-        'school',
+        "is_staff",
+        "is_superuser",
+        "is_active",
     )
 
     # ==========================================
@@ -52,9 +61,7 @@ class CustomUserAdmin(UserAdmin):
     # ==========================================
 
     ordering = (
-        'school',
-        'role',
-        'email',
+        "email",
     )
 
     # ==========================================
@@ -68,8 +75,8 @@ class CustomUserAdmin(UserAdmin):
     # ==========================================
 
     readonly_fields = (
-        'last_login',
-        'date_joined',
+        "last_login",
+        "date_joined",
     )
 
     # ==========================================
@@ -78,44 +85,63 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
 
-        ('Login Credentials', {
-            'fields': (
-                'email',
-                'username',
-                'password',
-            )
-        }),
+        (
+            "Login Credentials",
+            {
+                "fields": (
+                    "email",
+                    "username",
+                    "password",
+                )
+            }
+        ),
 
-        ('Role & School', {
-            'fields': (
-                'role',
-                'school',
-            )
-        }),
+        (
+            "Profile Links",
+            {
+                "fields": (
+                    "staff",
+                    "student",
+                )
+            }
+        ),
 
-        ('Profile Links', {
-            'fields': (
-                'staff',
-                'student',
-            )
-        }),
+        (
+            "Extra Info",
+            {
+                "fields": (
+                    "phone",
+                    "profile_photo",
+                    "designation",
+                    "is_email_verified",
+                    "is_phone_verified",
+                    "last_password_changed_at",
+                )
+            }
+        ),
 
-        ('Permissions', {
-            'fields': (
-                'is_active',
-                'is_staff',
-                'is_superuser',
-                'groups',
-                'user_permissions',
-            )
-        }),
+        (
+            "Permissions",
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            }
+        ),
 
-        ('Important Dates', {
-            'fields': (
-                'last_login',
-                'date_joined',
-            )
-        }),
+        (
+            "Important Dates",
+            {
+                "fields": (
+                    "last_login",
+                    "date_joined",
+                )
+            }
+        ),
     )
 
     # ==========================================
@@ -124,19 +150,119 @@ class CustomUserAdmin(UserAdmin):
 
     add_fieldsets = (
 
-        ('Create User', {
-            'classes': ('wide',),
-            'fields': (
-                'email',
-                'password1',
-                'password2',
-                'role',
-                'school',
-                'staff',
-                'student',
-                'is_active',
-                'is_staff',
-                'is_superuser',
-            ),
-        }),
+        (
+            "Create User",
+            {
+                "classes": (
+                    "wide",
+                ),
+
+                "fields": (
+                    "email",
+                    "password1",
+                    "password2",
+                    "staff",
+                    "student",
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                ),
+            }
+        ),
+    )
+
+
+# ==========================================
+# ROLE ADMIN
+# ==========================================
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "name",
+        "code",
+        "is_active",
+    )
+
+    search_fields = (
+        "name",
+        "code",
+    )
+
+    list_filter = (
+        "is_active",
+    )
+
+
+# ==========================================
+# PERMISSION ADMIN
+# ==========================================
+
+@admin.register(Permission)
+class PermissionAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "name",
+        "code",
+        "module",
+        "is_active",
+    )
+
+    search_fields = (
+        "name",
+        "code",
+    )
+
+    list_filter = (
+        "module",
+        "is_active",
+    )
+
+
+# ==========================================
+# USER ROLE ADMIN
+# ==========================================
+
+@admin.register(UserRole)
+class UserRoleAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user",
+        "role",
+        "is_active",
+    )
+
+    list_filter = (
+        "role",
+        "is_active",
+    )
+
+    search_fields = (
+        "user__email",
+        "role__name",
+    )
+
+
+# ==========================================
+# ROLE PERMISSION ADMIN
+# ==========================================
+
+@admin.register(RolePermission)
+class RolePermissionAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "role",
+        "permission",
+        "is_active",
+    )
+
+    list_filter = (
+        "role",
+        "permission",
+    )
+
+    search_fields = (
+        "role__name",
+        "permission__name",
     )

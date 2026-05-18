@@ -1,7 +1,14 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.db import models
+from django.contrib.auth.models import (
+    AbstractUser,
+    BaseUserManager
+)
+
 from django.core.exceptions import ValidationError
 
+from django.db import models
+
+from apps.core.models import AuditBaseModel
+from apps.schools.models import School
 
 # ==========================================
 # CUSTOM USER MANAGER
@@ -9,12 +16,22 @@ from django.core.exceptions import ValidationError
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(
+        self,
+        email,
+        password=None,
+        **extra_fields
+    ):
 
         if not email:
-            raise ValueError("Email is required")
 
-        email = self.normalize_email(email)
+            raise ValueError(
+                "Email is required"
+            )
+
+        email = self.normalize_email(
+            email
+        )
 
         user = self.model(
             email=email,
@@ -23,16 +40,34 @@ class UserManager(BaseUserManager):
         )
 
         user.set_password(password)
-        user.save(using=self._db)
+
+        user.save(
+            using=self._db
+        )
 
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(
+        self,
+        email,
+        password=None,
+        **extra_fields
+    ):
 
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
-        extra_fields.setdefault("is_active", True)
-        extra_fields.setdefault("role", "admin")
+        extra_fields.setdefault(
+            "is_staff",
+            True
+        )
+
+        extra_fields.setdefault(
+            "is_superuser",
+            True
+        )
+
+        extra_fields.setdefault(
+            "is_active",
+            True
+        )
 
         return self.create_user(
             email,
@@ -45,73 +80,58 @@ class UserManager(BaseUserManager):
 # USER MODEL
 # ==========================================
 
-class User(AbstractUser):
+class User(AbstractUser, AuditBaseModel):
 
-    # Custom manager
     objects = UserManager()
 
-    # Username optional but unique
     username = models.CharField(
         max_length=150,
         blank=True,
         unique=True
     )
 
-    # Email login
     email = models.EmailField(
         unique=True,
         db_index=True
     )
 
     USERNAME_FIELD = "email"
+
     REQUIRED_FIELDS = []
 
     # ------------------------------------------
-    # ROLES
+    # EXTRA FIELDS
     # ------------------------------------------
 
-    ROLE_CHOICES = [
-        ("principal", "Principal"),
-        ("teacher", "Teacher"),
-        ("clerk", "Clerk"),
-        ("student", "Student"),
-        ("admin", "Admin"),
-    ]
-
-    role = models.CharField(
-        max_length=50,
-        choices=ROLE_CHOICES,
-        default="teacher",
-        db_index=True
+    phone = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
     )
 
-    # ------------------------------------------
-    # RELATIONS
-    # ------------------------------------------
-
-    school = models.ForeignKey(
-        "schools.School",
-        on_delete=models.CASCADE,
-        null=True,
+    profile_photo = models.ImageField(
+        upload_to="users/photos/",
         blank=True,
-        related_name="users",
-        db_index=True
+        null=True
     )
 
-    staff = models.OneToOneField(
-        "staff.Staff",
-        on_delete=models.SET_NULL,
-        null=True,
+    designation = models.CharField(
+        max_length=255,
         blank=True,
-        related_name="user"
+        null=True
     )
 
-    student = models.OneToOneField(
-        "students.Student",
-        on_delete=models.SET_NULL,
+    is_email_verified = models.BooleanField(
+        default=False
+    )
+
+    is_phone_verified = models.BooleanField(
+        default=False
+    )
+
+    last_password_changed_at = models.DateTimeField(
         null=True,
-        blank=True,
-        related_name="user"
+        blank=True
     )
 
     # ------------------------------------------
@@ -121,62 +141,9 @@ class User(AbstractUser):
     def clean(self):
 
         if not self.email:
-            raise ValidationError("Email is required")
 
-        # Superuser handling
-        if self.is_superuser:
-            self.role = "admin"
-
-            if self.staff and self.student:
-                raise ValidationError(
-                    "User cannot be both staff and student"
-                )
-
-            return
-
-        if not self.school:
             raise ValidationError(
-                "School is required for all users"
-            )
-
-        if self.role in ["teacher", "principal", "clerk"] and not self.staff:
-            raise ValidationError(
-                f"{self.role} user must be linked to staff"
-            )
-
-        if self.role == "student" and not self.student:
-            raise ValidationError(
-                "Student user must be linked to student"
-            )
-
-        if self.role == "admin" and (self.staff or self.student):
-            raise ValidationError(
-                "Admin should not be linked to staff or student"
-            )
-
-        if self.staff and self.student:
-            raise ValidationError(
-                "User cannot be both staff and student"
-            )
-
-        if self.staff and self.role == "student":
-            raise ValidationError(
-                "Student role cannot be linked to staff"
-            )
-
-        if self.student and self.role != "student":
-            raise ValidationError(
-                "Only student role can link to student"
-            )
-
-        if self.staff and self.school != self.staff.school:
-            raise ValidationError(
-                "User school must match staff school"
-            )
-
-        if self.student and self.school != self.student.school:
-            raise ValidationError(
-                "User school must match student school"
+                "Email is required"
             )
 
     # ------------------------------------------
@@ -185,24 +152,24 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
 
-        # Normalize email
         if self.email:
-            self.email = self.email.lower().strip()
 
-        # Ensure username always exists
+            self.email = (
+                self.email
+                .lower()
+                .strip()
+            )
+
         if not self.username:
-            self.username = self.email
-        else:
-            self.username = self.username.lower().strip()
 
-        # Admin access handling
-        self.is_staff = bool(
-            self.is_superuser or self.role in ["admin", "principal"]
-        )
+            self.username = self.email
 
         self.full_clean()
 
-        super().save(*args, **kwargs)
+        super().save(
+            *args,
+            **kwargs
+        )
 
     # ------------------------------------------
     # STRING
@@ -216,7 +183,10 @@ class User(AbstractUser):
             else "No School"
         )
 
-        return f"{self.email} ({school_name} - {self.role})"
+        return (
+            f"{self.email} "
+            f"({school_name})"
+        )
 
     # ------------------------------------------
     # META
@@ -225,9 +195,130 @@ class User(AbstractUser):
     class Meta:
 
         indexes = [
-            models.Index(fields=["role"]),
-            models.Index(fields=["school"]),
             models.Index(fields=["email"]),
         ]
 
-        ordering = ["school", "role", "email"]
+        ordering = [
+            "email"
+        ]
+
+
+# ==========================================
+# ROLE MODEL
+# ==========================================
+
+class Role(AuditBaseModel):
+
+    name = models.CharField(
+        max_length=100,
+        unique=True
+    )
+
+    code = models.CharField(
+        max_length=100,
+        unique=True
+    )
+
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+
+        return self.name
+
+
+# ==========================================
+# PERMISSION MODEL
+# ==========================================
+
+class Permission(AuditBaseModel):
+
+    name = models.CharField(
+        max_length=255
+    )
+
+    code = models.CharField(
+        max_length=255,
+        unique=True
+    )
+
+    module = models.CharField(
+        max_length=100
+    )
+
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+
+        return self.name
+
+
+# ==========================================
+# USER ROLE MODEL
+# ==========================================
+
+class UserRole(AuditBaseModel):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="user_roles"
+    )
+
+    role = models.ForeignKey(
+        Role,
+        on_delete=models.CASCADE,
+        related_name="user_roles"
+    )
+
+    class Meta:
+
+        unique_together = (
+            "user",
+            "role",
+        )
+
+    def __str__(self):
+
+        return (
+            f"{self.user.email} - "
+            f"{self.role.name}"
+        )
+
+
+# ==========================================
+# ROLE PERMISSION MODEL
+# ==========================================
+
+class RolePermission(AuditBaseModel):
+
+    role = models.ForeignKey(
+        Role,
+        on_delete=models.CASCADE,
+        related_name="role_permissions"
+    )
+
+    permission = models.ForeignKey(
+        Permission,
+        on_delete=models.CASCADE,
+        related_name="role_permissions"
+    )
+
+    class Meta:
+
+        unique_together = (
+            "role",
+            "permission"
+        )
+
+    def __str__(self):
+
+        return (
+            f"{self.role.name} - "
+            f"{self.permission.code}"
+        )

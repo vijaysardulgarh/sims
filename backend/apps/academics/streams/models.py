@@ -1,16 +1,11 @@
 from django.db import models
 
+from apps.core.models import SchoolBaseModel
 
 class Stream(
-    models.Model
+    SchoolBaseModel
 ):
 
-    school = models.ForeignKey(
-        "schools.School",
-        on_delete=models.CASCADE,
-        related_name="streams",
-        db_index=True
-    )
 
     name = models.CharField(
         max_length=100,

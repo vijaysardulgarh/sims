@@ -2,7 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 import os
 import uuid
-
+from apps.core.models import SchoolBaseModel
 
 # -------------------------
 # CONSTANTS
@@ -21,13 +21,7 @@ def school_document_path(instance, filename):
     return os.path.join("documents", f"school_{school_id}", filename)
 
 
-class Document(models.Model):
-    school = models.ForeignKey(
-        "schools.School",
-        on_delete=models.CASCADE,
-        related_name="documents",
-        db_index=True
-    )
+class Document(SchoolBaseModel):
 
     title = models.CharField(max_length=255, db_index=True)
 

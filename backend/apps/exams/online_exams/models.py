@@ -1,9 +1,9 @@
 from django.db import models
 
 from apps.exams.models import Exam
+from apps.core.models import SchoolBaseModel
 
-
-class OnlineExam(models.Model):
+class OnlineExam(SchoolBaseModel):
 
     exam = models.OneToOneField(
         Exam,

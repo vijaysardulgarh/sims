@@ -19,9 +19,9 @@ from django.utils import timezone
 from apps.finance.student_fees.models import StudentFee
 from apps.schools.models import School
 from apps.users.models import User
+from apps.core.models import SchoolBaseModel
 
-
-class FeePayment(models.Model):
+class FeePayment(SchoolBaseModel):
 
     PAYMENT_MODE_CHOICES = [
 
@@ -44,13 +44,6 @@ class FeePayment(models.Model):
 
         ("Refunded", "Refunded"),
     ]
-
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-        related_name="fee_payments",
-        db_index=True
-    )
 
     student_fee = models.ForeignKey(
         StudentFee,

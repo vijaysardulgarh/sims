@@ -1,27 +1,35 @@
 from django.contrib import admin
-from .models import School
+
+from .models import (
+    School,
+    Cluster
+)
 
 
-@admin.register(School)
-class SchoolAdmin(admin.ModelAdmin):
+# ==========================================
+# CLUSTER ADMIN
+# ==========================================
+
+@admin.register(Cluster)
+class ClusterAdmin(admin.ModelAdmin):
 
     # ==========================================
     # TABLE DISPLAY
     # ==========================================
 
     list_display = (
-        'id',
-        'name',
-        'email',
-        'phone_number',
-        'website',
-        'is_active',
-        'created_at',
+        "id",
+        "name",
+        "code",
+        "email",
+        "phone",
+        "is_active",
+        "created_at",
     )
 
     list_display_links = (
-        'id',
-        'name',
+        "id",
+        "name",
     )
 
     # ==========================================
@@ -29,10 +37,10 @@ class SchoolAdmin(admin.ModelAdmin):
     # ==========================================
 
     search_fields = (
-        'name',
-        'email',
-        'phone_number',
-        'slug',
+        "name",
+        "code",
+        "email",
+        "slug",
     )
 
     # ==========================================
@@ -40,9 +48,8 @@ class SchoolAdmin(admin.ModelAdmin):
     # ==========================================
 
     list_filter = (
-        'is_active',
-        'is_deleted',
-        'created_at',
+        "is_active",
+        "created_at",
     )
 
     # ==========================================
@@ -50,7 +57,7 @@ class SchoolAdmin(admin.ModelAdmin):
     # ==========================================
 
     ordering = (
-        'name',
+        "name",
     )
 
     # ==========================================
@@ -64,9 +71,9 @@ class SchoolAdmin(admin.ModelAdmin):
     # ==========================================
 
     readonly_fields = (
-        'slug',
-        'created_at',
-        'updated_at',
+        "slug",
+        "created_at",
+        "updated_at",
     )
 
     # ==========================================
@@ -75,43 +82,287 @@ class SchoolAdmin(admin.ModelAdmin):
 
     fieldsets = (
 
-        ('Basic Information', {
-            'fields': (
-                'name',
-                'slug',
-                'motto',
-                'accreditation',
-                'established_date',
-            )
-        }),
+        (
+            "Basic Information",
+            {
+                "fields": (
+                    "name",
+                    "code",
+                    "slug",
+                    "description",
+                )
+            }
+        ),
 
-        ('Contact Information', {
-            'fields': (
-                'email',
-                'phone_number',
-                'website',
-                'address',
-            )
-        }),
+        (
+            "Contact Information",
+            {
+                "fields": (
+                    "email",
+                    "phone",
+                    "address",
+                )
+            }
+        ),
 
-        ('Media & Branding', {
-            'fields': (
-                'logo',
-                'social_media_links',
-            )
-        }),
+        (
+            "Media",
+            {
+                "fields": (
+                    "logo",
+                )
+            }
+        ),
 
-        ('Status', {
-            'fields': (
-                'is_active',
-                'is_deleted',
-            )
-        }),
+        (
+            "Location",
+            {
+                "fields": (
+                    "latitude",
+                    "longitude",
+                    "geo_radius_meters",
+                )
+            }
+        ),
 
-        ('System Information', {
-            'fields': (
-                'created_at',
-                'updated_at',
-            )
-        }),
+        (
+            "Regional Settings",
+            {
+                "fields": (
+                    "timezone",
+                    "currency",
+                )
+            }
+        ),
+
+        (
+            "Status",
+            {
+                "fields": (
+                    "is_active",
+                )
+            }
+        ),
+
+        (
+            "System Information",
+            {
+                "fields": (
+                    "created_at",
+                    "updated_at",
+                )
+            }
+        ),
     )
+
+    prepopulated_fields = {
+        "slug": ("name",)
+    }
+
+
+# ==========================================
+# SCHOOL ADMIN
+# ==========================================
+
+@admin.register(School)
+class SchoolAdmin(admin.ModelAdmin):
+
+    # ==========================================
+    # TABLE DISPLAY
+    # ==========================================
+
+    list_display = (
+        "id",
+        "name",
+        "code",
+        "email",
+        "phone",
+        "school_type",
+        "board",
+        "is_active",
+        "created_at",
+    )
+
+    list_display_links = (
+        "id",
+        "name",
+    )
+
+    # ==========================================
+    # SEARCH
+    # ==========================================
+
+    search_fields = (
+        "name",
+        "code",
+        "email",
+        "slug",
+        "city",
+    )
+
+    # ==========================================
+    # FILTERS
+    # ==========================================
+
+    list_filter = (
+        "school_type",
+        "board",
+        "is_active",
+        "created_at",
+    )
+
+    # ==========================================
+    # ORDERING
+    # ==========================================
+
+    ordering = (
+        "name",
+    )
+
+    # ==========================================
+    # PAGINATION
+    # ==========================================
+
+    list_per_page = 25
+
+    # ==========================================
+    # READONLY FIELDS
+    # ==========================================
+
+    readonly_fields = (
+        "slug",
+        "created_at",
+        "updated_at",
+    )
+
+    # ==========================================
+    # FIELDSETS
+    # ==========================================
+
+    fieldsets = (
+
+        (
+            "Cluster Information",
+            {
+                "fields": (
+                    "cluster",
+                )
+            }
+        ),
+
+        (
+            "Basic Information",
+            {
+                "fields": (
+                    "name",
+                    "code",
+                    "slug",
+                    "subdomain",
+                    "motto",
+                    "logo",
+                )
+            }
+        ),
+
+        (
+            "Academic Information",
+            {
+                "fields": (
+                    "school_type",
+                    "board",
+                    "language",
+                    "academic_year_start_month",
+                    "affiliation_number",
+                    "accreditation",
+                    "established_date",
+                )
+            }
+        ),
+
+        (
+            "Management",
+            {
+                "fields": (
+                    "principal_name",
+                )
+            }
+        ),
+
+        (
+            "Contact Information",
+            {
+                "fields": (
+                    "email",
+                    "phone",
+                    "alternate_phone",
+                    "website",
+                )
+            }
+        ),
+
+        (
+            "Address",
+            {
+                "fields": (
+                    "address",
+                    "city",
+                    "state",
+                    "country",
+                    "pincode",
+                )
+            }
+        ),
+
+        (
+            "Social Media",
+            {
+                "fields": (
+                    "social_media_links",
+                )
+            }
+        ),
+
+        (
+            "GPS & Geofence",
+            {
+                "fields": (
+                    "latitude",
+                    "longitude",
+                    "geo_radius_meters",
+                )
+            }
+        ),
+
+        (
+            "Regional Settings",
+            {
+                "fields": (
+                    "timezone",
+                    "currency",
+                )
+            }
+        ),
+
+        (
+            "Status",
+            {
+                "fields": (
+                    "is_active",
+                )
+            }
+        ),
+
+        (
+            "System Information",
+            {
+                "fields": (
+                    "created_at",
+                    "updated_at",
+                )
+            }
+        ),
+    )
+
+    prepopulated_fields = {
+        "slug": ("name",)
+    }

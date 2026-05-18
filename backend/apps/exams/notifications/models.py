@@ -1,9 +1,9 @@
 from django.db import models
 
 from apps.exams.models import Exam
+from apps.core.models import SchoolBaseModel
 
-
-class ExamNotification(models.Model):
+class ExamNotification(SchoolBaseModel):
 
     NOTIFICATION_TYPES = (
         ("exam", "Exam"),

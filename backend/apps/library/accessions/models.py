@@ -1,7 +1,8 @@
 from django.db import models
 from apps.library.books.models import Book
+from apps.core.models import SchoolBaseModel
 
-class BookAccession(models.Model):
+class BookAccession(SchoolBaseModel):
 
     STATUS_CHOICES = [
         ("available", "Available"),

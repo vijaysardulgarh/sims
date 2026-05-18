@@ -1,12 +1,12 @@
 from django.db import models
-
+from apps.core.models import SchoolBaseModel
 from apps.transport.transport_routes.models import (
     TransportRoute,
     TransportStop,
 )
 
 
-class TransportAssignment(models.Model):
+class TransportAssignment(SchoolBaseModel):
 
     student_name = models.CharField(max_length=255)
 

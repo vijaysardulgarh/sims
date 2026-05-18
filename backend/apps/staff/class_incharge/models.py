@@ -3,9 +3,9 @@ from django.db.models import Q
 
 from apps.academics.sections.models import Section
 from apps.staff.staff.models import Staff
+from apps.core.models import SchoolBaseModel
 
-
-class ClassIncharge(models.Model):
+class ClassIncharge(SchoolBaseModel):
 
     section = models.OneToOneField(
         Section,

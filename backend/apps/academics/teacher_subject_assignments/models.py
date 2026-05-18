@@ -14,8 +14,10 @@ from apps.academics.class_subjects.models import (
 
 from apps.staff.staff.models import Staff
 
+from apps.core.models import SchoolBaseModel
+
 class TeacherSubjectAssignment(
-    models.Model
+    SchoolBaseModel
 ):
 
     teacher = models.ForeignKey(

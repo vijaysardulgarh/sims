@@ -1,7 +1,7 @@
 from django.db import models
+from apps.core.models import SchoolBaseModel
 
-
-class Vehicle(models.Model):
+class Vehicle(SchoolBaseModel):
 
     VEHICLE_TYPES = (
         ("bus", "Bus"),

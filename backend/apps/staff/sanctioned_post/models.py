@@ -4,14 +4,9 @@ from apps.staff.post_type.models import PostType
 
 from apps.schools.models import School
 from apps.academics.subjects.models import Subject
+from apps.core.models import SchoolBaseModel
 
-class SanctionedPost(models.Model):
-
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-        related_name="sanctioned_posts"
-    )
+class SanctionedPost(SchoolBaseModel):
 
     post_type = models.ForeignKey(
         PostType,

@@ -5,8 +5,9 @@ from django.core.exceptions import (
 )
 
 from apps.schools.models import School
+from apps.core.models import SchoolBaseModel
 
-class BookCategory(models.Model):
+class BookCategory(SchoolBaseModel):
 
     school = models.ForeignKey(
         School,

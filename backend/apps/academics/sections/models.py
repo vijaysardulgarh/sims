@@ -20,9 +20,10 @@ from apps.academics.classes.models import (
     Class
 )
 
+from apps.core.models import SchoolBaseModel
 
 class Section(
-    models.Model
+    SchoolBaseModel
 ):
 
     SUB_STREAM_CHOICES = [
@@ -34,12 +35,6 @@ class Section(
         ("Vocational", "Vocational"),
     ]
 
-    school = models.ForeignKey(
-        "schools.School",
-        on_delete=models.CASCADE,
-        related_name="sections",
-        db_index=True
-    )
 
     class_obj = models.ForeignKey(
         Class,

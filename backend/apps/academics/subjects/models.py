@@ -8,17 +8,12 @@ from django.db.models.functions import (
     Lower
 )
 
-
+from apps.core.models import SchoolBaseModel
 class Subject(
-    models.Model
+    SchoolBaseModel
 ):
 
-    school = models.ForeignKey(
-        "schools.School",
-        on_delete=models.CASCADE,
-        related_name="subjects",
-        db_index=True
-    )
+
 
     name = models.CharField(
         max_length=100,

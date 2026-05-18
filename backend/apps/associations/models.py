@@ -7,29 +7,12 @@ from apps.staff.staff.models import Staff
 from apps.schools.models import School
 from apps.students.models import Student
 from apps.documents.models import Document
-
-# -----------------------------------------------------------------------------
-# BASE MIXIN (Reusable for all models)
-# -----------------------------------------------------------------------------
-
-class BaseModel(models.Model):
-    is_active = models.BooleanField(default=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    created_by = models.ForeignKey(Staff, null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
-    updated_by = models.ForeignKey(Staff, null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
-
-    class Meta:
-        abstract = True
-
-
+from apps.core.models import SchoolBaseModel
 # -----------------------------------------------------------------------------
 # ASSOCIATION
 # -----------------------------------------------------------------------------
 
-class Association(BaseModel):
+class Association(SchoolBaseModel):
 
     TYPE_CHOICES = [
         ("Club", "Club"),
@@ -37,7 +20,6 @@ class Association(BaseModel):
         ("Nodal", "Nodal"),
     ]
 
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="associations", db_index=True)
     name = models.CharField(max_length=255, db_index=True)
     association_type = models.CharField(max_length=20, choices=TYPE_CHOICES, db_index=True)
 
@@ -99,7 +81,7 @@ class Association(BaseModel):
 # ASSOCIATION ROLES
 # -----------------------------------------------------------------------------
 
-class AssociationRole(BaseModel):
+class AssociationRole(SchoolBaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="roles", db_index=True)
     title = models.CharField(max_length=255)
@@ -121,7 +103,7 @@ class AssociationRole(BaseModel):
 # STAFF ROLE ASSIGNMENT
 # -----------------------------------------------------------------------------
 
-class StaffAssociationRoleAssignment(BaseModel):
+class StaffAssociationRoleAssignment(SchoolBaseModel):
 
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="association_roles", db_index=True)
     role = models.ForeignKey(AssociationRole, on_delete=models.CASCADE, related_name="assigned_staff", db_index=True)
@@ -145,7 +127,7 @@ class StaffAssociationRoleAssignment(BaseModel):
 # STUDENT ROLE ASSIGNMENT
 # -----------------------------------------------------------------------------
 
-class StudentAssociationRoleAssignment(BaseModel):
+class StudentAssociationRoleAssignment(SchoolBaseModel):
 
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="association_roles", db_index=True)
     role = models.ForeignKey(AssociationRole, on_delete=models.CASCADE, related_name="assigned_students", db_index=True)
@@ -169,7 +151,7 @@ class StudentAssociationRoleAssignment(BaseModel):
 # ASSOCIATION MEMBERS
 # -----------------------------------------------------------------------------
 
-class AssociationMember(BaseModel):
+class AssociationMember(SchoolBaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name='members', db_index=True)
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='association_memberships', db_index=True)
@@ -199,7 +181,7 @@ class AssociationMember(BaseModel):
 # MEETINGS
 # -----------------------------------------------------------------------------
 
-class AssociationMeeting(BaseModel):
+class AssociationMeeting(SchoolBaseModel):
 
     association = models.ForeignKey('Association', on_delete=models.CASCADE, related_name='meetings', db_index=True)
     meeting_date = models.DateTimeField(null=True, blank=True, db_index=True)
@@ -229,7 +211,7 @@ class AssociationMeeting(BaseModel):
 # SMC
 # -----------------------------------------------------------------------------
 
-class SMCMember(BaseModel):
+class SMCMember(SchoolBaseModel):
 
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="smc_members", db_index=True)
 
@@ -262,7 +244,7 @@ class SMCMember(BaseModel):
 # ACTIVITIES
 # -----------------------------------------------------------------------------
 
-class ExtracurricularActivity(BaseModel):
+class ExtracurricularActivity(SchoolBaseModel):
 
     CATEGORY_CHOICES = [
         ('Sports', 'Sports'),
@@ -273,7 +255,6 @@ class ExtracurricularActivity(BaseModel):
         ('Other', 'Other'),
     ]
 
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='activities', db_index=True)
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField()
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, db_index=True)

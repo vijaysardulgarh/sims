@@ -1,81 +1,92 @@
 from rest_framework.views import APIView
+
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login, logout
-from rest_framework.authtoken.models import Token
-from rest_framework.permissions import AllowAny
+
+from rest_framework.permissions import (
+    IsAuthenticated,
+    AllowAny
+)
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView
+)
+
+from rest_framework_simplejwt.tokens import (
+    RefreshToken
+)
+
+from .serializers import (
+    LoginSerializer,
+    UserSerializer
+)
 
 
 # =========================================
-# LOGIN API (FULL CONVERSION)
+# LOGIN API
 # =========================================
-class LoginAPIView(APIView):
 
-    permission_classes = [AllowAny]
+class LoginAPIView(
+    TokenObtainPairView
+):
 
-    def post(self, request):
+    permission_classes = [
+        AllowAny
+    ]
 
-        username = request.data.get("username")
-        password = request.data.get("password")
-
-        if not username or not password:
-            return Response(
-                {"error": "Username and password required"},
-                status=400
-            )
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is None:
-            return Response(
-                {"error": "Invalid username or password"},
-                status=401
-            )
-
-        # OPTIONAL: session login (if you want)
-        login(request, user)
-
-        # Token for React
-        token, _ = Token.objects.get_or_create(user=user)
-
-        return Response({
-            "message": "Login successful",
-            "token": token.key,
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-            }
-        })
+    serializer_class = LoginSerializer
 
 
 # =========================================
 # LOGOUT API
 # =========================================
+
 class LogoutAPIView(APIView):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
 
     def post(self, request):
 
-        # delete token if exists
-        if request.user.is_authenticated:
-            Token.objects.filter(user=request.user).delete()
+        try:
 
-        logout(request)
+            refresh_token = request.data.get(
+                "refresh"
+            )
 
-        return Response({"message": "Logged out successfully"})
+            token = RefreshToken(
+                refresh_token
+            )
+
+            token.blacklist()
+
+            return Response({
+                "message": "Logged out successfully"
+            })
+
+        except Exception:
+
+            return Response({
+                "error": "Invalid refresh token"
+            }, status=400)
 
 
 # =========================================
-# CHECK AUTH (FOR REACT)
+# CURRENT USER API
 # =========================================
+
 class MeAPIView(APIView):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
 
     def get(self, request):
 
-        if not request.user.is_authenticated:
-            return Response({"error": "Not authenticated"}, status=401)
+        serializer = UserSerializer(
+            request.user
+        )
 
-        return Response({
-            "id": request.user.id,
-            "username": request.user.username,
-            "email": request.user.email,
-        })
+        return Response(
+            serializer.data
+        )

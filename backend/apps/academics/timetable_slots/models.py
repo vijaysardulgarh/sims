@@ -7,16 +7,10 @@ from django.core.exceptions import (
 from django.db.models import Q
 
 from apps.academics.days.models import Day
+from apps.core.models import SchoolBaseModel
 
+class TimetableSlot( SchoolBaseModel):
 
-class TimetableSlot(models.Model):
-
-    school = models.ForeignKey(
-        "schools.School",
-        on_delete=models.CASCADE,
-        related_name="timetable_slots",
-        db_index=True
-    )
 
     day = models.ForeignKey(
         Day,

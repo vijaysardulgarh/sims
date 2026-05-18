@@ -4,12 +4,22 @@ from apps.schools.models import School
 from apps.academics.classes.models import Class
 from apps.academics.streams.models import Stream
 from apps.academics.sections.models import Section
+from apps.core.models import AuditBaseModel
+from apps.users.models import User
+from django.conf import settings
 
-class Student(models.Model):
-    #user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+class Student(AuditBaseModel):
+    user = models.OneToOneField(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="student_profile"
+    )
     srn = models.CharField(primary_key=True, max_length=11)
     school_code = models.CharField(max_length=20, blank=True, null=True)
     school = models.ForeignKey(School,on_delete=models.CASCADE,related_name="students")
+    
     admission_date = models.DateField(blank=True, null=True)
     student_class = models.ForeignKey(Class,on_delete=models.SET_NULL,related_name="students",null=True,blank=True,db_index=True)
     stream = models.ForeignKey(Stream,on_delete=models.SET_NULL,related_name="students",null=True,blank=True,db_index=True)

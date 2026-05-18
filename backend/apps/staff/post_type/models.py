@@ -1,7 +1,7 @@
 from django.db import models
+from apps.core.models import SchoolBaseModel
 
-
-class PostType(models.Model):
+class PostType(SchoolBaseModel):
 
     name = models.CharField(
         max_length=50,

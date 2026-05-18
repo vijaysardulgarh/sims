@@ -4,19 +4,24 @@ from django.db.models import Q
 
 from apps.staff.post_type.models import PostType
 from apps.schools.models import School
+from apps.core.models import SchoolBaseModel
+from apps.users.models import User
+from django.conf import settings
 
-class Staff(models.Model):
+class Staff(SchoolBaseModel):
+
+    user = models.OneToOneField(
+    settings.AUTH_USER_MODEL,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="staff_profile"
+    )
 
     class Gender(models.TextChoices):
         MALE = "Male", "Male"
         FEMALE = "Female", "Female"
         OTHER = "Other", "Other"
-
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-        related_name="staff"
-    )
 
     employee_id = models.CharField(
         max_length=20,

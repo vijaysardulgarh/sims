@@ -1,7 +1,7 @@
 from django.db import models
+from apps.core.models import SchoolBaseModel
 
-
-class Driver(models.Model):
+class Driver(SchoolBaseModel):
 
     full_name = models.CharField(max_length=255)
 

@@ -11,15 +11,9 @@ from django.core.exceptions import (
 from apps.schools.models import School
 from apps.academics.classes.models import Class
 from apps.academics.streams.models import Stream
+from apps.core.models import SchoolBaseModel
 
-class FeeStructure(models.Model):
-
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-        related_name="fee_structures",
-        db_index=True
-    )
+class FeeStructure(SchoolBaseModel):
 
     class_obj = models.ForeignKey(
         Class,

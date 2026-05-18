@@ -1,7 +1,7 @@
 from django.db import models
+from apps.core.models import SchoolBaseModel
 
-
-class Exam(models.Model):
+class Exam(SchoolBaseModel):
 
     EXAM_MODES = (
         ("offline", "Offline"),

@@ -1,7 +1,7 @@
 from django.db import models
 
-
-class ExamType(models.Model):
+from apps.core.models import SchoolBaseModel
+class ExamType(SchoolBaseModel):
 
     CATEGORY_CHOICES = (
         ("school", "School"),

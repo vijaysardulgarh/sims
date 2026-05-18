@@ -13,9 +13,9 @@ from django.utils import timezone
 from apps.schools.models import School
 from apps.library.accessions.models import BookAccession
 from apps.users.models import User
+from apps.core.models import SchoolBaseModel
 
-
-class BookIssue(models.Model):
+class BookIssue(SchoolBaseModel):
 
     STATUS_CHOICES = [
 

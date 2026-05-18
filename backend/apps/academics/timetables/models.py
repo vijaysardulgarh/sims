@@ -20,7 +20,9 @@ from apps.staff.staff.models import Staff
 
 from apps.schools.models import School
 
-class Timetable(models.Model):
+from apps.core.models import SchoolBaseModel
+
+class Timetable(SchoolBaseModel):
 
     school = models.ForeignKey(
         School,

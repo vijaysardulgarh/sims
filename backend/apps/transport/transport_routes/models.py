@@ -1,10 +1,10 @@
 from django.db import models
-
+from apps.core.models import SchoolBaseModel
 from apps.transport.vehicles.models import Vehicle
 from apps.transport.drivers.models import Driver
 
 
-class TransportRoute(models.Model):
+class TransportRoute(SchoolBaseModel):
 
     route_name = models.CharField(max_length=255)
 
@@ -32,7 +32,7 @@ class TransportRoute(models.Model):
         return self.route_name
 
 
-class TransportStop(models.Model):
+class TransportStop(SchoolBaseModel):
 
     route = models.ForeignKey(
         TransportRoute,

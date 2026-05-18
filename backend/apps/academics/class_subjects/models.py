@@ -7,16 +7,9 @@ from django.core.exceptions import (
 from apps.academics.classes.models import Class
 from apps.academics.streams.models import Stream
 from apps.academics.subjects.models import Subject
+from apps.core.models import SchoolBaseModel
 
-
-class ClassSubject(models.Model):
-
-    school = models.ForeignKey(
-        "schools.School",
-        on_delete=models.CASCADE,
-        related_name="class_subjects",
-        db_index=True
-    )
+class ClassSubject(SchoolBaseModel):
 
     class_obj = models.ForeignKey(
         Class,

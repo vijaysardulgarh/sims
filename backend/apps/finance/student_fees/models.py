@@ -11,8 +11,9 @@ from django.core.exceptions import (
 from apps.schools.models import School
 from apps.students.models import Student
 from apps.finance.fee_structures.models import FeeStructure
+from apps.core.models import SchoolBaseModel
 
-class StudentFee(models.Model):
+class StudentFee(SchoolBaseModel):
 
     school = models.ForeignKey(
         School,
