@@ -9,7 +9,7 @@ const studentsRoutes = (
   <Route path="students">
 
     <Route
-      index
+      path=""
       element={<StudentsList />}
     />
 
