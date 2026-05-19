@@ -1,13 +1,45 @@
-import { Navigate } from "react-router-dom";
+import {
+    Navigate
+} from "react-router-dom";
 
-const RoleBasedRoute = ({ children, allowedRoles }) => {
-  const userRole = "admin";
+import {
+    useAuth
+} from "../../auth/context/AuthContext";
 
-  if (!allowedRoles.includes(userRole)) {
-    return <Navigate to="/unauthorized" replace />;
-  }
 
-  return children;
+const RoleBasedRoute = ({
+
+    children,
+
+    allowedRoles = [],
+
+}) => {
+
+    const {
+        user
+    } = useAuth();
+
+    const userRoles =
+        user?.roles || [];
+
+    const hasAccess =
+        allowedRoles.some(
+
+            role =>
+                userRoles.includes(role)
+        );
+
+    if (!hasAccess) {
+
+        return (
+            <Navigate
+                to="/unauthorized"
+                replace
+            />
+        );
+    }
+
+    return children;
 };
 
 export default RoleBasedRoute;

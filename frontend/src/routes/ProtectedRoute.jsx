@@ -4,7 +4,7 @@ import {
 
 import {
     useAuth
-} from "../../auth/context/AuthContext";
+} from "../auth/context/AuthContext";
 
 
 const ProtectedRoute = ({
@@ -20,7 +20,6 @@ const ProtectedRoute = ({
         return (
             <Navigate
                 to="/login"
-                replace
             />
         );
     }
