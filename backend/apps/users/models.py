@@ -177,16 +177,7 @@ class User(AbstractUser, AuditBaseModel):
 
     def __str__(self):
 
-        school_name = (
-            self.school.name
-            if self.school
-            else "No School"
-        )
-
-        return (
-            f"{self.email} "
-            f"({school_name})"
-        )
+        return self.email
 
     # ------------------------------------------
     # META

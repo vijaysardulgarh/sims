@@ -1,8 +1,6 @@
 from django.contrib import admin
 
-from django.contrib.auth.admin import (
-    UserAdmin
-)
+from django.contrib.auth.admin import UserAdmin
 
 from .models import (
     User,
@@ -19,6 +17,8 @@ from .models import (
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+
+    model = User
 
     # ==========================================
     # TABLE DISPLAY
@@ -44,6 +44,8 @@ class CustomUserAdmin(UserAdmin):
     search_fields = (
         "email",
         "username",
+        "first_name",
+        "last_name",
     )
 
     # ==========================================
@@ -97,25 +99,24 @@ class CustomUserAdmin(UserAdmin):
         ),
 
         (
-            "Profile Links",
+            "Personal Information",
             {
                 "fields": (
-                    "staff",
-                    "student",
+                    "first_name",
+                    "last_name",
+                    "phone",
+                    "profile_photo",
+                    "designation",
                 )
             }
         ),
 
         (
-            "Extra Info",
+            "Verification",
             {
                 "fields": (
-                    "phone",
-                    "profile_photo",
-                    "designation",
                     "is_email_verified",
                     "is_phone_verified",
-                    "last_password_changed_at",
                 )
             }
         ),
@@ -139,6 +140,7 @@ class CustomUserAdmin(UserAdmin):
                 "fields": (
                     "last_login",
                     "date_joined",
+                    "last_password_changed_at",
                 )
             }
         ),
@@ -161,8 +163,6 @@ class CustomUserAdmin(UserAdmin):
                     "email",
                     "password1",
                     "password2",
-                    "staff",
-                    "student",
                     "is_active",
                     "is_staff",
                     "is_superuser",
@@ -180,6 +180,7 @@ class CustomUserAdmin(UserAdmin):
 class RoleAdmin(admin.ModelAdmin):
 
     list_display = (
+        "id",
         "name",
         "code",
         "is_active",
@@ -192,6 +193,10 @@ class RoleAdmin(admin.ModelAdmin):
 
     list_filter = (
         "is_active",
+    )
+
+    ordering = (
+        "name",
     )
 
 
@@ -203,6 +208,7 @@ class RoleAdmin(admin.ModelAdmin):
 class PermissionAdmin(admin.ModelAdmin):
 
     list_display = (
+        "id",
         "name",
         "code",
         "module",
@@ -212,11 +218,17 @@ class PermissionAdmin(admin.ModelAdmin):
     search_fields = (
         "name",
         "code",
+        "module",
     )
 
     list_filter = (
         "module",
         "is_active",
+    )
+
+    ordering = (
+        "module",
+        "name",
     )
 
 
@@ -228,6 +240,7 @@ class PermissionAdmin(admin.ModelAdmin):
 class UserRoleAdmin(admin.ModelAdmin):
 
     list_display = (
+        "id",
         "user",
         "role",
         "is_active",
@@ -243,6 +256,10 @@ class UserRoleAdmin(admin.ModelAdmin):
         "role__name",
     )
 
+    ordering = (
+        "user",
+    )
+
 
 # ==========================================
 # ROLE PERMISSION ADMIN
@@ -252,6 +269,7 @@ class UserRoleAdmin(admin.ModelAdmin):
 class RolePermissionAdmin(admin.ModelAdmin):
 
     list_display = (
+        "id",
         "role",
         "permission",
         "is_active",
@@ -260,9 +278,14 @@ class RolePermissionAdmin(admin.ModelAdmin):
     list_filter = (
         "role",
         "permission",
+        "is_active",
     )
 
     search_fields = (
         "role__name",
         "permission__name",
+    )
+
+    ordering = (
+        "role",
     )
