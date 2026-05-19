@@ -1,22 +1,32 @@
-// import { BrowserRouter } from "react-router-dom";
-// import WebsiteRoutes from "./routes/WebsiteRoutes";
+import {
+  BrowserRouter
+} from "react-router-dom";
 
-// export default function App() {
-//   return (
-//     <BrowserRouter>
-//       <WebsiteRoutes />
-//     </BrowserRouter>
-//   );
-// }
+import AppRoutes
+from "./routes/AppRoutes";
 
 
-import { BrowserRouter } from "react-router-dom";
-import AppRoutes from "./routes/AppRoutes";
+// =====================================
+// AUTH PROVIDER
+// =====================================
+
+import {
+  AuthProvider
+} from "./dashboard/auth/context/AuthContext";
+
 
 export default function App() {
+
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+
+      <BrowserRouter>
+
+          <AuthProvider>
+
+              <AppRoutes />
+
+          </AuthProvider>
+
+      </BrowserRouter>
   );
 }

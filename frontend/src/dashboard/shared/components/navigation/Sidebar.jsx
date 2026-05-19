@@ -1,33 +1,44 @@
 import { NavLink } from "react-router-dom";
 
+import { useAuth } from "../../../auth/context/AuthContext";
+
 import { responsibilityMenus } from "../../../config/responsibilityMenus";
+
 
 const Sidebar = () => {
 
+  // =====================================
+  // AUTH
+  // =====================================
+
+  const { user } = useAuth();
+
   /*
-    TEMPORARY AUTH SYSTEM
+    Example:
+    roles = [
+      "SUPER_ADMIN",
+      "PRINCIPAL"
+    ]
   */
 
-  const role = localStorage.getItem("role");
+  const roles =
+    user?.roles || [];
 
   /*
-    RESPONSIBILITIES
     Example:
-    [
+    responsibilities = [
       "class-incharge",
-      "exam-coordinator",
-      "timetable-incharge"
+      "exam-coordinator"
     ]
   */
 
   const responsibilities =
-    JSON.parse(
-      localStorage.getItem("responsibilities")
-    ) || [];
+    user?.responsibilities || [];
 
-  // =========================
+
+  // =====================================
   // SUPER ADMIN MENU
-  // =========================
+  // =====================================
 
   const superAdminMenu = [
     { name: "Dashboard", path: "/dashboard/super-admin" },
@@ -41,9 +52,10 @@ const Sidebar = () => {
     { name: "Settings", path: "/dashboard/settings" },
   ];
 
-  // =========================
+
+  // =====================================
   // CLUSTER ADMIN MENU
-  // =========================
+  // =====================================
 
   const clusterAdminMenu = [
     { name: "Dashboard", path: "/dashboard/cluster-admin" },
@@ -56,9 +68,10 @@ const Sidebar = () => {
     { name: "Notices", path: "/dashboard/notices" },
   ];
 
-  // =========================
+
+  // =====================================
   // SCHOOL ADMIN MENU
-  // =========================
+  // =====================================
 
   const adminMenu = [
     { name: "Dashboard", path: "/dashboard/admin" },
@@ -78,9 +91,10 @@ const Sidebar = () => {
     { name: "Settings", path: "/dashboard/settings" },
   ];
 
-  // =========================
+
+  // =====================================
   // PRINCIPAL MENU
-  // =========================
+  // =====================================
 
   const principalMenu = [
     { name: "Dashboard", path: "/dashboard/principal" },
@@ -93,9 +107,10 @@ const Sidebar = () => {
     { name: "Discipline", path: "/dashboard/discipline" },
   ];
 
-  // =========================
+
+  // =====================================
   // VICE PRINCIPAL MENU
-  // =========================
+  // =====================================
 
   const vicePrincipalMenu = [
     { name: "Dashboard", path: "/dashboard/vice-principal" },
@@ -106,9 +121,10 @@ const Sidebar = () => {
     { name: "Reports", path: "/dashboard/reports" },
   ];
 
-  // =========================
+
+  // =====================================
   // TEACHER MENU
-  // =========================
+  // =====================================
 
   const teacherMenu = [
     { name: "Dashboard", path: "/dashboard/teacher" },
@@ -120,9 +136,10 @@ const Sidebar = () => {
     { name: "Timetable", path: "/dashboard/timetable" },
   ];
 
-  // =========================
+
+  // =====================================
   // ACCOUNTANT MENU
-  // =========================
+  // =====================================
 
   const accountantMenu = [
     { name: "Dashboard", path: "/dashboard/accountant" },
@@ -133,9 +150,10 @@ const Sidebar = () => {
     { name: "Fee Reports", path: "/dashboard/fee-reports" },
   ];
 
-  // =========================
+
+  // =====================================
   // CLERK MENU
-  // =========================
+  // =====================================
 
   const clerkMenu = [
     { name: "Dashboard", path: "/dashboard/clerk" },
@@ -145,9 +163,10 @@ const Sidebar = () => {
     { name: "Reports", path: "/dashboard/reports" },
   ];
 
-  // =========================
+
+  // =====================================
   // RECEPTIONIST MENU
-  // =========================
+  // =====================================
 
   const receptionistMenu = [
     { name: "Dashboard", path: "/dashboard/receptionist" },
@@ -157,9 +176,10 @@ const Sidebar = () => {
     { name: "Calls", path: "/dashboard/calls" },
   ];
 
-  // =========================
+
+  // =====================================
   // LIBRARIAN MENU
-  // =========================
+  // =====================================
 
   const librarianMenu = [
     { name: "Dashboard", path: "/dashboard/librarian" },
@@ -170,9 +190,10 @@ const Sidebar = () => {
     { name: "Library Reports", path: "/dashboard/library-reports" },
   ];
 
-  // =========================
+
+  // =====================================
   // HOSTEL WARDEN MENU
-  // =========================
+  // =====================================
 
   const hostelWardenMenu = [
     { name: "Dashboard", path: "/dashboard/hostel-warden" },
@@ -183,9 +204,10 @@ const Sidebar = () => {
     { name: "Hostel Reports", path: "/dashboard/hostel-reports" },
   ];
 
-  // =========================
+
+  // =====================================
   // SECURITY SUPERVISOR MENU
-  // =========================
+  // =====================================
 
   const securitySupervisorMenu = [
     { name: "Dashboard", path: "/dashboard/security-supervisor" },
@@ -195,9 +217,10 @@ const Sidebar = () => {
     { name: "Vehicles", path: "/dashboard/vehicles" },
   ];
 
-  // =========================
+
+  // =====================================
   // STUDENT MENU
-  // =========================
+  // =====================================
 
   const studentMenu = [
     { name: "Dashboard", path: "/dashboard/student" },
@@ -209,9 +232,10 @@ const Sidebar = () => {
     { name: "Timetable", path: "/dashboard/timetable" },
   ];
 
-  // =========================
+
+  // =====================================
   // PARENT MENU
-  // =========================
+  // =====================================
 
   const parentMenu = [
     { name: "Dashboard", path: "/dashboard/parent" },
@@ -222,30 +246,73 @@ const Sidebar = () => {
     { name: "Messages", path: "/dashboard/messages" },
   ];
 
-  // =========================
+
+  // =====================================
   // ROLE BASED MENU
-  // =========================
+  // =====================================
 
   let menuItems = [];
 
-  if (role === "super-admin") menuItems = superAdminMenu;
-  if (role === "cluster-admin") menuItems = clusterAdminMenu;
-  if (role === "admin") menuItems = adminMenu;
-  if (role === "principal") menuItems = principalMenu;
-  if (role === "vice-principal") menuItems = vicePrincipalMenu;
-  if (role === "teacher") menuItems = teacherMenu;
-  if (role === "accountant") menuItems = accountantMenu;
-  if (role === "clerk") menuItems = clerkMenu;
-  if (role === "receptionist") menuItems = receptionistMenu;
-  if (role === "librarian") menuItems = librarianMenu;
-  if (role === "hostel-warden") menuItems = hostelWardenMenu;
-  if (role === "security-supervisor") menuItems = securitySupervisorMenu;
-  if (role === "student") menuItems = studentMenu;
-  if (role === "parent") menuItems = parentMenu;
+  if (roles.includes("SUPER_ADMIN")) {
+    menuItems.push(...superAdminMenu);
+  }
 
-  // =========================
-  // RESPONSIBILITY BASED MENUS
-  // =========================
+  if (roles.includes("CLUSTER_ADMIN")) {
+    menuItems.push(...clusterAdminMenu);
+  }
+
+  if (roles.includes("ADMIN")) {
+    menuItems.push(...adminMenu);
+  }
+
+  if (roles.includes("PRINCIPAL")) {
+    menuItems.push(...principalMenu);
+  }
+
+  if (roles.includes("VICE_PRINCIPAL")) {
+    menuItems.push(...vicePrincipalMenu);
+  }
+
+  if (roles.includes("TEACHER")) {
+    menuItems.push(...teacherMenu);
+  }
+
+  if (roles.includes("ACCOUNTANT")) {
+    menuItems.push(...accountantMenu);
+  }
+
+  if (roles.includes("CLERK")) {
+    menuItems.push(...clerkMenu);
+  }
+
+  if (roles.includes("RECEPTIONIST")) {
+    menuItems.push(...receptionistMenu);
+  }
+
+  if (roles.includes("LIBRARIAN")) {
+    menuItems.push(...librarianMenu);
+  }
+
+  if (roles.includes("HOSTEL_WARDEN")) {
+    menuItems.push(...hostelWardenMenu);
+  }
+
+  if (roles.includes("SECURITY_SUPERVISOR")) {
+    menuItems.push(...securitySupervisorMenu);
+  }
+
+  if (roles.includes("STUDENT")) {
+    menuItems.push(...studentMenu);
+  }
+
+  if (roles.includes("PARENT")) {
+    menuItems.push(...parentMenu);
+  }
+
+
+  // =====================================
+  // RESPONSIBILITY MENUS
+  // =====================================
 
   responsibilities.forEach((responsibility) => {
 
@@ -259,6 +326,25 @@ const Sidebar = () => {
     }
 
   });
+
+
+  // =====================================
+  // REMOVE DUPLICATES
+  // =====================================
+
+  menuItems = [
+
+    ...new Map(
+
+      menuItems.map((item) => [
+
+        item.path,
+
+        item
+      ])
+    ).values()
+  ];
+
 
   return (
 
@@ -277,18 +363,20 @@ const Sidebar = () => {
       "
     >
 
-      {/* ===================================== */}
       {/* LOGO */}
-      {/* ===================================== */}
 
       <div className="p-6 border-b border-blue-800">
 
         <h1 className="text-3xl font-bold tracking-wide">
+
           SIMS
+
         </h1>
 
         <p className="text-blue-200 text-sm mt-1">
+
           School ERP System
+
         </p>
 
         <div
@@ -305,14 +393,17 @@ const Sidebar = () => {
             text-blue-100
           "
         >
-          {role}
+
+          {
+            roles.join(", ")
+          }
+
         </div>
 
       </div>
 
-      {/* ===================================== */}
+
       {/* NAVIGATION */}
-      {/* ===================================== */}
 
       <nav
         className="
@@ -325,36 +416,41 @@ const Sidebar = () => {
         "
       >
 
-        {menuItems.map((item) => (
+        {
+          menuItems.map((item) => (
 
-          <NavLink
-            key={item.name}
-            to={item.path}
-            className={({ isActive }) =>
-              `
-                block
-                px-4
-                py-3
-                rounded-xl
-                transition-all
-                duration-200
-                ${
-                  isActive
-                    ? "bg-white text-blue-900 font-semibold shadow-md"
-                    : "hover:bg-blue-800 text-blue-100"
-                }
-              `
-            }
-          >
-            {item.name}
-          </NavLink>
+            <NavLink
 
-        ))}
+              key={item.path}
+
+              to={item.path}
+
+              className={({ isActive }) =>
+                `
+                  block
+                  px-4
+                  py-3
+                  rounded-xl
+                  transition-all
+                  duration-200
+                  ${
+                    isActive
+                      ? "bg-white text-blue-900 font-semibold shadow-md"
+                      : "hover:bg-blue-800 text-blue-100"
+                  }
+                `
+              }
+            >
+
+              {item.name}
+
+            </NavLink>
+          ))
+        }
 
       </nav>
 
     </aside>
-
   );
 };
 

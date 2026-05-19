@@ -1,15 +1,23 @@
 import api from "../../../services/api";
 
+
 const studentService = {
 
   // =========================================
   // GET ALL STUDENTS
   // =========================================
 
-  getStudents: async () => {
+  getStudents: async (
+    params = {}
+  ) => {
 
     const response = await api.get(
-      "/students/"
+
+      "/students/",
+
+      {
+        params
+      }
     );
 
     return response.data;
@@ -23,6 +31,7 @@ const studentService = {
   getStudent: async (id) => {
 
     const response = await api.get(
+
       `/students/${id}/`
     );
 
@@ -34,10 +43,14 @@ const studentService = {
   // CREATE STUDENT
   // =========================================
 
-  createStudent: async (data) => {
+  createStudent: async (
+    data
+  ) => {
 
     const response = await api.post(
+
       "/students/",
+
       data
     );
 
@@ -50,8 +63,11 @@ const studentService = {
   // =========================================
 
   updateStudent: async (
+
     id,
+
     data
+
   ) => {
 
     const response = await api.patch(
@@ -64,14 +80,62 @@ const studentService = {
     return response.data;
   },
 
+
   // =========================================
   // DELETE STUDENT
   // =========================================
 
-  deleteStudent: async (id) => {
+  deleteStudent: async (
+    id
+  ) => {
 
     const response = await api.delete(
+
       `/students/${id}/`
+    );
+
+    return response.data;
+  },
+
+
+  // =========================================
+  // BULK DELETE STUDENTS
+  // =========================================
+
+  bulkDeleteStudents: async (
+    ids
+  ) => {
+
+    const response = await api.post(
+
+      "/students/bulk-delete/",
+
+      {
+        ids
+      }
+    );
+
+    return response.data;
+  },
+
+
+  // =========================================
+  // SEARCH STUDENTS
+  // =========================================
+
+  searchStudents: async (
+    query
+  ) => {
+
+    const response = await api.get(
+
+      "/students/",
+
+      {
+        params: {
+          search: query
+        }
+      }
     );
 
     return response.data;
@@ -82,11 +146,14 @@ const studentService = {
   // IMPORT STUDENTS
   // =========================================
 
-  importStudents: async (file) => {
+  importStudents: async (
+    file
+  ) => {
 
     try {
 
-      const formData = new FormData();
+      const formData =
+        new FormData();
 
       formData.append(
         "file",
@@ -101,6 +168,7 @@ const studentService = {
 
         {
           headers: {
+
             "Content-Type":
               "multipart/form-data",
           },
@@ -139,10 +207,11 @@ const studentService = {
 
     window.open(
 
-      "http://127.0.0.1:8000/api/students/export/"
+      `${api.defaults.baseURL}/students/export/`
     );
   },
 
 };
+
 
 export default studentService;

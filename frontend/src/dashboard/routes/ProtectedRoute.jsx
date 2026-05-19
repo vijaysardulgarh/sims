@@ -4,7 +4,7 @@ import {
 
 import {
     useAuth
-} from "../../auth/context/AuthContext";
+} from "../auth/context/AuthContext";
 
 
 const ProtectedRoute = ({
@@ -14,6 +14,7 @@ const ProtectedRoute = ({
     const {
         accessToken
     } = useAuth();
+
 
     if (!accessToken) {
 
@@ -25,7 +26,9 @@ const ProtectedRoute = ({
         );
     }
 
+
     return children;
 };
+
 
 export default ProtectedRoute;

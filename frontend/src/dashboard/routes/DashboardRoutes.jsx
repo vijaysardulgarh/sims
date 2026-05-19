@@ -6,9 +6,6 @@ import {
 import DashboardLayout
 from "../layouts/DashboardLayout";
 
-import roleRoutes
-from "../roles/roleRoutes";
-
 import moduleRoutes
 from "../modules/moduleRoutes";
 
@@ -36,7 +33,6 @@ const DashboardRoutes = () => {
                 }
             >
 
-                {roleRoutes}
 
                 {moduleRoutes}
 

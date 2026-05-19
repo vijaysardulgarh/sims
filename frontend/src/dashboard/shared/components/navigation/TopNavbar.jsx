@@ -1,114 +1,150 @@
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../auth/context/AuthContext";
+
 
 const TopNavbar = () => {
 
-  const navigate = useNavigate();
+// =====================================
+// AUTH
+// =====================================
 
-  // =========================
-  // GET ROLE
-  // =========================
+const {
 
-  const role = localStorage.getItem("role");
+  user,
 
-  // =========================
-  // LOGOUT
-  // =========================
+  logout
 
-  const handleLogout = () => {
+} = useAuth();
 
-    localStorage.removeItem("role");
-    localStorage.removeItem("responsibilities");
 
-    navigate("/login");
+// =====================================
+// ROLES
+// =====================================
 
-  };
+const roles =
+  user?.roles || [];
 
-  // =========================
-  // ROLE LABELS
-  // =========================
 
-  const roleLabels = {
+// =====================================
+// USER NAME
+// =====================================
 
-    "super-admin": "Super Admin",
-    "cluster-admin": "Cluster Admin",
-    "admin": "School Admin",
-    "principal": "Principal",
-    "vice-principal": "Vice Principal",
-    "teacher": "Teacher",
-    "accountant": "Accountant",
-    "clerk": "Clerk",
-    "receptionist": "Receptionist",
-    "librarian": "Librarian",
-    "hostel-warden": "Hostel Warden",
-    "security-supervisor": "Security Supervisor",
-    "student": "Student",
-    "parent": "Parent",
+const userName =
 
-  };
+  user?.first_name ||
 
-  // =========================
-  // USER NAME
-  // =========================
+  user?.email ||
 
-  const userName =
-    roleLabels[role] || "User";
+  "User";
 
-  // =========================
-  // USER INITIAL
-  // =========================
 
-  const userInitial =
-    userName.charAt(0).toUpperCase();
+// =====================================
+// USER INITIAL
+// =====================================
 
-  return (
+const userInitial =
 
-    <header className="bg-white shadow-sm h-16 flex items-center justify-between px-6">
+  userName.charAt(0).toUpperCase();
 
-      {/* LEFT SIDE */}
-      <div>
 
-        <h1 className="text-xl font-semibold text-gray-700">
-          School Management System
-        </h1>
+return (
 
-      </div>
+  <header
+    className="
+      bg-white
+      shadow-sm
+      h-16
+      flex
+      items-center
+      justify-between
+      px-6
+    "
+  >
 
-      {/* RIGHT SIDE */}
-      <div className="flex items-center gap-4">
+    {/* LEFT SIDE */}
+    <div>
 
-        {/* USER INFO */}
-        <div className="text-right">
+      <h1 className="text-xl font-semibold text-gray-700">
 
-          <p className="font-semibold text-gray-700">
-            {userName}
-          </p>
+        School Management System
 
-          <p className="text-sm text-gray-500 capitalize">
-            {role}
-          </p>
+      </h1>
 
-        </div>
+      <p className="text-sm text-gray-500">
 
-        {/* AVATAR */}
-        <div className="w-10 h-10 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold">
+        {user?.school_name}
 
-          {userInitial}
+      </p>
 
-        </div>
+    </div>
 
-        {/* LOGOUT BUTTON */}
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition"
-        >
-          Logout
-        </button>
+
+    {/* RIGHT SIDE */}
+    <div className="flex items-center gap-4">
+
+      {/* USER INFO */}
+      <div className="text-right">
+
+        <p className="font-semibold text-gray-700">
+
+          {userName}
+
+        </p>
+
+        <p className="text-sm text-gray-500">
+
+          {roles.join(", ")}
+
+        </p>
 
       </div>
 
-    </header>
 
-  );
+      {/* AVATAR */}
+      <div
+        className="
+          w-10
+          h-10
+          rounded-full
+          bg-blue-900
+          text-white
+          flex
+          items-center
+          justify-center
+          font-bold
+        "
+      >
+
+        {userInitial}
+
+      </div>
+
+
+      {/* LOGOUT BUTTON */}
+      <button
+
+        onClick={logout}
+
+        className="
+          bg-red-500
+          hover:bg-red-600
+          text-white
+          px-4
+          py-2
+          rounded-xl
+          text-sm
+          font-medium
+          transition
+        "
+      >
+
+        Logout
+
+      </button>
+
+    </div>
+
+  </header>
+);
 };
 
 export default TopNavbar;

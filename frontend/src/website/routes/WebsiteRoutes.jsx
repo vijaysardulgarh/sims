@@ -25,9 +25,13 @@ import Admissions from "../pages/Admissions";
 import Contact from "../pages/Contact";
 
 // Auth
-import Login from "../../dashboard/auth/Login";
-import ForgotPassword from "../../dashboard/auth/ForgotPassword";
-import ResetPassword from "../../dashboard/auth/ResetPassword";
+
+import LoginPage from "../../dashboard/auth/pages/LoginPage";
+
+import ForgotPassword from "../../dashboard/auth/pages/ForgotPasswordPage";
+
+import ResetPassword from "../../dashboard/auth/pages/ResetPasswordPage";
+
 
 export default function WebsiteRoutes() {
   return (
@@ -153,7 +157,7 @@ export default function WebsiteRoutes() {
         path="/login"
         element={
           <WebsiteLayout>
-            <Login />
+            <LoginPage />
           </WebsiteLayout>
         }
       />
