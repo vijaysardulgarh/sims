@@ -1,22 +1,23 @@
 import {
+
     createContext,
+
     useContext,
+
     useEffect,
+
     useState,
+
 } from "react";
 
 import api from "../../../services/api";
-
-import {
-    setupInterceptors
-} from "../../../services/api/interceptors";
 
 
 // =====================================
 // CONTEXT
 // =====================================
 
-const AuthContext =
+export const AuthContext =
     createContext();
 
 
@@ -29,8 +30,26 @@ export const AuthProvider = ({
 }) => {
 
     // =====================================
+    // GET STORED TOKEN
+    // =====================================
+
+    const getStoredToken = () => {
+
+        return localStorage.getItem(
+            "access"
+        );
+    };
+
+
+    // =====================================
     // STATE
     // =====================================
+
+    const [accessToken,
+        setAccessToken] =
+        useState(
+            getStoredToken()
+        );
 
     const [user,
         setUser] =
@@ -39,15 +58,6 @@ export const AuthProvider = ({
     const [loading,
         setLoading] =
         useState(true);
-
-    const [accessToken,
-        setAccessToken] =
-        useState(
-
-            localStorage.getItem(
-                "access"
-            )
-        );
 
 
     // =====================================
@@ -85,7 +95,7 @@ export const AuthProvider = ({
         );
 
         setUser(
-            data.user
+            data.user || null
         );
     };
 
@@ -96,10 +106,6 @@ export const AuthProvider = ({
 
     const logout = () => {
 
-        // =============================
-        // REMOVE TOKENS
-        // =============================
-
         localStorage.removeItem(
             "access"
         );
@@ -108,10 +114,6 @@ export const AuthProvider = ({
             "refresh"
         );
 
-        // =============================
-        // CLEAR STATE
-        // =============================
-
         setAccessToken(null);
 
         setUser(null);
@@ -119,22 +121,31 @@ export const AuthProvider = ({
 
 
     // =====================================
-    // AUTO LOAD USER
+    // LOAD CURRENT USER
     // =====================================
 
     useEffect(() => {
 
-        const initialize =
+        const loadUser =
             async () => {
 
             // =========================
-            // CHECK TOKEN
+            // GET TOKEN
             // =========================
 
             const token =
                 localStorage.getItem(
                     "access"
                 );
+
+            console.log(
+                "LOAD TOKEN:",
+                token
+            );
+
+            // =========================
+            // NO TOKEN
+            // =========================
 
             if (!token) {
 
@@ -155,46 +166,76 @@ export const AuthProvider = ({
                         "/users/me/"
                     );
 
+                console.log(
+                    "ME RESPONSE:",
+                    response.data
+                );
+
                 // =====================
-                // SET USER
+                // SAVE USER
                 // =====================
 
                 setUser(
                     response.data
                 );
 
+                // =====================
+                // KEEP TOKEN
+                // =====================
+
+                setAccessToken(
+                    token
+                );
+
             } catch (error) {
 
-                console.error(
+                console.log(
+                    "ME API ERROR:",
                     error
                 );
 
-                logout();
-            }
+            } finally {
 
-            setLoading(false);
+                // =====================
+                // STOP LOADING
+                // =====================
+
+                setLoading(false);
+            }
         };
 
-        initialize();
+        loadUser();
 
     }, []);
 
 
     // =====================================
-    // AXIOS INTERCEPTORS
+    // LOADING SCREEN
     // =====================================
 
-    useEffect(() => {
+    if (loading) {
 
-        setupInterceptors(
-            logout
+        return (
+
+            <div
+                className="
+                    flex
+                    items-center
+                    justify-center
+                    h-screen
+                    text-xl
+                "
+            >
+
+                Loading...
+
+            </div>
         );
-
-    }, []);
+    }
 
 
     // =====================================
-    // CONTEXT VALUE
+    // PROVIDER
     // =====================================
 
     return (
@@ -205,9 +246,9 @@ export const AuthProvider = ({
 
                 user,
 
-                loading,
-
                 accessToken,
+
+                loading,
 
                 login,
 
@@ -226,8 +267,9 @@ export const AuthProvider = ({
 // CUSTOM HOOK
 // =====================================
 
-export const useAuth = () =>
+export const useAuth = () => {
 
-    useContext(
+    return useContext(
         AuthContext
     );
+};

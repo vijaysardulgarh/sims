@@ -1,5 +1,5 @@
 import RoleForm
-from "../../components/RoleForm";
+from "../../forms/RoleForm";
 
 
 const EditRolePage = () => {

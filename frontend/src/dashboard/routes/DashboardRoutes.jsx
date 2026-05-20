@@ -1,6 +1,6 @@
 import {
     Routes,
-    Route,
+    Route
 } from "react-router-dom";
 
 import DashboardLayout
@@ -10,7 +10,7 @@ import moduleRoutes
 from "../modules/moduleRoutes";
 
 import ProtectedRoute
-from "./ProtectedRoute";
+from "../../routes/ProtectedRoute";
 
 
 const DashboardRoutes = () => {
@@ -21,7 +21,7 @@ const DashboardRoutes = () => {
 
             <Route
 
-                path="/dashboard/*"
+                path="dashboard/*"
 
                 element={
 
@@ -32,7 +32,6 @@ const DashboardRoutes = () => {
                     </ProtectedRoute>
                 }
             >
-
 
                 {moduleRoutes}
 

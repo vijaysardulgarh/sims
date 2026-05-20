@@ -1,39 +1,41 @@
-import axios from "axios";
+import api from "../../../services/api/axios";
 
 const API =
-    "http://127.0.0.1:8000/api/users";
+    "/users";
 
 const login = async (
     credentials
 ) => {
 
     const response =
-        await axios.post(
+        await api.post(
 
             `${API}/login/`,
 
             credentials
         );
 
+    // SAVE TOKENS
+
+    localStorage.setItem(
+        "access",
+        response.data.access
+    );
+
+    localStorage.setItem(
+        "refresh",
+        response.data.refresh
+    );
+
     return response.data;
 };
 
-const me = async (
-    token
-) => {
+const me = async () => {
 
     const response =
-        await axios.get(
+        await api.get(
 
-            `${API}/me/`,
-
-            {
-                headers: {
-
-                    Authorization:
-                        `Bearer ${token}`
-                }
-            }
+            `${API}/me/`
         );
 
     return response.data;

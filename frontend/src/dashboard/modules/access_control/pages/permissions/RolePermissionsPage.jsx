@@ -2,8 +2,7 @@ import {
     useParams
 } from "react-router-dom";
 
-import PermissionsForm
-from "../../components/PermissionsForm";
+import RolePermissionsForm from "../../forms/RolePermissionsForm";
 
 
 const RolePermissionsPage = () => {
@@ -62,7 +61,7 @@ const RolePermissionsPage = () => {
             {/* FORM */}
             {/* ================================= */}
 
-            <PermissionsForm
+            <RolePermissionsForm
                 roleId={id}
             />
 

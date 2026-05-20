@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import (
     User,
     Role,
-    Permission,
+    AccessControl,
     UserRole,
     RolePermission
 )
@@ -204,7 +204,7 @@ class RoleAdmin(admin.ModelAdmin):
 # PERMISSION ADMIN
 # ==========================================
 
-@admin.register(Permission)
+@admin.register(AccessControl)
 class PermissionAdmin(admin.ModelAdmin):
 
     list_display = (

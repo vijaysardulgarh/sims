@@ -4,7 +4,10 @@ from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer
 )
 
-from .models import User
+from .models import (
+    User,
+    AccessControl
+)
 
 
 # ==========================================
@@ -106,6 +109,7 @@ class UserSerializer(
             "is_student_profile",
         ]
 
+
     # =====================================
     # ROLES
     # =====================================
@@ -121,6 +125,7 @@ class UserSerializer(
                 flat=True
             ).distinct()
         )
+
 
     # =====================================
     # PERMISSIONS
@@ -138,6 +143,7 @@ class UserSerializer(
             ).distinct()
         )
 
+
     # =====================================
     # STAFF PROFILE
     # =====================================
@@ -152,6 +158,7 @@ class UserSerializer(
             "staff_profile"
         )
 
+
     # =====================================
     # STUDENT PROFILE
     # =====================================
@@ -165,3 +172,18 @@ class UserSerializer(
             obj,
             "student_profile"
         )
+
+
+# ==========================================
+# PERMISSION SERIALIZER
+# ==========================================
+
+class AccessControlSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = AccessControl
+
+        fields = "__all__"

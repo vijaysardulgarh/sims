@@ -1,20 +1,18 @@
-// import studentsRoutes from "./students/routes/studentsRoutes";
-// import academicsRoutes from "./academics/routes/academicsRoutes";
-// import examsRoutes from "./exams/routes/examsRoutes";
-// import financeRoutes from "./finance/routes/financeRoutes";
-// import attendanceRoutes from "./attendance/routes/attendanceRoutes";
+import { Route }
+from "react-router-dom";
 
-// const moduleRoutes = (
-//   <>
-//     {studentsRoutes}
-//     {academicsRoutes}
-//     {attendanceRoutes}
-//     {examsRoutes}
-//     {financeRoutes}
-//   </>
-// );
 
-// export default moduleRoutes;
+// =====================================
+// DASHBOARD HOME
+// =====================================
+
+import DashboardHomePage
+from "../home/pages/DashboardHomePage";
+
+
+// =====================================
+// MODULE ROUTES
+// =====================================
 
 import studentsRoutes
 from "./students/routes/studentsRoutes";
@@ -23,9 +21,27 @@ import accessControlRoutes
 from "./access_control/routes/accessControlRoutes";
 
 
+// =====================================
+// ROUTES
+// =====================================
+
 const moduleRoutes = (
 
   <>
+
+    {/* ================================= */}
+    {/* DASHBOARD HOME */}
+    {/* ================================= */}
+
+    <Route
+      index
+      element={<DashboardHomePage />}
+    />
+
+
+    {/* ================================= */}
+    {/* MODULES */}
+    {/* ================================= */}
 
     {studentsRoutes}
 

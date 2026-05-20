@@ -224,7 +224,7 @@ class Role(AuditBaseModel):
 # PERMISSION MODEL
 # ==========================================
 
-class Permission(AuditBaseModel):
+class AccessControl(AuditBaseModel):
 
     name = models.CharField(
         max_length=255
@@ -295,7 +295,7 @@ class RolePermission(AuditBaseModel):
     )
 
     permission = models.ForeignKey(
-        Permission,
+        AccessControl,
         on_delete=models.CASCADE,
         related_name="role_permissions"
     )

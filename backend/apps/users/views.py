@@ -15,9 +15,22 @@ from rest_framework_simplejwt.tokens import (
     RefreshToken
 )
 
+from rest_framework_simplejwt.authentication import (
+    JWTAuthentication
+)
+
+from .models import (
+    User,
+    AccessControl
+)
+
 from .serializers import (
+
     LoginSerializer,
-    UserSerializer
+
+    UserSerializer,
+
+    AccessControlSerializer
 )
 
 
@@ -40,13 +53,22 @@ class LoginAPIView(
 # LOGOUT API
 # =========================================
 
-class LogoutAPIView(APIView):
+class LogoutAPIView(
+    APIView
+):
+
+    authentication_classes = [
+        JWTAuthentication
+    ]
 
     permission_classes = [
         IsAuthenticated
     ]
 
-    def post(self, request):
+    def post(
+        self,
+        request
+    ):
 
         try:
 
@@ -61,13 +83,18 @@ class LogoutAPIView(APIView):
             token.blacklist()
 
             return Response({
-                "message": "Logged out successfully"
+
+                "message":
+                    "Logged out successfully"
             })
 
         except Exception:
 
             return Response({
-                "error": "Invalid refresh token"
+
+                "error":
+                    "Invalid refresh token"
+
             }, status=400)
 
 
@@ -75,13 +102,22 @@ class LogoutAPIView(APIView):
 # CURRENT USER API
 # =========================================
 
-class MeAPIView(APIView):
+class MeAPIView(
+    APIView
+):
+
+    authentication_classes = [
+        JWTAuthentication
+    ]
 
     permission_classes = [
         IsAuthenticated
     ]
 
-    def get(self, request):
+    def get(
+        self,
+        request
+    ):
 
         serializer = UserSerializer(
             request.user
@@ -90,3 +126,98 @@ class MeAPIView(APIView):
         return Response(
             serializer.data
         )
+
+
+# =========================================
+# PERMISSION LIST CREATE API
+# =========================================
+
+class AccessControlListCreateAPIView(
+    APIView
+):
+
+    authentication_classes = [
+        JWTAuthentication
+    ]
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get(
+        self,
+        request
+    ):
+
+        permissions = AccessControl.objects.all()
+
+        serializer = AccessControlSerializer(
+
+            permissions,
+
+            many=True
+        )
+
+        return Response(
+            serializer.data
+        )
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = AccessControlSerializer(
+
+            data=request.data
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response(
+                serializer.data,
+                status=201
+            )
+
+        return Response(
+            serializer.errors,
+            status=400
+        )
+
+
+# =========================================
+# PERMISSION DETAIL API
+# =========================================
+
+from rest_framework import generics
+
+
+class AccessControlListCreateAPIView(
+
+    generics.ListCreateAPIView
+):
+
+    queryset = (
+        AccessControl.objects.all()
+    )
+
+    serializer_class = (
+        AccessControlSerializer
+    )
+
+
+
+class AccessControlDetailAPIView(
+
+    generics.RetrieveUpdateDestroyAPIView
+):
+
+    queryset = (
+        AccessControl.objects.all()
+    )
+
+    serializer_class = (
+        AccessControlSerializer
+    )

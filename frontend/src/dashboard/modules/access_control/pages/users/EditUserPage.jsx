@@ -1,5 +1,5 @@
 import UserForm
-from "../../components/UserForm";
+from "../../forms/UserForm";
 
 
 const EditUserPage = () => {

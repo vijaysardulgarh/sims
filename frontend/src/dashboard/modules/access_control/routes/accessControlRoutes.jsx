@@ -1,5 +1,13 @@
 import { Route } from "react-router-dom";
-import PermissionsForm from "../components/PermissionsForm";
+
+
+// =====================================
+// FORMS
+// =====================================
+
+import PermissionsForm
+from "../forms/PermissionsForm.jsx";
+
 
 // =====================================
 // ROLE PAGES
@@ -106,6 +114,16 @@ const accessControlRoutes = (
         <Route
             path="permissions"
             element={<PermissionsListPage />}
+        />
+
+        <Route
+            path="permissions/add"
+            element={<PermissionsForm />}
+        />
+
+        <Route
+            path="permissions/edit/:id"
+            element={<PermissionsForm />}
         />
 
         <Route

@@ -1,38 +1,13 @@
-import api
-from "../../services/api/axios";
+import api from "./axios";
 
+const getPermissions = async () => {
 
-const login = async (
-  credentials
-) => {
+    const response =
+        await api.get("permissions/");
 
-  const response =
-    await api.post(
-
-      "/users/login/",
-
-      credentials
-    );
-
-  return response.data;
+    return response.data;
 };
-
-
-const getCurrentUser =
-  async () => {
-
-  const response =
-    await api.get(
-      "/users/me/"
-    );
-
-  return response.data;
-};
-
 
 export default {
-
-  login,
-
-  getCurrentUser,
+    getPermissions,
 };

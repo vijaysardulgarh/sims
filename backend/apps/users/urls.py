@@ -5,9 +5,16 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import (
+
     LoginAPIView,
+
     LogoutAPIView,
-    MeAPIView
+
+    MeAPIView,
+
+    AccessControlListCreateAPIView,
+
+    AccessControlDetailAPIView,
 )
 
 
@@ -41,4 +48,25 @@ urlpatterns = [
         name="me"
     ),
 
+
+    # =========================================
+    # PERMISSIONS
+    # =========================================
+
+    # =====================================
+    # ACCESS CONTROLS
+    # =====================================
+
+    path(
+        "permissions/",
+        AccessControlListCreateAPIView.as_view(),
+        name="access_controls"
+    ),
+
+    path(
+        "permissions//<int:pk>/",
+        AccessControlDetailAPIView.as_view(),
+        name="access_control_detail"
+    ),
+    
 ]

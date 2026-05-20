@@ -1,12 +1,12 @@
 import {
     useAuth
-  } from "../../../auth/context/AuthContext";
-  
-  import StatCard
-  from "../components/StatCard";
-  
-  import QuickActions
-  from "../components/QuickActions";
+} from "../../auth/context/AuthContext";
+
+import StatCard
+from "../components/StatCard";
+
+import QuickActions
+from "../components/QuickActions";
   
   
   const DashboardHomePage = () => {

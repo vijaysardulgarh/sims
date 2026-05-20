@@ -4,7 +4,7 @@ import {
 
 import {
     useAuth
-} from "../auth/context/AuthContext";
+} from "../dashboard/auth/context/AuthContext";
 
 
 const ProtectedRoute = ({
@@ -12,13 +12,52 @@ const ProtectedRoute = ({
 }) => {
 
     const {
-        accessToken
+
+        accessToken,
+
+        loading
+
     } = useAuth();
 
 
-    if (!accessToken) {
+    // =====================================
+    // WAIT FOR AUTH LOAD
+    // =====================================
+
+    if (loading) {
 
         return (
+
+            <div>
+
+                Loading...
+
+            </div>
+        );
+    }
+
+
+    // =====================================
+    // CHECK TOKEN
+    // =====================================
+
+    const token =
+
+        accessToken ||
+
+        localStorage.getItem(
+            "access"
+        );
+
+
+    // =====================================
+    // REDIRECT
+    // =====================================
+
+    if (!token) {
+
+        return (
+
             <Navigate
                 to="/login"
                 replace

@@ -4,7 +4,7 @@
 //   "http://127.0.0.1:8000/api/sections/"
 // );
 
-import axios from "axios";
+import api from "../../../services/api/axios";
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
