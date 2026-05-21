@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.staff.staff.models import Staff
+from apps.staff.profiles.models import Staff
 from apps.schools.models import School
 from apps.core.models import SchoolBaseModel
 

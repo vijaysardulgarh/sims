@@ -5,7 +5,7 @@ from django.utils.dateparse import parse_date
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from apps.staff.staff.models import (
+from apps.staff.profiles.models import (
     Staff,
 )
 from apps.staff.teacher_attendance.models import (

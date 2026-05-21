@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 
-from apps.staff.staff.models import Staff
+from apps.staff.profiles.models import Staff
 from apps.schools.models import School
 from apps.students.models import Student
 from apps.documents.models import Document

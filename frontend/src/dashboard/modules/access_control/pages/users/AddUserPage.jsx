@@ -6,8 +6,13 @@ const AddUserPage = () => {
 
     return (
 
-        <UserForm />
+        <div>
+
+            <UserForm />
+
+        </div>
     );
 };
+
 
 export default AddUserPage;

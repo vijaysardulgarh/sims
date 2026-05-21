@@ -10,7 +10,7 @@ from apps.core.utils.helpers import (
     get_current_school
 )
 
-from apps.staff.staff.models import (
+from apps.staff.profiles.models import (
     Staff
 )
 

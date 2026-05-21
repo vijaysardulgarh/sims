@@ -5,7 +5,7 @@ from apps.academics.classes.models import Class
 from apps.academics.streams.models import Stream
 from apps.academics.sections.models import Section
 from apps.core.models import AuditBaseModel
-from apps.users.models import User
+from apps.users.models.user_model import User
 from django.conf import settings
 
 class Student(AuditBaseModel):

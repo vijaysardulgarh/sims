@@ -4,17 +4,27 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView
 )
 
-from .views import (
+from apps.users.views.auth_views import (
 
     LoginAPIView,
 
     LogoutAPIView,
 
-    MeAPIView,
+    MeAPIView
+)
+
+from apps.users.views.access_control_views import (
 
     AccessControlListCreateAPIView,
 
-    AccessControlDetailAPIView,
+    AccessControlDetailAPIView
+)
+
+from apps.users.views.user_views import (
+
+    UserListCreateAPIView,
+
+    UserDetailAPIView
 )
 
 
@@ -50,12 +60,8 @@ urlpatterns = [
 
 
     # =========================================
-    # PERMISSIONS
-    # =========================================
-
-    # =====================================
     # ACCESS CONTROLS
-    # =====================================
+    # =========================================
 
     path(
         "permissions/",
@@ -64,9 +70,25 @@ urlpatterns = [
     ),
 
     path(
-        "permissions//<int:pk>/",
+        "permissions/<int:pk>/",
         AccessControlDetailAPIView.as_view(),
         name="access_control_detail"
     ),
-    
+
+
+    # =========================================
+    # USERS
+    # =========================================
+
+    path(
+        "",
+        UserListCreateAPIView.as_view(),
+        name="users"
+    ),
+
+    path(
+        "<int:pk>/",
+        UserDetailAPIView.as_view(),
+        name="user_detail"
+    ),
 ]

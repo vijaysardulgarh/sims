@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.staff.models import TeacherAttendance
+from apps.staff.profiles.models import TeacherAttendance
 
 
 @admin.register(TeacherAttendance)

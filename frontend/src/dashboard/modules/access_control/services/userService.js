@@ -7,7 +7,9 @@ const userService = {
     // GET ALL USERS
     // =====================================
 
-    getUsers: async (params = {}) => {
+    getUsers: async (
+        params = {}
+    ) => {
 
         const response = await api.get(
 
@@ -26,7 +28,9 @@ const userService = {
     // GET SINGLE USER
     // =====================================
 
-    getUser: async (id) => {
+    getUser: async (
+        id
+    ) => {
 
         const response = await api.get(
 
@@ -41,13 +45,23 @@ const userService = {
     // CREATE USER
     // =====================================
 
-    createUser: async (data) => {
+    createUser: async (
+        data
+    ) => {
 
         const response = await api.post(
 
             "/users/",
 
-            data
+            data,
+
+            {
+                headers: {
+
+                    "Content-Type":
+                        "multipart/form-data",
+                },
+            }
         );
 
         return response.data;
@@ -70,7 +84,15 @@ const userService = {
 
             `/users/${id}/`,
 
-            data
+            data,
+
+            {
+                headers: {
+
+                    "Content-Type":
+                        "multipart/form-data",
+                },
+            }
         );
 
         return response.data;
@@ -81,7 +103,9 @@ const userService = {
     // DELETE USER
     // =====================================
 
-    deleteUser: async (id) => {
+    deleteUser: async (
+        id
+    ) => {
 
         const response = await api.delete(
 

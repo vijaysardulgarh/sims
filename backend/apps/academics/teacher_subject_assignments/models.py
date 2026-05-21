@@ -12,7 +12,7 @@ from apps.academics.class_subjects.models import (
     ClassSubject
 )
 
-from apps.staff.staff.models import Staff
+from apps.staff.profiles.models import Staff
 
 from apps.core.models import SchoolBaseModel
 

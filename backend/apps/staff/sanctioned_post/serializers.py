@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.staff.models import SanctionedPost
+from apps.staff.sanctioned_post.models import SanctionedPost
 
 
 class SanctionedPostSerializer(

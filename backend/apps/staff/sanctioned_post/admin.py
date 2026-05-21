@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.staff.models import SanctionedPost
+from apps.staff.sanctioned_post.models import SanctionedPost
 
 
 @admin.register(SanctionedPost)

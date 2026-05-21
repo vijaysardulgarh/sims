@@ -4,7 +4,7 @@ from django.db.models import Count, Sum, Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from apps.staff.staff.models import (
+from apps.staff.profiles.models import (
     Staff,
 )
 from apps.staff.sanctioned_post.models import (

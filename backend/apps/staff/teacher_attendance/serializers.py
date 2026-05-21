@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.staff.models import TeacherAttendance
+from apps.staff.profiles.models import TeacherAttendance
 
 
 class TeacherAttendanceSerializer(

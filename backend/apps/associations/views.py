@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Prefetch
 from apps.core.utils.helpers import get_current_school
 from apps.associations.models import SMCMember, Association, StaffAssociationRoleAssignment
-from apps.staff.staff.models import Staff
+from apps.staff.profiles.models import Staff
 
 
 # =========================================

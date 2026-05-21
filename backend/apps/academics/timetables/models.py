@@ -16,7 +16,7 @@ from apps.academics.classrooms.models import (
     Classroom
 )
 
-from apps.staff.staff.models import Staff
+from apps.staff.profiles.models import Staff
 
 from apps.schools.models import School
 

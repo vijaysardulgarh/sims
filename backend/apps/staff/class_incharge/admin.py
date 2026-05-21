@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.staff.models import ClassIncharge
+from apps.staff.class_incharge.models import ClassIncharge
 
 
 @admin.register(ClassIncharge)

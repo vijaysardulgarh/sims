@@ -19,18 +19,11 @@ from rest_framework_simplejwt.authentication import (
     JWTAuthentication
 )
 
-from .models import (
-    User,
-    AccessControl
-)
-
-from .serializers import (
+from ..serializers import (
 
     LoginSerializer,
 
-    UserSerializer,
-
-    AccessControlSerializer
+    UserSerializer
 )
 
 
@@ -126,98 +119,3 @@ class MeAPIView(
         return Response(
             serializer.data
         )
-
-
-# =========================================
-# PERMISSION LIST CREATE API
-# =========================================
-
-class AccessControlListCreateAPIView(
-    APIView
-):
-
-    authentication_classes = [
-        JWTAuthentication
-    ]
-
-    permission_classes = [
-        IsAuthenticated
-    ]
-
-    def get(
-        self,
-        request
-    ):
-
-        permissions = AccessControl.objects.all()
-
-        serializer = AccessControlSerializer(
-
-            permissions,
-
-            many=True
-        )
-
-        return Response(
-            serializer.data
-        )
-
-    def post(
-        self,
-        request
-    ):
-
-        serializer = AccessControlSerializer(
-
-            data=request.data
-        )
-
-        if serializer.is_valid():
-
-            serializer.save()
-
-            return Response(
-                serializer.data,
-                status=201
-            )
-
-        return Response(
-            serializer.errors,
-            status=400
-        )
-
-
-# =========================================
-# PERMISSION DETAIL API
-# =========================================
-
-from rest_framework import generics
-
-
-class AccessControlListCreateAPIView(
-
-    generics.ListCreateAPIView
-):
-
-    queryset = (
-        AccessControl.objects.all()
-    )
-
-    serializer_class = (
-        AccessControlSerializer
-    )
-
-
-
-class AccessControlDetailAPIView(
-
-    generics.RetrieveUpdateDestroyAPIView
-):
-
-    queryset = (
-        AccessControl.objects.all()
-    )
-
-    serializer_class = (
-        AccessControlSerializer
-    )

@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from apps.staff.staff.models import Staff
+from apps.staff.profiles.models import Staff
 
 
 class StaffByRoleAPIView(APIView):

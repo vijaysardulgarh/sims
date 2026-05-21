@@ -19,7 +19,7 @@ urlpatterns = [
     path(
         "staff/",
         include(
-            "apps.staff.staff.urls"
+            "apps.staff.profiles.urls"
         )
     ),
 
