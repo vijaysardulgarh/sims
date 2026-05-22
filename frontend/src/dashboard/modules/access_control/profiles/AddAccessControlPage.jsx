@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
 
-import RoleForm from "../../forms/RoleForm";
+import AccessControlForm from "../forms/AccessControlForm";
 
-import roleService from "../../services/roleService";
+import accessControlService from "../services/accessControlService";
 
 
-const AddRolePage = () => {
+const AddAccessControlPage = () => {
 
     const navigate = useNavigate();
 
 
     // =====================================
-    // CREATE ROLE
+    // CREATE
     // =====================================
 
     const handleSubmit = async (
@@ -20,18 +20,18 @@ const AddRolePage = () => {
 
         try {
 
-            await roleService.createRole(
+            await accessControlService.createAccessControl(
                 formData
             );
 
             navigate(
-                "/dashboard/roles"
+                "/dashboard/access-controls"
             );
 
         } catch (error) {
 
             console.error(
-                "Create Role Error:",
+                "Create Access Control Error:",
                 error
             );
         }
@@ -44,11 +44,11 @@ const AddRolePage = () => {
 
             <h1 className="text-2xl font-bold mb-4">
 
-                Add Role
+                Add Access Control
 
             </h1>
 
-            <RoleForm
+            <AccessControlForm
                 onSubmit={handleSubmit}
             />
 
@@ -56,4 +56,4 @@ const AddRolePage = () => {
     );
 };
 
-export default AddRolePage;
+export default AddAccessControlPage;

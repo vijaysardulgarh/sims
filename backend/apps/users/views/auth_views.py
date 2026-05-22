@@ -19,14 +19,16 @@ from rest_framework_simplejwt.authentication import (
     JWTAuthentication
 )
 
-from ..serializers import (
+from apps.users.serializers.LoginSerializer import (
 
     LoginSerializer,
 
+)    
+
+from apps.users.serializers.UserSerializer import (
+
     UserSerializer
 )
-
-
 # =========================================
 # LOGIN API
 # =========================================

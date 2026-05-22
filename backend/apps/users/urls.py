@@ -20,6 +20,13 @@ from apps.users.views.access_control_views import (
     AccessControlDetailAPIView
 )
 
+from apps.users.views.role_views import (
+
+    RoleListCreateAPIView,
+
+    RoleDetailAPIView
+)
+
 from apps.users.views.user_views import (
 
     UserListCreateAPIView,
@@ -60,19 +67,36 @@ urlpatterns = [
 
 
     # =========================================
-    # ACCESS CONTROLS
+    # PERMISSIONS
     # =========================================
 
     path(
         "permissions/",
         AccessControlListCreateAPIView.as_view(),
-        name="access_controls"
+        name="permissions"
     ),
 
     path(
         "permissions/<int:pk>/",
         AccessControlDetailAPIView.as_view(),
-        name="access_control_detail"
+        name="permission_detail"
+    ),
+
+
+    # =========================================
+    # ROLES
+    # =========================================
+
+    path(
+        "roles/",
+        RoleListCreateAPIView.as_view(),
+        name="roles"
+    ),
+
+    path(
+        "roles/<int:pk>/",
+        RoleDetailAPIView.as_view(),
+        name="role_detail"
     ),
 
 

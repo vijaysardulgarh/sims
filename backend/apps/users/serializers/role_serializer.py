@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from users.models import (
+from apps.users.models.role_model import (
     Role
 )
 

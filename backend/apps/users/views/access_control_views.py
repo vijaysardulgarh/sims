@@ -8,7 +8,7 @@ from apps.users.models.access_control_model import (
     AccessControl
 )
 
-from apps.users.serializers import (
+from apps.users.serializers.AccessControlSerializer import (
     AccessControlSerializer
 )
 

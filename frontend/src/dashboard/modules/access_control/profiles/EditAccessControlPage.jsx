@@ -14,59 +14,53 @@ import {
 
 } from "react-router-dom";
 
-import RoleForm from "../../forms/RoleForm";
+import AccessControlForm from "../forms/AccessControlForm";
 
-import roleService from "../../services/roleService";
+import accessControlService from "../services/accessControlService";
 
 
-const EditRolePage = () => {
+const EditAccessControlPage = () => {
 
     const { id } = useParams();
 
     const navigate = useNavigate();
 
-    const [role, setRole] = useState(null);
-
-    const [loading, setLoading] = useState(true);
+    const [accessControl, setAccessControl] =
+        useState(null);
 
 
     // =====================================
-    // FETCH ROLE
+    // FETCH
     // =====================================
 
     useEffect(() => {
 
-        fetchRole();
+        fetchAccessControl();
 
     }, []);
 
 
-    const fetchRole = async () => {
+    const fetchAccessControl = async () => {
 
         try {
 
-            const data = await roleService.getRole(
-                id
-            );
+            const data =
+                await accessControlService.getAccessControl(id);
 
-            setRole(data);
+            setAccessControl(data);
 
         } catch (error) {
 
             console.error(
-                "Fetch Role Error:",
+                "Fetch Access Control Error:",
                 error
             );
-
-        } finally {
-
-            setLoading(false);
         }
     };
 
 
     // =====================================
-    // UPDATE ROLE
+    // UPDATE
     // =====================================
 
     const handleSubmit = async (
@@ -75,7 +69,7 @@ const EditRolePage = () => {
 
         try {
 
-            await roleService.updateRole(
+            await accessControlService.updateAccessControl(
 
                 id,
 
@@ -83,20 +77,20 @@ const EditRolePage = () => {
             );
 
             navigate(
-                "/dashboard/roles"
+                "/dashboard/access-controls"
             );
 
         } catch (error) {
 
             console.error(
-                "Update Role Error:",
+                "Update Access Control Error:",
                 error
             );
         }
     };
 
 
-    if (loading) {
+    if (!accessControl) {
 
         return <p>Loading...</p>;
     }
@@ -108,13 +102,13 @@ const EditRolePage = () => {
 
             <h1 className="text-2xl font-bold mb-4">
 
-                Edit Role
+                Edit Access Control
 
             </h1>
 
-            <RoleForm
+            <AccessControlForm
 
-                initialData={role}
+                initialData={accessControl}
 
                 onSubmit={handleSubmit}
             />
@@ -123,4 +117,4 @@ const EditRolePage = () => {
     );
 };
 
-export default EditRolePage;
+export default EditAccessControlPage;

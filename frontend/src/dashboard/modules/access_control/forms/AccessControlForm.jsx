@@ -7,7 +7,7 @@ import {
 } from "react";
 
 
-const RoleForm = ({
+const AccessControlForm = ({
 
     initialData = null,
 
@@ -15,19 +15,15 @@ const RoleForm = ({
 
 }) => {
 
-    // =====================================
-    // STATE
-    // =====================================
-
     const [formData, setFormData] = useState({
 
         name: "",
 
         code: "",
 
-        description: "",
+        module: "",
 
-        is_active: true,
+        description: "",
     });
 
 
@@ -53,11 +49,11 @@ const RoleForm = ({
                 code:
                     initialData.code || "",
 
+                module:
+                    initialData.module || "",
+
                 description:
                     initialData.description || "",
-
-                is_active:
-                    initialData.is_active ?? true,
             });
         }
 
@@ -74,11 +70,7 @@ const RoleForm = ({
 
             name,
 
-            value,
-
-            checked,
-
-            type
+            value
 
         } = e.target;
 
@@ -86,10 +78,7 @@ const RoleForm = ({
 
             ...prev,
 
-            [name]:
-                type === "checkbox"
-                    ? checked
-                    : value,
+            [name]: value,
         }));
     };
 
@@ -104,18 +93,9 @@ const RoleForm = ({
 
         e.preventDefault();
 
-        console.log(
-            "Submitting Form:",
-            formData
-        );
-
         await onSubmit(formData);
     };
 
-
-    // =====================================
-    // UI
-    // =====================================
 
     return (
 
@@ -124,13 +104,11 @@ const RoleForm = ({
             className="space-y-4"
         >
 
-            {/* ================================= */}
             {/* NAME */}
-            {/* ================================= */}
 
             <div>
 
-                <label className="block mb-1 font-medium">
+                <label className="block mb-1">
 
                     Name
 
@@ -141,20 +119,18 @@ const RoleForm = ({
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="border border-gray-300 p-2 w-full rounded"
+                    className="border p-2 w-full rounded"
                     required
                 />
 
             </div>
 
 
-            {/* ================================= */}
             {/* CODE */}
-            {/* ================================= */}
 
             <div>
 
-                <label className="block mb-1 font-medium">
+                <label className="block mb-1">
 
                     Code
 
@@ -165,20 +141,40 @@ const RoleForm = ({
                     name="code"
                     value={formData.code}
                     onChange={handleChange}
-                    className="border border-gray-300 p-2 w-full rounded"
+                    className="border p-2 w-full rounded"
                     required
                 />
 
             </div>
 
 
-            {/* ================================= */}
-            {/* DESCRIPTION */}
-            {/* ================================= */}
+            {/* MODULE */}
 
             <div>
 
-                <label className="block mb-1 font-medium">
+                <label className="block mb-1">
+
+                    Module
+
+                </label>
+
+                <input
+                    type="text"
+                    name="module"
+                    value={formData.module}
+                    onChange={handleChange}
+                    className="border p-2 w-full rounded"
+                    required
+                />
+
+            </div>
+
+
+            {/* DESCRIPTION */}
+
+            <div>
+
+                <label className="block mb-1">
 
                     Description
 
@@ -188,45 +184,21 @@ const RoleForm = ({
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
-                    className="border border-gray-300 p-2 w-full rounded"
+                    className="border p-2 w-full rounded"
                     rows={4}
                 />
 
             </div>
 
 
-            {/* ================================= */}
-            {/* ACTIVE */}
-            {/* ================================= */}
-
-            <div className="flex items-center gap-2">
-
-                <input
-                    type="checkbox"
-                    name="is_active"
-                    checked={formData.is_active}
-                    onChange={handleChange}
-                />
-
-                <label className="font-medium">
-
-                    Active
-
-                </label>
-
-            </div>
-
-
-            {/* ================================= */}
-            {/* SUBMIT BUTTON */}
-            {/* ================================= */}
+            {/* BUTTON */}
 
             <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                className="bg-blue-600 text-white px-4 py-2 rounded"
             >
 
-                Save Role
+                Save Access Control
 
             </button>
 
@@ -234,4 +206,4 @@ const RoleForm = ({
     );
 };
 
-export default RoleForm;
+export default AccessControlForm;

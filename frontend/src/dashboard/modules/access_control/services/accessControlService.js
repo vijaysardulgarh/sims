@@ -1,17 +1,19 @@
 import api from "../../../../services/api/axios";
 
 
-const roleService = {
+const accessControlService = {
 
     // =====================================
-    // GET ALL ROLES
+    // GET ALL ACCESS CONTROLS
     // =====================================
 
-    getRoles: async (params = {}) => {
+    getAccessControls: async (
+        params = {}
+    ) => {
 
         const response = await api.get(
 
-            "/users/roles/",
+            "/users/permissions/",
 
             {
                 params,
@@ -23,14 +25,16 @@ const roleService = {
 
 
     // =====================================
-    // GET SINGLE ROLE
+    // GET SINGLE ACCESS CONTROL
     // =====================================
 
-    getRole: async (id) => {
+    getAccessControl: async (
+        id
+    ) => {
 
         const response = await api.get(
 
-            `/users/roles/${id}/`
+            `/users/permissions/${id}/`
         );
 
         return response.data;
@@ -38,14 +42,16 @@ const roleService = {
 
 
     // =====================================
-    // CREATE ROLE
+    // CREATE ACCESS CONTROL
     // =====================================
 
-    createRole: async (data) => {
+    createAccessControl: async (
+        data
+    ) => {
 
         const response = await api.post(
 
-            "/users/roles/",
+            "/users/permissions/",
 
             data
         );
@@ -55,10 +61,10 @@ const roleService = {
 
 
     // =====================================
-    // UPDATE ROLE
+    // UPDATE ACCESS CONTROL
     // =====================================
 
-    updateRole: async (
+    updateAccessControl: async (
 
         id,
 
@@ -68,7 +74,7 @@ const roleService = {
 
         const response = await api.patch(
 
-            `/users/roles/${id}/`,
+            `/users/permissions/${id}/`,
 
             data
         );
@@ -78,14 +84,16 @@ const roleService = {
 
 
     // =====================================
-    // DELETE ROLE
+    // DELETE ACCESS CONTROL
     // =====================================
 
-    deleteRole: async (id) => {
+    deleteAccessControl: async (
+        id
+    ) => {
 
         const response = await api.delete(
 
-            `/users/roles/${id}/`
+            `/users/permissions/${id}/`
         );
 
         return response.data;
@@ -93,4 +101,4 @@ const roleService = {
 };
 
 
-export default roleService;
+export default accessControlService;

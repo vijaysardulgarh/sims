@@ -12,51 +12,44 @@ import {
 
 } from "react-router-dom";
 
-import roleService from "../../services/roleService";
+import userRoleService from "../../services/userRoleService";
 
 
-const RolesListPage = () => {
+const UserRolesListPage = () => {
 
-    const [roles, setRoles] = useState([]);
-
-    const [loading, setLoading] = useState(true);
+    const [userRoles, setUserRoles] =
+        useState([]);
 
 
     // =====================================
-    // FETCH ROLES
+    // FETCH
     // =====================================
 
     useEffect(() => {
 
-        fetchRoles();
+        fetchUserRoles();
 
     }, []);
 
 
-    const fetchRoles = async () => {
+    const fetchUserRoles = async () => {
 
         try {
 
-            const data = await roleService.getRoles();
+            const data =
+                await userRoleService.getUserRoles();
 
-            setRoles(data.results || data);
+            setUserRoles(data);
 
         } catch (error) {
 
-            console.error(
-                "Fetch Roles Error:",
-                error
-            );
-
-        } finally {
-
-            setLoading(false);
+            console.error(error);
         }
     };
 
 
     // =====================================
-    // DELETE ROLE
+    // DELETE
     // =====================================
 
     const handleDelete = async (
@@ -65,31 +58,22 @@ const RolesListPage = () => {
 
         const confirmDelete = window.confirm(
 
-            "Are you sure you want to delete this role?"
+            "Delete user role?"
         );
 
         if (!confirmDelete) return;
 
         try {
 
-            await roleService.deleteRole(id);
+            await userRoleService.deleteUserRole(id);
 
-            fetchRoles();
+            fetchUserRoles();
 
         } catch (error) {
 
-            console.error(
-                "Delete Role Error:",
-                error
-            );
+            console.error(error);
         }
     };
-
-
-    if (loading) {
-
-        return <p>Loading...</p>;
-    }
 
 
     return (
@@ -98,22 +82,20 @@ const RolesListPage = () => {
 
             {/* HEADER */}
 
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between mb-4">
 
                 <h1 className="text-2xl font-bold">
 
-                    Roles List
+                    User Roles
 
                 </h1>
 
                 <Link
-
-                    to="/dashboard/roles/add"
-
+                    to="/dashboard/user-roles/add"
                     className="bg-blue-600 text-white px-4 py-2 rounded"
                 >
 
-                    Add Role
+                    Add User Role
 
                 </Link>
 
@@ -133,15 +115,11 @@ const RolesListPage = () => {
                         </th>
 
                         <th className="border p-2">
-                            Name
+                            User
                         </th>
 
                         <th className="border p-2">
-                            Code
-                        </th>
-
-                        <th className="border p-2">
-                            Active
+                            Role
                         </th>
 
                         <th className="border p-2">
@@ -156,46 +134,32 @@ const RolesListPage = () => {
                 <tbody>
 
                     {
-                        roles.map((role) => (
+                        userRoles.map((item) => (
 
-                            <tr key={role.id}>
+                            <tr key={item.id}>
 
                                 <td className="border p-2">
 
-                                    {role.id}
+                                    {item.id}
 
                                 </td>
 
                                 <td className="border p-2">
 
-                                    {role.name}
+                                    {item.user_email}
 
                                 </td>
 
                                 <td className="border p-2">
 
-                                    {role.code}
-
-                                </td>
-
-                                <td className="border p-2">
-
-                                    {
-                                        role.is_active
-                                            ? "Yes"
-                                            : "No"
-                                    }
+                                    {item.role_name}
 
                                 </td>
 
                                 <td className="border p-2 flex gap-2">
 
-                                    {/* EDIT */}
-
                                     <Link
-
-                                        to={`/dashboard/roles/edit/${role.id}`}
-
+                                        to={`/dashboard/user-roles/edit/${item.id}`}
                                         className="bg-yellow-500 text-white px-3 py-1 rounded"
                                     >
 
@@ -203,15 +167,10 @@ const RolesListPage = () => {
 
                                     </Link>
 
-
-                                    {/* DELETE */}
-
                                     <button
-
                                         onClick={() =>
-                                            handleDelete(role.id)
+                                            handleDelete(item.id)
                                         }
-
                                         className="bg-red-600 text-white px-3 py-1 rounded"
                                     >
 
@@ -233,4 +192,4 @@ const RolesListPage = () => {
     );
 };
 
-export default RolesListPage;
+export default UserRolesListPage;
