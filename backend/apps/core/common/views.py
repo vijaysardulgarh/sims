@@ -5,10 +5,6 @@ from rest_framework.views import (
     APIView
 )
 
-from rest_framework.response import (
-    Response
-)
-
 from rest_framework.permissions import (
     IsAuthenticated
 )
@@ -17,8 +13,12 @@ from django_filters.rest_framework import (
     DjangoFilterBackend
 )
 
-from apps.core.utils.helpers import (
-    get_current_school
+from apps.core.responses.success import (
+    success_response
+)
+
+from apps.core.responses.error import (
+    error_response
 )
 
 
@@ -50,11 +50,8 @@ class SchoolFilteredViewSet(
     def get_school(self):
 
         return getattr(
-
-            self.request.user,
-
+            self.request,
             "school",
-
             None
         )
 
@@ -69,13 +66,16 @@ class SchoolFilteredViewSet(
 
         school = self.get_school()
 
-        if school:
+        if not school:
 
-            return queryset.filter(
-                school=school
-            )
+            return queryset.none()
 
-        return queryset.none()
+        return queryset.filter(
+
+            school=school,
+
+            is_deleted=False
+        )
 
     # =====================================
     # GET QUERYSET
@@ -92,7 +92,7 @@ class SchoolFilteredViewSet(
         )
 
     # =====================================
-    # AUTO ASSIGN SCHOOL
+    # CREATE OBJECT
     # =====================================
 
     def perform_create(
@@ -100,17 +100,12 @@ class SchoolFilteredViewSet(
         serializer
     ):
 
-        school = self.get_school()
+        serializer.save(
 
-        if school:
+            school=self.get_school(),
 
-            serializer.save(
-                school=school
-            )
-
-        else:
-
-            serializer.save()
+            created_by=self.request.user
+        )
 
     # =====================================
     # UPDATE OBJECT
@@ -121,10 +116,13 @@ class SchoolFilteredViewSet(
         serializer
     ):
 
-        serializer.save()
+        serializer.save(
+
+            updated_by=self.request.user
+        )
 
     # =====================================
-    # DESTROY OBJECT
+    # SOFT DELETE
     # =====================================
 
     def perform_destroy(
@@ -132,93 +130,17 @@ class SchoolFilteredViewSet(
         instance
     ):
 
-        instance.delete()
+        instance.is_deleted = True
 
-
-# =========================================
-# BASE REPORT API VIEW
-# =========================================
-
-class BaseReportAPIView(
-    APIView
-):
-
-    permission_classes = [
-        IsAuthenticated
-    ]
-
-    # =====================================
-    # GET CURRENT SCHOOL
-    # =====================================
-
-    def get_school(
-        self,
-        request
-    ):
-
-        return get_current_school(
-            request
+        instance.updated_by = (
+            self.request.user
         )
 
-    # =====================================
-    # SCHOOL ERROR RESPONSE
-    # =====================================
-
-    def school_error_response(
-        self
-    ):
-
-        return Response({
-
-            "success": False,
-
-            "message":
-                "School not selected."
-
-        }, status=400)
-
-    # =====================================
-    # SUCCESS RESPONSE
-    # =====================================
-
-    def success_response(
-        self,
-        data=None,
-        message="Success",
-        status_code=200
-    ):
-
-        return Response({
-
-            "success": True,
-
-            "message": message,
-
-            "data": data
-
-        }, status=status_code)
-
-    # =====================================
-    # ERROR RESPONSE
-    # =====================================
-
-    def error_response(
-        self,
-        message="Something went wrong",
-        status_code=400
-    ):
-
-        return Response({
-
-            "success": False,
-
-            "message": message
-
-        }, status=status_code)
+        instance.save()
 
 
 # =========================================
-# BASE SIMPLE API VIEW
+# BASE API VIEW
 # =========================================
 
 class BaseAPIView(
@@ -230,6 +152,20 @@ class BaseAPIView(
     ]
 
     # =====================================
+    # GET SCHOOL
+    # =====================================
+
+    def get_school(
+        self
+    ):
+
+        return getattr(
+            self.request,
+            "school",
+            None
+        )
+
+    # =====================================
     # SUCCESS RESPONSE
     # =====================================
 
@@ -240,15 +176,14 @@ class BaseAPIView(
         status_code=200
     ):
 
-        return Response({
+        return success_response(
 
-            "success": True,
+            data=data,
 
-            "message": message,
+            message=message,
 
-            "data": data
-
-        }, status=status_code)
+            status_code=status_code
+        )
 
     # =====================================
     # ERROR RESPONSE
@@ -257,13 +192,15 @@ class BaseAPIView(
     def error_response(
         self,
         message="Something went wrong",
+        errors=None,
         status_code=400
     ):
 
-        return Response({
+        return error_response(
 
-            "success": False,
+            message=message,
 
-            "message": message
+            errors=errors,
 
-        }, status=status_code)
+            status_code=status_code
+        )

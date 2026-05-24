@@ -1,0 +1,854 @@
+
+==================================================
+FILE: ./admin.py
+==================================================
+from django.contrib import admin
+
+# Register your models here.
+
+==================================================
+FILE: ./apps.py
+==================================================
+from django.apps import AppConfig
+
+
+class CoreConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.core'
+
+==================================================
+FILE: ./audit_logs/admin.py
+==================================================
+
+==================================================
+FILE: ./audit_logs/models.py
+==================================================
+from django.db import models
+
+from apps.core.users.models import User
+
+
+class AuditLog(models.Model):
+
+    ACTION_CHOICES = [
+
+        ("CREATE", "Create"),
+        ("UPDATE", "Update"),
+        ("DELETE", "Delete"),
+        ("LOGIN", "Login"),
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+
+    action = models.CharField(
+        max_length=20,
+        choices=ACTION_CHOICES
+    )
+
+    module = models.CharField(
+        max_length=100
+    )
+
+    object_id = models.PositiveIntegerField(
+        null=True,
+        blank=True
+    )
+
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    ip_address = models.GenericIPAddressField(
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return f"{self.user} - {self.action}"
+==================================================
+FILE: ./audit_logs/serializers.py
+==================================================
+
+==================================================
+FILE: ./audit_logs/urls.py
+==================================================
+
+==================================================
+FILE: ./audit_logs/views.py
+==================================================
+
+==================================================
+FILE: ./audit_logs/__init__.py
+==================================================
+
+==================================================
+FILE: ./common/base/models.py
+==================================================
+from django.db import models
+
+from django.conf import settings
+
+
+# =========================================
+# AUDIT BASE MODEL
+# =========================================
+
+class AuditBaseModel(
+    models.Model
+):
+
+    # =====================================
+    # SOFT DELETE
+    # =====================================
+
+    is_deleted = models.BooleanField(
+        default=False
+    )
+
+    # =====================================
+    # TIMESTAMPS
+    # =====================================
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    # =====================================
+    # AUDIT
+    # =====================================
+
+    created_by = models.ForeignKey(
+
+        settings.AUTH_USER_MODEL,
+
+        null=True,
+
+        blank=True,
+
+        on_delete=models.SET_NULL,
+
+        related_name="+"
+    )
+
+    updated_by = models.ForeignKey(
+
+        settings.AUTH_USER_MODEL,
+
+        null=True,
+
+        blank=True,
+
+        on_delete=models.SET_NULL,
+
+        related_name="+"
+    )
+
+    class Meta:
+
+        abstract = True
+
+
+# =========================================
+# SCHOOL BASE MODEL
+# =========================================
+
+class SchoolBaseModel(
+    AuditBaseModel
+):
+
+    school = models.ForeignKey(
+
+        "schools.School",
+
+        on_delete=models.CASCADE,
+
+        related_name="%(class)s_objects",
+
+        null=True,
+
+        blank=True
+    )
+
+    class Meta:
+
+        abstract = True
+==================================================
+FILE: ./common/base/__init__.py
+==================================================
+
+==================================================
+FILE: ./common/serializers.py
+==================================================
+from rest_framework import serializers
+
+
+# =========================================
+# BASE REPORT SERIALIZER
+# =========================================
+
+class BaseReportSerializer(
+    serializers.Serializer
+):
+
+    success = serializers.BooleanField(
+        default=True
+    )
+
+    message = serializers.CharField(
+        required=False,
+        allow_blank=True
+    )
+
+    data = serializers.JSONField(
+        required=False
+    )
+==================================================
+FILE: ./common/views.py
+==================================================
+from rest_framework import viewsets
+from rest_framework import filters
+
+from rest_framework.views import (
+    APIView
+)
+
+from rest_framework.permissions import (
+    IsAuthenticated
+)
+
+from django_filters.rest_framework import (
+    DjangoFilterBackend
+)
+
+from apps.core.responses.success import (
+    success_response
+)
+
+from apps.core.responses.error import (
+    error_response
+)
+
+
+# =========================================
+# BASE SCHOOL FILTER VIEWSET
+# =========================================
+
+class SchoolFilteredViewSet(
+    viewsets.ModelViewSet
+):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    filter_backends = [
+
+        DjangoFilterBackend,
+
+        filters.SearchFilter,
+
+        filters.OrderingFilter,
+    ]
+
+    # =====================================
+    # GET SCHOOL
+    # =====================================
+
+    def get_school(self):
+
+        return getattr(
+            self.request,
+            "school",
+            None
+        )
+
+    # =====================================
+    # FILTER QUERYSET
+    # =====================================
+
+    def filter_queryset_by_school(
+        self,
+        queryset
+    ):
+
+        school = self.get_school()
+
+        if not school:
+
+            return queryset.none()
+
+        return queryset.filter(
+
+            school=school,
+
+            is_deleted=False
+        )
+
+    # =====================================
+    # GET QUERYSET
+    # =====================================
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        return (
+            self.filter_queryset_by_school(
+                queryset
+            )
+        )
+
+    # =====================================
+    # CREATE OBJECT
+    # =====================================
+
+    def perform_create(
+        self,
+        serializer
+    ):
+
+        serializer.save(
+
+            school=self.get_school(),
+
+            created_by=self.request.user
+        )
+
+    # =====================================
+    # UPDATE OBJECT
+    # =====================================
+
+    def perform_update(
+        self,
+        serializer
+    ):
+
+        serializer.save(
+
+            updated_by=self.request.user
+        )
+
+    # =====================================
+    # SOFT DELETE
+    # =====================================
+
+    def perform_destroy(
+        self,
+        instance
+    ):
+
+        instance.is_deleted = True
+
+        instance.updated_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# =========================================
+# BASE API VIEW
+# =========================================
+
+class BaseAPIView(
+    APIView
+):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    # =====================================
+    # GET SCHOOL
+    # =====================================
+
+    def get_school(
+        self
+    ):
+
+        return getattr(
+            self.request,
+            "school",
+            None
+        )
+
+    # =====================================
+    # SUCCESS RESPONSE
+    # =====================================
+
+    def success_response(
+        self,
+        data=None,
+        message="Success",
+        status_code=200
+    ):
+
+        return success_response(
+
+            data=data,
+
+            message=message,
+
+            status_code=status_code
+        )
+
+    # =====================================
+    # ERROR RESPONSE
+    # =====================================
+
+    def error_response(
+        self,
+        message="Something went wrong",
+        errors=None,
+        status_code=400
+    ):
+
+        return error_response(
+
+            message=message,
+
+            errors=errors,
+
+            status_code=status_code
+        )
+==================================================
+FILE: ./common/__init__.py
+==================================================
+from .serializers import (
+    BaseReportSerializer
+)
+
+from .views import (
+    BaseAPIView,
+    BaseReportAPIView,
+    SchoolFilteredViewSet
+)
+==================================================
+FILE: ./exceptions/custom_exceptions.py
+==================================================
+from rest_framework.exceptions import (
+    APIException
+)
+
+
+class BadRequestException(
+    APIException
+):
+
+    status_code = 400
+
+    default_detail = "Bad request."
+
+    default_code = "bad_request"
+
+
+class PermissionDeniedException(
+    APIException
+):
+
+    status_code = 403
+
+    default_detail = "Permission denied."
+
+    default_code = "permission_denied"
+==================================================
+FILE: ./exceptions/handlers.py
+==================================================
+from rest_framework.views import (
+    exception_handler
+)
+
+from rest_framework.response import (
+    Response
+)
+
+
+def custom_exception_handler(
+    exc,
+    context
+):
+
+    response = exception_handler(
+        exc,
+        context
+    )
+
+    if response is not None:
+
+        return Response({
+
+            "success": False,
+
+            "errors": response.data
+        },
+        status=response.status_code)
+
+    return response
+==================================================
+FILE: ./exceptions/__init__.py
+==================================================
+
+==================================================
+FILE: ./media_manager/media/models.py
+==================================================
+from django.db import models
+
+from backend.apps.schools.branches.models import School
+
+from apps.accounts.users.models import User
+
+
+class MediaFile(models.Model):
+
+    school = models.ForeignKey(
+        School,
+        on_delete=models.CASCADE,
+        related_name="media_files"
+    )
+
+    file = models.FileField(
+        upload_to="media/"
+    )
+
+    file_type = models.CharField(
+        max_length=50
+    )
+
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return self.file.name
+==================================================
+FILE: ./media_manager/media/serializers.py
+==================================================
+
+==================================================
+FILE: ./media_manager/media/urls.py
+==================================================
+
+==================================================
+FILE: ./media_manager/media/views.py
+==================================================
+
+==================================================
+FILE: ./media_manager/media/__init__.py
+==================================================
+
+==================================================
+FILE: ./notifications/admin.py
+==================================================
+
+==================================================
+FILE: ./notifications/models.py
+==================================================
+from django.db import models
+
+from apps.accounts.users.models import User
+
+
+class Notification(models.Model):
+
+    TYPE_CHOICES = [
+
+        ("SMS", "SMS"),
+        ("EMAIL", "Email"),
+        ("SYSTEM", "System"),
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="notifications"
+    )
+
+    title = models.CharField(
+        max_length=255
+    )
+
+    message = models.TextField()
+
+    notification_type = models.CharField(
+        max_length=20,
+        choices=TYPE_CHOICES
+    )
+
+    is_read = models.BooleanField(
+        default=False
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return self.title
+==================================================
+FILE: ./notifications/serializers.py
+==================================================
+
+==================================================
+FILE: ./notifications/urls.py
+==================================================
+
+==================================================
+FILE: ./notifications/__init__.py
+==================================================
+
+==================================================
+FILE: ./responses/error.py
+==================================================
+from rest_framework.response import (
+    Response
+)
+
+
+def error_response(
+
+    errors=None,
+
+    message="Error",
+
+    status_code=400
+):
+
+    return Response({
+
+        "success": False,
+
+        "message": message,
+
+        "errors": errors
+    },
+    status=status_code)
+==================================================
+FILE: ./responses/success.py
+==================================================
+from rest_framework.response import (
+    Response
+)
+
+
+def success_response(
+
+    data=None,
+
+    message="Success",
+
+    status_code=200
+):
+
+    return Response({
+
+        "success": True,
+
+        "message": message,
+
+        "data": data
+    },
+    status=status_code)
+==================================================
+FILE: ./responses/__init__.py
+==================================================
+
+==================================================
+FILE: ./settings/admin.py
+==================================================
+
+==================================================
+FILE: ./settings/models.py
+==================================================
+from django.db import models
+
+from apps.schools.branches.models import School
+
+
+class SystemSetting(models.Model):
+
+    school = models.ForeignKey(
+        School,
+        on_delete=models.CASCADE,
+        related_name="settings"
+    )
+
+    key = models.CharField(
+        max_length=100
+    )
+
+    value = models.TextField()
+
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+
+        return self.key
+==================================================
+FILE: ./settings/serializers.py
+==================================================
+
+==================================================
+FILE: ./settings/urls.py
+==================================================
+
+==================================================
+FILE: ./settings/views.py
+==================================================
+
+==================================================
+FILE: ./settings/__init__.py
+==================================================
+
+==================================================
+FILE: ./tenancy/middleware.py
+==================================================
+from django.http import JsonResponse
+
+from apps.core.tenancy.tenant_resolver import (
+    get_school_from_request
+)
+
+
+class SchoolTenantMiddleware:
+
+    def __init__(
+        self,
+        get_response
+    ):
+
+        self.get_response = get_response
+
+    def __call__(
+        self,
+        request
+    ):
+
+        school = (
+            get_school_from_request(
+                request
+            )
+        )
+
+        # =================================
+        # SCHOOL NOT FOUND
+        # =================================
+
+        if not school:
+
+            return JsonResponse({
+
+                "success": False,
+
+                "message":
+                    "Invalid school domain."
+
+            }, status=400)
+
+        # =================================
+        # ATTACH SCHOOL
+        # =================================
+
+        request.school = school
+
+        response = self.get_response(
+            request
+        )
+
+        return response
+==================================================
+FILE: ./tenancy/tenant_resolver.py
+==================================================
+from apps.schools.models import (
+    School
+)
+
+
+def get_school_from_request(
+    request
+):
+
+    host = request.get_host()
+
+    domain_parts = host.split(".")
+
+    # =====================================
+    # EXAMPLE
+    # =====================================
+
+    # school1.domain.com
+    # school2.domain.com
+
+    if len(domain_parts) < 3:
+
+        return None
+
+    subdomain = domain_parts[0]
+
+    try:
+
+        return School.objects.get(
+            slug=subdomain,
+            is_active=True
+        )
+
+    except School.DoesNotExist:
+
+        return None
+==================================================
+FILE: ./tenancy/__init__.py
+==================================================
+
+==================================================
+FILE: ./tests.py
+==================================================
+from django.test import TestCase
+
+# Create your tests here.
+
+==================================================
+FILE: ./utils/slug.py
+==================================================
+from django.utils.text import slugify
+
+
+def generate_unique_slug(instance, field_value):
+    return slugify(field_value)
+==================================================
+FILE: ./utils/__init__.py
+==================================================
+
+==================================================
+FILE: ./views.py
+==================================================
+from django.shortcuts import render
+
+# Create your views here.
+
+==================================================
+FILE: ./__init__.py
+==================================================

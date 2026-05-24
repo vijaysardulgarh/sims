@@ -1,11 +1,11 @@
-from apps.academics.classes.admin import (
+from apps.academics.structure.classes.admin import (
     ClassAdmin
 )
 
-from apps.academics.sections.admin import (
+from apps.academics.structure.sections.admin import (
     SectionAdmin
 )
 
-from apps.academics.streams.admin import (
+from apps.academics.structure.streams.admin import (
     StreamAdmin
 )

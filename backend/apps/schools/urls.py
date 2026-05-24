@@ -1,5 +1,10 @@
 from django.urls import path
-from .views import *
+from .views import (
+    SchoolListAPIView,
+    SelectSchoolAPIView,
+    ClearSchoolAPIView,
+    CurrentSchoolAPIView,
+)
 
 urlpatterns = [
     path("", SchoolListAPIView.as_view()),             # GET all schools

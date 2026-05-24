@@ -1,11 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-
 from apps.staff.post_type.models import PostType
-from apps.schools.models import School
-from apps.core.models import SchoolBaseModel
-from apps.users.models.user_model import User
+from apps.core.common.base.models import SchoolBaseModel
 from django.conf import settings
 
 class Staff(SchoolBaseModel):

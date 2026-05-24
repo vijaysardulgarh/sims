@@ -4,7 +4,7 @@ import {
 
 import {
     useAuth
-} from "../dashboard/auth/context/AuthContext";
+} from "../dashboard/modules/access_control/auth/context/AuthContext";
 
 
 const ProtectedRoute = ({

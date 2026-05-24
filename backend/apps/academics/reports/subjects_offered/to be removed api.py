@@ -2,7 +2,7 @@ from collections import (
     defaultdict
 )
 
-from apps.academics.class_subjects import (
+from apps.academics.curriculum.class_subjects import (
     ClassSubject
 )
 

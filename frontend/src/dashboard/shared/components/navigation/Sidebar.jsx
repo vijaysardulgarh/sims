@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-import { useAuth } from "../../../auth/context/AuthContext";
+import { useAuth } from "../../../modules/access_control/auth/context/AuthContext";
 
 import { responsibilityMenus } from "../../../config/responsibilityMenus";
 

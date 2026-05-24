@@ -1,9 +1,9 @@
 from django.db import models
 from django.db.models import Q
 
-from apps.academics.sections.models import Section
+from apps.academics.structure.sections.models import Section
 from apps.staff.profiles.models import Staff
-from apps.core.models import SchoolBaseModel
+from apps.core.common.base.models import SchoolBaseModel
 
 class ClassIncharge(SchoolBaseModel):
 

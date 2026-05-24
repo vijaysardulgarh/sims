@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.core.users.models import User
+from apps.accounts.users.models import User
 
 
 class AuditLog(models.Model):

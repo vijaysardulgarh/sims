@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.core.models import SchoolBaseModel
+from apps.core.common.base.models import SchoolBaseModel
 class ExamType(SchoolBaseModel):
 
     CATEGORY_CHOICES = (

@@ -11,7 +11,7 @@ import AppRoutes from "./routes/AppRoutes";
 
 import {
   AuthProvider
-} from "./dashboard/auth/context/AuthContext";
+} from "./dashboard/modules/access_control/auth/context/AuthContext";
 
 
 export default function App() {

@@ -6,94 +6,105 @@ from django.urls import (
 urlpatterns = [
 
     # =====================================
-    # CORE ACADEMICS
+    # STRUCTURE
     # =====================================
 
     path(
         "classes/",
         include(
-            "apps.academics.classes.urls"
+            "apps.academics.structure.classes.urls"
         )
     ),
 
     path(
         "streams/",
         include(
-            "apps.academics.streams.urls"
+            "apps.academics.structure.streams.urls"
         )
     ),
 
     path(
         "mediums/",
         include(
-            "apps.academics.mediums.urls"
+            "apps.academics.structure.mediums.urls"
         )
     ),
 
     path(
         "classrooms/",
         include(
-            "apps.academics.classrooms.urls"
+            "apps.academics.structure.classrooms.urls"
         )
     ),
 
     path(
         "sections/",
         include(
-            "apps.academics.sections.urls"
+            "apps.academics.structure.sections.urls"
         )
     ),
+
+    # =====================================
+    # CURRICULUM
+    # =====================================
 
     path(
         "subjects/",
         include(
-            "apps.academics.subjects.urls"
+            "apps.academics.curriculum.subjects.urls"
         )
     ),
 
     path(
         "class-subjects/",
         include(
-            "apps.academics.class_subjects.urls"
+            "apps.academics.curriculum.class_subjects.urls"
         )
     ),
-
-    path(
-        "days/",
-        include(
-            "apps.academics.days.urls"
-        )
-    ),
-
-    # =====================================
-    # TIMETABLE MANAGEMENT
-    # =====================================
 
     path(
         "teacher-subject-assignments/",
         include(
-            "apps.academics.teacher_subject_assignments.urls"
+            "apps.academics.curriculum.teacher_subject_assignments.urls"
+        )
+    ),
+
+    # =====================================
+    # TIMETABLE
+    # =====================================
+
+    path(
+        "days/",
+        include(
+            "apps.academics.timetable.days.urls"
         )
     ),
 
     path(
         "timetable-slots/",
         include(
-            "apps.academics.timetable_slots.urls"
+            "apps.academics.timetable.timetable_slots.urls"
         )
     ),
 
     path(
         "timetables/",
         include(
-            "apps.academics.timetables.urls"
+            "apps.academics.timetable.timetables.urls"
         )
     ),
 
     path(
         "timetable-generator/",
         include(
-            "apps.academics.timetable_generator.urls"
+            "apps.academics.timetable.timetable_generator.urls"
+        )
+    ),
+
+    path(
+        "timetable-drag-drop/",
+        include(
+            "apps.academics.timetable.timetable_drag_drop.urls"
         )
     ),
 

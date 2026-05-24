@@ -5,7 +5,7 @@ from django.core.exceptions import (
 )
 
 from apps.schools.models import School
-from apps.core.models import SchoolBaseModel
+from apps.core.common.base.models import SchoolBaseModel
 
 class BookCategory(SchoolBaseModel):
 

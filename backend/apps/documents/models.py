@@ -2,7 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 import os
 import uuid
-from apps.core.models import SchoolBaseModel
+from apps.core.common.base.models import SchoolBaseModel
 
 # -------------------------
 # CONSTANTS

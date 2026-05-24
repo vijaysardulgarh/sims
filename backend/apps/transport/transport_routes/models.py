@@ -1,5 +1,5 @@
 from django.db import models
-from apps.core.models import SchoolBaseModel
+from apps.core.common.base.models import SchoolBaseModel
 from apps.transport.vehicles.models import Vehicle
 from apps.transport.drivers.models import Driver
 

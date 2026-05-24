@@ -1,7 +1,7 @@
 from django.db import models
 
 from apps.exams.models import Exam
-from apps.core.models import SchoolBaseModel
+from apps.core.common.base.models import SchoolBaseModel
 
 class ExamNotification(SchoolBaseModel):
 

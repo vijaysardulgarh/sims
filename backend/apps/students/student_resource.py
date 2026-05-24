@@ -19,17 +19,17 @@ from apps.schools.models import (
     School
 )
 
-from apps.academics.classes.models import (
-    Class,
+from apps.academics.structure.classes.models import (
+    Class
 )
 
-from apps.academics.sections.models import (
-    Section,
+from apps.academics.structure.sections.models import (
+    Section
 )
-from apps.academics.mediums.models import (
-    Medium,
+from apps.academics.structure.mediums.models import (
+    Medium
 )
-from apps.academics.streams.models import (
+from apps.academics.structure.streams.models import (
     Stream
 )
 

@@ -90,7 +90,7 @@ INSTALLED_APPS = [
 
     "apps.students",
 
-    "apps.users",
+    "apps.accounts",
 
     "apps.website",
 ]
@@ -243,7 +243,7 @@ DEFAULT_AUTO_FIELD = (
 # CUSTOM USER MODEL
 # =========================================
 
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "accounts.User"
 
 
 # =========================================

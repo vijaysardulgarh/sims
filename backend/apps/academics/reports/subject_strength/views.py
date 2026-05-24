@@ -1,36 +1,69 @@
 from django.db.models import (
     Case,
-    When
+    When,
+    IntegerField
+)
+
+from rest_framework.permissions import (
+    IsAuthenticated
 )
 
 from apps.students.models import (
     Student
 )
 
-from apps.academics.subjects.models import (
+from apps.academics.curriculum.subjects.models import (
     Subject
 )
 
 from apps.core.common.views import (
-    BaseReportAPIView
+    BaseAPIView
 )
 
 
+# ==========================================
+# SUBJECT STRENGTH API VIEW
+# ==========================================
+
 class SubjectStrengthAPIView(
-    BaseReportAPIView
+    BaseAPIView
 ):
 
-    def get(self, request):
+    permission_classes = [
+        IsAuthenticated
+    ]
 
-        school = self.get_school(
-            request
+    # ======================================
+    # GET
+    # ======================================
+
+    def get(
+        self,
+        request
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
         )
+
+        # ==================================
+        # SCHOOL CHECK
+        # ==================================
 
         if not school:
 
-            return (
-                self.school_error_response()
+            return self.error_response(
+
+                message="School not found.",
+
+                status_code=400
             )
+
+        # ==================================
+        # CLASS ORDER
+        # ==================================
 
         class_order = {
 
@@ -49,25 +82,41 @@ class SubjectStrengthAPIView(
             "Twelfth": 7,
         }
 
+        # ==================================
+        # SUBJECTS
+        # ==================================
+
         subjects = (
 
             Subject.objects
 
             .filter(
-                school=school
+
+                school=school,
+
+                is_active=True,
+
+                is_deleted=False
             )
 
-            .order_by(
-                "name"
-            )
+            .order_by("name")
         )
+
+        # ==================================
+        # STUDENT GROUPS
+        # ==================================
 
         student_groups = (
 
             Student.objects
 
             .filter(
-                school_name=school.name
+
+                school=school,
+
+                is_active=True,
+
+                is_deleted=False
             )
 
             .values(
@@ -84,22 +133,29 @@ class SubjectStrengthAPIView(
                 order=Case(
 
                     *[
+
                         When(
+
                             studentclass=cls,
+
                             then=pos
                         )
 
                         for cls, pos in (
                             class_order.items()
                         )
-                    ]
+                    ],
+
+                    output_field=IntegerField()
                 )
             )
 
-            .order_by(
-                "order"
-            )
+            .order_by("order")
         )
+
+        # ==================================
+        # FINAL DATA
+        # ==================================
 
         final_data = []
 
@@ -123,7 +179,7 @@ class SubjectStrengthAPIView(
 
                 Student.objects.filter(
 
-                    school_name=school.name,
+                    school=school,
 
                     studentclass=group[
                         "studentclass"
@@ -135,9 +191,17 @@ class SubjectStrengthAPIView(
 
                     stream=group[
                         "stream"
-                    ]
+                    ],
+
+                    is_active=True,
+
+                    is_deleted=False
                 )
             )
+
+            # ==============================
+            # SUBJECT COUNTS
+            # ==============================
 
             for subject in subjects:
 
@@ -159,6 +223,10 @@ class SubjectStrengthAPIView(
                 row
             )
 
+        # ==================================
+        # RESPONSE
+        # ==================================
+
         return self.success_response(
-            final_data
+            data=final_data
         )

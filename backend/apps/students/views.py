@@ -8,19 +8,19 @@ from django.db.models import (
     Count,
     Q,
     Case,
-    When
-)
-
-from apps.core.utils import (
-    get_current_school
+    When,
+    IntegerField,
+    Value,
 )
 
 from apps.students.models import (
-    Student,
-    StudentAchievement
+    Student
+)
+from apps.students.achievements.models import (
+    Achievement
 )
 
-from apps.users.permissions import (
+from apps.accounts.authorization.permissions import (
     CanViewStudents
 )
 
@@ -38,27 +38,34 @@ class AchievementListAPIView(APIView):
     def get(self, request):
 
         achievements = (
-            StudentAchievement.objects
-            .select_related("exam_detail")
-            .all()
+
+            Achievement.objects
+
+            .select_related(
+                "exam_detail"
+            )
+
             .order_by("-date")
         )
 
         data = [
 
             {
-                "id": a.id,
+                "id": achievement.id,
 
-                "date": a.date,
+                "date": achievement.date,
 
                 "exam": (
-                    a.exam_detail.name
-                    if a.exam_detail
+
+                    achievement.exam_detail.name
+
+                    if achievement.exam_detail
+
                     else None
                 ),
             }
 
-            for a in achievements
+            for achievement in achievements
         ]
 
         return Response(data)
@@ -78,28 +85,33 @@ class AchievementDetailAPIView(APIView):
 
         achievement = get_object_or_404(
 
-            StudentAchievement.objects
+            Achievement.objects
             .select_related("exam_detail"),
 
             pk=pk
         )
 
-        return Response({
+        data = {
 
             "id": achievement.id,
 
             "date": achievement.date,
 
             "exam": (
+
                 achievement.exam_detail.name
+
                 if achievement.exam_detail
+
                 else None
             ),
-        })
+        }
+
+        return Response(data)
 
 
 # =========================================
-# STUDENT STRENGTH
+# STUDENT STRENGTH REPORT
 # =========================================
 
 class StudentStrengthAPIView(APIView):
@@ -110,58 +122,46 @@ class StudentStrengthAPIView(APIView):
 
     def get(self, request):
 
-        school = get_current_school(
-            request
-        )
-
-        if not school:
-
-            return Response({
-
-                "error": (
-                    "School not selected"
-                )
-
-            }, status=400)
+        # =====================================
+        # CLASS ORDER
+        # =====================================
 
         class_order = {
 
-            "Sixth": 1,
-
-            "Seventh": 2,
-
-            "Eighth": 3,
-
-            "Nineth": 4,
-
-            "Tenth": 5,
-
-            "Eleventh": 6,
-
-            "Twelfth": 7,
+            "6TH": 1,
+            "7TH": 2,
+            "8TH": 3,
+            "9TH": 4,
+            "10TH": 5,
+            "11TH": 6,
+            "12TH": 7,
         }
 
-        data = list(
+        # =====================================
+        # QUERYSET
+        # =====================================
+
+        queryset = (
 
             Student.objects.filter(
-                school_name=school.name
+                school=request.user.school
             )
 
             .values(
-                "studentclass",
-                "section",
-                "stream"
+                "student_class__name",
+                "section__name",
+                "stream__name",
             )
 
             .annotate(
 
-                # =====================================
+                # =================================
                 # SC
-                # =====================================
+                # =================================
 
                 scmale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Male",
@@ -174,7 +174,7 @@ class StudentStrengthAPIView(APIView):
 
                 scfemale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Female",
@@ -185,13 +185,13 @@ class StudentStrengthAPIView(APIView):
                     )
                 ),
 
-                # =====================================
+                # =================================
                 # BC-A
-                # =====================================
+                # =================================
 
                 bcamale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Male",
@@ -201,7 +201,7 @@ class StudentStrengthAPIView(APIView):
 
                 bcafemale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Female",
@@ -209,13 +209,13 @@ class StudentStrengthAPIView(APIView):
                     )
                 ),
 
-                # =====================================
+                # =================================
                 # BC-B
-                # =====================================
+                # =================================
 
                 bcbmale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Male",
@@ -225,7 +225,7 @@ class StudentStrengthAPIView(APIView):
 
                 bcbfemale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Female",
@@ -233,13 +233,13 @@ class StudentStrengthAPIView(APIView):
                     )
                 ),
 
-                # =====================================
+                # =================================
                 # GENERAL
-                # =====================================
+                # =================================
 
                 genmale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Male",
@@ -249,7 +249,7 @@ class StudentStrengthAPIView(APIView):
 
                 genfemale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Female",
@@ -257,13 +257,13 @@ class StudentStrengthAPIView(APIView):
                     )
                 ),
 
-                # =====================================
+                # =================================
                 # TOTAL
-                # =====================================
+                # =================================
 
                 totalmale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Male"
@@ -272,63 +272,82 @@ class StudentStrengthAPIView(APIView):
 
                 totalfemale=Count(
 
-                    "srn",
+                    "id",
 
                     filter=Q(
                         gender="Female"
                     )
                 ),
 
-                total=Count("srn"),
+                total=Count("id"),
 
-                # =====================================
+                # =================================
                 # CWSN
-                # =====================================
+                # =================================
 
                 malecwsn=Count(
 
-                    "srn",
+                    "id",
 
                     filter=(
+
                         Q(gender="Male")
+
                         &
-                        ~Q(disability=None)
+
+                        Q(
+                            disability__isnull=False
+                        )
+
                         &
+
                         ~Q(disability="")
                     )
                 ),
 
                 femalecwsn=Count(
 
-                    "srn",
+                    "id",
 
                     filter=(
+
                         Q(gender="Female")
+
                         &
-                        ~Q(disability=None)
+
+                        Q(
+                            disability__isnull=False
+                        )
+
                         &
+
                         ~Q(disability="")
                     )
                 ),
 
                 cwsn=Count(
 
-                    "srn",
+                    "id",
 
                     filter=(
+
+                        Q(
+                            disability__isnull=False
+                        )
+
+                        &
+
                         ~Q(disability="")
-                        |
-                        ~Q(disability=None)
                     )
                 ),
 
-                # =====================================
+                # =================================
                 # BPL
-                # =====================================
+                # =================================
 
                 malebpl=Count(
 
-                    "srn",
+                    "id",
 
                     filter=(
 
@@ -336,8 +355,8 @@ class StudentStrengthAPIView(APIView):
 
                         &
 
-                        ~Q(
-                            bpl_certificate_issuing_authority=None
+                        Q(
+                            bpl_certificate_issuing_authority__isnull=False
                         )
 
                         &
@@ -350,7 +369,7 @@ class StudentStrengthAPIView(APIView):
 
                 femalebpl=Count(
 
-                    "srn",
+                    "id",
 
                     filter=(
 
@@ -358,8 +377,8 @@ class StudentStrengthAPIView(APIView):
 
                         &
 
-                        ~Q(
-                            bpl_certificate_issuing_authority=None
+                        Q(
+                            bpl_certificate_issuing_authority__isnull=False
                         )
 
                         &
@@ -372,42 +391,50 @@ class StudentStrengthAPIView(APIView):
 
                 bpl=Count(
 
-                    "srn",
+                    "id",
 
                     filter=(
+
+                        Q(
+                            bpl_certificate_issuing_authority__isnull=False
+                        )
+
+                        &
 
                         ~Q(
                             bpl_certificate_issuing_authority=""
                         )
-
-                        |
-
-                        ~Q(
-                            bpl_certificate_issuing_authority=None
-                        )
                     )
                 ),
 
-                # =====================================
-                # CLASS ORDER
-                # =====================================
+                # =================================
+                # ORDER
+                # =================================
 
                 order=Case(
 
                     *[
 
                         When(
-                            studentclass=cls,
-                            then=pos
+                            student_class__name=class_name,
+                            then=Value(position)
                         )
 
-                        for cls, pos
+                        for class_name, position
+
                         in class_order.items()
-                    ]
+                    ],
+
+                    default=Value(999),
+
+                    output_field=IntegerField()
                 )
             )
 
-            .order_by("order")
+            .order_by(
+                "order",
+                "section__name"
+            )
         )
 
-        return Response(data)
+        return Response(queryset)

@@ -1,6 +1,19 @@
 from django.urls import path
-from .views import *
-from .views_extra import *
+from .views import (
+    AboutSchoolAPIView,
+    PrincipalAPIView,
+    AffiliationAPIView,
+    InfrastructureAPIView,
+    MandatoryDisclosureAPIView,
+    FAQAPIView,
+    ContactAPIView,
+)
+
+from .views_extra import (
+    AdmissionFormAPIView,
+    WebsitePagesAPIView,
+    DashboardAPIView,
+)
 urlpatterns = [
     path("about/", AboutSchoolAPIView.as_view()),
     path("principal/", PrincipalAPIView.as_view()),
@@ -8,7 +21,7 @@ urlpatterns = [
     path("infrastructure/", InfrastructureAPIView.as_view()),
     path("disclosure/", MandatoryDisclosureAPIView.as_view()),
     path("faq/", FAQAPIView.as_view()),
-    path("static/", StaticPagesAPIView.as_view()),
+    #path("static/", StaticPagesAPIView.as_view()),
     path("contact/", ContactAPIView.as_view()),
     path("admission-form/", AdmissionFormAPIView.as_view()),
     path("pages/", WebsitePagesAPIView.as_view()),

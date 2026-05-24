@@ -18,8 +18,8 @@ from django.utils import timezone
 
 from apps.finance.student_fees.models import StudentFee
 from apps.schools.models import School
-from apps.users.models.user_model import User
-from apps.core.models import SchoolBaseModel
+from apps.accounts.users.models import User
+from apps.core.common.base.models import SchoolBaseModel
 
 class FeePayment(SchoolBaseModel):
 

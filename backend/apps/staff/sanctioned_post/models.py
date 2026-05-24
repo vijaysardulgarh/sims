@@ -3,8 +3,8 @@ from django.db import models
 from apps.staff.post_type.models import PostType
 
 from apps.schools.models import School
-from apps.academics.subjects.models import Subject
-from apps.core.models import SchoolBaseModel
+from apps.academics.curriculum.subjects.models import Subject
+from apps.core.common.base.models import SchoolBaseModel
 
 class SanctionedPost(SchoolBaseModel):
 

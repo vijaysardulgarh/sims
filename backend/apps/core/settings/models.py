@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.core.schools.models import School
+from apps.schools.branches.models import School
 
 
 class SystemSetting(models.Model):

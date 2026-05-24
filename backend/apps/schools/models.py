@@ -2,20 +2,32 @@ from django.db import models
 
 from django.db.models import Q
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import (
+    ValidationError
+)
 
-from apps.core.models import AuditBaseModel
+from apps.core.common.base.models import (
+    AuditBaseModel
+)
 
-from apps.core.utils.slug import generate_unique_slug
+from apps.core.utils.slug import (
+    generate_unique_slug
+)
 
 
 # ==========================================
 # CLUSTER LOGO PATH
 # ==========================================
 
-def cluster_logo_path(instance, filename):
+def cluster_logo_path(
+    instance,
+    filename
+):
 
-    slug = instance.slug or "unassigned"
+    slug = (
+        instance.slug
+        or "unassigned"
+    )
 
     return (
         f"clusters/{slug}/logo/{filename}"
@@ -26,9 +38,15 @@ def cluster_logo_path(instance, filename):
 # SCHOOL LOGO PATH
 # ==========================================
 
-def school_logo_path(instance, filename):
+def school_logo_path(
+    instance,
+    filename
+):
 
-    slug = instance.slug or "unassigned"
+    slug = (
+        instance.slug
+        or "unassigned"
+    )
 
     return (
         f"schools/{slug}/logo/{filename}"
@@ -39,7 +57,13 @@ def school_logo_path(instance, filename):
 # CLUSTER MODEL
 # ==========================================
 
-class Cluster(AuditBaseModel):
+class Cluster(
+    AuditBaseModel
+):
+
+    # ======================================
+    # BASIC INFO
+    # ======================================
 
     name = models.CharField(
         max_length=255,
@@ -61,11 +85,27 @@ class Cluster(AuditBaseModel):
         null=True
     )
 
+    # ======================================
+    # STATUS
+    # ======================================
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    # ======================================
+    # MEDIA
+    # ======================================
+
     logo = models.ImageField(
         upload_to=cluster_logo_path,
         blank=True,
         null=True
     )
+
+    # ======================================
+    # CONTACT
+    # ======================================
 
     email = models.EmailField(
         blank=True,
@@ -83,6 +123,10 @@ class Cluster(AuditBaseModel):
         null=True
     )
 
+    # ======================================
+    # REGION
+    # ======================================
+
     timezone = models.CharField(
         max_length=100,
         default="Asia/Kolkata"
@@ -92,6 +136,10 @@ class Cluster(AuditBaseModel):
         max_length=20,
         default="INR"
     )
+
+    # ======================================
+    # GPS
+    # ======================================
 
     latitude = models.DecimalField(
         max_digits=9,
@@ -107,22 +155,32 @@ class Cluster(AuditBaseModel):
         null=True
     )
 
-    geo_radius_meters = models.PositiveIntegerField(
-        default=100,
-        help_text="Geofence radius in meters"
+    geo_radius_meters = (
+        models.PositiveIntegerField(
+            default=100,
+            help_text=(
+                "Geofence radius in meters"
+            )
+        )
     )
 
-    # ==========================================
+    # ======================================
     # SAVE
-    # ==========================================
+    # ======================================
 
-    def save(self, *args, **kwargs):
+    def save(
+        self,
+        *args,
+        **kwargs
+    ):
 
         if not self.slug:
 
-            self.slug = generate_unique_slug(
-                Cluster,
-                self.name
+            self.slug = (
+                generate_unique_slug(
+                    Cluster,
+                    self.name
+                )
             )
 
         self.full_clean()
@@ -132,17 +190,19 @@ class Cluster(AuditBaseModel):
             **kwargs
         )
 
-    # ==========================================
+    # ======================================
     # STRING
-    # ==========================================
+    # ======================================
 
-    def __str__(self):
+    def __str__(
+        self
+    ):
 
         return self.name
 
-    # ==========================================
+    # ======================================
     # META
-    # ==========================================
+    # ======================================
 
     class Meta:
 
@@ -150,20 +210,31 @@ class Cluster(AuditBaseModel):
 
         verbose_name_plural = "Clusters"
 
-        ordering = ["name"]
+        ordering = [
+            "name"
+        ]
 
         constraints = [
 
             models.UniqueConstraint(
-                models.functions.Lower("name"),
+
+                models.functions.Lower(
+                    "name"
+                ),
+
                 name=(
                     "unique_cluster_name_case_insensitive"
                 )
             ),
 
             models.UniqueConstraint(
+
                 fields=["email"],
-                condition=Q(email__isnull=False),
+
+                condition=Q(
+                    email__isnull=False
+                ),
+
                 name=(
                     "unique_cluster_email_if_present"
                 )
@@ -172,9 +243,21 @@ class Cluster(AuditBaseModel):
 
         indexes = [
 
-            models.Index(fields=["name"]),
+            models.Index(
+                fields=["name"]
+            ),
 
-            models.Index(fields=["is_active"]),
+            models.Index(
+                fields=["code"]
+            ),
+
+            models.Index(
+                fields=["is_active"]
+            ),
+
+            models.Index(
+                fields=["is_deleted"]
+            ),
         ]
 
 
@@ -182,11 +265,13 @@ class Cluster(AuditBaseModel):
 # SCHOOL MODEL
 # ==========================================
 
-class School(AuditBaseModel):
+class School(
+    AuditBaseModel
+):
 
-    # ==========================================
+    # ======================================
     # CHOICES
-    # ==========================================
+    # ======================================
 
     SCHOOL_TYPE_CHOICES = [
 
@@ -194,7 +279,10 @@ class School(AuditBaseModel):
 
         ("MIDDLE", "Middle School"),
 
-        ("SECONDARY", "Secondary School"),
+        (
+            "SECONDARY",
+            "Secondary School"
+        ),
 
         (
             "SENIOR_SECONDARY",
@@ -205,7 +293,10 @@ class School(AuditBaseModel):
 
         ("COLLEGE", "College"),
 
-        ("COACHING", "Coaching Institute"),
+        (
+            "COACHING",
+            "Coaching Institute"
+        ),
     ]
 
     BOARD_CHOICES = [
@@ -214,33 +305,44 @@ class School(AuditBaseModel):
 
         ("ICSE", "ICSE"),
 
-        ("STATE", "State Board"),
+        (
+            "STATE",
+            "State Board"
+        ),
 
         (
             "IB",
             "International Baccalaureate"
         ),
 
-        ("CAMBRIDGE", "Cambridge"),
+        (
+            "CAMBRIDGE",
+            "Cambridge"
+        ),
 
         ("OTHER", "Other"),
     ]
 
-    # ==========================================
+    # ======================================
     # RELATIONS
-    # ==========================================
+    # ======================================
 
     cluster = models.ForeignKey(
+
         Cluster,
+
         on_delete=models.SET_NULL,
+
         null=True,
+
         blank=True,
+
         related_name="schools"
     )
 
-    # ==========================================
+    # ======================================
     # BASIC INFO
-    # ==========================================
+    # ======================================
 
     name = models.CharField(
         max_length=255,
@@ -264,6 +366,23 @@ class School(AuditBaseModel):
         null=True
     )
 
+    motto = models.CharField(
+        max_length=255,
+        blank=True
+    )
+
+    # ======================================
+    # STATUS
+    # ======================================
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    # ======================================
+    # MEDIA
+    # ======================================
+
     logo = models.ImageField(
         upload_to=school_logo_path,
         blank=True,
@@ -271,14 +390,9 @@ class School(AuditBaseModel):
         default="schools/default/logo.png"
     )
 
-    motto = models.CharField(
-        max_length=255,
-        blank=True
-    )
-
-    # ==========================================
+    # ======================================
     # CONTACT
-    # ==========================================
+    # ======================================
 
     email = models.EmailField(
         blank=True,
@@ -302,9 +416,9 @@ class School(AuditBaseModel):
         null=True
     )
 
-    # ==========================================
+    # ======================================
     # ADDRESS
-    # ==========================================
+    # ======================================
 
     address = models.TextField(
         blank=True,
@@ -334,9 +448,9 @@ class School(AuditBaseModel):
         null=True
     )
 
-    # ==========================================
+    # ======================================
     # MANAGEMENT
-    # ==========================================
+    # ======================================
 
     principal_name = models.CharField(
         max_length=255,
@@ -344,9 +458,11 @@ class School(AuditBaseModel):
         null=True
     )
 
-    established_date = models.DateField(
-        blank=True,
-        null=True
+    established_date = (
+        models.DateField(
+            blank=True,
+            null=True
+        )
     )
 
     accreditation = models.CharField(
@@ -360,9 +476,9 @@ class School(AuditBaseModel):
         null=True
     )
 
-    # ==========================================
+    # ======================================
     # ACADEMICS
-    # ==========================================
+    # ======================================
 
     school_type = models.CharField(
         max_length=50,
@@ -389,9 +505,9 @@ class School(AuditBaseModel):
         )
     )
 
-    # ==========================================
+    # ======================================
     # REGION
-    # ==========================================
+    # ======================================
 
     timezone = models.CharField(
         max_length=100,
@@ -403,18 +519,18 @@ class School(AuditBaseModel):
         default="INR"
     )
 
-    # ==========================================
+    # ======================================
     # SOCIAL
-    # ==========================================
+    # ======================================
 
     social_media_links = models.JSONField(
         default=dict,
         blank=True
     )
 
-    # ==========================================
+    # ======================================
     # GPS
-    # ==========================================
+    # ======================================
 
     latitude = models.DecimalField(
         max_digits=9,
@@ -439,39 +555,49 @@ class School(AuditBaseModel):
         )
     )
 
-    # ==========================================
-    # VALIDATIONS
-    # ==========================================
+    # ======================================
+    # VALIDATION
+    # ======================================
 
-    def clean(self):
+    def clean(
+        self
+    ):
 
         if self.established_date:
 
             from datetime import date
 
             if (
+
                 self.established_date
                 > date.today()
             ):
 
                 raise ValidationError(
+
                     (
                         "Established date "
-                        "cannot be in future"
+                        "cannot be in future."
                     )
                 )
 
-    # ==========================================
+    # ======================================
     # SAVE
-    # ==========================================
+    # ======================================
 
-    def save(self, *args, **kwargs):
+    def save(
+        self,
+        *args,
+        **kwargs
+    ):
 
         if not self.slug:
 
-            self.slug = generate_unique_slug(
-                School,
-                self.name
+            self.slug = (
+                generate_unique_slug(
+                    School,
+                    self.name
+                )
             )
 
         self.full_clean()
@@ -481,17 +607,19 @@ class School(AuditBaseModel):
             **kwargs
         )
 
-    # ==========================================
+    # ======================================
     # STRING
-    # ==========================================
+    # ======================================
 
-    def __str__(self):
+    def __str__(
+        self
+    ):
 
         return self.name
 
-    # ==========================================
+    # ======================================
     # META
-    # ==========================================
+    # ======================================
 
     class Meta:
 
@@ -499,20 +627,31 @@ class School(AuditBaseModel):
 
         verbose_name_plural = "Schools"
 
-        ordering = ["name"]
+        ordering = [
+            "name"
+        ]
 
         constraints = [
 
             models.UniqueConstraint(
-                models.functions.Lower("name"),
+
+                models.functions.Lower(
+                    "name"
+                ),
+
                 name=(
                     "unique_school_name_case_insensitive"
                 )
             ),
 
             models.UniqueConstraint(
+
                 fields=["email"],
-                condition=Q(email__isnull=False),
+
+                condition=Q(
+                    email__isnull=False
+                ),
+
                 name=(
                     "unique_school_email_if_present"
                 )
@@ -521,9 +660,23 @@ class School(AuditBaseModel):
 
         indexes = [
 
-            models.Index(fields=["name"]),
+            models.Index(
+                fields=["name"]
+            ),
 
-            models.Index(fields=["is_active"]),
+            models.Index(
+                fields=["code"]
+            ),
 
-            models.Index(fields=["code"]),
+            models.Index(
+                fields=["subdomain"]
+            ),
+
+            models.Index(
+                fields=["is_active"]
+            ),
+
+            models.Index(
+                fields=["is_deleted"]
+            ),
         ]

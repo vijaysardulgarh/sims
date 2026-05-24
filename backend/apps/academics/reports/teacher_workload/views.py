@@ -2,12 +2,16 @@ from django.db.models import (
     Count
 )
 
-from apps.academics.timetables.models import (
+from rest_framework.permissions import (
+    IsAuthenticated
+)
+
+from apps.academics.timetable.timetables.models import (
     Timetable
 )
 
 from apps.core.common.views import (
-    BaseReportAPIView
+    BaseAPIView
 )
 
 from apps.academics.reports.teacher_workload.serializers import (
@@ -15,28 +19,61 @@ from apps.academics.reports.teacher_workload.serializers import (
 )
 
 
+# ==========================================
+# TEACHER WORKLOAD API VIEW
+# ==========================================
+
 class TeacherWorkloadAPIView(
-    BaseReportAPIView
+    BaseAPIView
 ):
 
-    def get(self, request):
+    permission_classes = [
+        IsAuthenticated
+    ]
 
-        school = self.get_school(
-            request
+    # ======================================
+    # GET
+    # ======================================
+
+    def get(
+        self,
+        request
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
         )
+
+        # ==================================
+        # SCHOOL CHECK
+        # ==================================
 
         if not school:
 
-            return (
-                self.school_error_response()
+            return self.error_response(
+
+                message="School not found.",
+
+                status_code=400
             )
+
+        # ==================================
+        # QUERYSET
+        # ==================================
 
         queryset = (
 
             Timetable.objects
 
             .filter(
-                school=school
+
+                school=school,
+
+                is_active=True,
+
+                is_deleted=False
             )
 
             .values(
@@ -57,14 +94,24 @@ class TeacherWorkloadAPIView(
             )
         )
 
+        # ==================================
+        # SERIALIZER
+        # ==================================
+
         serializer = (
 
             TeacherWorkloadSerializer(
+
                 queryset,
+
                 many=True
             )
         )
 
+        # ==================================
+        # RESPONSE
+        # ==================================
+
         return self.success_response(
-            serializer.data
+            data=serializer.data
         )

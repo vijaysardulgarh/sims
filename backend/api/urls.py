@@ -23,8 +23,8 @@ urlpatterns = [
     # ======================================
 
     path(
-        "api/users/",
-        include("apps.users.urls")
+        "api/accounts/",
+        include("apps.accounts.urls")
     ),
 
     # ======================================

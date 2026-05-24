@@ -9,9 +9,9 @@ from django.core.exceptions import (
 )
 
 from apps.schools.models import School
-from apps.academics.classes.models import Class
-from apps.academics.streams.models import Stream
-from apps.core.models import SchoolBaseModel
+from apps.academics.structure.classes.models import Class
+from apps.academics.structure.streams.models import Stream
+from apps.core.common.base.models import SchoolBaseModel
 
 class FeeStructure(SchoolBaseModel):
 

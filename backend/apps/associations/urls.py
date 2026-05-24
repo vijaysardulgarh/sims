@@ -1,5 +1,12 @@
 from django.urls import path
-from .views import *
+
+from .views import (
+    SMCMemberAPIView,
+    NodalStaffAPIView,
+    CommitteeDetailAPIView,
+    StaffAssociationRolesAPIView,
+    StaticCommitteeAPIView,
+)
 
 urlpatterns = [
     path("smc/", SMCMemberAPIView.as_view()),

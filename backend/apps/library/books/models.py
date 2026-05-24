@@ -8,7 +8,7 @@ from django.core.exceptions import (
     ValidationError
 )
 from apps.schools.models import School
-from apps.core.models import SchoolBaseModel
+from apps.core.common.base.models import SchoolBaseModel
 
 class Book(SchoolBaseModel):
 

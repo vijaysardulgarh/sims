@@ -1,0 +1,28 @@
+{
+    "python.analysis.extraPaths": [
+        "./backend"
+    ],
+
+    "python.autoComplete.extraPaths": [
+        "./backend"
+    ],
+
+    "python.envFile": "${workspaceFolder}/backend/.env",
+
+    "python.analysis.importFormat": "absolute",
+
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "",
+            "depth": 10
+        }
+    ],
+
+    "python.analysis.autoImportCompletions": true,
+
+    "python.analysis.typeCheckingMode": "basic",
+
+    "python.analysis.useLibraryCodeForTypes": true,
+
+    "python.terminal.activateEnvironment": true
+}

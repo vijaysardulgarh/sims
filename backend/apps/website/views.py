@@ -1,175 +1,541 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+from django.shortcuts import (
+    get_object_or_404
+)
 
-from apps.core.utils.helpers import get_current_school
+from rest_framework.views import (
+    APIView
+)
+
+from rest_framework.response import (
+    Response
+)
+
+from rest_framework.permissions import (
+    IsAuthenticated
+)
+
 from apps.website.models import (
+
     AboutSchool,
+
     Principal,
+
     Affiliation,
+
     MandatoryPublicDisclosure,
+
     FAQ
 )
-from apps.schools.models import School
+
+from apps.schools.models import (
+    School
+)
+
+from apps.core.common.views import (
+    BaseAPIView
+)
 
 
 # =========================================
 # ABOUT SCHOOL
 # =========================================
-class AboutSchoolAPIView(APIView):
 
-    def get(self, request):
+class AboutSchoolAPIView(
+    BaseAPIView
+):
 
-        school = get_current_school(request)
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get(
+        self,
+        request
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
+        )
+
         if not school:
-            return Response({"error": "School not selected"}, status=400)
 
-        about = AboutSchool.objects.filter(school=school).first()
+            return self.error_response(
+
+                message="School not found.",
+
+                status_code=400
+            )
+
+        about = (
+
+            AboutSchool.objects.filter(
+
+                school=school,
+
+                is_active=True,
+
+                is_deleted=False
+            )
+
+            .first()
+        )
 
         if not about:
-            return Response({"about": None})
 
-        return Response({
-            "description": about.description,
-            "vision": getattr(about, "vision", ""),
-            "mission": getattr(about, "mission", "")
-        })
+            return self.success_response(
+
+                data={
+                    "about": None
+                }
+            )
+
+        return self.success_response(
+
+            data={
+
+                "description":
+                    about.description,
+
+                "vision":
+                    getattr(
+                        about,
+                        "vision",
+                        ""
+                    ),
+
+                "mission":
+                    getattr(
+                        about,
+                        "mission",
+                        ""
+                    )
+            }
+        )
 
 
 # =========================================
 # PRINCIPAL MESSAGE
 # =========================================
-class PrincipalAPIView(APIView):
 
-    def get(self, request):
+class PrincipalAPIView(
+    BaseAPIView
+):
 
-        school = get_current_school(request)
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get(
+        self,
+        request
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
+        )
+
+        if not school:
+
+            return self.error_response(
+
+                message="School not found.",
+
+                status_code=400
+            )
 
         message = (
-            Principal.objects.filter(school=school).first()
-            if school else Principal.objects.first()
+
+            Principal.objects.filter(
+
+                school=school,
+
+                is_active=True,
+
+                is_deleted=False
+            )
+
+            .first()
         )
 
         if not message:
-            return Response({"message": None})
 
-        return Response({
-            "name": message.name,
-            "message": message.message,
-            "photo": getattr(message, "photo", None)
-        })
+            return self.success_response(
+
+                data={
+                    "message": None
+                }
+            )
+
+        return self.success_response(
+
+            data={
+
+                "name":
+                    message.name,
+
+                "message":
+                    message.message,
+
+                "photo":
+
+                    getattr(
+                        message,
+                        "photo",
+                        None
+                    )
+            }
+        )
 
 
 # =========================================
 # AFFILIATION STATUS
 # =========================================
-class AffiliationAPIView(APIView):
 
-    def get(self, request):
+class AffiliationAPIView(
+    BaseAPIView
+):
 
-        school = get_current_school(request)
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get(
+        self,
+        request
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
+        )
+
         if not school:
-            return Response({"error": "School not selected"}, status=400)
 
-        affiliations = Affiliation.objects.filter(school=school)
+            return self.error_response(
 
-        return Response(list(affiliations.values()))
+                message="School not found.",
+
+                status_code=400
+            )
+
+        affiliations = (
+
+            Affiliation.objects.filter(
+
+                school=school,
+
+                is_active=True,
+
+                is_deleted=False
+            )
+
+            .order_by("id")
+        )
+
+        return self.success_response(
+
+            data=list(
+                affiliations.values()
+            )
+        )
 
 
 # =========================================
 # INFRASTRUCTURE
 # =========================================
-class InfrastructureAPIView(APIView):
 
-    def get(self, request):
+class InfrastructureAPIView(
+    BaseAPIView
+):
 
-        school = get_current_school(request)
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get(
+        self,
+        request
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
+        )
+
         if not school:
-            return Response({"error": "School not selected"}, status=400)
 
-        infrastructures = school.infrastructures.all().order_by("category")
+            return self.error_response(
+
+                message="School not found.",
+
+                status_code=400
+            )
+
+        infrastructures = (
+
+            school.infrastructures.filter(
+
+                is_active=True,
+
+                is_deleted=False
+            )
+
+            .order_by("category")
+        )
 
         data = [
+
             {
-                "id": i.id,
-                "name": i.name,
-                "category": i.category,
-                "description": getattr(i, "description", "")
+
+                "id":
+                    infrastructure.id,
+
+                "name":
+                    infrastructure.name,
+
+                "category":
+                    infrastructure.category,
+
+                "description":
+
+                    getattr(
+
+                        infrastructure,
+
+                        "description",
+
+                        ""
+                    )
             }
-            for i in infrastructures
+
+            for infrastructure
+            in infrastructures
         ]
 
-        return Response(data)
+        return self.success_response(
+            data=data
+        )
 
 
 # =========================================
 # MANDATORY DISCLOSURE
 # =========================================
-class MandatoryDisclosureAPIView(APIView):
 
-    def get(self, request):
+class MandatoryDisclosureAPIView(
+    BaseAPIView
+):
 
-        disclosures = MandatoryPublicDisclosure.objects.filter(
-            is_active=True
-        ).order_by("id")
+    permission_classes = [
+        IsAuthenticated
+    ]
 
-        return Response(list(disclosures.values()))
+    def get(
+        self,
+        request
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
+        )
+
+        disclosures = (
+
+            MandatoryPublicDisclosure.objects
+
+            .filter(
+
+                school=school,
+
+                is_active=True,
+
+                is_deleted=False
+            )
+
+            .order_by("id")
+        )
+
+        return self.success_response(
+
+            data=list(
+                disclosures.values()
+            )
+        )
 
 
 # =========================================
 # FAQ
 # =========================================
-class FAQAPIView(APIView):
 
-    def get(self, request):
+class FAQAPIView(
+    BaseAPIView
+):
 
-        faqs = FAQ.objects.filter(is_active=True).order_by("order", "category")
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get(
+        self,
+        request
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
+        )
+
+        faqs = (
+
+            FAQ.objects.filter(
+
+                school=school,
+
+                is_active=True,
+
+                is_deleted=False
+            )
+
+            .order_by(
+
+                "order",
+
+                "category"
+            )
+        )
 
         categories = {}
 
         for faq in faqs:
-            cat = faq.get_category_display()
 
-            if cat not in categories:
-                categories[cat] = []
+            category = (
+                faq.get_category_display()
+            )
 
-            categories[cat].append({
-                "question": faq.question,
-                "answer": faq.answer
+            if category not in categories:
+
+                categories[
+                    category
+                ] = []
+
+            categories[
+                category
+            ].append({
+
+                "question":
+                    faq.question,
+
+                "answer":
+                    faq.answer
             })
 
-        return Response(categories)
+        return self.success_response(
+            data=categories
+        )
 
 
 # =========================================
 # STATIC CONTENT FLAGS
 # =========================================
-class StaticPagesAPIView(APIView):
 
-    def get(self, request):
+class StaticPagesAPIView(
+    BaseAPIView
+):
 
-        return Response({
-            "achievements": True,
-            "board_results": True,
-            "sports_achievements": True
-        })
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get(
+        self,
+        request
+    ):
+
+        return self.success_response(
+
+            data={
+
+                "achievements":
+                    True,
+
+                "board_results":
+                    True,
+
+                "sports_achievements":
+                    True
+            }
+        )
 
 
 # =========================================
 # CONTACT
 # =========================================
-class ContactAPIView(APIView):
 
-    def get(self, request):
+class ContactAPIView(
+    BaseAPIView
+):
 
-        school = get_current_school(request)
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get(
+        self,
+        request
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
+        )
 
         if not school:
-            return Response({"contact": None})
 
-        return Response({
-            "name": school.name,
-            "address": getattr(school, "address", ""),
-            "phone": getattr(school, "phone_number", ""),
-            "email": getattr(school, "email", "")
-        })
+            return self.success_response(
+
+                data={
+                    "contact": None
+                }
+            )
+
+        return self.success_response(
+
+            data={
+
+                "name":
+                    school.name,
+
+                "address":
+
+                    getattr(
+                        school,
+                        "address",
+                        ""
+                    ),
+
+                "phone":
+
+                    getattr(
+                        school,
+                        "phone",
+                        ""
+                    ),
+
+                "email":
+
+                    getattr(
+                        school,
+                        "email",
+                        ""
+                    )
+            }
+        )
