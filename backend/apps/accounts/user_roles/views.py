@@ -58,7 +58,7 @@ class UserRoleListCreateAPIView(
 
             .filter(
 
-                school=self.request.school,
+                school=self.getattr(request.user, "school", None),
 
                 is_deleted=False
             )
@@ -77,7 +77,7 @@ class UserRoleListCreateAPIView(
 
         serializer.save(
 
-            school=self.request.school,
+            school=self.getattr(request.user, "school", None),
 
             created_by=self.request.user
         )
@@ -120,7 +120,7 @@ class UserRoleDetailAPIView(
 
             .filter(
 
-                school=self.request.school,
+                school=self.getattr(request.user, "school", None),
 
                 is_deleted=False
             )

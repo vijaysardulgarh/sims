@@ -14,32 +14,13 @@ from apps.accounts.permissions.serializers import (
 
 
 # =========================================
-# PERMISSION LIST API
+# PERMISSION LIST CREATE API
 # =========================================
 
 class PermissionListAPIView(
 
-    generics.ListAPIView
+    generics.ListCreateAPIView
 ):
-
-    queryset = (
-
-        Permission.objects.filter(
-
-            is_deleted=False,
-
-            is_active=True
-        )
-
-        .order_by(
-
-            "module",
-
-            "display_order",
-
-            "name"
-        )
-    )
 
     serializer_class = (
         PermissionSerializer
@@ -48,6 +29,107 @@ class PermissionListAPIView(
     permission_classes = [
         IsAuthenticated
     ]
+
+    # =====================================
+    # GET QUERYSET
+    # =====================================
+
+    def get_queryset(
+        self
+    ):
+
+        # =================================
+        # SUPER ADMIN
+        # =================================
+
+        if self.request.user.is_superuser:
+
+            return (
+
+                Permission.objects.filter(
+
+                    is_deleted=False
+                )
+
+                .order_by(
+
+                    "module",
+
+                    "display_order",
+
+                    "name"
+                )
+            )
+
+        # =================================
+        # SCHOOL ADMIN
+        # =================================
+
+        return (
+
+            Permission.objects.filter(
+
+                school=getattr(
+
+                    self.request.user,
+
+                    "school",
+
+                    None
+                ),
+
+                is_deleted=False
+            )
+
+            .order_by(
+
+                "module",
+
+                "display_order",
+
+                "name"
+            )
+        )
+
+    # =====================================
+    # PERFORM CREATE
+    # =====================================
+
+    def perform_create(
+        self,
+        serializer
+    ):
+
+        # =================================
+        # SUPER ADMIN
+        # =================================
+
+        if self.request.user.is_superuser:
+
+            serializer.save(
+
+                created_by=self.request.user
+            )
+
+        # =================================
+        # SCHOOL ADMIN
+        # =================================
+
+        else:
+
+            serializer.save(
+
+                school=getattr(
+
+                    self.request.user,
+
+                    "school",
+
+                    None
+                ),
+
+                created_by=self.request.user
+            )
 
 
 # =========================================
@@ -56,18 +138,8 @@ class PermissionListAPIView(
 
 class PermissionDetailAPIView(
 
-    generics.RetrieveAPIView
+    generics.RetrieveUpdateDestroyAPIView
 ):
-
-    queryset = (
-
-        Permission.objects.filter(
-
-            is_deleted=False,
-
-            is_active=True
-        )
-    )
 
     serializer_class = (
         PermissionSerializer
@@ -76,3 +148,70 @@ class PermissionDetailAPIView(
     permission_classes = [
         IsAuthenticated
     ]
+
+    # =====================================
+    # GET QUERYSET
+    # =====================================
+
+    def get_queryset(
+        self
+    ):
+
+        # =================================
+        # SUPER ADMIN
+        # =================================
+
+        if self.request.user.is_superuser:
+
+            return Permission.objects.filter(
+
+                is_deleted=False
+            )
+
+        # =================================
+        # SCHOOL ADMIN
+        # =================================
+
+        return Permission.objects.filter(
+
+            school=getattr(
+
+                self.request.user,
+
+                "school",
+
+                None
+            ),
+
+            is_deleted=False
+        )
+
+    # =====================================
+    # PERFORM UPDATE
+    # =====================================
+
+    def perform_update(
+        self,
+        serializer
+    ):
+
+        serializer.save(
+            updated_by=self.request.user
+        )
+
+    # =====================================
+    # SOFT DELETE
+    # =====================================
+
+    def perform_destroy(
+        self,
+        instance
+    ):
+
+        instance.is_deleted = True
+
+        instance.updated_by = (
+            self.request.user
+        )
+
+        instance.save()

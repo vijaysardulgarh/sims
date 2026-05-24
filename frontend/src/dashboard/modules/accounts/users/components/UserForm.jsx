@@ -184,7 +184,7 @@ const UserForm = ({
 
 
     // =====================================
-    // SUBMIT
+    // HANDLE SUBMIT
     // =====================================
 
     const handleSubmit =
@@ -196,8 +196,13 @@ const UserForm = ({
 
         try {
 
+            // =====================================
+            // FORM DATA
+            // =====================================
+
             const payload =
                 new FormData();
+
 
             Object.keys(formData)
                 .forEach((key) => {
@@ -219,6 +224,10 @@ const UserForm = ({
             });
 
 
+            // =====================================
+            // UPDATE USER
+            // =====================================
+
             if (userId) {
 
                 await userService.updateUser(
@@ -227,23 +236,91 @@ const UserForm = ({
 
                     payload
                 );
+            }
 
-            } else {
+            // =====================================
+            // CREATE USER
+            // =====================================
+
+            else {
 
                 await userService.createUser(
                     payload
                 );
             }
 
+
+            // =====================================
+            // SUCCESS
+            // =====================================
+
+            alert(
+                "User saved successfully"
+            );
+
+
             navigate(
                 "/dashboard/users"
             );
 
-        } catch (error) {
+        }
 
-            console.error(error);
+        catch (error) {
 
-        } finally {
+            // =====================================
+            // FULL ERROR
+            // =====================================
+
+            console.error(
+
+                "FULL ERROR:",
+
+                error
+            );
+
+
+            // =====================================
+            // RESPONSE
+            // =====================================
+
+            console.log(
+
+                "RESPONSE:",
+
+                error.response
+            );
+
+
+            // =====================================
+            // VALIDATION DATA
+            // =====================================
+
+            console.log(
+
+                "DATA:",
+
+                error.response?.data
+            );
+
+
+            // =====================================
+            // ALERT
+            // =====================================
+
+            alert(
+
+                JSON.stringify(
+
+                    error.response?.data,
+
+                    null,
+
+                    2
+                )
+            );
+        }
+
+        finally {
 
             setLoading(false);
         }
@@ -463,86 +540,6 @@ const UserForm = ({
                             />
                         )
                     }
-
-                </div>
-
-
-                {/* CHECKBOXES */}
-
-                <div className="space-y-4">
-
-                    <label className="flex items-center gap-3">
-
-                        <input
-                            type="checkbox"
-                            name="is_active"
-                            checked={formData.is_active}
-                            onChange={handleChange}
-                        />
-
-                        Active User
-
-                    </label>
-
-
-                    <label className="flex items-center gap-3">
-
-                        <input
-                            type="checkbox"
-                            name="is_staff"
-                            checked={formData.is_staff}
-                            onChange={handleChange}
-                        />
-
-                        Staff User
-
-                    </label>
-
-
-                    <label className="flex items-center gap-3">
-
-                        <input
-                            type="checkbox"
-                            name="is_superuser"
-                            checked={formData.is_superuser}
-                            onChange={handleChange}
-                        />
-
-                        Superuser
-
-                    </label>
-
-                </div>
-
-
-                <div className="space-y-4">
-
-                    <label className="flex items-center gap-3">
-
-                        <input
-                            type="checkbox"
-                            name="is_email_verified"
-                            checked={formData.is_email_verified}
-                            onChange={handleChange}
-                        />
-
-                        Email Verified
-
-                    </label>
-
-
-                    <label className="flex items-center gap-3">
-
-                        <input
-                            type="checkbox"
-                            name="is_phone_verified"
-                            checked={formData.is_phone_verified}
-                            onChange={handleChange}
-                        />
-
-                        Phone Verified
-
-                    </label>
 
                 </div>
 

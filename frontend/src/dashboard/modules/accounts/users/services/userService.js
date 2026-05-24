@@ -13,7 +13,7 @@ const userService = {
 
         const response = await api.get(
 
-            "/users/",
+            "/accounts/users/",
 
             {
                 params,
@@ -34,7 +34,7 @@ const userService = {
 
         const response = await api.get(
 
-            `/users/${id}/`
+            `/accounts/users/${id}/`
         );
 
         return response.data;
@@ -51,7 +51,7 @@ const userService = {
 
         const response = await api.post(
 
-            "/users/",
+            "/accounts/users/",
 
             data,
 
@@ -82,7 +82,7 @@ const userService = {
 
         const response = await api.patch(
 
-            `/users/${id}/`,
+            `/accounts/users/${id}/`,
 
             data,
 
@@ -109,7 +109,7 @@ const userService = {
 
         const response = await api.delete(
 
-            `/users/${id}/`
+            `/accounts/users/${id}/`
         );
 
         return response.data;
@@ -130,7 +130,7 @@ const userService = {
 
         const response = await api.post(
 
-            `/users/${userId}/roles/`,
+            `/accounts/users/${userId}/roles/`,
 
             {
                 roles,

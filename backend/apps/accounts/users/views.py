@@ -57,17 +57,26 @@ class UserListCreateAPIView(
         self
     ):
 
-        return (
+        school = getattr(
 
-            User.objects.filter(
+            self.request.user,
 
-                school=self.request.school,
+            "school",
 
-                is_deleted=False
+            None
+        )
+
+        queryset = User.objects.filter(
+            is_deleted=False
+        )
+
+        if school:
+
+            queryset = queryset.filter(
+                school=school
             )
 
-            .order_by("-id")
-        )
+        return queryset.order_by("-id")
 
     # =====================================
     # PERFORM CREATE
@@ -80,7 +89,7 @@ class UserListCreateAPIView(
 
         serializer.save(
 
-            school=self.request.school,
+            school=self.request.user.school,
 
             created_by=self.request.user
         )
@@ -119,15 +128,26 @@ class UserDetailAPIView(
         self
     ):
 
-        return (
+        school = getattr(
 
-            User.objects.filter(
+            self.request.user,
 
-                school=self.request.school,
+            "school",
 
-                is_deleted=False
-            )
+            None
         )
+
+        queryset = User.objects.filter(
+            is_deleted=False
+        )
+
+        if school:
+
+            queryset = queryset.filter(
+                school=school
+            )
+
+        return queryset
 
     # =====================================
     # PERFORM UPDATE

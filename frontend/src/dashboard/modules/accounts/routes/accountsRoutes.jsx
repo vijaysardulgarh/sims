@@ -122,9 +122,14 @@ const accountsRoutes = (
         />
 
         <Route
-            path="role-permissions/:id"
+            path="roles/:id/permissions"
             element={<RolePermissionsPage />}
         />
+        
+        {/* <Route
+            path="role-permissions/:id"
+            element={<RolePermissionsPage />}
+        /> */}
 
 
         {/* ================================= */}

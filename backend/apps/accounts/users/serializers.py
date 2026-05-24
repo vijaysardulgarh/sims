@@ -144,18 +144,17 @@ class UserSerializer(
             None
         )
 
-        request = self.context.get(
-            "request"
-        )
-
         user = User.objects.create_user(
-
-            password=password,
-
-            school=request.school,
-
             **validated_data
         )
+
+        if password:
+
+            user.set_password(
+                password
+            )
+
+            user.save()
 
         return user
 

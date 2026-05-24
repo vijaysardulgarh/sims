@@ -3,30 +3,27 @@ import api from "../../../../../services/api/axios";
 
 const PermissionService = {
 
-    // =====================================
-    // GET ALL PERMISSIONS
-    // =====================================
-
     getPermissions: async (
         params = {}
     ) => {
 
         const response = await api.get(
 
-            "/users/permissions/",
+            "/accounts/permissions/",
 
             {
                 params,
             }
         );
 
+        console.log(
+            "RAW API RESPONSE:",
+            response.data
+        );
+
         return response.data;
     },
 
-
-    // =====================================
-    // GET SINGLE PERMISSION
-    // =====================================
 
     getPermission: async (
         id
@@ -34,16 +31,12 @@ const PermissionService = {
 
         const response = await api.get(
 
-            `/users/permissions/${id}/`
+            `/accounts/permissions/${id}/`
         );
 
         return response.data;
     },
 
-
-    // =====================================
-    // CREATE PERMISSION
-    // =====================================
 
     createPermission: async (
         data
@@ -51,7 +44,7 @@ const PermissionService = {
 
         const response = await api.post(
 
-            "/users/permissions/",
+            "/accounts/permissions/",
 
             data
         );
@@ -59,10 +52,6 @@ const PermissionService = {
         return response.data;
     },
 
-
-    // =====================================
-    // UPDATE PERMISSION
-    // =====================================
 
     updatePermission: async (
 
@@ -74,7 +63,7 @@ const PermissionService = {
 
         const response = await api.patch(
 
-            `/users/permissions/${id}/`,
+            `/accounts/permissions/${id}/`,
 
             data
         );
@@ -83,17 +72,13 @@ const PermissionService = {
     },
 
 
-    // =====================================
-    // DELETE PERMISSION
-    // =====================================
-
     deletePermission: async (
         id
     ) => {
 
         const response = await api.delete(
 
-            `/users/permissions/${id}/`
+            `/accounts/permissions/${id}/`
         );
 
         return response.data;

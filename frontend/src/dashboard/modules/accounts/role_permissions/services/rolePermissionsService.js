@@ -18,9 +18,11 @@ const rolePermissionService = {
                 `/accounts/roles/${roleId}/permissions/`
             );
 
-            return response.data;
+            return response.data.data;
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(error);
 
@@ -52,9 +54,11 @@ const rolePermissionService = {
                 }
             );
 
-            return response.data;
+            return response.data.data;
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(error);
 

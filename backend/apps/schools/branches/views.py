@@ -47,7 +47,7 @@ class BranchListCreateAPIView(
 
             Branch.objects.filter(
 
-                school=self.request.school,
+                school=self.getattr(request.user, "school", None),
 
                 is_deleted=False
             )
@@ -72,7 +72,7 @@ class BranchListCreateAPIView(
 
         serializer.save(
 
-            school=self.request.school,
+            school=self.getattr(request.user, "school", None),
 
             created_by=self.request.user,
 
@@ -110,7 +110,7 @@ class BranchDetailAPIView(
 
             Branch.objects.filter(
 
-                school=self.request.school,
+                school=self.getattr(request.user, "school", None),
 
                 is_deleted=False
             )

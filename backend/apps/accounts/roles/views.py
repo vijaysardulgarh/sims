@@ -1,9 +1,5 @@
 from rest_framework import status
 
-from rest_framework.response import (
-    Response
-)
-
 from rest_framework.permissions import (
     IsAuthenticated
 )
@@ -46,18 +42,36 @@ class RoleListCreateAPIView(
         request
     ):
 
-        roles = (
+        # ==================================
+        # SUPER ADMIN
+        # ==================================
 
-            Role.objects.filter(
+        if request.user.is_superuser:
 
-                school=request.school,
+            roles = Role.objects.filter(
 
                 is_deleted=False
 
-            )
+            ).order_by("id")
 
-            .order_by("id")
-        )
+        # ==================================
+        # SCHOOL ADMIN
+        # ==================================
+
+        else:
+
+            roles = Role.objects.filter(
+
+                school=getattr(
+                    request.user,
+                    "school",
+                    None
+                ),
+
+                is_deleted=False
+
+            ).order_by("id")
+
 
         serializer = RoleSerializer(
 
@@ -90,12 +104,33 @@ class RoleListCreateAPIView(
 
         if serializer.is_valid():
 
-            serializer.save(
+            # ==============================
+            # SUPER ADMIN
+            # ==============================
 
-                school=request.school,
+            if request.user.is_superuser:
 
-                created_by=request.user
-            )
+                serializer.save(
+
+                    created_by=request.user
+                )
+
+            # ==============================
+            # SCHOOL ADMIN
+            # ==============================
+
+            else:
+
+                serializer.save(
+
+                    school=getattr(
+                        request.user,
+                        "school",
+                        None
+                    ),
+
+                    created_by=request.user
+                )
 
             return self.success_response(
 
@@ -138,13 +173,36 @@ class RoleDetailAPIView(
         pk
     ):
 
+        # ==================================
+        # SUPER ADMIN
+        # ==================================
+
+        if request.user.is_superuser:
+
+            return get_object_or_404(
+
+                Role,
+
+                pk=pk,
+
+                is_deleted=False
+            )
+
+        # ==================================
+        # SCHOOL ADMIN
+        # ==================================
+
         return get_object_or_404(
 
             Role,
 
             pk=pk,
 
-            school=request.school,
+            school=getattr(
+                request.user,
+                "school",
+                None
+            ),
 
             is_deleted=False
         )

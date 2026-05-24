@@ -773,7 +773,7 @@ class SchoolTenantMiddleware:
         # ATTACH SCHOOL
         # =================================
 
-        request.school = school
+        getattr(request.user, "school", None) = school
 
         response = self.get_response(
             request

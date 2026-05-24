@@ -17,9 +17,15 @@ import roleService from "../services/roleService";
 
 const RolesListPage = () => {
 
-    const [roles, setRoles] = useState([]);
+    // =====================================
+    // STATE
+    // =====================================
 
-    const [loading, setLoading] = useState(true);
+    const [roles, setRoles] =
+        useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
 
 
     // =====================================
@@ -37,18 +43,53 @@ const RolesListPage = () => {
 
         try {
 
-            const data = await roleService.getRoles();
+            const data =
+                await roleService.getRoles();
 
-            setRoles(data.results || data);
 
-        } catch (error) {
+            // =====================================
+            // DEBUG RESPONSE
+            // =====================================
+
+            console.log(
+
+                "ROLES API RESPONSE:",
+
+                data
+            );
+
+
+            // =====================================
+            // SAFE ARRAY HANDLING
+            // =====================================
+
+            setRoles(
+
+                Array.isArray(data)
+
+                    ? data
+
+                    : Array.isArray(data.results)
+
+                        ? data.results
+
+                        : []
+            );
+
+        }
+
+        catch (error) {
 
             console.error(
+
                 "Fetch Roles Error:",
+
                 error
             );
 
-        } finally {
+        }
+
+        finally {
 
             setLoading(false);
         }
@@ -63,54 +104,102 @@ const RolesListPage = () => {
         id
     ) => {
 
-        const confirmDelete = window.confirm(
+        const confirmDelete =
+            window.confirm(
 
-            "Are you sure you want to delete this role?"
-        );
+                "Are you sure you want to delete this role?"
+            );
 
-        if (!confirmDelete) return;
+        if (!confirmDelete) {
+
+            return;
+        }
 
         try {
 
-            await roleService.deleteRole(id);
+            await roleService.deleteRole(
+                id
+            );
 
             fetchRoles();
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(
+
                 "Delete Role Error:",
+
                 error
             );
         }
     };
 
 
+    // =====================================
+    // LOADING
+    // =====================================
+
     if (loading) {
 
-        return <p>Loading...</p>;
+        return (
+
+            <div className="p-4">
+
+                Loading...
+
+            </div>
+        );
     }
 
 
+    // =====================================
+    // UI
+    // =====================================
+
     return (
 
-        <div className="p-4">
+        <div className="p-6 bg-gray-50 min-h-screen">
 
+            {/* ================================= */}
             {/* HEADER */}
+            {/* ================================= */}
 
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-6">
 
-                <h1 className="text-2xl font-bold">
+                <div>
 
-                    Roles List
+                    <h1 className="text-3xl font-bold text-gray-900">
 
-                </h1>
+                        Roles Management
+
+                    </h1>
+
+                    <p className="text-gray-500 mt-1">
+
+                        Manage role-based access control
+                        for your organization.
+
+                    </p>
+
+                </div>
+
 
                 <Link
 
                     to="/dashboard/roles/add"
 
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                    className="
+                        bg-blue-600
+                        hover:bg-blue-700
+                        text-white
+                        px-5
+                        py-2.5
+                        rounded-xl
+                        shadow-sm
+                        transition
+                    "
                 >
 
                     Add Role
@@ -120,117 +209,256 @@ const RolesListPage = () => {
             </div>
 
 
+            {/* ================================= */}
+            {/* EMPTY STATE */}
+            {/* ================================= */}
+
+            {
+                roles.length === 0 && (
+
+                    <div
+                        className="
+                            bg-white
+                            border
+                            rounded-2xl
+                            p-10
+                            text-center
+                            text-gray-500
+                            shadow-sm
+                        "
+                    >
+
+                        No roles found
+
+                    </div>
+                )
+            }
+
+
+            {/* ================================= */}
             {/* TABLE */}
+            {/* ================================= */}
 
-            <table className="w-full border">
+            {
+                roles.length > 0 && (
 
-                <thead>
+                    <div
+                        className="
+                            bg-white
+                            rounded-2xl
+                            shadow-sm
+                            overflow-hidden
+                            border
+                        "
+                    >
 
-                    <tr className="bg-gray-100">
+                        <table className="w-full">
 
-                        <th className="border p-2">
-                            ID
-                        </th>
+                            <thead>
 
-                        <th className="border p-2">
-                            Name
-                        </th>
+                                <tr className="bg-gray-100 text-gray-700">
 
-                        <th className="border p-2">
-                            Code
-                        </th>
+                                    <th className="border-b p-4 text-left">
 
-                        <th className="border p-2">
-                            Active
-                        </th>
+                                        ID
 
-                        <th className="border p-2">
-                            Actions
-                        </th>
+                                    </th>
 
-                    </tr>
+                                    <th className="border-b p-4 text-left">
 
-                </thead>
+                                        Name
 
+                                    </th>
 
-                <tbody>
+                                    <th className="border-b p-4 text-left">
 
-                    {
-                        roles.map((role) => (
+                                        Code
 
-                            <tr key={role.id}>
+                                    </th>
 
-                                <td className="border p-2">
+                                    <th className="border-b p-4 text-left">
 
-                                    {role.id}
+                                        Active
 
-                                </td>
+                                    </th>
 
-                                <td className="border p-2">
+                                    <th className="border-b p-4 text-left">
 
-                                    {role.name}
+                                        Actions
 
-                                </td>
+                                    </th>
 
-                                <td className="border p-2">
+                                </tr>
 
-                                    {role.code}
-
-                                </td>
-
-                                <td className="border p-2">
-
-                                    {
-                                        role.is_active
-                                            ? "Yes"
-                                            : "No"
-                                    }
-
-                                </td>
-
-                                <td className="border p-2 flex gap-2">
-
-                                    {/* EDIT */}
-
-                                    <Link
-
-                                        to={`/dashboard/roles/edit/${role.id}`}
-
-                                        className="bg-yellow-500 text-white px-3 py-1 rounded"
-                                    >
-
-                                        Edit
-
-                                    </Link>
+                            </thead>
 
 
-                                    {/* DELETE */}
+                            <tbody>
 
-                                    <button
+                                {
+                                    roles.map((role) => (
 
-                                        onClick={() =>
-                                            handleDelete(role.id)
-                                        }
+                                        <tr
+                                            key={role.id}
+                                            className="
+                                                hover:bg-gray-50
+                                                transition
+                                            "
+                                        >
 
-                                        className="bg-red-600 text-white px-3 py-1 rounded"
-                                    >
+                                            {/* ID */}
 
-                                        Delete
+                                            <td className="border-b p-4">
 
-                                    </button>
+                                                #{role.id}
 
-                                </td>
+                                            </td>
 
-                            </tr>
-                        ))
-                    }
 
-                </tbody>
+                                            {/* NAME */}
 
-            </table>
+                                            <td className="border-b p-4 font-medium text-gray-800">
+
+                                                {role.name}
+
+                                            </td>
+
+
+                                            {/* CODE */}
+
+                                            <td className="border-b p-4 text-gray-600">
+
+                                                {role.code}
+
+                                            </td>
+
+
+                                            {/* ACTIVE */}
+
+                                            <td className="border-b p-4">
+
+                                                <span
+                                                    className={`
+                                                        px-3
+                                                        py-1
+                                                        rounded-full
+                                                        text-xs
+                                                        font-semibold
+                                                        ${
+                                                            role.is_active
+
+                                                                ? "bg-green-100 text-green-700"
+
+                                                                : "bg-red-100 text-red-700"
+                                                        }
+                                                    `}
+                                                >
+
+                                                    {
+                                                        role.is_active
+
+                                                            ? "Active"
+
+                                                            : "Inactive"
+                                                    }
+
+                                                </span>
+
+                                            </td>
+
+
+                                            {/* ACTIONS */}
+
+                                            <td className="border-b p-4">
+
+                                                <div className="flex items-center gap-2">
+
+                                                    {/* EDIT */}
+
+                                                    <Link
+
+                                                        to={`/dashboard/roles/edit/${role.id}`}
+
+                                                        className="
+                                                            bg-yellow-500
+                                                            hover:bg-yellow-600
+                                                            text-white
+                                                            px-3
+                                                            py-1.5
+                                                            rounded-lg
+                                                            transition
+                                                        "
+                                                    >
+
+                                                        Edit
+
+                                                    </Link>
+
+
+                                                    {/* PERMISSIONS */}
+
+                                                    <Link
+
+                                                        to={`/dashboard/roles/${role.id}/permissions`}
+
+                                                        className="
+                                                            bg-blue-600
+                                                            hover:bg-blue-700
+                                                            text-white
+                                                            px-3
+                                                            py-1.5
+                                                            rounded-lg
+                                                            transition
+                                                        "
+                                                    >
+
+                                                        Permissions
+
+                                                    </Link>
+
+
+                                                    {/* DELETE */}
+
+                                                    <button
+
+                                                        onClick={() =>
+                                                            handleDelete(role.id)
+                                                        }
+
+                                                        className="
+                                                            bg-red-600
+                                                            hover:bg-red-700
+                                                            text-white
+                                                            px-3
+                                                            py-1.5
+                                                            rounded-lg
+                                                            transition
+                                                        "
+                                                    >
+
+                                                        Delete
+
+                                                    </button>
+
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+                                    ))
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                )
+            }
 
         </div>
     );
 };
+
 
 export default RolesListPage;

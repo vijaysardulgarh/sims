@@ -7,18 +7,20 @@ const roleService = {
     // GET ALL ROLES
     // =====================================
 
-    getRoles: async (params = {}) => {
+    getRoles: async (
+        params = {}
+    ) => {
 
         const response = await api.get(
 
-            "/users/roles/",
+            "/accounts/roles/",
 
             {
                 params,
             }
         );
 
-        return response.data;
+        return response.data.data;
     },
 
 
@@ -26,14 +28,16 @@ const roleService = {
     // GET SINGLE ROLE
     // =====================================
 
-    getRole: async (id) => {
+    getRole: async (
+        id
+    ) => {
 
         const response = await api.get(
 
-            `/users/roles/${id}/`
+            `/accounts/roles/${id}/`
         );
 
-        return response.data;
+        return response.data.data;
     },
 
 
@@ -41,16 +45,18 @@ const roleService = {
     // CREATE ROLE
     // =====================================
 
-    createRole: async (data) => {
+    createRole: async (
+        data
+    ) => {
 
         const response = await api.post(
 
-            "/users/roles/",
+            "/accounts/roles/",
 
             data
         );
 
-        return response.data;
+        return response.data.data;
     },
 
 
@@ -68,12 +74,12 @@ const roleService = {
 
         const response = await api.patch(
 
-            `/users/roles/${id}/`,
+            `/accounts/roles/${id}/`,
 
             data
         );
 
-        return response.data;
+        return response.data.data;
     },
 
 
@@ -81,14 +87,16 @@ const roleService = {
     // DELETE ROLE
     // =====================================
 
-    deleteRole: async (id) => {
+    deleteRole: async (
+        id
+    ) => {
 
         const response = await api.delete(
 
-            `/users/roles/${id}/`
+            `/accounts/roles/${id}/`
         );
 
-        return response.data;
+        return response.data.data;
     },
 };
 

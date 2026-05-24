@@ -3,11 +3,16 @@ import {
     useState
 } from "react";
 
+import {
+    ShieldCheck,
+    CheckCircle2
+} from "lucide-react";
+
 import permissionService from "../../permissions/services/permissionService";
 
 import roleService from "../../roles/services/roleService";
 
-import rolePermissionsService from "../services/rolePermissionsService";
+import rolePermissionService from "../services/rolePermissionsService";
 
 
 const RolePermissionsForm = ({
@@ -59,9 +64,7 @@ const RolePermissionsForm = ({
 
             setLoading(true);
 
-            // =============================
             // ROLE
-            // =============================
 
             const roleData =
                 await roleService.getRole(
@@ -70,9 +73,7 @@ const RolePermissionsForm = ({
 
             setRole(roleData);
 
-            // =============================
             // PERMISSIONS
-            // =============================
 
             const permissionsData =
                 await permissionService.getPermissions();
@@ -81,9 +82,7 @@ const RolePermissionsForm = ({
                 permissionsData
             );
 
-            // =============================
             // ROLE PERMISSIONS
-            // =============================
 
             const rolePermissionsData =
                 await rolePermissionService.getRolePermissions(
@@ -219,7 +218,7 @@ const RolePermissionsForm = ({
 
         return (
 
-            <div>
+            <div className="p-6">
 
                 Loading...
 
@@ -232,44 +231,124 @@ const RolePermissionsForm = ({
 
         <div
             className="
-                bg-white
-                rounded-2xl
-                shadow-sm
-                p-6
+                space-y-8
             "
         >
 
+            {/* ================================= */}
             {/* HEADER */}
+            {/* ================================= */}
 
-            <div className="mb-6">
+            <div
+                className="
+                    flex
+                    items-center
+                    justify-between
+                    flex-wrap
+                    gap-4
+                    bg-white
+                    border
+                    rounded-2xl
+                    p-6
+                    shadow-sm
+                "
+            >
 
-                <h2
+                <div
                     className="
-                        text-2xl
-                        font-bold
-                        text-gray-800
+                        flex
+                        items-center
+                        gap-4
                     "
                 >
 
-                    Role Permissions
+                    <div
+                        className="
+                            w-14
+                            h-14
+                            rounded-2xl
+                            bg-blue-100
+                            flex
+                            items-center
+                            justify-center
+                        "
+                    >
 
-                </h2>
+                        <ShieldCheck
+                            className="
+                                w-7
+                                h-7
+                                text-blue-600
+                            "
+                        />
 
-                <p
+                    </div>
+
+
+                    <div>
+
+                        <h2
+                            className="
+                                text-2xl
+                                font-bold
+                                text-gray-900
+                            "
+                        >
+
+                            {role?.name}
+
+                        </h2>
+
+                        <p
+                            className="
+                                text-gray-500
+                                mt-1
+                            "
+                        >
+
+                            Configure role-based access
+                            permissions.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
                     className="
-                        text-gray-500
-                        mt-1
+                        bg-blue-50
+                        border
+                        border-blue-100
+                        px-4
+                        py-3
+                        rounded-xl
                     "
                 >
 
-                    {role?.name}
+                    <p
+                        className="
+                            text-sm
+                            text-blue-700
+                            font-medium
+                        "
+                    >
 
-                </p>
+                        {
+                            selectedPermissions.length
+                        } permissions selected
+
+                    </p>
+
+                </div>
 
             </div>
 
 
+            {/* ================================= */}
             {/* FORM */}
+            {/* ================================= */}
 
             <form
                 onSubmit={handleSubmit}
@@ -277,7 +356,6 @@ const RolePermissionsForm = ({
             >
 
                 {
-
                     Object.entries(
                         groupedPermissions
                     ).map(
@@ -288,53 +366,76 @@ const RolePermissionsForm = ({
                             <div
                                 key={module}
                                 className="
+                                    bg-white
                                     border
+                                    border-gray-200
                                     rounded-2xl
+                                    shadow-sm
                                     overflow-hidden
                                 "
                             >
 
-                                {/* MODULE */}
+                                {/* MODULE HEADER */}
 
                                 <div
                                     className="
-                                        bg-gray-100
-                                        px-5
+                                        flex
+                                        items-center
+                                        justify-between
+                                        px-6
                                         py-4
+                                        bg-gray-50
                                         border-b
                                     "
                                 >
 
-                                    <h3
-                                        className="
-                                            font-semibold
-                                            text-lg
-                                            text-gray-700
-                                        "
-                                    >
+                                    <div>
 
-                                        {module}
+                                        <h3
+                                            className="
+                                                text-lg
+                                                font-semibold
+                                                text-gray-800
+                                                capitalize
+                                            "
+                                        >
 
-                                    </h3>
+                                            {module}
+
+                                        </h3>
+
+                                        <p
+                                            className="
+                                                text-sm
+                                                text-gray-500
+                                            "
+                                        >
+
+                                            {
+                                                modulePermissions.length
+                                            } permissions
+
+                                        </p>
+
+                                    </div>
 
                                 </div>
 
 
-                                {/* PERMISSIONS */}
+                                {/* PERMISSIONS GRID */}
 
                                 <div
                                     className="
+                                        p-6
                                         grid
                                         grid-cols-1
                                         md:grid-cols-2
                                         xl:grid-cols-3
                                         gap-4
-                                        p-5
                                     "
                                 >
 
                                     {
-
                                         modulePermissions.map(
 
                                             (permission) => (
@@ -343,18 +444,31 @@ const RolePermissionsForm = ({
 
                                                     key={permission.id}
 
-                                                    className="
+                                                    className={`
                                                         flex
-                                                        items-center
-                                                        gap-3
+                                                        items-start
+                                                        gap-4
+                                                        p-4
+                                                        rounded-2xl
                                                         border
-                                                        rounded-xl
-                                                        px-4
-                                                        py-3
-                                                        hover:bg-gray-50
                                                         cursor-pointer
-                                                    "
+                                                        transition
+                                                        hover:border-blue-400
+                                                        hover:bg-blue-50
+
+                                                        ${
+                                                            selectedPermissions.includes(
+                                                                permission.code
+                                                            )
+
+                                                                ? "border-blue-500 bg-blue-50"
+
+                                                                : "border-gray-200"
+                                                        }
+                                                    `}
                                                 >
+
+                                                    {/* CHECKBOX */}
 
                                                     <input
 
@@ -375,25 +489,65 @@ const RolePermissionsForm = ({
                                                                 permission.code
                                                             )
                                                         }
+
+                                                        className="
+                                                            mt-1
+                                                            w-4
+                                                            h-4
+                                                            accent-blue-600
+                                                        "
                                                     />
 
-                                                    <div>
 
-                                                        <p
+                                                    {/* CONTENT */}
+
+                                                    <div
+                                                        className="
+                                                            flex-1
+                                                        "
+                                                    >
+
+                                                        <div
                                                             className="
-                                                                font-medium
-                                                                text-gray-700
+                                                                flex
+                                                                items-center
+                                                                gap-2
                                                             "
                                                         >
 
-                                                            {permission.name}
+                                                            <h4
+                                                                className="
+                                                                    font-semibold
+                                                                    text-gray-800
+                                                                "
+                                                            >
 
-                                                        </p>
+                                                                {permission.name}
+
+                                                            </h4>
+
+                                                            {
+                                                                selectedPermissions.includes(
+                                                                    permission.code
+                                                                ) && (
+
+                                                                    <CheckCircle2
+                                                                        className="
+                                                                            w-4
+                                                                            h-4
+                                                                            text-blue-600
+                                                                        "
+                                                                    />
+                                                                )
+                                                            }
+
+                                                        </div>
 
                                                         <p
                                                             className="
                                                                 text-sm
                                                                 text-gray-500
+                                                                mt-1
                                                             "
                                                         >
 
@@ -416,9 +570,14 @@ const RolePermissionsForm = ({
                 }
 
 
-                {/* BUTTON */}
+                {/* SAVE BUTTON */}
 
-                <div className="flex justify-end">
+                <div
+                    className="
+                        flex
+                        justify-end
+                    "
+                >
 
                     <button
 
@@ -429,17 +588,22 @@ const RolePermissionsForm = ({
                         className="
                             bg-blue-600
                             hover:bg-blue-700
+                            disabled:bg-gray-400
                             text-white
-                            px-6
+                            px-8
                             py-3
-                            rounded-xl
-                            font-medium
+                            rounded-2xl
+                            font-semibold
+                            shadow-sm
+                            transition
                         "
                     >
 
                         {
                             loading
+
                                 ? "Saving..."
+
                                 : "Save Permissions"
                         }
 

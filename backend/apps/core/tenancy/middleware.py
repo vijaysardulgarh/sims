@@ -72,7 +72,7 @@ class SchoolTenantMiddleware:
             "127.0.0.1" in host
         ):
 
-            request.school = None
+            getattr(request.user, "school", None) = None
 
             return self.get_response(
                 request
@@ -111,7 +111,7 @@ class SchoolTenantMiddleware:
         # ATTACH SCHOOL
         # ==================================
 
-        request.school = school
+        getattr(request.user, "school", None) = school
 
         # ==================================
         # CONTINUE

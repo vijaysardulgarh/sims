@@ -19,6 +19,9 @@ const PermissionsListPage = () => {
     const [permissions, setPermissions] =
         useState([]);
 
+    const [loading, setLoading] =
+        useState(true);
+
 
     // =====================================
     // FETCH PERMISSIONS
@@ -35,17 +38,79 @@ const PermissionsListPage = () => {
 
         try {
 
+            setLoading(true);
+
             const data =
                 await PermissionService.getPermissions();
 
-            setPermissions(data);
 
-        } catch (error) {
+            // =================================
+            // DEBUG RESPONSE
+            // =================================
+
+            console.log(
+
+                "PERMISSIONS RESPONSE:",
+
+                data
+            );
+
+
+            // =================================
+            // SAFE DATA HANDLING
+            // =================================
+
+            if (Array.isArray(data)) {
+
+                setPermissions(data);
+
+            }
+
+            else if (
+
+                Array.isArray(data?.results)
+
+            ) {
+
+                setPermissions(
+                    data.results
+                );
+
+            }
+
+            else if (
+
+                Array.isArray(data?.data)
+
+            ) {
+
+                setPermissions(
+                    data.data
+                );
+
+            }
+
+            else {
+
+                setPermissions([]);
+            }
+        }
+
+        catch (error) {
 
             console.error(
+
                 "Fetch Permissions Error:",
+
                 error
             );
+
+            setPermissions([]);
+        }
+
+        finally {
+
+            setLoading(false);
         }
     };
 
@@ -72,15 +137,35 @@ const PermissionsListPage = () => {
             );
 
             fetchPermissions();
+        }
 
-        } catch (error) {
+        catch (error) {
 
             console.error(
+
                 "Delete Permission Error:",
+
                 error
             );
         }
     };
+
+
+    // =====================================
+    // LOADING
+    // =====================================
+
+    if (loading) {
+
+        return (
+
+            <div className="p-4">
+
+                Loading permissions...
+
+            </div>
+        );
+    }
 
 
     return (
@@ -151,7 +236,7 @@ const PermissionsListPage = () => {
                     <tbody>
 
                         {
-                            permissions.length > 0 ? (
+                            permissions?.length > 0 ? (
 
                                 permissions.map((item) => (
 
@@ -160,11 +245,16 @@ const PermissionsListPage = () => {
                                         className="hover:bg-gray-50"
                                     >
 
+                                        {/* ID */}
+
                                         <td className="border p-3">
 
                                             {item.id}
 
                                         </td>
+
+
+                                        {/* NAME */}
 
                                         <td className="border p-3">
 
@@ -172,11 +262,17 @@ const PermissionsListPage = () => {
 
                                         </td>
 
+
+                                        {/* CODE */}
+
                                         <td className="border p-3">
 
                                             {item.code}
 
                                         </td>
+
+
+                                        {/* MODULE */}
 
                                         <td className="border p-3">
 
@@ -184,9 +280,14 @@ const PermissionsListPage = () => {
 
                                         </td>
 
+
+                                        {/* ACTIONS */}
+
                                         <td className="border p-3">
 
                                             <div className="flex gap-2 justify-center">
+
+                                                {/* EDIT */}
 
                                                 <Link
                                                     to={`/dashboard/permissions/edit/${item.id}`}
@@ -196,6 +297,9 @@ const PermissionsListPage = () => {
                                                     Edit
 
                                                 </Link>
+
+
+                                                {/* DELETE */}
 
                                                 <button
                                                     onClick={() =>
@@ -241,5 +345,6 @@ const PermissionsListPage = () => {
         </div>
     );
 };
+
 
 export default PermissionsListPage;
