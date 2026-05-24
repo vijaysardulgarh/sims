@@ -2,9 +2,7 @@ import {
     Navigate
 } from "react-router-dom";
 
-import {
-    useAuth
-} from "../dashboard/modules/access_control/auth/context/AuthContext";
+import { useAuth } from "../dashboard/modules/accounts/auth/context/AuthContext";
 
 
 const ProtectedRoute = ({

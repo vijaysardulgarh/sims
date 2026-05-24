@@ -17,8 +17,7 @@ from "../website/routes/WebsiteRoutes";
 // AUTH
 // =====================================
 
-import LoginPage
-from "../dashboard/modules/access_control/auth/pages/LoginPage";
+import LoginPage from "../dashboard/modules/accounts/auth/pages/LoginPage";
 
 
 // =====================================

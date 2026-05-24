@@ -1,4 +1,4 @@
-import { useAuth } from "../../../modules/access_control/auth/context/AuthContext";
+import { useAuth } from "../../../modules/accounts/auth/context/AuthContext";
 
 
 const TopNavbar = () => {

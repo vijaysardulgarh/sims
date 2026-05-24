@@ -1,4 +1,4 @@
-import api from "../../../../services/api/axios";
+import api from "../../../../../services/api/axios";
 
 
 const rolePermissionService = {

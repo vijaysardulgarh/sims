@@ -53,8 +53,8 @@ urlpatterns = [
     # =====================================
 
     path(
-        "me/",
+        "current-logged-in-user/",
         CurrentUserAPIView.as_view(),
-        name="current-user"
+        name="current-logged-in-user"
     ),
 ]

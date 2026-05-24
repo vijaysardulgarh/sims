@@ -12,13 +12,13 @@ import {
 
 } from "react-router-dom";
 
-import UserRoleForm from "../UserRoleForm";
+import UserRoleForm from "../components/UserRoleForm";
 
-import userRoleService from "../../services/userRoleService";
+import userRoleService from "../services/userRoleService";
 
-import userService from "../../services/userService";
+import userService from "../../users/services/userService";
 
-import roleService from "../../services/roleService";
+import roleService from "../../roles/services/roleService";
 
 
 const AddUserRolePage = () => {

@@ -163,11 +163,11 @@ export const AuthProvider = ({
                 const response =
                     await api.get(
 
-                        "/users/me/"
+                        "/accounts/current-logged-in-user/"
                     );
 
                 console.log(
-                    "ME RESPONSE:",
+                    "CURRENT USER RESPONSE:",
                     response.data
                 );
 

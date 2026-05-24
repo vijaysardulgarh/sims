@@ -1,6 +1,6 @@
 import {
     useAuth
-} from "../../modules/access_control/auth/context/AuthContext";
+} from "../../modules/accounts/auth/context/AuthContext";
 
 import StatCard
 from "../components/StatCard";

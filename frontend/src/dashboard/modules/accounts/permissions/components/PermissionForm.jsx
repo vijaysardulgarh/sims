@@ -1,19 +1,21 @@
 import {
-
     useEffect,
-
     useState
-
 } from "react";
 
-
-const AccessControlForm = ({
+const PermissionForm = ({
 
     initialData = null,
 
     onSubmit,
 
+    loading = false,
+
 }) => {
+
+    // =====================================
+    // STATE
+    // =====================================
 
     const [formData, setFormData] = useState({
 
@@ -34,11 +36,8 @@ const AccessControlForm = ({
     useEffect(() => {
 
         if (
-
             initialData &&
-
             Object.keys(initialData).length > 0
-
         ) {
 
             setFormData({
@@ -67,11 +66,8 @@ const AccessControlForm = ({
     const handleChange = (e) => {
 
         const {
-
             name,
-
             value
-
         } = e.target;
 
         setFormData((prev) => ({
@@ -87,11 +83,11 @@ const AccessControlForm = ({
     // HANDLE SUBMIT
     // =====================================
 
-    const handleSubmit = async (
-        e
-    ) => {
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
+
+        if (!onSubmit) return;
 
         await onSubmit(formData);
     };
@@ -101,16 +97,18 @@ const AccessControlForm = ({
 
         <form
             onSubmit={handleSubmit}
-            className="space-y-4"
+            className="space-y-5 bg-white p-6 rounded-lg shadow"
         >
 
+            {/* ================================= */}
             {/* NAME */}
+            {/* ================================= */}
 
             <div>
 
-                <label className="block mb-1">
+                <label className="block mb-1 font-medium">
 
-                    Name
+                    Permission Name
 
                 </label>
 
@@ -119,20 +117,23 @@ const AccessControlForm = ({
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="border p-2 w-full rounded"
+                    placeholder="Enter permission name"
+                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                 />
 
             </div>
 
 
+            {/* ================================= */}
             {/* CODE */}
+            {/* ================================= */}
 
             <div>
 
-                <label className="block mb-1">
+                <label className="block mb-1 font-medium">
 
-                    Code
+                    Permission Code
 
                 </label>
 
@@ -141,18 +142,21 @@ const AccessControlForm = ({
                     name="code"
                     value={formData.code}
                     onChange={handleChange}
-                    className="border p-2 w-full rounded"
+                    placeholder="e.g. can_create_student"
+                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                 />
 
             </div>
 
 
+            {/* ================================= */}
             {/* MODULE */}
+            {/* ================================= */}
 
             <div>
 
-                <label className="block mb-1">
+                <label className="block mb-1 font-medium">
 
                     Module
 
@@ -163,18 +167,21 @@ const AccessControlForm = ({
                     name="module"
                     value={formData.module}
                     onChange={handleChange}
-                    className="border p-2 w-full rounded"
+                    placeholder="e.g. students"
+                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                 />
 
             </div>
 
 
+            {/* ================================= */}
             {/* DESCRIPTION */}
+            {/* ================================= */}
 
             <div>
 
-                <label className="block mb-1">
+                <label className="block mb-1 font-medium">
 
                     Description
 
@@ -184,26 +191,38 @@ const AccessControlForm = ({
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
-                    className="border p-2 w-full rounded"
                     rows={4}
+                    placeholder="Enter permission description"
+                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
             </div>
 
 
+            {/* ================================= */}
             {/* BUTTON */}
+            {/* ================================= */}
 
-            <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
+            <div>
 
-                Save Access Control
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded transition disabled:opacity-50"
+                >
 
-            </button>
+                    {
+                        loading
+                            ? "Saving..."
+                            : "Save Permission"
+                    }
+
+                </button>
+
+            </div>
 
         </form>
     );
 };
 
-export default AccessControlForm;
+export default PermissionForm;

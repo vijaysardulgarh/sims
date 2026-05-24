@@ -1,13 +1,13 @@
 import api from "../../../../../services/api/axios";
 
 
-const accessControlService = {
+const PermissionService = {
 
     // =====================================
-    // GET ALL ACCESS CONTROLS
+    // GET ALL PERMISSIONS
     // =====================================
 
-    getAccessControls: async (
+    getPermissions: async (
         params = {}
     ) => {
 
@@ -25,10 +25,10 @@ const accessControlService = {
 
 
     // =====================================
-    // GET SINGLE ACCESS CONTROL
+    // GET SINGLE PERMISSION
     // =====================================
 
-    getAccessControl: async (
+    getPermission: async (
         id
     ) => {
 
@@ -42,10 +42,10 @@ const accessControlService = {
 
 
     // =====================================
-    // CREATE ACCESS CONTROL
+    // CREATE PERMISSION
     // =====================================
 
-    createAccessControl: async (
+    createPermission: async (
         data
     ) => {
 
@@ -61,10 +61,10 @@ const accessControlService = {
 
 
     // =====================================
-    // UPDATE ACCESS CONTROL
+    // UPDATE PERMISSION
     // =====================================
 
-    updateAccessControl: async (
+    updatePermission: async (
 
         id,
 
@@ -84,10 +84,10 @@ const accessControlService = {
 
 
     // =====================================
-    // DELETE ACCESS CONTROL
+    // DELETE PERMISSION
     // =====================================
 
-    deleteAccessControl: async (
+    deletePermission: async (
         id
     ) => {
 
@@ -101,4 +101,4 @@ const accessControlService = {
 };
 
 
-export default accessControlService;
+export default PermissionService;

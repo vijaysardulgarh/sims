@@ -1,5 +1,4 @@
-import UserForm
-from "../../forms/UserForm";
+import UserForm from "../components/UserForm";
 
 
 const AddUserPage = () => {

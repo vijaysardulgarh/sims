@@ -1,50 +1,49 @@
 import {
-
     useEffect,
-
     useState
-
 } from "react";
 
 import {
-
     Link
-
 } from "react-router-dom";
 
-import accessControlService from "./accessControlService";
+import PermissionService from "../services/permissionService";
 
 
-const AccessControlListPage = () => {
+const PermissionsListPage = () => {
 
-    const [accessControls, setAccessControls] =
+    // =====================================
+    // STATE
+    // =====================================
+
+    const [permissions, setPermissions] =
         useState([]);
 
 
     // =====================================
-    // FETCH ACCESS CONTROLS
+    // FETCH PERMISSIONS
     // =====================================
 
     useEffect(() => {
 
-        fetchAccessControls();
+        fetchPermissions();
 
     }, []);
 
 
-    const fetchAccessControls = async () => {
+    const fetchPermissions = async () => {
 
         try {
 
             const data =
-                await accessControlService.getAccessControls();
+                await PermissionService.getPermissions();
 
-            setAccessControls(data);
+            setPermissions(data);
 
         } catch (error) {
 
             console.error(
-                "Fetch Access Controls Error:",
+                "Fetch Permissions Error:",
                 error
             );
         }
@@ -52,7 +51,7 @@ const AccessControlListPage = () => {
 
 
     // =====================================
-    // DELETE ACCESS CONTROL
+    // DELETE PERMISSION
     // =====================================
 
     const handleDelete = async (
@@ -61,23 +60,23 @@ const AccessControlListPage = () => {
 
         const confirmDelete = window.confirm(
 
-            "Delete access control?"
+            "Delete permission?"
         );
 
         if (!confirmDelete) return;
 
         try {
 
-            await accessControlService.deleteAccessControl(
+            await PermissionService.deletePermission(
                 id
             );
 
-            fetchAccessControls();
+            fetchPermissions();
 
         } catch (error) {
 
             console.error(
-                "Delete Access Control Error:",
+                "Delete Permission Error:",
                 error
             );
         }
@@ -92,20 +91,20 @@ const AccessControlListPage = () => {
             {/* HEADER */}
             {/* ================================= */}
 
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-6">
 
                 <h1 className="text-2xl font-bold">
 
-                    Access Controls
+                    Permissions
 
                 </h1>
 
                 <Link
-                    to="/dashboard/access-controls/add"
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                    to="/dashboard/permissions/add"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                 >
 
-                    Add Access Control
+                    Add Permission
 
                 </Link>
 
@@ -116,31 +115,31 @@ const AccessControlListPage = () => {
             {/* TABLE */}
             {/* ================================= */}
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto bg-white rounded shadow">
 
-                <table className="w-full border">
+                <table className="w-full border-collapse">
 
                     <thead>
 
                         <tr className="bg-gray-100">
 
-                            <th className="border p-2">
+                            <th className="border p-3 text-left">
                                 ID
                             </th>
 
-                            <th className="border p-2">
+                            <th className="border p-3 text-left">
                                 Name
                             </th>
 
-                            <th className="border p-2">
+                            <th className="border p-3 text-left">
                                 Code
                             </th>
 
-                            <th className="border p-2">
+                            <th className="border p-3 text-left">
                                 Module
                             </th>
 
-                            <th className="border p-2">
+                            <th className="border p-3 text-center">
                                 Actions
                             </th>
 
@@ -152,57 +151,64 @@ const AccessControlListPage = () => {
                     <tbody>
 
                         {
-                            accessControls.length > 0 ? (
+                            permissions.length > 0 ? (
 
-                                accessControls.map((item) => (
+                                permissions.map((item) => (
 
-                                    <tr key={item.id}>
+                                    <tr
+                                        key={item.id}
+                                        className="hover:bg-gray-50"
+                                    >
 
-                                        <td className="border p-2">
+                                        <td className="border p-3">
 
                                             {item.id}
 
                                         </td>
 
-                                        <td className="border p-2">
+                                        <td className="border p-3">
 
                                             {item.name}
 
                                         </td>
 
-                                        <td className="border p-2">
+                                        <td className="border p-3">
 
                                             {item.code}
 
                                         </td>
 
-                                        <td className="border p-2">
+                                        <td className="border p-3">
 
                                             {item.module}
 
                                         </td>
 
-                                        <td className="border p-2 flex gap-2">
+                                        <td className="border p-3">
 
-                                            <Link
-                                                to={`/dashboard/access-controls/edit/${item.id}`}
-                                                className="bg-yellow-500 text-white px-3 py-1 rounded"
-                                            >
+                                            <div className="flex gap-2 justify-center">
 
-                                                Edit
+                                                <Link
+                                                    to={`/dashboard/permissions/edit/${item.id}`}
+                                                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+                                                >
 
-                                            </Link>
+                                                    Edit
 
-                                            <button
-                                                onClick={() =>
-                                                    handleDelete(item.id)
-                                                }
-                                                className="bg-red-600 text-white px-3 py-1 rounded"
-                                            >
+                                                </Link>
 
-                                                Delete
+                                                <button
+                                                    onClick={() =>
+                                                        handleDelete(item.id)
+                                                    }
+                                                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+                                                >
 
-                                            </button>
+                                                    Delete
+
+                                                </button>
+
+                                            </div>
 
                                         </td>
 
@@ -215,10 +221,10 @@ const AccessControlListPage = () => {
 
                                     <td
                                         colSpan="5"
-                                        className="border p-4 text-center"
+                                        className="border p-4 text-center text-gray-500"
                                     >
 
-                                        No Access Controls Found
+                                        No Permissions Found
 
                                     </td>
 
@@ -236,4 +242,4 @@ const AccessControlListPage = () => {
     );
 };
 
-export default AccessControlListPage;
+export default PermissionsListPage;

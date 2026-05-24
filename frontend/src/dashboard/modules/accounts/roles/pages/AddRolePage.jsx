@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import RoleForm from "../components/RoleForm";
 
-import roleService from "../../services/roleService";
+import roleService from "../services/roleService";
 
 
 const AddRolePage = () => {

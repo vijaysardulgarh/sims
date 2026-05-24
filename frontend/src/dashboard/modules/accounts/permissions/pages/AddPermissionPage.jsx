@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
 
-import AccessControlForm from "../components/PermissionsForm";
+import PermissionForm from "../components/PermissionForm";
 
-import accessControlService from "../services/permissionService";
+import PermissionService from "../services/permissionService";
 
 
-const AddAccessControlPage = () => {
+const AddPermissionPage = () => {
 
     const navigate = useNavigate();
 
 
     // =====================================
-    // CREATE
+    // CREATE PERMISSION
     // =====================================
 
     const handleSubmit = async (
@@ -20,18 +20,18 @@ const AddAccessControlPage = () => {
 
         try {
 
-            await accessControlService.createAccessControl(
+            await PermissionService.createPermission(
                 formData
             );
 
             navigate(
-                "/dashboard/access-controls"
+                "/dashboard/permissions"
             );
 
         } catch (error) {
 
             console.error(
-                "Create Access Control Error:",
+                "Create Permission Error:",
                 error
             );
         }
@@ -42,13 +42,22 @@ const AddAccessControlPage = () => {
 
         <div className="p-4">
 
-            <h1 className="text-2xl font-bold mb-4">
+            {/* ================================= */}
+            {/* PAGE TITLE */}
+            {/* ================================= */}
 
-                Add Access Control
+            <h1 className="text-2xl font-bold mb-6">
+
+                Add Permission
 
             </h1>
 
-            <AccessControlForm
+
+            {/* ================================= */}
+            {/* FORM */}
+            {/* ================================= */}
+
+            <PermissionForm
                 onSubmit={handleSubmit}
             />
 
@@ -56,4 +65,4 @@ const AddAccessControlPage = () => {
     );
 };
 
-export default AddAccessControlPage;
+export default AddPermissionPage;

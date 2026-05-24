@@ -14,9 +14,9 @@ import {
 
 } from "react-router-dom";
 
-import RoleForm from "../RoleForm";
+import RoleForm from "../components/RoleForm";
 
-import roleService from "../../services/roleService";
+import roleService from "../services/roleService";
 
 
 const EditRolePage = () => {

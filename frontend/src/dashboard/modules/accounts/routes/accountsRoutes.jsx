@@ -5,68 +5,57 @@ import { Route } from "react-router-dom";
 // ROLE PAGES
 // =====================================
 
-import RolesListPage from "../pages/roles/RolesListPage";
+import RolesListPage from "../roles/pages/RolesListPage";
 
-import AddRolePage from "../pages/roles/AddRolePage";
+import AddRolePage from "../roles/pages/AddRolePage";
 
-import EditRolePage from "../pages/roles/EditRolePage";
+import EditRolePage from "../roles/pages/EditRolePage";
 
 
 // =====================================
 // USER PAGES
 // =====================================
 
-import UsersListPage from "../pages/users/UsersListPage";
+import UsersListPage from "../users/pages/UsersListPage";
 
-import AddUserPage from "../pages/users/AddUserPage";
+import AddUserPage from "../users/pages/AddUserPage";
 
-import EditUserPage from "../pages/users/EditUserPage";
+import EditUserPage from "../users/pages/EditUserPage";
 
-import UserProfilePage from "../pages/users/UserProfilePage";
-
-
-// =====================================
-// ACCESS CONTROL PAGES
-// =====================================
-
-import AccessControlListPage from "../profiles/AccessControlListPage";
-
-import AddAccessControlPage from "../profiles/AddAccessControlPage";
-
-import EditAccessControlPage from "../profiles/EditAccessControlPage";
+import UserProfilePage from "../users/pages/UserProfilePage";
 
 
 // =====================================
 // PERMISSION PAGES
 // =====================================
 
-import PermissionsListPage from "../pages/permissions/PermissionsListPage";
+import PermissionsListPage from "../permissions/pages/PermissionsListPage";
 
-import PermissionsForm from "../permissions/PermissionsForm";
+import AddPermissionPage from "../permissions/pages/AddPermissionPage";
 
-import RolePermissionsPage from "../pages/permissions/RolePermissionsPage";
+import EditPermissionPage from "../permissions/pages/EditPermissionPage";
+
+import RolePermissionsPage from "../role_permissions/pages/RolePermissionsPage";
 
 
 // =====================================
 // USER ROLE PAGES
 // =====================================
 
-import UserRolesListPage from "../pages/user_roles/UserRolesListPage";
+import UserRolesListPage from "../user_roles/pages/UserRolesListPage";
 
-import AddUserRolePage from "../pages/user_roles/AddUserRolePage";
+import AddUserRolePage from "../user_roles/pages/AddUserRolePage";
 
-import EditUserRolePage from "../pages/user_roles/EditUserRolePage";
+import EditUserRolePage from "../user_roles/pages/EditUserRolePage";
 
 
 // =====================================
 // ROUTES
 // =====================================
 
-const accessControlRoutes = (
+const accountsRoutes = (
 
     <>
-
-        
 
         {/* ================================= */}
         {/* ROLES */}
@@ -114,26 +103,6 @@ const accessControlRoutes = (
 
 
         {/* ================================= */}
-        {/* ACCESS CONTROLS CRUD */}
-        {/* ================================= */}
-
-        <Route
-            path="access-controls"
-            element={<AccessControlListPage />}
-        />
-
-        <Route
-            path="access-controls/add"
-            element={<AddAccessControlPage />}
-        />
-
-        <Route
-            path="access-controls/edit/:id"
-            element={<EditAccessControlPage />}
-        />
-
-
-        {/* ================================= */}
         {/* PERMISSIONS */}
         {/* ================================= */}
 
@@ -144,12 +113,12 @@ const accessControlRoutes = (
 
         <Route
             path="permissions/add"
-            element={<PermissionsForm />}
+            element={<AddPermissionPage />}
         />
 
         <Route
             path="permissions/edit/:id"
-            element={<PermissionsForm />}
+            element={<EditPermissionPage />}
         />
 
         <Route
@@ -180,4 +149,4 @@ const accessControlRoutes = (
     </>
 );
 
-export default accessControlRoutes;
+export default accountsRoutes;

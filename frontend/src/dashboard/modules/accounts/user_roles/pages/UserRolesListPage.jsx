@@ -12,7 +12,7 @@ import {
 
 } from "react-router-dom";
 
-import userRoleService from "../../services/userRoleService";
+import userRoleService from "../services/userRoleService";
 
 
 const UserRolesListPage = () => {

@@ -3,7 +3,7 @@ import {
 } from "react-router-dom";
 
 import RolePermissionsForm from
-"../components/RolePermissionsForm";
+"../components/RolePermissionForm";
 
 
 const RolePermissionsPage = () => {

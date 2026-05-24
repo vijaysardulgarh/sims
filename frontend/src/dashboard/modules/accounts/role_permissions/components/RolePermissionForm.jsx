@@ -3,14 +3,11 @@ import {
     useState
 } from "react";
 
-import permissionService from
-"../../permissions/services/permissionService";
+import permissionService from "../../permissions/services/permissionService";
 
-import roleService from
-"../../roles/services/roleService";
+import roleService from "../../roles/services/roleService";
 
-import rolePermissionService from
-"../services/rolePermissionService";
+import rolePermissionsService from "../services/rolePermissionsService";
 
 
 const RolePermissionsForm = ({

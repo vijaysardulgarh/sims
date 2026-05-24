@@ -1,58 +1,64 @@
 import {
-
     useEffect,
-
     useState
-
 } from "react";
 
 import {
-
     useNavigate,
-
     useParams
-
 } from "react-router-dom";
 
-import AccessControlForm from "../permissions/forms/PermissionsForm";
+import PermissionForm from "../components/PermissionForm";
 
-import accessControlService from "../permissions/services/permissionService";
+import PermissionService from "../services/permissionService";
 
 
-const EditAccessControlPage = () => {
+const EditPermissionPage = () => {
+
+    // =====================================
+    // ROUTER
+    // =====================================
 
     const { id } = useParams();
 
     const navigate = useNavigate();
 
-    const [accessControl, setAccessControl] =
+
+    // =====================================
+    // STATE
+    // =====================================
+
+    const [permission, setPermission] =
         useState(null);
+
+    const [loading, setLoading] =
+        useState(false);
 
 
     // =====================================
-    // FETCH
+    // FETCH PERMISSION
     // =====================================
 
     useEffect(() => {
 
-        fetchAccessControl();
+        fetchPermission();
 
     }, []);
 
 
-    const fetchAccessControl = async () => {
+    const fetchPermission = async () => {
 
         try {
 
             const data =
-                await accessControlService.getAccessControl(id);
+                await PermissionService.getPermission(id);
 
-            setAccessControl(data);
+            setPermission(data);
 
         } catch (error) {
 
             console.error(
-                "Fetch Access Control Error:",
+                "Fetch Permission Error:",
                 error
             );
         }
@@ -60,7 +66,7 @@ const EditAccessControlPage = () => {
 
 
     // =====================================
-    // UPDATE
+    // UPDATE PERMISSION
     // =====================================
 
     const handleSubmit = async (
@@ -69,7 +75,9 @@ const EditAccessControlPage = () => {
 
         try {
 
-            await accessControlService.updateAccessControl(
+            setLoading(true);
+
+            await PermissionService.updatePermission(
 
                 id,
 
@@ -77,22 +85,37 @@ const EditAccessControlPage = () => {
             );
 
             navigate(
-                "/dashboard/access-controls"
+                "/dashboard/permissions"
             );
 
         } catch (error) {
 
             console.error(
-                "Update Access Control Error:",
+                "Update Permission Error:",
                 error
             );
+
+        } finally {
+
+            setLoading(false);
         }
     };
 
 
-    if (!accessControl) {
+    // =====================================
+    // LOADING
+    // =====================================
 
-        return <p>Loading...</p>;
+    if (!permission) {
+
+        return (
+
+            <div className="p-4">
+
+                Loading...
+
+            </div>
+        );
     }
 
 
@@ -100,21 +123,32 @@ const EditAccessControlPage = () => {
 
         <div className="p-4">
 
-            <h1 className="text-2xl font-bold mb-4">
+            {/* ================================= */}
+            {/* PAGE TITLE */}
+            {/* ================================= */}
 
-                Edit Access Control
+            <h1 className="text-2xl font-bold mb-6">
+
+                Edit Permission
 
             </h1>
 
-            <AccessControlForm
 
-                initialData={accessControl}
+            {/* ================================= */}
+            {/* FORM */}
+            {/* ================================= */}
+
+            <PermissionForm
+
+                initialData={permission}
 
                 onSubmit={handleSubmit}
+
+                loading={loading}
             />
 
         </div>
     );
 };
 
-export default EditAccessControlPage;
+export default EditPermissionPage;

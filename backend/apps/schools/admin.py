@@ -155,9 +155,7 @@ class ClusterAdmin(admin.ModelAdmin):
         ),
     )
 
-    prepopulated_fields = {
-        "slug": ("name",)
-    }
+
 
 
 # ==========================================
@@ -362,7 +360,3 @@ class SchoolAdmin(admin.ModelAdmin):
             }
         ),
     )
-
-    prepopulated_fields = {
-        "slug": ("name",)
-    }

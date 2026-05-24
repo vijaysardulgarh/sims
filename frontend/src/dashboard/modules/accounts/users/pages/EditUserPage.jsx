@@ -2,8 +2,7 @@ import {
     useParams
 } from "react-router-dom";
 
-import UserForm
-from "../../forms/UserForm";
+import UserForm from "../components/UserForm";
 
 
 const EditUserPage = () => {

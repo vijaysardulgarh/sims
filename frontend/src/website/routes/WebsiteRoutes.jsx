@@ -26,11 +26,11 @@ import Contact from "../pages/Contact";
 
 // Auth
 
-import LoginPage from "../../dashboard/modules/access_control/auth/pages/LoginPage";
+import LoginPage from "../../dashboard/modules/accounts/auth/pages/LoginPage";
 
-import ForgotPassword from "../../dashboard/modules/access_control/auth/pages/ForgotPasswordPage";
+import ForgotPassword from "../../dashboard/modules/accounts/auth/pages/ForgotPasswordPage";
 
-import ResetPassword from "../../dashboard/modules/access_control/auth/pages/ResetPasswordPage";
+import ResetPassword from "../../dashboard/modules/accounts/auth/pages/ResetPasswordPage";
 
 
 export default function WebsiteRoutes() {
