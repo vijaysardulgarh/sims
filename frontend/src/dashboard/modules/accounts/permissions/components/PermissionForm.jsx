@@ -3,9 +3,12 @@ import {
     useState
 } from "react";
 
+
 const PermissionForm = ({
 
     initialData = null,
+
+    modules = [],
 
     onSubmit,
 
@@ -19,14 +22,36 @@ const PermissionForm = ({
 
     const [formData, setFormData] = useState({
 
-        name: "",
-
-        code: "",
-
         module: "",
+
+        action: "view",
 
         description: "",
     });
+
+
+    // =====================================
+    // ACTION OPTIONS
+    // =====================================
+
+    const actionOptions = [
+
+        "view",
+
+        "add",
+
+        "edit",
+
+        "delete",
+
+        "import",
+
+        "export",
+
+        "assign",
+
+        "approve",
+    ];
 
 
     // =====================================
@@ -42,14 +67,11 @@ const PermissionForm = ({
 
             setFormData({
 
-                name:
-                    initialData.name || "",
-
-                code:
-                    initialData.code || "",
-
                 module:
                     initialData.module || "",
+
+                action:
+                    initialData.action || "view",
 
                 description:
                     initialData.description || "",
@@ -101,56 +123,6 @@ const PermissionForm = ({
         >
 
             {/* ================================= */}
-            {/* NAME */}
-            {/* ================================= */}
-
-            <div>
-
-                <label className="block mb-1 font-medium">
-
-                    Permission Name
-
-                </label>
-
-                <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Enter permission name"
-                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                />
-
-            </div>
-
-
-            {/* ================================= */}
-            {/* CODE */}
-            {/* ================================= */}
-
-            <div>
-
-                <label className="block mb-1 font-medium">
-
-                    Permission Code
-
-                </label>
-
-                <input
-                    type="text"
-                    name="code"
-                    value={formData.code}
-                    onChange={handleChange}
-                    placeholder="e.g. can_create_student"
-                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                />
-
-            </div>
-
-
-            {/* ================================= */}
             {/* MODULE */}
             {/* ================================= */}
 
@@ -162,15 +134,72 @@ const PermissionForm = ({
 
                 </label>
 
-                <input
-                    type="text"
+                <select
                     name="module"
                     value={formData.module}
                     onChange={handleChange}
-                    placeholder="e.g. students"
                     className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
-                />
+                >
+
+                    <option value="">
+
+                        Select Module
+
+                    </option>
+
+                    {modules.map((module) => (
+
+                        <option
+                            key={module.id}
+                            value={module.id}
+                        >
+
+                            {module.name}
+
+                        </option>
+
+                    ))}
+
+                </select>
+
+            </div>
+
+
+            {/* ================================= */}
+            {/* ACTION */}
+            {/* ================================= */}
+
+            <div>
+
+                <label className="block mb-1 font-medium">
+
+                    Action
+
+                </label>
+
+                <select
+                    name="action"
+                    value={formData.action}
+                    onChange={handleChange}
+                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                >
+
+                    {actionOptions.map((action) => (
+
+                        <option
+                            key={action}
+                            value={action}
+                        >
+
+                            {action}
+
+                        </option>
+
+                    ))}
+
+                </select>
 
             </div>
 
@@ -195,6 +224,22 @@ const PermissionForm = ({
                     placeholder="Enter permission description"
                     className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+
+            </div>
+
+
+            {/* ================================= */}
+            {/* AUTO GENERATED INFO */}
+            {/* ================================= */}
+
+            <div className="bg-gray-50 p-4 rounded border">
+
+                <p className="text-sm text-gray-600">
+
+                    Permission name and code
+                    will be generated automatically.
+
+                </p>
 
             </div>
 

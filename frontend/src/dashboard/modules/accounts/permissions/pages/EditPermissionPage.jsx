@@ -1,16 +1,24 @@
 import {
+
     useEffect,
+
     useState
+
 } from "react";
 
 import {
+
     useNavigate,
+
     useParams
+
 } from "react-router-dom";
 
 import PermissionForm from "../components/PermissionForm";
 
 import PermissionService from "../services/permissionService";
+
+import * as ModuleService from "../../modules/services/moduleService";
 
 
 const EditPermissionPage = () => {
@@ -31,20 +39,29 @@ const EditPermissionPage = () => {
     const [permission, setPermission] =
         useState(null);
 
+    const [modules, setModules] =
+        useState([]);
+
     const [loading, setLoading] =
         useState(false);
 
 
     // =====================================
-    // FETCH PERMISSION
+    // FETCH DATA
     // =====================================
 
     useEffect(() => {
 
         fetchPermission();
 
+        fetchModules();
+
     }, []);
 
+
+    // =====================================
+    // FETCH PERMISSION
+    // =====================================
 
     const fetchPermission = async () => {
 
@@ -59,6 +76,29 @@ const EditPermissionPage = () => {
 
             console.error(
                 "Fetch Permission Error:",
+                error
+            );
+        }
+    };
+
+
+    // =====================================
+    // FETCH MODULES
+    // =====================================
+
+    const fetchModules = async () => {
+
+        try {
+
+            const data =
+                await ModuleService.getModules();
+
+            setModules(data);
+
+        } catch (error) {
+
+            console.error(
+                "Fetch Modules Error:",
                 error
             );
         }
@@ -141,6 +181,8 @@ const EditPermissionPage = () => {
             <PermissionForm
 
                 initialData={permission}
+
+                modules={modules}
 
                 onSubmit={handleSubmit}
 

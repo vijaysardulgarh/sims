@@ -28,6 +28,8 @@ class PermissionAdmin(
 
         "module",
 
+        "action",
+
         "is_active",
 
         "is_system_permission",
@@ -45,7 +47,7 @@ class PermissionAdmin(
 
         "code",
 
-        "module",
+        "module__name",
     )
 
     # ======================================
@@ -55,6 +57,8 @@ class PermissionAdmin(
     list_filter = (
 
         "module",
+
+        "action",
 
         "is_active",
 
@@ -82,6 +86,10 @@ class PermissionAdmin(
 
     readonly_fields = (
 
+        "name",
+
+        "code",
+
         "created_at",
 
         "updated_at",
@@ -103,11 +111,13 @@ class PermissionAdmin(
             {
                 "fields": (
 
+                    "module",
+
+                    "action",
+
                     "name",
 
                     "code",
-
-                    "module",
 
                     "description",
                 )

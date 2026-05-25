@@ -1,3 +1,8 @@
+// =========================================
+// FILE:
+// frontend/src/routes/accountsRoutes.jsx
+// =========================================
+
 import { Route } from "react-router-dom";
 
 
@@ -39,6 +44,17 @@ import RolePermissionsPage from "../role_permissions/pages/RolePermissionsPage";
 
 
 // =====================================
+// MODULE PAGES
+// =====================================
+
+import ModulesListPage from "../modules/pages/ModulesListPage";
+
+import AddModulePage from "../modules/pages/AddModulePage";
+
+import EditModulePage from "../modules/pages/EditModulePage";
+
+
+// =====================================
 // USER ROLE PAGES
 // =====================================
 
@@ -49,11 +65,9 @@ import AddUserRolePage from "../user_roles/pages/AddUserRolePage";
 import EditUserRolePage from "../user_roles/pages/EditUserRolePage";
 
 
-
-// =========================================
-// FILE:
-// frontend/src/routes/accountsRoutes.jsx
-// =========================================
+// =====================================
+// USER PERMISSION PAGES
+// =====================================
 
 import UserPermissionsPage from "../user_permissions/pages/UserPermissionsPage";
 
@@ -134,11 +148,26 @@ const accountsRoutes = (
             path="roles/:id/permissions"
             element={<RolePermissionsPage />}
         />
-        
-        {/* <Route
-            path="role-permissions/:id"
-            element={<RolePermissionsPage />}
-        /> */}
+
+
+        {/* ================================= */}
+        {/* MODULES */}
+        {/* ================================= */}
+
+        <Route
+            path="modules"
+            element={<ModulesListPage />}
+        />
+
+        <Route
+            path="modules/add"
+            element={<AddModulePage />}
+        />
+
+        <Route
+            path="modules/edit/:id"
+            element={<EditModulePage />}
+        />
 
 
         {/* ================================= */}
@@ -160,15 +189,15 @@ const accountsRoutes = (
             element={<EditUserRolePage />}
         />
 
-        // =========================================
-        // ADD ROUTE
-        // =========================================
+
+        {/* ================================= */}
+        {/* USER PERMISSIONS */}
+        {/* ================================= */}
 
         <Route
             path="user-permissions"
             element={<UserPermissionsPage />}
         />
-
 
     </>
 );

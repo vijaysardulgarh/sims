@@ -1,3 +1,8 @@
+# =========================================
+# FILE:
+# backend/apps/accounts/urls.py
+# =========================================
+
 from django.urls import (
 
     path,
@@ -60,6 +65,17 @@ urlpatterns = [
         "permissions/",
         include(
             "apps.accounts.permissions.urls"
+        )
+    ),
+
+    # =====================================
+    # MODULES
+    # =====================================
+
+    path(
+        "modules/",
+        include(
+            "apps.accounts.modules.urls"
         )
     ),
 

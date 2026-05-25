@@ -3,6 +3,10 @@ import api from "../../../../../services/api/axios";
 
 const PermissionService = {
 
+    // =====================================
+    // GET PERMISSIONS
+    // =====================================
+
     getPermissions: async (
         params = {}
     ) => {
@@ -16,14 +20,13 @@ const PermissionService = {
             }
         );
 
-        console.log(
-            "RAW API RESPONSE:",
-            response.data
-        );
-
         return response.data;
     },
 
+
+    // =====================================
+    // GET SINGLE PERMISSION
+    // =====================================
 
     getPermission: async (
         id
@@ -37,6 +40,10 @@ const PermissionService = {
         return response.data;
     },
 
+
+    // =====================================
+    // CREATE PERMISSION
+    // =====================================
 
     createPermission: async (
         data
@@ -52,6 +59,10 @@ const PermissionService = {
         return response.data;
     },
 
+
+    // =====================================
+    // UPDATE PERMISSION
+    // =====================================
 
     updatePermission: async (
 
@@ -71,6 +82,10 @@ const PermissionService = {
         return response.data;
     },
 
+
+    // =====================================
+    // DELETE PERMISSION
+    // =====================================
 
     deletePermission: async (
         id

@@ -1,13 +1,64 @@
-import { useNavigate } from "react-router-dom";
+import {
+
+    useEffect,
+
+    useState
+
+} from "react";
+
+import {
+
+    useNavigate
+
+} from "react-router-dom";
 
 import PermissionForm from "../components/PermissionForm";
 
 import PermissionService from "../services/permissionService";
 
+import * as ModuleService from "../../modules/services/moduleService";
+
 
 const AddPermissionPage = () => {
 
     const navigate = useNavigate();
+
+    // =====================================
+    // STATE
+    // =====================================
+
+    const [modules, setModules] = useState([]);
+
+    const [loading, setLoading] = useState(false);
+
+
+    // =====================================
+    // LOAD MODULES
+    // =====================================
+
+    useEffect(() => {
+
+        loadModules();
+
+    }, []);
+
+
+    const loadModules = async () => {
+
+        try {
+
+            const response = await ModuleService.getModules();
+
+            setModules(response);
+
+        } catch (error) {
+
+            console.error(
+                "Load Modules Error:",
+                error
+            );
+        }
+    };
 
 
     // =====================================
@@ -19,6 +70,8 @@ const AddPermissionPage = () => {
     ) => {
 
         try {
+
+            setLoading(true);
 
             await PermissionService.createPermission(
                 formData
@@ -34,6 +87,10 @@ const AddPermissionPage = () => {
                 "Create Permission Error:",
                 error
             );
+
+        } finally {
+
+            setLoading(false);
         }
     };
 
@@ -58,6 +115,11 @@ const AddPermissionPage = () => {
             {/* ================================= */}
 
             <PermissionForm
+
+                modules={modules}
+
+                loading={loading}
+
                 onSubmit={handleSubmit}
             />
 

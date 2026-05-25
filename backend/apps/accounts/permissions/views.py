@@ -38,47 +38,15 @@ class PermissionListAPIView(
         self
     ):
 
-        # =================================
-        # SUPER ADMIN
-        # =================================
-
-        if self.request.user.is_superuser:
-
-            return (
-
-                Permission.objects.filter(
-
-                    is_deleted=False
-                )
-
-                .order_by(
-
-                    "module",
-
-                    "display_order",
-
-                    "name"
-                )
-            )
-
-        # =================================
-        # SCHOOL ADMIN
-        # =================================
-
         return (
 
             Permission.objects.filter(
 
-                school=getattr(
-
-                    self.request.user,
-
-                    "school",
-
-                    None
-                ),
-
                 is_deleted=False
+            )
+
+            .select_related(
+                "module"
             )
 
             .order_by(
@@ -100,36 +68,12 @@ class PermissionListAPIView(
         serializer
     ):
 
-        # =================================
-        # SUPER ADMIN
-        # =================================
+        serializer.save(
 
-        if self.request.user.is_superuser:
+            created_by=self.request.user,
 
-            serializer.save(
-
-                created_by=self.request.user
-            )
-
-        # =================================
-        # SCHOOL ADMIN
-        # =================================
-
-        else:
-
-            serializer.save(
-
-                school=getattr(
-
-                    self.request.user,
-
-                    "school",
-
-                    None
-                ),
-
-                created_by=self.request.user
-            )
+            updated_by=self.request.user,
+        )
 
 
 # =========================================
@@ -157,33 +101,16 @@ class PermissionDetailAPIView(
         self
     ):
 
-        # =================================
-        # SUPER ADMIN
-        # =================================
+        return (
 
-        if self.request.user.is_superuser:
-
-            return Permission.objects.filter(
+            Permission.objects.filter(
 
                 is_deleted=False
             )
 
-        # =================================
-        # SCHOOL ADMIN
-        # =================================
-
-        return Permission.objects.filter(
-
-            school=getattr(
-
-                self.request.user,
-
-                "school",
-
-                None
-            ),
-
-            is_deleted=False
+            .select_related(
+                "module"
+            )
         )
 
     # =====================================

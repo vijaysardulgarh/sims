@@ -4,6 +4,10 @@ from apps.core.common.base.models import (
     AuditBaseModel
 )
 
+from apps.accounts.modules.models import (
+    Module
+)
+
 
 # ==========================================
 # PERMISSION MODEL
@@ -13,31 +17,79 @@ class Permission(
     AuditBaseModel
 ):
 
+    ACTION_CHOICES = [
+
+        ("view", "View"),
+
+        ("add", "Add"),
+
+        ("edit", "Edit"),
+
+        ("delete", "Delete"),
+
+        ("import", "Import"),
+
+        ("export", "Export"),
+
+        ("assign", "Assign"),
+
+        ("approve", "Approve"),
+    ]
+
     # ======================================
-    # BASIC INFO
+    # MODULE
+    # ======================================
+
+    module = models.ForeignKey(
+
+        Module,
+
+        on_delete=models.CASCADE,
+
+        related_name="permissions",
+    )
+
+    # ======================================
+    # ACTION
+    # ======================================
+
+    action = models.CharField(
+
+        max_length=50,
+
+        choices=ACTION_CHOICES,
+    )
+
+    # ======================================
+    # AUTO GENERATED
     # ======================================
 
     name = models.CharField(
-        max_length=255
+
+        max_length=255,
+
+        editable=False,
     )
 
     code = models.CharField(
+
         max_length=255,
-        unique=True
+
+        unique=True,
+
+        editable=False,
     )
 
-    module = models.CharField(
-        max_length=100
-    )
+    # ======================================
+    # OPTIONAL
+    # ======================================
 
     description = models.TextField(
-        blank=True,
-        null=True
-    )
 
-    # ======================================
-    # SYSTEM
-    # ======================================
+        blank=True,
+
+        null=True,
+    )
 
     is_system_permission = models.BooleanField(
         default=True
@@ -55,12 +107,43 @@ class Permission(
             "name"
         ]
 
-        indexes = [
+        unique_together = (
+            "module",
+            "action",
+        )
 
-            models.Index(fields=["module"]),
+    def save(
+        self,
+        *args,
+        **kwargs
+    ):
 
-            models.Index(fields=["code"]),
-        ]
+        # ==================================
+        # AUTO NAME
+        # ==================================
+
+        self.name = (
+
+            f"{self.get_action_display()} "
+
+            f"{self.module.name}"
+        )
+
+        # ==================================
+        # AUTO CODE
+        # ==================================
+
+        self.code = (
+
+            f"{self.module.slug}_"
+
+            f"{self.action}"
+        )
+
+        super().save(
+            *args,
+            **kwargs
+        )
 
     def __str__(self):
 

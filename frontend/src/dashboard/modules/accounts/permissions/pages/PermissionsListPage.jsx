@@ -224,6 +224,10 @@ const PermissionsListPage = () => {
                                 Module
                             </th>
 
+                            <th className="border p-3 text-left">
+                                Action
+                            </th>
+
                             <th className="border p-3 text-center">
                                 Actions
                             </th>
@@ -276,7 +280,16 @@ const PermissionsListPage = () => {
 
                                         <td className="border p-3">
 
-                                            {item.module}
+                                            {item.module_name}
+
+                                        </td>
+
+
+                                        {/* ACTION */}
+
+                                        <td className="border p-3">
+
+                                            {item.action_display}
 
                                         </td>
 
@@ -324,7 +337,7 @@ const PermissionsListPage = () => {
                                 <tr>
 
                                     <td
-                                        colSpan="5"
+                                        colSpan="6"
                                         className="border p-4 text-center text-gray-500"
                                     >
 

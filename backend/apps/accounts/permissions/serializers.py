@@ -19,6 +19,16 @@ class PermissionSerializer(
         allow_null=True
     )
 
+    module_name = serializers.CharField(
+        source="module.name",
+        read_only=True
+    )
+
+    action_display = serializers.CharField(
+        source="get_action_display",
+        read_only=True
+    )
+
     class Meta:
 
         model = Permission
@@ -27,11 +37,17 @@ class PermissionSerializer(
 
             "id",
 
+            "module",
+
+            "module_name",
+
+            "action",
+
+            "action_display",
+
             "name",
 
             "code",
-
-            "module",
 
             "description",
 
@@ -46,18 +62,11 @@ class PermissionSerializer(
 
             "id",
 
+            "name",
+
+            "code",
+
             "created_at",
 
             "updated_at",
         ]
-
-    # ======================================
-    # VALIDATE CODE
-    # ======================================
-
-    def validate_code(
-        self,
-        value
-    ):
-
-        return value.upper()
