@@ -22,7 +22,11 @@ class LoginSerializer(
         attrs
     ):
 
-        data = super().validate(
+        # ==================================
+        # AUTHENTICATE USER
+        # ==================================
+
+        super().validate(
             attrs
         )
 
@@ -63,6 +67,25 @@ class LoginSerializer(
 
                 "Invalid school login."
             )
+
+        # ==================================
+        # GENERATE CUSTOM TOKEN
+        # ==================================
+
+        refresh = self.get_token(
+            user
+        )
+
+        data = {
+
+            "refresh": str(
+                refresh
+            ),
+
+            "access": str(
+                refresh.access_token
+            ),
+        }
 
         return data
 
@@ -144,7 +167,7 @@ class LoginSerializer(
 
             user.user_roles.filter(
 
-                school=user.school,
+            
 
                 is_active=True,
 
@@ -169,7 +192,7 @@ class LoginSerializer(
 
             user.user_roles.filter(
 
-                school=user.school,
+           
 
                 is_active=True,
 

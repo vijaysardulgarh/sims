@@ -4,6 +4,8 @@ import { useState } from "react";
 
 import api from "../../../../../services/api/axios";
 
+import { useAuth } from "../context/AuthContext";
+
 
 const LoginPage = () => {
 
@@ -12,6 +14,13 @@ const LoginPage = () => {
     // =====================================
 
     const navigate = useNavigate();
+
+
+    // =====================================
+    // AUTH
+    // =====================================
+
+    const { login } = useAuth();
 
 
     // =====================================
@@ -74,36 +83,10 @@ const LoginPage = () => {
 
 
             // =====================================
-            // SAVE TOKENS
+            // AUTH CONTEXT LOGIN
             // =====================================
 
-            localStorage.setItem(
-
-                "access",
-
-                data.access
-            );
-
-            localStorage.setItem(
-
-                "refresh",
-
-                data.refresh
-            );
-
-
-            // =====================================
-            // SAVE USER
-            // =====================================
-
-            localStorage.setItem(
-
-                "user",
-
-                JSON.stringify(
-                    data.user
-                )
-            );
+            login(data);
 
 
             // =====================================

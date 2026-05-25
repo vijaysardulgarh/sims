@@ -73,4 +73,15 @@ urlpatterns = [
             "apps.accounts.role_permissions.urls"
         )
     ),
+
+    # =====================================
+    # USER PERMISSIONS
+    # =====================================
+
+    path(
+        "user-permissions/",
+        include(
+            "apps.accounts.user_permissions.urls"
+        )
+    ),
 ]

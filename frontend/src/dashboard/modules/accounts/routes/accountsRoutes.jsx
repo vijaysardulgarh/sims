@@ -49,6 +49,15 @@ import AddUserRolePage from "../user_roles/pages/AddUserRolePage";
 import EditUserRolePage from "../user_roles/pages/EditUserRolePage";
 
 
+
+// =========================================
+// FILE:
+// frontend/src/routes/accountsRoutes.jsx
+// =========================================
+
+import UserPermissionsPage from "../user_permissions/pages/UserPermissionsPage";
+
+
 // =====================================
 // ROUTES
 // =====================================
@@ -150,6 +159,16 @@ const accountsRoutes = (
             path="user-roles/edit/:id"
             element={<EditUserRolePage />}
         />
+
+        // =========================================
+        // ADD ROUTE
+        // =========================================
+
+        <Route
+            path="user-permissions"
+            element={<UserPermissionsPage />}
+        />
+
 
     </>
 );

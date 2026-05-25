@@ -4,7 +4,6 @@ from apps.accounts.role_permissions.models import (
     RolePermission
 )
 
-
 # ==========================================
 # ROLE PERMISSION SERIALIZER
 # ==========================================

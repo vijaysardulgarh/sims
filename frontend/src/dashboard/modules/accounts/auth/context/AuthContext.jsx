@@ -10,6 +10,8 @@ import {
 
 } from "react";
 
+import { jwtDecode } from "jwt-decode";
+
 import api from "../../../../../services/api";
 
 
@@ -87,6 +89,21 @@ export const AuthProvider = ({
         );
 
         // =============================
+        // DECODE USER
+        // =============================
+
+        const decodedUser =
+
+            jwtDecode(
+                data.access
+            );
+
+        console.log(
+            "DECODED USER:",
+            decodedUser
+        );
+
+        // =============================
         // UPDATE STATE
         // =============================
 
@@ -95,7 +112,7 @@ export const AuthProvider = ({
         );
 
         setUser(
-            data.user || null
+            decodedUser
         );
     };
 
@@ -129,23 +146,10 @@ export const AuthProvider = ({
         const loadUser =
             async () => {
 
-            // =========================
-            // GET TOKEN
-            // =========================
-
             const token =
                 localStorage.getItem(
                     "access"
                 );
-
-            console.log(
-                "LOAD TOKEN:",
-                token
-            );
-
-            // =========================
-            // NO TOKEN
-            // =========================
 
             if (!token) {
 
@@ -157,31 +161,21 @@ export const AuthProvider = ({
             try {
 
                 // =====================
-                // GET CURRENT USER
+                // DECODE TOKEN
                 // =====================
 
-                const response =
-                    await api.get(
+                const decodedUser =
 
-                        "/accounts/current-logged-in-user/"
-                    );
+                    jwtDecode(token);
 
                 console.log(
-                    "CURRENT USER RESPONSE:",
-                    response.data
+                    "LOADED USER:",
+                    decodedUser
                 );
-
-                // =====================
-                // SAVE USER
-                // =====================
 
                 setUser(
-                    response.data
+                    decodedUser
                 );
-
-                // =====================
-                // KEEP TOKEN
-                // =====================
 
                 setAccessToken(
                     token
@@ -190,15 +184,13 @@ export const AuthProvider = ({
             } catch (error) {
 
                 console.log(
-                    "ME API ERROR:",
+                    "AUTH ERROR:",
                     error
                 );
 
-            } finally {
+                logout();
 
-                // =====================
-                // STOP LOADING
-                // =====================
+            } finally {
 
                 setLoading(false);
             }

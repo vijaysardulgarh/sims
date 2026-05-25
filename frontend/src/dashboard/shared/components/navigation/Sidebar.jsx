@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
+
 import { useAuth } from "../../../modules/accounts/auth/context/AuthContext";
+
 import { responsibilityMenus } from "../../../config/responsibilityMenus";
+
 
 
 const Sidebar = () => {
@@ -9,29 +12,77 @@ const Sidebar = () => {
   // AUTH
   // =====================================
 
+
   const { user } = useAuth();
 
+  console.log(user);
+
+
+  // =====================================
+  // NORMALIZED ROLES
+  // =====================================
+
   /*
-    Example:
-    roles = [
-      "SUPER_ADMIN",
-      "PRINCIPAL"
+    Supports:
+
+    ["ADMIN"]
+
+    OR
+
+    [
+      {
+        name: "ADMIN"
+      }
+    ]
+
+    OR
+
+    [
+      {
+        code: "ADMIN"
+      }
     ]
   */
 
   const roles =
-    user?.roles || [];
 
-  /*
-    Example:
-    responsibilities = [
-      "class-incharge",
-      "exam-coordinator"
-    ]
-  */
+    user?.roles?.map((role) => {
+
+      // STRING ROLE
+
+      if (typeof role === "string") {
+
+        return role.toUpperCase();
+      }
+
+      // OBJECT ROLE
+
+      return (
+        role?.code ||
+        role?.name ||
+        role?.role_code ||
+        ""
+      ).toUpperCase();
+
+    }) || [];
+
+
+  // =====================================
+  // RESPONSIBILITIES
+  // =====================================
 
   const responsibilities =
+
     user?.responsibilities || [];
+
+
+  // =====================================
+  // DEBUG
+  // =====================================
+
+  console.log("USER:", user);
+
+  console.log("ROLES:", roles);
 
 
   // =====================================
@@ -39,84 +90,58 @@ const Sidebar = () => {
   // =====================================
 
   const superAdminMenu = [
+
     { name: "Dashboard", path: "/dashboard/super-admin" },
+
     { name: "Clusters", path: "/dashboard/clusters" },
+
     { name: "Schools", path: "/dashboard/schools" },
+
     { name: "Subscriptions", path: "/dashboard/subscriptions" },
+
     { name: "School Admins", path: "/dashboard/school-admins" },
+
     { name: "Cluster Admins", path: "/dashboard/cluster-admins" },
+
     { name: "Users", path: "/dashboard/users" },
+
     { name: "Global Reports", path: "/dashboard/global-reports" },
+
     { name: "Settings", path: "/dashboard/settings" },
   ];
 
 
   // =====================================
-  // CLUSTER ADMIN MENU
-  // =====================================
-
-  const clusterAdminMenu = [
-    { name: "Dashboard", path: "/dashboard/cluster-admin" },
-    { name: "Cluster Schools", path: "/dashboard/cluster-schools" },
-    { name: "Analytics", path: "/dashboard/analytics" },
-    { name: "Attendance Reports", path: "/dashboard/attendance-reports" },
-    { name: "Academic Reports", path: "/dashboard/academic-reports" },
-    { name: "Staff Monitoring", path: "/dashboard/staff-monitoring" },
-    { name: "Meetings", path: "/dashboard/meetings" },
-    { name: "Notices", path: "/dashboard/notices" },
-  ];
-
-
-  // =====================================
-  // SCHOOL ADMIN MENU
+  // ADMIN MENU
   // =====================================
 
   const adminMenu = [
+
     { name: "Dashboard", path: "/dashboard/admin" },
+
     { name: "Students", path: "/dashboard/students" },
+
     { name: "Staff", path: "/dashboard/staff" },
+
     { name: "Admissions", path: "/dashboard/admissions" },
+
     { name: "Academics", path: "/dashboard/academics" },
+
     { name: "Attendance", path: "/dashboard/attendance" },
+
     { name: "Examinations", path: "/dashboard/examinations" },
+
     { name: "Fees", path: "/dashboard/fees" },
+
     { name: "Timetable", path: "/dashboard/timetable" },
+
     { name: "Library", path: "/dashboard/library" },
+
     { name: "Transport", path: "/dashboard/transport" },
-    { name: "Hostel", path: "/dashboard/hostel" },
-    { name: "Inventory", path: "/dashboard/inventory" },
+
     { name: "Reports", path: "/dashboard/reports" },
+
     { name: "Settings", path: "/dashboard/settings" },
-  ];
-
-
-  // =====================================
-  // PRINCIPAL MENU
-  // =====================================
-
-  const principalMenu = [
-    { name: "Dashboard", path: "/dashboard/principal" },
-    { name: "Academic Reports", path: "/dashboard/academic-reports" },
-    { name: "Attendance", path: "/dashboard/attendance" },
-    { name: "Staff Monitoring", path: "/dashboard/staff" },
-    { name: "Examinations", path: "/dashboard/examinations" },
-    { name: "Meetings", path: "/dashboard/meetings" },
-    { name: "Analytics", path: "/dashboard/analytics" },
-    { name: "Discipline", path: "/dashboard/discipline" },
-  ];
-
-
-  // =====================================
-  // VICE PRINCIPAL MENU
-  // =====================================
-
-  const vicePrincipalMenu = [
-    { name: "Dashboard", path: "/dashboard/vice-principal" },
-    { name: "Attendance", path: "/dashboard/attendance" },
-    { name: "Discipline", path: "/dashboard/discipline" },
-    { name: "Teacher Monitoring", path: "/dashboard/staff" },
-    { name: "Meetings", path: "/dashboard/meetings" },
-    { name: "Reports", path: "/dashboard/reports" },
   ];
 
 
@@ -125,12 +150,19 @@ const Sidebar = () => {
   // =====================================
 
   const teacherMenu = [
+
     { name: "Dashboard", path: "/dashboard/teacher" },
+
     { name: "My Classes", path: "/dashboard/my-classes" },
+
     { name: "Attendance", path: "/dashboard/attendance" },
+
     { name: "Homework", path: "/dashboard/homework" },
+
     { name: "Assignments", path: "/dashboard/assignments" },
+
     { name: "Marks Entry", path: "/dashboard/marks" },
+
     { name: "Timetable", path: "/dashboard/timetable" },
   ];
 
@@ -140,108 +172,14 @@ const Sidebar = () => {
   // =====================================
 
   const accountantMenu = [
+
     { name: "Dashboard", path: "/dashboard/accountant" },
+
     { name: "Fees", path: "/dashboard/fees" },
+
     { name: "Receipts", path: "/dashboard/receipts" },
-    { name: "Concessions", path: "/dashboard/concessions" },
-    { name: "Scholarships", path: "/dashboard/scholarships" },
+
     { name: "Fee Reports", path: "/dashboard/fee-reports" },
-  ];
-
-
-  // =====================================
-  // CLERK MENU
-  // =====================================
-
-  const clerkMenu = [
-    { name: "Dashboard", path: "/dashboard/clerk" },
-    { name: "Admissions", path: "/dashboard/admissions" },
-    { name: "Certificates", path: "/dashboard/certificates" },
-    { name: "Student Records", path: "/dashboard/student-records" },
-    { name: "Reports", path: "/dashboard/reports" },
-  ];
-
-
-  // =====================================
-  // RECEPTIONIST MENU
-  // =====================================
-
-  const receptionistMenu = [
-    { name: "Dashboard", path: "/dashboard/receptionist" },
-    { name: "Visitors", path: "/dashboard/visitors" },
-    { name: "Inquiries", path: "/dashboard/inquiries" },
-    { name: "Appointments", path: "/dashboard/appointments" },
-    { name: "Calls", path: "/dashboard/calls" },
-  ];
-
-
-  // =====================================
-  // LIBRARIAN MENU
-  // =====================================
-
-  const librarianMenu = [
-    { name: "Dashboard", path: "/dashboard/librarian" },
-    { name: "Books", path: "/dashboard/books" },
-    { name: "Issue Books", path: "/dashboard/issue-books" },
-    { name: "Returns", path: "/dashboard/returns" },
-    { name: "Fine Management", path: "/dashboard/fines" },
-    { name: "Library Reports", path: "/dashboard/library-reports" },
-  ];
-
-
-  // =====================================
-  // HOSTEL WARDEN MENU
-  // =====================================
-
-  const hostelWardenMenu = [
-    { name: "Dashboard", path: "/dashboard/hostel-warden" },
-    { name: "Rooms", path: "/dashboard/rooms" },
-    { name: "Hostel Students", path: "/dashboard/hostel-students" },
-    { name: "Hostel Attendance", path: "/dashboard/hostel-attendance" },
-    { name: "Discipline", path: "/dashboard/discipline" },
-    { name: "Hostel Reports", path: "/dashboard/hostel-reports" },
-  ];
-
-
-  // =====================================
-  // SECURITY SUPERVISOR MENU
-  // =====================================
-
-  const securitySupervisorMenu = [
-    { name: "Dashboard", path: "/dashboard/security-supervisor" },
-    { name: "Visitor Logs", path: "/dashboard/visitor-logs" },
-    { name: "Gate Entries", path: "/dashboard/gate-entries" },
-    { name: "Incidents", path: "/dashboard/incidents" },
-    { name: "Vehicles", path: "/dashboard/vehicles" },
-  ];
-
-
-  // =====================================
-  // STUDENT MENU
-  // =====================================
-
-  const studentMenu = [
-    { name: "Dashboard", path: "/dashboard/student" },
-    { name: "Subjects", path: "/dashboard/subjects" },
-    { name: "Homework", path: "/dashboard/homework" },
-    { name: "Assignments", path: "/dashboard/assignments" },
-    { name: "Results", path: "/dashboard/results" },
-    { name: "Attendance", path: "/dashboard/attendance" },
-    { name: "Timetable", path: "/dashboard/timetable" },
-  ];
-
-
-  // =====================================
-  // PARENT MENU
-  // =====================================
-
-  const parentMenu = [
-    { name: "Dashboard", path: "/dashboard/parent" },
-    { name: "Attendance", path: "/dashboard/attendance" },
-    { name: "Homework", path: "/dashboard/homework" },
-    { name: "Results", path: "/dashboard/results" },
-    { name: "Fees", path: "/dashboard/fees" },
-    { name: "Messages", path: "/dashboard/messages" },
   ];
 
 
@@ -251,60 +189,36 @@ const Sidebar = () => {
 
   let menuItems = [];
 
+
+  // SUPER ADMIN
+
   if (roles.includes("SUPER_ADMIN")) {
+
     menuItems.push(...superAdminMenu);
   }
 
-  if (roles.includes("CLUSTER_ADMIN")) {
-    menuItems.push(...clusterAdminMenu);
-  }
+
+  // ADMIN
 
   if (roles.includes("ADMIN")) {
+
     menuItems.push(...adminMenu);
   }
 
-  if (roles.includes("PRINCIPAL")) {
-    menuItems.push(...principalMenu);
-  }
 
-  if (roles.includes("VICE_PRINCIPAL")) {
-    menuItems.push(...vicePrincipalMenu);
-  }
+  // TEACHER
 
   if (roles.includes("TEACHER")) {
+
     menuItems.push(...teacherMenu);
   }
 
+
+  // ACCOUNTANT
+
   if (roles.includes("ACCOUNTANT")) {
+
     menuItems.push(...accountantMenu);
-  }
-
-  if (roles.includes("CLERK")) {
-    menuItems.push(...clerkMenu);
-  }
-
-  if (roles.includes("RECEPTIONIST")) {
-    menuItems.push(...receptionistMenu);
-  }
-
-  if (roles.includes("LIBRARIAN")) {
-    menuItems.push(...librarianMenu);
-  }
-
-  if (roles.includes("HOSTEL_WARDEN")) {
-    menuItems.push(...hostelWardenMenu);
-  }
-
-  if (roles.includes("SECURITY_SUPERVISOR")) {
-    menuItems.push(...securitySupervisorMenu);
-  }
-
-  if (roles.includes("STUDENT")) {
-    menuItems.push(...studentMenu);
-  }
-
-  if (roles.includes("PARENT")) {
-    menuItems.push(...parentMenu);
   }
 
 
@@ -315,12 +229,12 @@ const Sidebar = () => {
   responsibilities.forEach((responsibility) => {
 
     const extraMenus =
-      responsibilityMenus[responsibility];
+
+      responsibilityMenus?.[responsibility];
 
     if (extraMenus) {
 
       menuItems.push(...extraMenus);
-
     }
 
   });
@@ -342,6 +256,13 @@ const Sidebar = () => {
       ])
     ).values()
   ];
+
+
+  // =====================================
+  // DEBUG
+  // =====================================
+
+  console.log("MENU ITEMS:", menuItems);
 
 
   return (
@@ -377,23 +298,32 @@ const Sidebar = () => {
 
         </p>
 
-        <div
-          className="
-            mt-4
-            inline-block
-            bg-white/10
-            px-3
-            py-1
-            rounded-full
-            text-xs
-            uppercase
-            tracking-wider
-            text-blue-100
-          "
-        >
+
+        {/* ROLE BADGES */}
+
+        <div className="mt-4 flex flex-wrap gap-2">
 
           {
-            roles.join(", ")
+            roles.map((role) => (
+
+              <span
+                key={role}
+                className="
+                  bg-white/10
+                  px-3
+                  py-1
+                  rounded-full
+                  text-xs
+                  uppercase
+                  tracking-wider
+                  text-blue-100
+                "
+              >
+
+                {role}
+
+              </span>
+            ))
           }
 
         </div>
@@ -409,10 +339,20 @@ const Sidebar = () => {
           p-4
           space-y-2
           overflow-y-auto
-          scroll-smooth
-          custom-scrollbar
         "
       >
+
+        {
+          menuItems.length === 0 && (
+
+            <div className="text-blue-200 text-sm">
+
+              No menu items available
+
+            </div>
+          )
+        }
+
 
         {
           menuItems.map((item) => (
@@ -424,6 +364,7 @@ const Sidebar = () => {
               to={item.path}
 
               className={({ isActive }) =>
+
                 `
                   block
                   px-4
@@ -451,5 +392,6 @@ const Sidebar = () => {
     </aside>
   );
 };
+
 
 export default Sidebar;

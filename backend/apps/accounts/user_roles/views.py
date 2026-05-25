@@ -4,10 +4,6 @@ from rest_framework.permissions import (
     IsAuthenticated
 )
 
-from django.shortcuts import (
-    get_object_or_404
-)
-
 from apps.core.common.views import (
     BaseAPIView
 )
@@ -46,6 +42,8 @@ class UserRoleListCreateAPIView(
         self
     ):
 
+        request = self.request
+
         return (
 
             UserRole.objects
@@ -58,7 +56,11 @@ class UserRoleListCreateAPIView(
 
             .filter(
 
-                school=self.getattr(request.user, "school", None),
+                school=getattr(
+                    request.user,
+                    "school",
+                    None
+                ),
 
                 is_deleted=False
             )
@@ -75,11 +77,19 @@ class UserRoleListCreateAPIView(
         serializer
     ):
 
+        request = self.request
+
         serializer.save(
 
-            school=self.getattr(request.user, "school", None),
+            school=getattr(
+                request.user,
+                "school",
+                None
+            ),
 
-            created_by=self.request.user
+            created_by=request.user,
+
+            updated_by=request.user
         )
 
 
@@ -108,6 +118,8 @@ class UserRoleDetailAPIView(
         self
     ):
 
+        request = self.request
+
         return (
 
             UserRole.objects
@@ -120,7 +132,11 @@ class UserRoleDetailAPIView(
 
             .filter(
 
-                school=self.getattr(request.user, "school", None),
+                school=getattr(
+                    request.user,
+                    "school",
+                    None
+                ),
 
                 is_deleted=False
             )

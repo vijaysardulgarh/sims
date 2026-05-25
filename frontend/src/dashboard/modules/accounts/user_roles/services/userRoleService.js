@@ -6,7 +6,7 @@ const userRoleService = {
     getUserRoles: async () => {
 
         const response = await api.get(
-            "/users/user-roles/"
+            "/accounts/user-roles/"
         );
 
         return response.data;
@@ -16,7 +16,7 @@ const userRoleService = {
     getUserRole: async (id) => {
 
         const response = await api.get(
-            `/users/user-roles/${id}/`
+            `/accounts/user-roles/${id}/`
         );
 
         return response.data;
@@ -27,7 +27,7 @@ const userRoleService = {
 
         const response = await api.post(
 
-            "/users/user-roles/",
+            "/accounts/user-roles/",
 
             data
         );
@@ -43,7 +43,7 @@ const userRoleService = {
 
         const response = await api.patch(
 
-            `/users/user-roles/${id}/`,
+            `/accounts/user-roles/${id}/`,
 
             data
         );
@@ -56,7 +56,7 @@ const userRoleService = {
 
         const response = await api.delete(
 
-            `/users/user-roles/${id}/`
+            `/accounts/user-roles/${id}/`
         );
 
         return response.data;

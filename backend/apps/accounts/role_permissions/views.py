@@ -8,6 +8,14 @@ from rest_framework.permissions import (
     IsAuthenticated
 )
 
+from apps.accounts.users.models import (
+    User
+)
+
+from apps.accounts.user_roles.models import (
+    UserRole
+)
+
 from apps.core.common.views import (
     BaseAPIView
 )
@@ -25,6 +33,7 @@ from apps.accounts.role_permissions.models import (
 )
 
 from apps.accounts.role_permissions.serializers import (
+
     RolePermissionSerializer
 )
 
@@ -358,3 +367,5 @@ class RolePermissionsAPIView(
             "message":
             "Permissions assigned successfully"
         })
+
+
