@@ -1,11 +1,23 @@
 from rest_framework import generics
 
+from rest_framework.views import APIView
+
+from rest_framework.response import Response
+
 from rest_framework.permissions import (
     IsAuthenticated
 )
 
 from apps.core.common.views import (
     BaseAPIView
+)
+
+from apps.accounts.roles.models import (
+    Role
+)
+
+from apps.accounts.permissions.models import (
+    Permission
 )
 
 from apps.accounts.role_permissions.models import (
@@ -22,6 +34,7 @@ from apps.accounts.role_permissions.serializers import (
 # =========================================
 
 class RolePermissionListCreateAPIView(
+
     BaseAPIView,
     generics.ListCreateAPIView
 ):
@@ -34,6 +47,7 @@ class RolePermissionListCreateAPIView(
         IsAuthenticated
     ]
 
+
     # =====================================
     # GET QUERYSET
     # =====================================
@@ -42,7 +56,7 @@ class RolePermissionListCreateAPIView(
         self
     ):
 
-        return (
+        queryset = (
 
             RolePermission.objects
 
@@ -53,9 +67,6 @@ class RolePermissionListCreateAPIView(
             )
 
             .filter(
-
-                school=self.getattr(request.user, "school", None),
-
                 is_deleted=False
             )
 
@@ -63,6 +74,31 @@ class RolePermissionListCreateAPIView(
                 "role"
             )
         )
+
+        # =================================
+        # SUPER ADMIN
+        # =================================
+
+        if self.request.user.is_superuser:
+
+            return queryset
+
+        # =================================
+        # SCHOOL FILTER
+        # =================================
+
+        return queryset.filter(
+
+            school=getattr(
+
+                self.request.user,
+
+                "school",
+
+                None
+            )
+        )
+
 
     # =====================================
     # PERFORM CREATE
@@ -75,7 +111,14 @@ class RolePermissionListCreateAPIView(
 
         serializer.save(
 
-            school=self.getattr(request.user, "school", None),
+            school=getattr(
+
+                self.request.user,
+
+                "school",
+
+                None
+            ),
 
             created_by=self.request.user
         )
@@ -86,6 +129,7 @@ class RolePermissionListCreateAPIView(
 # =========================================
 
 class RolePermissionDetailAPIView(
+
     BaseAPIView,
     generics.RetrieveUpdateDestroyAPIView
 ):
@@ -98,6 +142,7 @@ class RolePermissionDetailAPIView(
         IsAuthenticated
     ]
 
+
     # =====================================
     # GET QUERYSET
     # =====================================
@@ -106,7 +151,7 @@ class RolePermissionDetailAPIView(
         self
     ):
 
-        return (
+        queryset = (
 
             RolePermission.objects
 
@@ -117,12 +162,34 @@ class RolePermissionDetailAPIView(
             )
 
             .filter(
-
-                school=self.getattr(request.user, "school", None),
-
                 is_deleted=False
             )
         )
+
+        # =================================
+        # SUPER ADMIN
+        # =================================
+
+        if self.request.user.is_superuser:
+
+            return queryset
+
+        # =================================
+        # SCHOOL FILTER
+        # =================================
+
+        return queryset.filter(
+
+            school=getattr(
+
+                self.request.user,
+
+                "school",
+
+                None
+            )
+        )
+
 
     # =====================================
     # PERFORM UPDATE
@@ -136,6 +203,7 @@ class RolePermissionDetailAPIView(
         serializer.save(
             updated_by=self.request.user
         )
+
 
     # =====================================
     # SOFT DELETE
@@ -153,3 +221,140 @@ class RolePermissionDetailAPIView(
         )
 
         instance.save()
+
+
+# =========================================
+# ROLE PERMISSIONS ASSIGN API
+# =========================================
+
+class RolePermissionsAPIView(
+    APIView
+):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+
+    # =====================================
+    # GET ROLE PERMISSIONS
+    # =====================================
+
+    def get(
+        self,
+        request,
+        id
+    ):
+
+        role_permissions = (
+
+            RolePermission.objects
+
+            .select_related(
+                "permission"
+            )
+
+            .filter(
+
+                role_id=id,
+
+                is_deleted=False
+            )
+        )
+
+        permission_codes = [
+
+            item.permission.code
+
+            for item in role_permissions
+        ]
+
+        return Response(
+            permission_codes
+        )
+
+
+    # =====================================
+    # ASSIGN ROLE PERMISSIONS
+    # =====================================
+
+    def post(
+        self,
+        request,
+        id
+    ):
+
+        try:
+
+            role = Role.objects.get(
+                id=id
+            )
+
+        except Role.DoesNotExist:
+
+            return Response(
+
+                {
+                    "detail":
+                    "Role not found"
+                },
+
+                status=404
+            )
+
+
+        permission_codes = request.data.get(
+
+            "permissions",
+
+            []
+        )
+
+        print(
+            "PERMISSION CODES:",
+            permission_codes
+        )
+
+
+        # =================================
+        # DELETE OLD
+        # =================================
+
+        RolePermission.objects.filter(
+            role=role
+        ).delete()
+
+
+        # =================================
+        # CREATE NEW
+        # =================================
+
+        for code in permission_codes:
+
+            try:
+
+                permission = Permission.objects.get(
+                    code=code
+                )
+
+                RolePermission.objects.create(
+
+                    school=role.school,
+
+                    role=role,
+
+                    permission=permission,
+
+                    created_by=request.user
+                )
+
+            except Permission.DoesNotExist:
+
+                continue
+
+
+        return Response({
+
+            "message":
+            "Permissions assigned successfully"
+        })

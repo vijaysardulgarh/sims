@@ -54,7 +54,7 @@ const RolePermissionsForm = ({
 
 
     // =====================================
-    // FETCH
+    // FETCH DATA
     // =====================================
 
     const fetchData =
@@ -64,7 +64,10 @@ const RolePermissionsForm = ({
 
             setLoading(true);
 
+
+            // =================================
             // ROLE
+            // =================================
 
             const roleData =
                 await roleService.getRole(
@@ -73,30 +76,71 @@ const RolePermissionsForm = ({
 
             setRole(roleData);
 
+
+            // =================================
             // PERMISSIONS
+            // =================================
 
             const permissionsData =
                 await permissionService.getPermissions();
 
-            setPermissions(
+            console.log(
+                "PERMISSIONS:",
                 permissionsData
             );
 
+            setPermissions(
+
+                Array.isArray(
+                    permissionsData
+                )
+
+                    ? permissionsData
+
+                    : Array.isArray(
+                        permissionsData?.results
+                    )
+
+                        ? permissionsData.results
+
+                        : []
+            );
+
+
+            // =================================
             // ROLE PERMISSIONS
+            // =================================
 
             const rolePermissionsData =
                 await rolePermissionService.getRolePermissions(
                     roleId
                 );
 
+            console.log(
+
+                "ROLE PERMISSIONS:",
+
+                rolePermissionsData
+            );
+
+
             setSelectedPermissions(
 
-                rolePermissionsData || []
+                Array.isArray(
+                    rolePermissionsData
+                )
+
+                    ? rolePermissionsData
+
+                    : []
             );
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "FETCH ERROR:",
+                error
+            );
 
         } finally {
 
@@ -106,7 +150,7 @@ const RolePermissionsForm = ({
 
 
     // =====================================
-    // TOGGLE
+    // TOGGLE PERMISSION
     // =====================================
 
     const togglePermission =
@@ -125,6 +169,7 @@ const RolePermissionsForm = ({
                 selectedPermissions.filter(
 
                     item =>
+
                         item !== permissionCode
                 )
             );
@@ -142,33 +187,38 @@ const RolePermissionsForm = ({
 
 
     // =====================================
-    // GROUP
+    // GROUP PERMISSIONS
     // =====================================
 
     const groupedPermissions =
-        permissions.reduce(
 
-            (acc, permission) => {
+        Array.isArray(permissions)
 
-                const module =
-                    permission.module ||
-                    "General";
+            ? permissions.reduce(
 
-                if (!acc[module]) {
+                (acc, permission) => {
 
-                    acc[module] = [];
-                }
+                    const module =
+                        permission.module ||
+                        "General";
 
-                acc[module].push(
-                    permission
-                );
+                    if (!acc[module]) {
 
-                return acc;
+                        acc[module] = [];
+                    }
 
-            },
+                    acc[module].push(
+                        permission
+                    );
 
-            {}
-        );
+                    return acc;
+
+                },
+
+                {}
+            )
+
+            : {};
 
 
     // =====================================
@@ -184,11 +234,40 @@ const RolePermissionsForm = ({
 
             setLoading(true);
 
+            console.log(
+                "SELECTED:",
+                selectedPermissions
+            );
+
+
+            // =================================
+            // CLEAN ARRAY
+            // =================================
+
+            const cleanedPermissions =
+
+                selectedPermissions.filter(
+
+                    item =>
+
+                        typeof item === "string"
+                );
+
+            console.log(
+                "CLEANED:",
+                cleanedPermissions
+            );
+
+
+            // =================================
+            // API CALL
+            // =================================
+
             await rolePermissionService.assignPermissionsToRole(
 
                 roleId,
 
-                selectedPermissions
+                cleanedPermissions
             );
 
             alert(
@@ -197,10 +276,26 @@ const RolePermissionsForm = ({
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "SUBMIT ERROR:",
+                error
+            );
+
+            console.log(
+                "BACKEND ERROR:",
+                error?.response?.data
+            );
 
             alert(
-                "Failed to update permissions"
+
+                JSON.stringify(
+
+                    error?.response?.data,
+
+                    null,
+
+                    2
+                )
             );
 
         } finally {
@@ -468,8 +563,6 @@ const RolePermissionsForm = ({
                                                     `}
                                                 >
 
-                                                    {/* CHECKBOX */}
-
                                                     <input
 
                                                         type="checkbox"
@@ -498,8 +591,6 @@ const RolePermissionsForm = ({
                                                         "
                                                     />
 
-
-                                                    {/* CONTENT */}
 
                                                     <div
                                                         className="
@@ -570,7 +661,9 @@ const RolePermissionsForm = ({
                 }
 
 
+                {/* ================================= */}
                 {/* SAVE BUTTON */}
+                {/* ================================= */}
 
                 <div
                     className="

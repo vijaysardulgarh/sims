@@ -15,14 +15,12 @@ const rolePermissionService = {
 
             const response = await api.get(
 
-                `/accounts/roles/${roleId}/permissions/`
+                `/accounts/role-permissions/roles/${roleId}/permissions/`
             );
 
-            return response.data.data;
+            return response.data;
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(error);
 
@@ -47,18 +45,16 @@ const rolePermissionService = {
 
             const response = await api.post(
 
-                `/accounts/roles/${roleId}/permissions/`,
+                `/accounts/role-permissions/roles/${roleId}/permissions/`,
 
                 {
                     permissions,
                 }
             );
 
-            return response.data.data;
+            return response.data;
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(error);
 
