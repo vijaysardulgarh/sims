@@ -30,6 +30,8 @@ class PermissionAdmin(
 
         "action",
 
+        "display_order",
+
         "is_active",
 
         "is_system_permission",
@@ -143,6 +145,8 @@ class PermissionAdmin(
             "Audit Information",
 
             {
+                "classes": ("collapse",),
+
                 "fields": (
 
                     "created_at",
@@ -155,6 +159,14 @@ class PermissionAdmin(
                 )
             }
         ),
+    )
+
+    # ======================================
+    # AUTO SELECT RELATED
+    # ======================================
+
+    list_select_related = (
+        "module",
     )
 
     # ======================================

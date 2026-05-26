@@ -5,6 +5,14 @@ from apps.core.common.base.models import AuditBaseModel
 
 class Module(AuditBaseModel):
 
+    parent = models.ForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="children",
+    )
+
     name = models.CharField(
         max_length=100,
         unique=True,
@@ -14,19 +22,22 @@ class Module(AuditBaseModel):
         unique=True,
     )
 
-    description = models.TextField(
+    path = models.CharField(
+        max_length=255,
         blank=True,
         null=True,
     )
 
-    class Meta:
+    icon = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
 
-        db_table = "auth_modules"
+    order = models.PositiveIntegerField(
+        default=0,
+    )
 
-        ordering = [
-            "name",
-        ]
-
-    def __str__(self):
-
-        return self.name
+    is_menu = models.BooleanField(
+        default=True,
+    )

@@ -52,7 +52,7 @@ class RolePermission(
         )
 
         ordering = [
-            "role"
+            "role__name"
         ]
 
     def __str__(self):

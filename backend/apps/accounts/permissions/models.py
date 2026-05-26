@@ -17,6 +17,10 @@ class Permission(
     AuditBaseModel
 ):
 
+    # ======================================
+    # ACTION CHOICES
+    # ======================================
+
     ACTION_CHOICES = [
 
         ("view", "View"),
@@ -61,7 +65,7 @@ class Permission(
     )
 
     # ======================================
-    # AUTO GENERATED
+    # AUTO GENERATED NAME
     # ======================================
 
     name = models.CharField(
@@ -70,6 +74,10 @@ class Permission(
 
         editable=False,
     )
+
+    # ======================================
+    # AUTO GENERATED CODE
+    # ======================================
 
     code = models.CharField(
 
@@ -99,7 +107,13 @@ class Permission(
         default=0
     )
 
+    # ======================================
+    # META
+    # ======================================
+
     class Meta:
+
+        db_table = "auth_permissions"
 
         ordering = [
             "module",
@@ -111,6 +125,10 @@ class Permission(
             "module",
             "action",
         )
+
+    # ======================================
+    # SAVE
+    # ======================================
 
     def save(
         self,
@@ -135,7 +153,7 @@ class Permission(
 
         self.code = (
 
-            f"{self.module.slug}_"
+            f"{self.module.slug}."
 
             f"{self.action}"
         )
@@ -144,6 +162,10 @@ class Permission(
             *args,
             **kwargs
         )
+
+    # ======================================
+    # STRING
+    # ======================================
 
     def __str__(self):
 

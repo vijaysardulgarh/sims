@@ -38,7 +38,7 @@ class PermissionListAPIView(
         self
     ):
 
-        return (
+        queryset = (
 
             Permission.objects.filter(
 
@@ -51,13 +51,57 @@ class PermissionListAPIView(
 
             .order_by(
 
-                "module",
+                "module__name",
 
                 "display_order",
 
                 "name"
             )
         )
+
+        # =================================
+        # FILTER BY MODULE
+        # =================================
+
+        module_id = self.request.query_params.get(
+            "module"
+        )
+
+        if module_id:
+
+            queryset = queryset.filter(
+                module_id=module_id
+            )
+
+        # =================================
+        # FILTER BY ACTION
+        # =================================
+
+        action = self.request.query_params.get(
+            "action"
+        )
+
+        if action:
+
+            queryset = queryset.filter(
+                action=action
+            )
+
+        # =================================
+        # FILTER ACTIVE
+        # =================================
+
+        is_active = self.request.query_params.get(
+            "is_active"
+        )
+
+        if is_active is not None:
+
+            queryset = queryset.filter(
+                is_active=is_active.lower() == "true"
+            )
+
+        return queryset
 
     # =====================================
     # PERFORM CREATE
@@ -142,3 +186,56 @@ class PermissionDetailAPIView(
         )
 
         instance.save()
+
+
+# =========================================
+# PERMISSIONS BY MODULE API
+# =========================================
+
+class PermissionByModuleAPIView(
+
+    generics.ListAPIView
+):
+
+    serializer_class = (
+        PermissionSerializer
+    )
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    # =====================================
+    # GET QUERYSET
+    # =====================================
+
+    def get_queryset(
+        self
+    ):
+
+        module_id = self.kwargs.get(
+            "module_id"
+        )
+
+        return (
+
+            Permission.objects.filter(
+
+                module_id=module_id,
+
+                is_deleted=False,
+
+                is_active=True,
+            )
+
+            .select_related(
+                "module"
+            )
+
+            .order_by(
+
+                "display_order",
+
+                "name"
+            )
+        )

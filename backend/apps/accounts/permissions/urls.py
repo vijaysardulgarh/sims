@@ -6,14 +6,16 @@ from apps.accounts.permissions.views import (
 
     PermissionListAPIView,
 
-    PermissionDetailAPIView
+    PermissionDetailAPIView,
+
+    PermissionByModuleAPIView,
 )
 
 
 urlpatterns = [
 
     # =====================================
-    # PERMISSION LIST
+    # PERMISSION LIST + CREATE
     # =====================================
 
     path(
@@ -30,5 +32,15 @@ urlpatterns = [
         "<int:pk>/",
         PermissionDetailAPIView.as_view(),
         name="permission-detail"
+    ),
+
+    # =====================================
+    # PERMISSIONS BY MODULE
+    # =====================================
+
+    path(
+        "module/<int:module_id>/",
+        PermissionByModuleAPIView.as_view(),
+        name="permissions-by-module"
     ),
 ]
