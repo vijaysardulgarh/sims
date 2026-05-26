@@ -3,7 +3,7 @@ from django.db.models import Count
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from apps.students.models import Student
+from apps.students.profiles.models import Student
 from apps.staff.class_incharge.models import ClassIncharge
 
 

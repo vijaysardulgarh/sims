@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 
 from apps.core.utils.helpers import get_current_school
-from apps.students.models import Student
+from apps.students.profiles.models import Student
 
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer
 from reportlab.lib import colors

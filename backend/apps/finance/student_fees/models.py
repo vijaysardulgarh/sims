@@ -9,7 +9,7 @@ from django.core.exceptions import (
 )
 
 from apps.schools.models import School
-from apps.students.models import Student
+from apps.students.profiles.models import Student
 from apps.finance.fee_structures.models import FeeStructure
 from apps.core.common.base.models import SchoolBaseModel
 

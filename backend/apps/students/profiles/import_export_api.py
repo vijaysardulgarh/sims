@@ -11,7 +11,7 @@ from django.http import HttpResponse
 
 from tablib import Dataset
 
-from apps.students.student_resource import (
+from apps.students.profiles.student_resource import (
     StudentResource
 )
 

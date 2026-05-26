@@ -13,7 +13,7 @@ from django.db.models import (
     Value,
 )
 
-from apps.students.models import (
+from apps.students.profiles.models import (
     Student
 )
 from apps.students.achievements.models import (

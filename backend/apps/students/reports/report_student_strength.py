@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from collections import defaultdict
 
 from apps.core.utils.helpers import get_current_school
-from apps.students.models import Student
+from apps.students.profiles.models import Student
 
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer, PageBreak
 from reportlab.lib.pagesizes import A4, landscape

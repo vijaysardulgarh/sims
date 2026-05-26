@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.db.models import Count, Sum, Q
 
 from apps.staff.models import Staff, TeacherAttendance, ClassIncharge, SanctionedPost
-from apps.students.models import Student
+from apps.students.profiles.models import Student
 from apps.schools.models import School
 
 

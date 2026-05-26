@@ -73,7 +73,6 @@ class Student(AuditBaseModel):
 
     family_id = models.CharField(max_length=50, blank=True, null=True)
     religion=models.CharField(max_length=50, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
     class Meta:
         indexes = [
             models.Index(fields=["school"]),

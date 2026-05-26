@@ -93,6 +93,8 @@ INSTALLED_APPS = [
     "apps.accounts",
 
     "apps.website",
+    
+    "import_export",
 ]
 
 

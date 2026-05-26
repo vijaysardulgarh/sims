@@ -5,6 +5,9 @@ from .views import (
     ModuleRetrieveUpdateDestroyAPIView,
 )
 
+from apps.accounts.modules.sidebar.SidebarAPIView import (
+    SidebarAPIView
+)
 
 urlpatterns = [
 
@@ -19,4 +22,10 @@ urlpatterns = [
         ModuleRetrieveUpdateDestroyAPIView.as_view(),
         name="module-detail",
     ),
+
+    path(
+    "sidebar/",
+    SidebarAPIView.as_view(),
+    name="sidebar"
+),
 ]

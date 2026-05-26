@@ -13,11 +13,11 @@ from django.http import HttpResponse
 
 from tablib import Dataset
 
-from apps.students.student_resource import (
+from backend.apps.students.profiles.student_resource import (
     StudentResource
 )
 
-from apps.students.models import (
+from apps.students.profiles.models import (
     Student
 )
 

@@ -5,7 +5,7 @@ from django.utils.text import slugify
 
 from apps.staff.profiles.models import Staff
 from apps.schools.models import School
-from apps.students.models import Student
+from apps.students.profiles.models import Student
 from apps.documents.models import Document
 from apps.core.common.base.models import SchoolBaseModel
 # -----------------------------------------------------------------------------

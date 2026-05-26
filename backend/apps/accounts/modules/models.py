@@ -41,3 +41,7 @@ class Module(AuditBaseModel):
     is_menu = models.BooleanField(
         default=True,
     )
+
+    def __str__(self):
+
+        return self.name

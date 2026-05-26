@@ -8,7 +8,7 @@ from rest_framework.permissions import (
     IsAuthenticated
 )
 
-from apps.students.models import (
+from apps.students.profiles.models import (
     Student
 )
 
