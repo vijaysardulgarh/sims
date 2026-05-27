@@ -95,6 +95,12 @@ INSTALLED_APPS = [
     "apps.website",
     
     "import_export",
+
+    "apps.clusters",
+
+    "apps.exams",
+    
+    "apps.transport",
 ]
 
 

@@ -135,17 +135,17 @@ class Book(SchoolBaseModel):
         constraints = [
 
             models.CheckConstraint(
-                check=Q(total_copies__gte=0),
+                condition=Q(total_copies__gte=0),
                 name="book_total_copies_positive"
             ),
 
             models.CheckConstraint(
-                check=Q(available_copies__gte=0),
+                condition=Q(available_copies__gte=0),
                 name="book_available_copies_positive"
             ),
 
             models.CheckConstraint(
-                check=Q(price__gte=0),
+                condition=Q(price__gte=0),
                 name="book_price_positive"
             ),
         ]

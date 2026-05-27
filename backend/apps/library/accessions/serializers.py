@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.library.book_accessions.models import (
+from apps.library.accessions.models import (
     BookAccession
 )
 

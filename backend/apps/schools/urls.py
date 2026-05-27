@@ -1,14 +1,71 @@
+# =============================================================================
+# schools/urls.py
+# =============================================================================
+
 from django.urls import path
-from .views import (
+
+from apps.schools.views import (
+
     SchoolListAPIView,
+
     SelectSchoolAPIView,
+
     ClearSchoolAPIView,
+
     CurrentSchoolAPIView,
 )
 
 urlpatterns = [
-    path("", SchoolListAPIView.as_view()),             # GET all schools
-    path("select/", SelectSchoolAPIView.as_view()),    # POST select school
-    path("clear/", ClearSchoolAPIView.as_view()),      # POST clear session
-    path("current/", CurrentSchoolAPIView.as_view()),  # GET current school
+
+    # =====================================
+    # SCHOOL LIST
+    # =====================================
+
+    path(
+
+        "",
+
+        SchoolListAPIView.as_view(),
+
+        name="school-list"
+    ),
+
+    # =====================================
+    # SELECT SCHOOL
+    # =====================================
+
+    path(
+
+        "select/",
+
+        SelectSchoolAPIView.as_view(),
+
+        name="select-school"
+    ),
+
+    # =====================================
+    # CLEAR SCHOOL
+    # =====================================
+
+    path(
+
+        "clear/",
+
+        ClearSchoolAPIView.as_view(),
+
+        name="clear-school"
+    ),
+
+    # =====================================
+    # CURRENT SCHOOL
+    # =====================================
+
+    path(
+
+        "current/",
+
+        CurrentSchoolAPIView.as_view(),
+
+        name="current-school"
+    ),
 ]
