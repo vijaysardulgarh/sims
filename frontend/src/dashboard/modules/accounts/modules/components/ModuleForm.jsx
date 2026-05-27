@@ -7,6 +7,8 @@ export default function ModuleForm({
     handleSubmit,
 
     isEdit,
+
+    parentModules = [],
 }) {
 
     return (
@@ -15,6 +17,58 @@ export default function ModuleForm({
             onSubmit={handleSubmit}
             className="space-y-6"
         >
+
+            {/* PARENT MODULE */}
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+
+                    Parent Module
+
+                </label>
+
+                <select
+                    name="parent"
+                    value={formData.parent || ""}
+                    onChange={handleChange}
+                    className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-xl
+                        px-4
+                        py-3
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
+                >
+
+                    <option value="">
+
+                        Main Module
+
+                    </option>
+
+                    {
+                        parentModules.map((module) => (
+
+                            <option
+                                key={module.id}
+                                value={module.id}
+                            >
+
+                                {module.name}
+
+                            </option>
+                        ))
+                    }
+
+                </select>
+
+            </div>
+
 
             {/* NAME */}
 
@@ -82,22 +136,22 @@ export default function ModuleForm({
             </div>
 
 
-            {/* DESCRIPTION */}
+            {/* PATH */}
 
             <div>
 
                 <label className="block mb-2 font-medium">
 
-                    Description
+                    Frontend Path
 
                 </label>
 
-                <textarea
-                    name="description"
-                    value={formData.description}
+                <input
+                    type="text"
+                    name="path"
+                    value={formData.path || ""}
                     onChange={handleChange}
-                    placeholder="Enter description"
-                    rows="4"
+                    placeholder="/dashboard/users"
                     className="
                         w-full
                         border
@@ -110,6 +164,89 @@ export default function ModuleForm({
                         focus:ring-blue-500
                     "
                 />
+
+            </div>
+
+
+            {/* ICON */}
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+
+                    Icon
+
+                </label>
+
+                <input
+                    type="text"
+                    name="icon"
+                    value={formData.icon || ""}
+                    onChange={handleChange}
+                    placeholder="Users"
+                    className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-xl
+                        px-4
+                        py-3
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
+                />
+
+            </div>
+
+
+            {/* ORDER */}
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+
+                    Menu Order
+
+                </label>
+
+                <input
+                    type="number"
+                    name="order"
+                    value={formData.order || 0}
+                    onChange={handleChange}
+                    className="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-xl
+                        px-4
+                        py-3
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
+                />
+
+            </div>
+
+
+            {/* IS MENU */}
+
+            <div className="flex items-center gap-3">
+
+                <input
+                    type="checkbox"
+                    name="is_menu"
+                    checked={formData.is_menu}
+                    onChange={handleChange}
+                />
+
+                <label>
+
+                    Show In Sidebar
+
+                </label>
 
             </div>
 

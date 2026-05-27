@@ -11,16 +11,96 @@ const PermissionService = {
         params = {}
     ) => {
 
-        const response = await api.get(
+        try {
 
-            "/accounts/permissions/",
+            const response = await api.get(
 
-            {
-                params,
-            }
-        );
+                "/accounts/permissions/",
 
-        return response.data;
+                {
+                    params,
+                }
+            );
+
+            return response.data;
+
+        } catch (error) {
+
+            console.error(
+                "GET PERMISSIONS ERROR:",
+                error
+            );
+
+            throw error;
+        }
+    },
+
+
+    // =====================================
+    // GET ACTIVE PERMISSIONS
+    // =====================================
+
+    getActivePermissions: async () => {
+
+        try {
+
+            const response = await api.get(
+
+                "/accounts/permissions/",
+
+                {
+                    params: {
+                        is_active: true,
+                    }
+                }
+            );
+
+            return response.data;
+
+        } catch (error) {
+
+            console.error(
+                "GET ACTIVE PERMISSIONS ERROR:",
+                error
+            );
+
+            throw error;
+        }
+    },
+
+
+    // =====================================
+    // GET PERMISSIONS BY MODULE
+    // =====================================
+
+    getPermissionsByModule: async (
+        moduleId
+    ) => {
+
+        try {
+
+            const response = await api.get(
+
+                "/accounts/permissions/",
+
+                {
+                    params: {
+                        module: moduleId,
+                    }
+                }
+            );
+
+            return response.data;
+
+        } catch (error) {
+
+            console.error(
+                "GET MODULE PERMISSIONS ERROR:",
+                error
+            );
+
+            throw error;
+        }
     },
 
 
@@ -32,12 +112,24 @@ const PermissionService = {
         id
     ) => {
 
-        const response = await api.get(
+        try {
 
-            `/accounts/permissions/${id}/`
-        );
+            const response = await api.get(
 
-        return response.data;
+                `/accounts/permissions/${id}/`
+            );
+
+            return response.data;
+
+        } catch (error) {
+
+            console.error(
+                "GET PERMISSION ERROR:",
+                error
+            );
+
+            throw error;
+        }
     },
 
 
@@ -49,14 +141,26 @@ const PermissionService = {
         data
     ) => {
 
-        const response = await api.post(
+        try {
 
-            "/accounts/permissions/",
+            const response = await api.post(
 
-            data
-        );
+                "/accounts/permissions/",
 
-        return response.data;
+                data
+            );
+
+            return response.data;
+
+        } catch (error) {
+
+            console.error(
+                "CREATE PERMISSION ERROR:",
+                error
+            );
+
+            throw error;
+        }
     },
 
 
@@ -72,14 +176,26 @@ const PermissionService = {
 
     ) => {
 
-        const response = await api.patch(
+        try {
 
-            `/accounts/permissions/${id}/`,
+            const response = await api.patch(
 
-            data
-        );
+                `/accounts/permissions/${id}/`,
 
-        return response.data;
+                data
+            );
+
+            return response.data;
+
+        } catch (error) {
+
+            console.error(
+                "UPDATE PERMISSION ERROR:",
+                error
+            );
+
+            throw error;
+        }
     },
 
 
@@ -91,12 +207,57 @@ const PermissionService = {
         id
     ) => {
 
-        const response = await api.delete(
+        try {
 
-            `/accounts/permissions/${id}/`
-        );
+            const response = await api.delete(
 
-        return response.data;
+                `/accounts/permissions/${id}/`
+            );
+
+            return response.data;
+
+        } catch (error) {
+
+            console.error(
+                "DELETE PERMISSION ERROR:",
+                error
+            );
+
+            throw error;
+        }
+    },
+
+
+    // =====================================
+    // BULK CREATE PERMISSIONS
+    // =====================================
+
+    bulkCreatePermissions: async (
+        permissions
+    ) => {
+
+        try {
+
+            const response = await api.post(
+
+                "/accounts/permissions/bulk-create/",
+
+                {
+                    permissions,
+                }
+            );
+
+            return response.data;
+
+        } catch (error) {
+
+            console.error(
+                "BULK CREATE PERMISSIONS ERROR:",
+                error
+            );
+
+            throw error;
+        }
     },
 };
 

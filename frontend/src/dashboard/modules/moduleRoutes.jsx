@@ -6,7 +6,7 @@ from "react-router-dom";
 // DASHBOARD HOME
 // =====================================
 
-import DashboardHomePage from "../home/pages/DashboardHomePage";
+import DashboardHomePage from "./home/pages/DashboardHomePage";
 
 
 // =====================================

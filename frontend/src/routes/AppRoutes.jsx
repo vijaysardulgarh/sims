@@ -25,7 +25,7 @@ import LoginPage from "../dashboard/modules/accounts/auth/pages/LoginPage";
 // =====================================
 
 import DashboardLayout
-from "../dashboard/layouts/DashboardLayout";
+from "../dashboard/modules/home/layouts/DashboardLayout";
 
 import moduleRoutes
 from "../dashboard/modules/moduleRoutes";

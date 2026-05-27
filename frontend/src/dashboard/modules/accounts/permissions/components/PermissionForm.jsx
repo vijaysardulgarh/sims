@@ -1,5 +1,6 @@
 import {
     useEffect,
+    useMemo,
     useState
 } from "react";
 
@@ -36,21 +37,45 @@ const PermissionForm = ({
 
     const actionOptions = [
 
-        "view",
+        {
+            value: "view",
+            label: "View",
+        },
 
-        "add",
+        {
+            value: "add",
+            label: "Add",
+        },
 
-        "edit",
+        {
+            value: "edit",
+            label: "Edit",
+        },
 
-        "delete",
+        {
+            value: "delete",
+            label: "Delete",
+        },
 
-        "import",
+        {
+            value: "import",
+            label: "Import",
+        },
 
-        "export",
+        {
+            value: "export",
+            label: "Export",
+        },
 
-        "assign",
+        {
+            value: "assign",
+            label: "Assign",
+        },
 
-        "approve",
+        {
+            value: "approve",
+            label: "Approve",
+        },
     ];
 
 
@@ -82,6 +107,32 @@ const PermissionForm = ({
 
 
     // =====================================
+    // SELECTED MODULE
+    // =====================================
+
+    const selectedModule = useMemo(() => {
+
+        return modules.find(
+            (module) =>
+                Number(module.id) ===
+                Number(formData.module)
+        );
+
+    }, [modules, formData.module]);
+
+
+    // =====================================
+    // GENERATED CODE PREVIEW
+    // =====================================
+
+    const generatedCode = selectedModule
+
+        ? `${selectedModule.slug}.${formData.action}`
+
+        : "";
+
+
+    // =====================================
     // HANDLE CHANGE
     // =====================================
 
@@ -96,7 +147,10 @@ const PermissionForm = ({
 
             ...prev,
 
-            [name]: value,
+            [name]:
+                name === "module"
+                    ? Number(value)
+                    : value,
         }));
     };
 
@@ -119,7 +173,13 @@ const PermissionForm = ({
 
         <form
             onSubmit={handleSubmit}
-            className="space-y-5 bg-white p-6 rounded-lg shadow"
+            className="
+                space-y-5
+                bg-white
+                p-6
+                rounded-xl
+                shadow
+            "
         >
 
             {/* ================================= */}
@@ -138,7 +198,16 @@ const PermissionForm = ({
                     name="module"
                     value={formData.module}
                     onChange={handleChange}
-                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="
+                        border
+                        border-gray-300
+                        p-3
+                        w-full
+                        rounded-lg
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
                     required
                 >
 
@@ -182,18 +251,27 @@ const PermissionForm = ({
                     name="action"
                     value={formData.action}
                     onChange={handleChange}
-                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="
+                        border
+                        border-gray-300
+                        p-3
+                        w-full
+                        rounded-lg
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
                     required
                 >
 
                     {actionOptions.map((action) => (
 
                         <option
-                            key={action}
-                            value={action}
+                            key={action.value}
+                            value={action.value}
                         >
 
-                            {action}
+                            {action.label}
 
                         </option>
 
@@ -222,7 +300,16 @@ const PermissionForm = ({
                     onChange={handleChange}
                     rows={4}
                     placeholder="Enter permission description"
-                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="
+                        border
+                        border-gray-300
+                        p-3
+                        w-full
+                        rounded-lg
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
                 />
 
             </div>
@@ -232,14 +319,39 @@ const PermissionForm = ({
             {/* AUTO GENERATED INFO */}
             {/* ================================= */}
 
-            <div className="bg-gray-50 p-4 rounded border">
+            <div className="bg-gray-50 p-4 rounded-lg border">
 
-                <p className="text-sm text-gray-600">
+                <div className="space-y-2">
 
-                    Permission name and code
-                    will be generated automatically.
+                    <p className="text-sm text-gray-600">
 
-                </p>
+                        Permission name and code
+                        are generated automatically.
+
+                    </p>
+
+                    {
+                        generatedCode && (
+
+                            <div>
+
+                                <p className="text-sm text-gray-500">
+
+                                    Generated Code
+
+                                </p>
+
+                                <p className="font-mono text-blue-600">
+
+                                    {generatedCode}
+
+                                </p>
+
+                            </div>
+                        )
+                    }
+
+                </div>
 
             </div>
 
@@ -253,7 +365,16 @@ const PermissionForm = ({
                 <button
                     type="submit"
                     disabled={loading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded transition disabled:opacity-50"
+                    className="
+                        bg-blue-600
+                        hover:bg-blue-700
+                        text-white
+                        px-5
+                        py-2
+                        rounded-lg
+                        transition
+                        disabled:opacity-50
+                    "
                 >
 
                     {

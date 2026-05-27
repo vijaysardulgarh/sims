@@ -60,6 +60,40 @@ const EditPermissionPage = () => {
 
 
     // =====================================
+    // FLATTEN MODULES
+    // =====================================
+
+    const flattenModules = (
+        modules = []
+    ) => {
+
+        let result = [];
+
+        modules.forEach((module) => {
+
+            result.push(module);
+
+            if (
+                module.children &&
+                module.children.length > 0
+            ) {
+
+                result = [
+
+                    ...result,
+
+                    ...flattenModules(
+                        module.children
+                    )
+                ];
+            }
+        });
+
+        return result;
+    };
+
+
+    // =====================================
     // FETCH PERMISSION
     // =====================================
 
@@ -93,7 +127,60 @@ const EditPermissionPage = () => {
             const data =
                 await ModuleService.getModules();
 
-            setModules(data);
+            // ==============================
+            // FLATTEN MODULES
+            // ==============================
+
+            const flattenedModules =
+                flattenModules(data);
+
+            // ==============================
+            // REMOVE DUPLICATES
+            // ==============================
+
+            const uniqueModules = Array.from(
+
+                new Map(
+
+                    flattenedModules.map((module) => [
+
+                        module.id,
+
+                        module
+                    ])
+
+                ).values()
+            );
+
+            // ==============================
+            // FILTER ACTIVE
+            // ==============================
+
+            const activeModules =
+                uniqueModules.filter(
+                    (module) =>
+                        module.is_active
+                );
+
+            // ==============================
+            // SORT MODULES
+            // ==============================
+
+            activeModules.sort((a, b) => {
+
+                if (a.order !== b.order) {
+
+                    return a.order - b.order;
+                }
+
+                return a.name.localeCompare(
+                    b.name
+                );
+            });
+
+            setModules(
+                activeModules
+            );
 
         } catch (error) {
 
@@ -117,12 +204,38 @@ const EditPermissionPage = () => {
 
             setLoading(true);
 
+            // ==============================
+            // PREPARE PAYLOAD
+            // ==============================
+
+            const payload = {
+
+                ...formData,
+
+                module: Number(
+                    formData.module
+                ),
+            };
+
+            console.log(
+                "UPDATE PERMISSION PAYLOAD:",
+                payload
+            );
+
+            // ==============================
+            // UPDATE
+            // ==============================
+
             await PermissionService.updatePermission(
 
                 id,
 
-                formData
+                payload
             );
+
+            // ==============================
+            // REDIRECT
+            // ==============================
 
             navigate(
                 "/dashboard/permissions"
@@ -133,6 +246,10 @@ const EditPermissionPage = () => {
             console.error(
                 "Update Permission Error:",
                 error
+            );
+
+            console.log(
+                error.response?.data
             );
 
         } finally {

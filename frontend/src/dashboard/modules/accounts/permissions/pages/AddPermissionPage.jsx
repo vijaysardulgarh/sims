@@ -43,13 +43,105 @@ const AddPermissionPage = () => {
     }, []);
 
 
+    // =====================================
+    // FLATTEN MODULES
+    // =====================================
+
+    const flattenModules = (
+        modules = []
+    ) => {
+
+        let result = [];
+
+        modules.forEach((module) => {
+
+            result.push(module);
+
+            if (
+                module.children &&
+                module.children.length > 0
+            ) {
+
+                result = [
+
+                    ...result,
+
+                    ...flattenModules(
+                        module.children
+                    )
+                ];
+            }
+        });
+
+        return result;
+    };
+
+
+    // =====================================
+    // LOAD MODULES
+    // =====================================
+
     const loadModules = async () => {
 
         try {
 
-            const response = await ModuleService.getModules();
+            const response =
+                await ModuleService.getModules();
 
-            setModules(response);
+            // ==============================
+            // FLATTEN MODULES
+            // ==============================
+
+            const flattenedModules =
+                flattenModules(response);
+
+            // ==============================
+            // REMOVE DUPLICATES
+            // ==============================
+
+            const uniqueModules = Array.from(
+
+                new Map(
+
+                    flattenedModules.map((module) => [
+
+                        module.id,
+
+                        module
+                    ])
+
+                ).values()
+            );
+
+            // ==============================
+            // FILTER ACTIVE
+            // ==============================
+
+            const activeModules =
+                uniqueModules.filter(
+                    (module) =>
+                        module.is_active
+                );
+
+            // ==============================
+            // SORT BY ORDER + NAME
+            // ==============================
+
+            activeModules.sort((a, b) => {
+
+                if (a.order !== b.order) {
+
+                    return a.order - b.order;
+                }
+
+                return a.name.localeCompare(
+                    b.name
+                );
+            });
+
+            setModules(
+                activeModules
+            );
 
         } catch (error) {
 
@@ -73,9 +165,35 @@ const AddPermissionPage = () => {
 
             setLoading(true);
 
-            await PermissionService.createPermission(
-                formData
+            // ==============================
+            // PREPARE PAYLOAD
+            // ==============================
+
+            const payload = {
+
+                ...formData,
+
+                module: Number(
+                    formData.module
+                ),
+            };
+
+            console.log(
+                "PERMISSION PAYLOAD:",
+                payload
             );
+
+            // ==============================
+            // CREATE
+            // ==============================
+
+            await PermissionService.createPermission(
+                payload
+            );
+
+            // ==============================
+            // REDIRECT
+            // ==============================
 
             navigate(
                 "/dashboard/permissions"
@@ -86,6 +204,10 @@ const AddPermissionPage = () => {
             console.error(
                 "Create Permission Error:",
                 error
+            );
+
+            console.log(
+                error.response?.data
             );
 
         } finally {
