@@ -17,25 +17,13 @@ from apps.associations.association_roles.models import (
 )
 
 from apps.core.common.base.models import (
-    SchoolBaseModel
+    SessionBaseModel
 )
 
 
 class StudentAssociationRoleAssignment(
-    SchoolBaseModel
+    SessionBaseModel
 ):
-
-    academic_session = models.ForeignKey(
-
-        "academics.AcademicSession",
-
-        on_delete=models.CASCADE,
-
-        related_name=
-        "student_association_role_assignments",
-
-        db_index=True
-    )
 
     student = models.ForeignKey(
 

@@ -7,10 +7,9 @@ from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 
 from apps.documents.models import Document
-from apps.core.common.base.models import SchoolBaseModel
+from apps.core.common.base.models import SessionBaseModel
 
-
-class Association(SchoolBaseModel):
+class Association(SessionBaseModel):
 
     TYPE_CHOICES = [
         ("Club", "Club"),
@@ -23,13 +22,6 @@ class Association(SchoolBaseModel):
         ("Inactive", "Inactive"),
         ("Archived", "Archived"),
     ]
-
-    academic_session = models.ForeignKey(
-        "academics.AcademicSession",
-        on_delete=models.CASCADE,
-        related_name="associations",
-        db_index=True
-    )
 
     name = models.CharField(
         max_length=255,

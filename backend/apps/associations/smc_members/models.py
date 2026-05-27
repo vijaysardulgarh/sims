@@ -4,10 +4,10 @@
 
 from django.db import models
 
-from apps.core.common.base.models import SchoolBaseModel
+from apps.core.common.base.models import SessionBaseModel
 
 
-class SMCMember(SchoolBaseModel):
+class SMCMember(SessionBaseModel):
 
     POSITION_CHOICES = [
         ("President", "President"),
@@ -16,12 +16,6 @@ class SMCMember(SchoolBaseModel):
         ("Member", "Member"),
     ]
 
-    academic_session = models.ForeignKey(
-        "academics.AcademicSession",
-        on_delete=models.CASCADE,
-        related_name="smc_members",
-        db_index=True
-    )
 
     name = models.CharField(max_length=100)
 

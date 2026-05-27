@@ -6,10 +6,10 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 
-from apps.core.common.base.models import SchoolBaseModel
+from apps.core.common.base.models import SessionBaseModel
 
 
-class ExtracurricularActivity(SchoolBaseModel):
+class ExtracurricularActivity(SessionBaseModel):
 
     CATEGORY_CHOICES = [
         ("Sports", "Sports"),
@@ -26,13 +26,6 @@ class ExtracurricularActivity(SchoolBaseModel):
         ("Completed", "Completed"),
         ("Cancelled", "Cancelled"),
     ]
-
-    academic_session = models.ForeignKey(
-        "academics.AcademicSession",
-        on_delete=models.CASCADE,
-        related_name="extracurricular_activities",
-        db_index=True
-    )
 
     name = models.CharField(
         max_length=100,

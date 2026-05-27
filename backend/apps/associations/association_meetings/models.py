@@ -8,17 +8,10 @@ from apps.documents.models import Document
 from apps.associations.associations.models import (
     Association
 )
-from apps.core.common.base.models import SchoolBaseModel
+from apps.core.common.base.models import SessionBaseModel
 
 
-class AssociationMeeting(SchoolBaseModel):
-
-    academic_session = models.ForeignKey(
-        "academics.AcademicSession",
-        on_delete=models.CASCADE,
-        related_name="association_meetings",
-        db_index=True
-    )
+class AssociationMeeting(SessionBaseModel):
 
     association = models.ForeignKey(
         Association,

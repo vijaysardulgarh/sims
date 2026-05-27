@@ -1,19 +1,18 @@
 from django.db import models
-
 from django.conf import settings
 
 
-# =========================================
+# =============================================================================
 # AUDIT BASE MODEL
-# =========================================
+# =============================================================================
 
 class AuditBaseModel(
     models.Model
 ):
 
-    # =====================================
+    # =========================================================================
     # STATUS
-    # =====================================
+    # =========================================================================
 
     is_active = models.BooleanField(
         default=True
@@ -23,9 +22,9 @@ class AuditBaseModel(
         default=False
     )
 
-    # =====================================
+    # =========================================================================
     # TIMESTAMPS
-    # =====================================
+    # =========================================================================
 
     created_at = models.DateTimeField(
         auto_now_add=True
@@ -35,19 +34,19 @@ class AuditBaseModel(
         auto_now=True
     )
 
-    # =====================================
-    # AUDIT
-    # =====================================
+    # =========================================================================
+    # AUDIT USERS
+    # =========================================================================
 
     created_by = models.ForeignKey(
 
         settings.AUTH_USER_MODEL,
 
+        on_delete=models.SET_NULL,
+
         null=True,
 
         blank=True,
-
-        on_delete=models.SET_NULL,
 
         related_name="+"
     )
@@ -56,11 +55,11 @@ class AuditBaseModel(
 
         settings.AUTH_USER_MODEL,
 
+        on_delete=models.SET_NULL,
+
         null=True,
 
         blank=True,
-
-        on_delete=models.SET_NULL,
 
         related_name="+"
     )
@@ -70,9 +69,9 @@ class AuditBaseModel(
         abstract = True
 
 
-# =========================================
+# =============================================================================
 # SCHOOL BASE MODEL
-# =========================================
+# =============================================================================
 
 class SchoolBaseModel(
     AuditBaseModel
@@ -81,6 +80,32 @@ class SchoolBaseModel(
     school = models.ForeignKey(
 
         "schools.School",
+
+        on_delete=models.CASCADE,
+
+        related_name="%(class)s_objects",
+
+        null=True,
+
+        blank=True
+    )
+
+    class Meta:
+
+        abstract = True
+
+
+# =============================================================================
+# SESSION BASE MODEL
+# =============================================================================
+
+class SessionBaseModel(
+    SchoolBaseModel
+):
+
+    academic_session = models.ForeignKey(
+
+        "academics.AcademicSession",
 
         on_delete=models.CASCADE,
 
