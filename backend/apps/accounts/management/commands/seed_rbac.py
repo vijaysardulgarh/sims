@@ -40,6 +40,12 @@ RBAC_CONFIG = {
         "children": [
 
             {
+                "name": "Sessions",
+                "slug": "sessions",
+                "path": "/dashboard/sessions",
+            },
+
+            {
                 "name": "Subjects",
                 "slug": "subjects",
                 "path": "/dashboard/subjects",
@@ -178,21 +184,9 @@ RBAC_CONFIG = {
             },
 
             {
-                "name": "Authentication",
-                "slug": "authentication",
-                "path": "/dashboard/authentication",
-            },
-
-            {
-                "name": "Authorization",
-                "slug": "authorization",
-                "path": "/dashboard/authorization",
-            },
-
-            {
-                "name": "Management",
-                "slug": "management",
-                "path": "/dashboard/management",
+                "name": "Reports",
+                "slug": "account-reports",
+                "path": "/dashboard/account-reports",
             },
         ]
     },
@@ -208,21 +202,57 @@ RBAC_CONFIG = {
         "children": [
 
             {
-                "name": "Parents",
-                "slug": "parents",
-                "path": "/dashboard/parents",
+                "name": "Associations",
+                "slug": "associations",
+                "path": "/dashboard/associations",
             },
 
             {
-                "name": "Alumni",
-                "slug": "alumni",
-                "path": "/dashboard/alumni",
+                "name": "Association Roles",
+                "slug": "association-roles",
+                "path": "/dashboard/association-roles",
             },
 
             {
-                "name": "Communities",
-                "slug": "communities",
-                "path": "/dashboard/communities",
+                "name": "Association Members",
+                "slug": "association-members",
+                "path": "/dashboard/association-members",
+            },
+
+            {
+                "name": "Association Meetings",
+                "slug": "association-meetings",
+                "path": "/dashboard/association-meetings",
+            },
+
+            {
+                "name": "Extracurricular Activities",
+                "slug": "extracurricular-activities",
+                "path": "/dashboard/extracurricular-activities",
+            },
+
+            {
+                "name": "SMC Members",
+                "slug": "smc-members",
+                "path": "/dashboard/smc-members",
+            },
+
+            {
+                "name": "Staff Association Role Assignments",
+                "slug": "staff-association-role-assignments",
+                "path": "/dashboard/staff-association-role-assignments",
+            },
+
+            {
+                "name": "Student Association Role Assignments",
+                "slug": "student-association-role-assignments",
+                "path": "/dashboard/student-association-role-assignments",
+            },
+
+            {
+                "name": "Reports",
+                "slug": "association-reports",
+                "path": "/dashboard/association-reports",
             },
         ]
     },
@@ -268,27 +298,39 @@ RBAC_CONFIG = {
         "children": [
 
             {
-                "name": "Exam Types",
-                "slug": "exam-types",
-                "path": "/dashboard/exam-types",
+                "name": "Exam",
+                "slug": "exam",
+                "path": "/dashboard/exam",
             },
 
             {
-                "name": "Marks",
-                "slug": "marks",
-                "path": "/dashboard/marks",
+                "name": "Notifications",
+                "slug": "notifications",
+                "path": "/dashboard/notifications",
             },
 
             {
-                "name": "Results",
-                "slug": "results",
-                "path": "/dashboard/results",
+                "name": "Online Exams",
+                "slug": "online-exams",
+                "path": "/dashboard/online-exams",
             },
 
             {
-                "name": "Grades",
-                "slug": "grades",
-                "path": "/dashboard/grades",
+                "name": "Question Banks",
+                "slug": "question-banks",
+                "path": "/dashboard/question-banks",
+            },
+
+            {
+                "name": "Schedules",
+                "slug": "schedules",
+                "path": "/dashboard/schedules",
+            },
+
+            {
+                "name": "Reports",
+                "slug": "exam-reports",
+                "path": "/dashboard/exam-reports",
             },
         ]
     },
@@ -304,27 +346,27 @@ RBAC_CONFIG = {
         "children": [
 
             {
-                "name": "Fees",
-                "slug": "fees",
-                "path": "/dashboard/fees",
+                "name": "Fees Payments",
+                "slug": "fees-payments",
+                "path": "/dashboard/fees-payments",
             },
 
             {
-                "name": "Expenses",
-                "slug": "expenses",
-                "path": "/dashboard/expenses",
+                "name": "Fees Structure",
+                "slug": "fees-structure",
+                "path": "/dashboard/fees-structure",
             },
 
             {
-                "name": "Invoices",
-                "slug": "invoices",
-                "path": "/dashboard/invoices",
+                "name": "Student Fees",
+                "slug": "student-fees",
+                "path": "/dashboard/student-fees",
             },
 
             {
-                "name": "Finance Accounts",
-                "slug": "finance-accounts",
-                "path": "/dashboard/finance-accounts",
+                "name": "Reports",
+                "slug": "finance-reports",
+                "path": "/dashboard/finance-reports",
             },
         ]
     },
@@ -356,6 +398,18 @@ RBAC_CONFIG = {
                 "slug": "book-categories",
                 "path": "/dashboard/book-categories",
             },
+
+            {
+                "name": "Accessions",
+                "slug": "accessions",
+                "path": "/dashboard/accessions",
+            },
+
+            {
+                "name": "Reports",
+                "slug": "library-reports",
+                "path": "/dashboard/library-reports",
+            },
         ]
     },
 
@@ -382,9 +436,39 @@ RBAC_CONFIG = {
             },
 
             {
-                "name": "Sessions",
-                "slug": "sessions",
-                "path": "/dashboard/sessions",
+                "name": "Reports",
+                "slug": "school-reports",
+                "path": "/dashboard/school-reports",
+            },
+        ]
+    },
+
+    # ======================================
+    # CLUSTER
+    # ======================================
+
+    "cluster": {
+
+        "path": None,
+
+        "children": [
+
+            {
+                "name": "Cluster Schools",
+                "slug": "cluster-schools",
+                "path": "/dashboard/cluster-schools",
+            },
+
+            {
+                "name": "Cluster Staff",
+                "slug": "cluster-staff",
+                "path": "/dashboard/cluster-staff",
+            },
+
+            {
+                "name": "Cluster Reports",
+                "slug": "cluster-reports",
+                "path": "/dashboard/cluster-reports",
             },
         ]
     },
@@ -427,6 +511,12 @@ RBAC_CONFIG = {
                 "name": "Teacher Attendance",
                 "slug": "teacher-attendance",
                 "path": "/dashboard/teacher-attendance",
+            },
+
+            {
+                "name": "Reports",
+                "slug": "staff-reports",
+                "path": "/dashboard/staff-reports",
             },
         ]
     },
@@ -493,6 +583,18 @@ RBAC_CONFIG = {
                 "name": "Drivers",
                 "slug": "drivers",
                 "path": "/dashboard/drivers",
+            },
+
+            {
+                "name": "Transport Assignment",
+                "slug": "transport-assignment",
+                "path": "/dashboard/transport-assignment",
+            },
+
+            {
+                "name": "Reports",
+                "slug": "transport-reports",
+                "path": "/dashboard/transport-reports",
             },
         ]
     },
@@ -625,10 +727,6 @@ class Command(
             )
         )
 
-        # ==================================
-        # ROLES
-        # ==================================
-
         roles_map = {}
 
         for role_data in DEFAULT_ROLES:
@@ -661,15 +759,7 @@ class Command(
 
         all_permissions = []
 
-        # ==================================
-        # MODULES
-        # ==================================
-
         for parent_slug, config in RBAC_CONFIG.items():
-
-            # ==============================
-            # PARENT MODULE
-            # ==============================
 
             parent_module, _ = (
                 Module.objects.get_or_create(
@@ -699,10 +789,6 @@ class Command(
                 )
             )
 
-            # ==============================
-            # PARENT PERMISSIONS
-            # ==============================
-
             for action in ACTIONS:
 
                 permission, _ = (
@@ -717,10 +803,6 @@ class Command(
                 all_permissions.append(
                     permission
                 )
-
-            # ==============================
-            # CHILD MODULES
-            # ==============================
 
             for child in config.get(
                 "children",
@@ -758,10 +840,6 @@ class Command(
                     )
                 )
 
-                # ==========================
-                # CHILD PERMISSIONS
-                # ==========================
-
                 for action in ACTIONS:
 
                     permission, _ = (
@@ -777,10 +855,6 @@ class Command(
                         permission
                     )
 
-        # ==================================
-        # SUPER ADMIN PERMISSIONS
-        # ==================================
-
         super_admin_role = roles_map.get(
             "SUPER_ADMIN"
         )
@@ -795,10 +869,6 @@ class Command(
 
                     permission=permission,
                 )
-
-        # ==================================
-        # ADMIN PERMISSIONS
-        # ==================================
 
         admin_role = roles_map.get(
             "ADMIN"
