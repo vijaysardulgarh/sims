@@ -13,11 +13,9 @@ import {
 
 import toast from "react-hot-toast";
 
-import SanctionedPostForm
-from "../components/SanctionedPostForm";
+import SanctionedPostForm from "../components/SanctionedPostForm";
 
-import sanctionedPostService
-from "../services/sanctionedPostService";
+import sanctionedPostService from "../services/sanctionedPostService";
 
 const AddSanctionedPost = () => {
 

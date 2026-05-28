@@ -1,14 +1,14 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from .views import (
-    PostTypeListAPIView,
+from .views import PostTypeViewSet
+
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    PostTypeViewSet,
+    basename="post-types"
 )
 
-urlpatterns = [
-
-    path(
-        "",
-        PostTypeListAPIView.as_view(),
-        name="post-type-list",
-    ),
-]
+urlpatterns = router.urls

@@ -15,11 +15,9 @@ import {
 
 import toast from "react-hot-toast";
 
-import PostTypeForm
-from "./PostTypeForm";
+import PostTypeForm from "../components/PostTypeForm";
 
-import postTypeService
-from "./postTypeService";
+import postTypeService from "../services/postTypeService";
 
 const EditPostType = () => {
 

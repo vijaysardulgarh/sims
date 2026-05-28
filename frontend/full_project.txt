@@ -23693,7 +23693,7 @@ FILE: ./src/dashboard/modules/staff/class-incharge/services/classInchargeService
 // File: classInchargeService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL CLASS INCHARGES
@@ -23802,7 +23802,7 @@ FILE: ./src/dashboard/modules/staff/dashboard/dashboardService.js
 // File: dashboardService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // STAFF DASHBOARD
@@ -25235,7 +25235,7 @@ FILE: ./src/dashboard/modules/staff/post-types/services/postTypeService.js
 // File: postTypeService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL POST TYPES
@@ -25514,7 +25514,7 @@ FILE: ./src/dashboard/modules/staff/reports/reportsService.js
 // File: reportService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // STAFF REPORT
@@ -26984,7 +26984,7 @@ FILE: ./src/dashboard/modules/staff/sanctioned-posts/services/sanctionedPostServ
 // File: sanctionedPostService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL
@@ -30149,7 +30149,7 @@ FILE: ./src/dashboard/modules/staff/teacher-attendance/services/teacherAttendanc
 // File: teacherAttendanceService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL
@@ -30647,7 +30647,7 @@ FILE: ./src/dashboard/modules/staff/teacher-timetable/teacherTimetableService.js
 // File: teacherTimetableService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET TEACHER TIMETABLE

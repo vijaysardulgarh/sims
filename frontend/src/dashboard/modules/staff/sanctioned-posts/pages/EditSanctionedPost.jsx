@@ -16,10 +16,10 @@ import {
 import toast from "react-hot-toast";
 
 import SanctionedPostForm
-from "./SanctionedPostForm";
+from "../components/SanctionedPostForm";
 
 import sanctionedPostService
-from "./sanctionedPostService";
+from "../services/sanctionedPostService";
 
 const EditSanctionedPost = () => {
 

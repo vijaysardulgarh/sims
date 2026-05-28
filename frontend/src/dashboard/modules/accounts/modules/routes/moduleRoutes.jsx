@@ -1,4 +1,4 @@
-// src/modules/accounts/modules/routes/moduleRoutes.jsx
+import { Route } from "react-router-dom";
 
 import ModulesListPage from "../pages/ModulesListPage";
 
@@ -7,22 +7,27 @@ import AddModulePage from "../pages/AddModulePage";
 import EditModulePage from "../pages/EditModulePage";
 
 
-const moduleRoutes = [
+const moduleRoutes = (
 
-    {
-        path: "/accounts/modules",
-        element: <ModulesListPage />,
-    },
+    <Route path="modules">
 
-    {
-        path: "/accounts/modules/add",
-        element: <AddModulePage />,
-    },
+        <Route
+            index
+            element={<ModulesListPage />}
+        />
 
-    {
-        path: "/accounts/modules/:id/edit",
-        element: <EditModulePage />,
-    },
-];
+        <Route
+            path="add"
+            element={<AddModulePage />}
+        />
+
+        <Route
+            path=":id/edit"
+            element={<EditModulePage />}
+        />
+
+    </Route>
+
+);
 
 export default moduleRoutes;

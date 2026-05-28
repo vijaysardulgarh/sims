@@ -9,3 +9,6 @@ from apps.academics.structure.sections.admin import (
 from apps.academics.structure.streams.admin import (
     StreamAdmin
 )
+from apps.academics.curriculum.subjects.admin import (
+    SubjectAdmin
+)

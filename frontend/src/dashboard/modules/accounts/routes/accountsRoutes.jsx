@@ -1,205 +1,254 @@
-// =========================================
-// FILE:
-// frontend/src/routes/accountsRoutes.jsx
-// =========================================
+// // =========================================
+// // FILE:
+// // frontend/src/routes/accountsRoutes.jsx
+// // =========================================
+
+// import { Route } from "react-router-dom";
+
+
+// // =====================================
+// // ROLE PAGES
+// // =====================================
+
+// import RolesListPage from "../roles/pages/RolesListPage";
+
+// import AddRolePage from "../roles/pages/AddRolePage";
+
+// import EditRolePage from "../roles/pages/EditRolePage";
+
+
+// // =====================================
+// // USER PAGES
+// // =====================================
+
+// import UsersListPage from "../users/pages/UsersListPage";
+
+// import AddUserPage from "../users/pages/AddUserPage";
+
+// import EditUserPage from "../users/pages/EditUserPage";
+
+// import UserProfilePage from "../users/pages/UserProfilePage";
+
+
+// // =====================================
+// // PERMISSION PAGES
+// // =====================================
+
+// import PermissionsListPage from "../permissions/pages/PermissionsListPage";
+
+// import AddPermissionPage from "../permissions/pages/AddPermissionPage";
+
+// import EditPermissionPage from "../permissions/pages/EditPermissionPage";
+
+// import RolePermissionsPage from "../role_permissions/pages/RolePermissionsPage";
+
+
+// // =====================================
+// // MODULE PAGES
+// // =====================================
+
+// import ModulesListPage from "../modules/pages/ModulesListPage";
+
+// import AddModulePage from "../modules/pages/AddModulePage";
+
+// import EditModulePage from "../modules/pages/EditModulePage";
+
+
+// // =====================================
+// // USER ROLE PAGES
+// // =====================================
+
+// import UserRolesListPage from "../user_roles/pages/UserRolesListPage";
+
+// import AddUserRolePage from "../user_roles/pages/AddUserRolePage";
+
+// import EditUserRolePage from "../user_roles/pages/EditUserRolePage";
+
+
+// // =====================================
+// // USER PERMISSION PAGES
+// // =====================================
+
+// import UserPermissionsPage from "../user_permissions/pages/UserPermissionsPage";
+
+
+// // =====================================
+// // ROUTES
+// // =====================================
+
+// const accountsRoutes = (
+
+//     <>
+
+//         {/* ================================= */}
+//         {/* ROLES */}
+//         {/* ================================= */}
+
+//         <Route
+//             path="roles"
+//             element={<RolesListPage />}
+//         />
+
+//         <Route
+//             path="roles/add"
+//             element={<AddRolePage />}
+//         />
+
+//         <Route
+//             path="roles/edit/:id"
+//             element={<EditRolePage />}
+//         />
+
+
+//         {/* ================================= */}
+//         {/* USERS */}
+//         {/* ================================= */}
+
+//         <Route
+//             path="users"
+//             element={<UsersListPage />}
+//         />
+
+//         <Route
+//             path="users/add"
+//             element={<AddUserPage />}
+//         />
+
+//         <Route
+//             path="users/edit/:id"
+//             element={<EditUserPage />}
+//         />
+
+//         <Route
+//             path="users/profile/:id"
+//             element={<UserProfilePage />}
+//         />
+
+
+//         {/* ================================= */}
+//         {/* PERMISSIONS */}
+//         {/* ================================= */}
+
+//         <Route
+//             path="permissions"
+//             element={<PermissionsListPage />}
+//         />
+
+//         <Route
+//             path="permissions/add"
+//             element={<AddPermissionPage />}
+//         />
+
+//         <Route
+//             path="permissions/edit/:id"
+//             element={<EditPermissionPage />}
+//         />
+
+//         <Route
+//             path="roles/:id/permissions"
+//             element={<RolePermissionsPage />}
+//         />
+
+
+//         {/* ================================= */}
+//         {/* MODULES */}
+//         {/* ================================= */}
+
+//         <Route
+//             path="modules"
+//             element={<ModulesListPage />}
+//         />
+
+//         <Route
+//             path="modules/add"
+//             element={<AddModulePage />}
+//         />
+
+//         <Route
+//             path="modules/edit/:id"
+//             element={<EditModulePage />}
+//         />
+
+
+//         {/* ================================= */}
+//         {/* USER ROLES */}
+//         {/* ================================= */}
+
+//         <Route
+//             path="user-roles"
+//             element={<UserRolesListPage />}
+//         />
+
+//         <Route
+//             path="user-roles/add"
+//             element={<AddUserRolePage />}
+//         />
+
+//         <Route
+//             path="user-roles/edit/:id"
+//             element={<EditUserRolePage />}
+//         />
+
+
+//         {/* ================================= */}
+//         {/* USER PERMISSIONS */}
+//         {/* ================================= */}
+
+//         <Route
+//             path="user-permissions"
+//             element={<UserPermissionsPage />}
+//         />
+
+//     </>
+// );
+
+// export default accountsRoutes;
+
 
 import { Route } from "react-router-dom";
 
+import roleRoutes from
+"../roles/routes/roleRoutes";
 
-// =====================================
-// ROLE PAGES
-// =====================================
+import userRoutes from
+"../users/routes/userRoutes";
 
-import RolesListPage from "../roles/pages/RolesListPage";
+import permissionRoutes from
+"../permissions/routes/permissionRoutes";
 
-import AddRolePage from "../roles/pages/AddRolePage";
+import rolePermissionRoutes from
+"../role_permissions/routes/rolePermissionRoutes";
 
-import EditRolePage from "../roles/pages/EditRolePage";
+import moduleRoutes from
+"../modules/routes/moduleRoutes";
 
+import userRoleRoutes from
+"../user_roles/routes/userRoleRoutes";
 
-// =====================================
-// USER PAGES
-// =====================================
+import userPermissionRoutes from
+"../user_permissions/routes/userPermissionRoutes";
 
-import UsersListPage from "../users/pages/UsersListPage";
-
-import AddUserPage from "../users/pages/AddUserPage";
-
-import EditUserPage from "../users/pages/EditUserPage";
-
-import UserProfilePage from "../users/pages/UserProfilePage";
-
-
-// =====================================
-// PERMISSION PAGES
-// =====================================
-
-import PermissionsListPage from "../permissions/pages/PermissionsListPage";
-
-import AddPermissionPage from "../permissions/pages/AddPermissionPage";
-
-import EditPermissionPage from "../permissions/pages/EditPermissionPage";
-
-import RolePermissionsPage from "../role_permissions/pages/RolePermissionsPage";
-
-
-// =====================================
-// MODULE PAGES
-// =====================================
-
-import ModulesListPage from "../modules/pages/ModulesListPage";
-
-import AddModulePage from "../modules/pages/AddModulePage";
-
-import EditModulePage from "../modules/pages/EditModulePage";
-
-
-// =====================================
-// USER ROLE PAGES
-// =====================================
-
-import UserRolesListPage from "../user_roles/pages/UserRolesListPage";
-
-import AddUserRolePage from "../user_roles/pages/AddUserRolePage";
-
-import EditUserRolePage from "../user_roles/pages/EditUserRolePage";
-
-
-// =====================================
-// USER PERMISSION PAGES
-// =====================================
-
-import UserPermissionsPage from "../user_permissions/pages/UserPermissionsPage";
-
-
-// =====================================
-// ROUTES
-// =====================================
 
 const accountsRoutes = (
 
-    <>
+    <Route path="accounts">
 
-        {/* ================================= */}
-        {/* ROLES */}
-        {/* ================================= */}
+        {roleRoutes}
 
-        <Route
-            path="roles"
-            element={<RolesListPage />}
-        />
+        {userRoutes}
 
-        <Route
-            path="roles/add"
-            element={<AddRolePage />}
-        />
+        {permissionRoutes}
 
-        <Route
-            path="roles/edit/:id"
-            element={<EditRolePage />}
-        />
+        {rolePermissionRoutes}
 
+        {moduleRoutes}
 
-        {/* ================================= */}
-        {/* USERS */}
-        {/* ================================= */}
+        {userRoleRoutes}
 
-        <Route
-            path="users"
-            element={<UsersListPage />}
-        />
+        {userPermissionRoutes}
 
-        <Route
-            path="users/add"
-            element={<AddUserPage />}
-        />
+    </Route>
 
-        <Route
-            path="users/edit/:id"
-            element={<EditUserPage />}
-        />
-
-        <Route
-            path="users/profile/:id"
-            element={<UserProfilePage />}
-        />
-
-
-        {/* ================================= */}
-        {/* PERMISSIONS */}
-        {/* ================================= */}
-
-        <Route
-            path="permissions"
-            element={<PermissionsListPage />}
-        />
-
-        <Route
-            path="permissions/add"
-            element={<AddPermissionPage />}
-        />
-
-        <Route
-            path="permissions/edit/:id"
-            element={<EditPermissionPage />}
-        />
-
-        <Route
-            path="roles/:id/permissions"
-            element={<RolePermissionsPage />}
-        />
-
-
-        {/* ================================= */}
-        {/* MODULES */}
-        {/* ================================= */}
-
-        <Route
-            path="modules"
-            element={<ModulesListPage />}
-        />
-
-        <Route
-            path="modules/add"
-            element={<AddModulePage />}
-        />
-
-        <Route
-            path="modules/edit/:id"
-            element={<EditModulePage />}
-        />
-
-
-        {/* ================================= */}
-        {/* USER ROLES */}
-        {/* ================================= */}
-
-        <Route
-            path="user-roles"
-            element={<UserRolesListPage />}
-        />
-
-        <Route
-            path="user-roles/add"
-            element={<AddUserRolePage />}
-        />
-
-        <Route
-            path="user-roles/edit/:id"
-            element={<EditUserRolePage />}
-        />
-
-
-        {/* ================================= */}
-        {/* USER PERMISSIONS */}
-        {/* ================================= */}
-
-        <Route
-            path="user-permissions"
-            element={<UserPermissionsPage />}
-        />
-
-    </>
 );
 
 export default accountsRoutes;

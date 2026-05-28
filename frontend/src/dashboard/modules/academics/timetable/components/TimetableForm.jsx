@@ -13,7 +13,7 @@ import classService from "../../classes/services/classService";
 import sectionService from "../../sections/services/sectionService";
 import subjectService from "../../subjects/services/subjectService";
 
-import staffService from "../../../staff/staff/services/staffService";
+import staffService from "../../../staff/profiles/services/staffService";
 
 import dayService from "../../days/services/dayService";
 import classroomService from "../../classrooms/services/classroomService";

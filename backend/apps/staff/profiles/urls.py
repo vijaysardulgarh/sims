@@ -1,21 +1,14 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from .views import (
-    StaffByRoleAPIView,
-    StaffStaticAPIView,
+from apps.staff.profiles.views import StaffViewSet
+
+
+router = DefaultRouter()
+
+router.register(
+    "staff-profiles",
+    StaffViewSet,
+    basename="staff-profiles"
 )
 
-urlpatterns = [
-
-    path(
-        "role/<str:role>/",
-        StaffByRoleAPIView.as_view(),
-        name="staff-by-role",
-    ),
-
-    path(
-        "static/",
-        StaffStaticAPIView.as_view(),
-        name="staff-static",
-    ),
-]
+urlpatterns = router.urls

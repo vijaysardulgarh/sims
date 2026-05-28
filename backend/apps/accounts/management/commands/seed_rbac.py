@@ -54,7 +54,7 @@ RBAC_CONFIG = {
             {
                 "name": "Class Subjects",
                 "slug": "class-subjects",
-                "path": "/dashboard/academicsclass-subjects",
+                "path": "/dashboard/academics/class-subjects",
             },
 
             {
@@ -511,7 +511,7 @@ RBAC_CONFIG = {
             {
                 "name": "Teacher Attendance",
                 "slug": "teacher-attendance",
-                "path": "/dashboard/teacher-attendance",
+                "path": "/dashboard/staff/teacher-attendance",
             },
 
             {

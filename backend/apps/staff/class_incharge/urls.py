@@ -7,7 +7,7 @@ from .views import (
 urlpatterns = [
 
     path(
-        "report/",
+        "",
         ClassInchargeReportAPIView.as_view(),
         name="class-incharge-report",
     ),

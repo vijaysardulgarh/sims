@@ -17,7 +17,7 @@ urlpatterns = [
     ),
 
     path(
-        "staff/",
+        "",
         include(
             "apps.staff.profiles.urls"
         )
@@ -31,9 +31,9 @@ urlpatterns = [
     ),
 
     path(
-        "sanctioned-post/",
+        "sanctioned-posts/",
         include(
-            "apps.staff.sanctioned_post.urls"
+            "apps.staff.sanctioned_posts.urls"
         )
     ),
 ]

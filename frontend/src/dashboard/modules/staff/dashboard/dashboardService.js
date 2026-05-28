@@ -3,7 +3,7 @@
 // File: dashboardService.js
 // ============================================
 
-import api from "../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // STAFF DASHBOARD

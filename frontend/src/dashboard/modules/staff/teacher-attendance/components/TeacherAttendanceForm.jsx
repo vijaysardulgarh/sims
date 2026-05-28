@@ -8,8 +8,7 @@ import {
   useState
 } from "react";
 
-import staffService
-from "../staff/staffService";
+import staffService from "../services/teacherAttendanceService";
 
 const TeacherAttendanceForm = ({
 

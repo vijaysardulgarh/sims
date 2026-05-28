@@ -8,12 +8,16 @@ from django.db.models.functions import (
     Lower
 )
 
-from apps.core.common.base.models import SchoolBaseModel
-class Subject(
+from apps.core.common.base.models import (
     SchoolBaseModel
-):
+)
 
 
+class Subject(SchoolBaseModel):
+
+    # ============================================
+    # BASIC
+    # ============================================
 
     name = models.CharField(
         max_length=100,
@@ -26,6 +30,26 @@ class Subject(
         null=True,
         db_index=True
     )
+
+    # ============================================
+    # FLAGS
+    # ============================================
+
+    is_language = models.BooleanField(
+        default=False
+    )
+
+    is_optional = models.BooleanField(
+        default=False
+    )
+
+    has_lab = models.BooleanField(
+        default=False
+    )
+
+    # ============================================
+    # META
+    # ============================================
 
     class Meta:
 
@@ -50,11 +74,18 @@ class Subject(
             )
         ]
 
+    # ============================================
+    # VALIDATION
+    # ============================================
+
     def clean(self):
 
         if (
+
             self.name
+
             and
+
             Subject.objects.exclude(
                 pk=self.pk
             ).filter(
@@ -67,11 +98,20 @@ class Subject(
         ):
 
             raise ValidationError({
+
                 "name":
                     "This subject already exists."
             })
 
-    def save(self, *args, **kwargs):
+    # ============================================
+    # SAVE
+    # ============================================
+
+    def save(
+        self,
+        *args,
+        **kwargs
+    ):
 
         if self.name:
 
@@ -87,7 +127,14 @@ class Subject(
 
         self.full_clean()
 
-        super().save(*args, **kwargs)
+        super().save(
+            *args,
+            **kwargs
+        )
+
+    # ============================================
+    # STRING
+    # ============================================
 
     def __str__(self):
 

@@ -1,71 +1,21 @@
-# =============================================================================
-# schools/urls.py
-# =============================================================================
-
 from django.urls import path
 
 from apps.schools.views import (
 
-    SchoolListAPIView,
+    SchoolListCreateAPIView,
 
-    SelectSchoolAPIView,
-
-    ClearSchoolAPIView,
-
-    CurrentSchoolAPIView,
+    SchoolRetrieveUpdateDestroyAPIView,
 )
 
 urlpatterns = [
 
-    # =====================================
-    # SCHOOL LIST
-    # =====================================
-
     path(
-
         "",
-
-        SchoolListAPIView.as_view(),
-
-        name="school-list"
+        SchoolListCreateAPIView.as_view(),
     ),
 
-    # =====================================
-    # SELECT SCHOOL
-    # =====================================
-
     path(
-
-        "select/",
-
-        SelectSchoolAPIView.as_view(),
-
-        name="select-school"
-    ),
-
-    # =====================================
-    # CLEAR SCHOOL
-    # =====================================
-
-    path(
-
-        "clear/",
-
-        ClearSchoolAPIView.as_view(),
-
-        name="clear-school"
-    ),
-
-    # =====================================
-    # CURRENT SCHOOL
-    # =====================================
-
-    path(
-
-        "current/",
-
-        CurrentSchoolAPIView.as_view(),
-
-        name="current-school"
+        "<int:pk>/",
+        SchoolRetrieveUpdateDestroyAPIView.as_view(),
     ),
 ]

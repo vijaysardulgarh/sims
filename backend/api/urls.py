@@ -97,4 +97,13 @@ urlpatterns = [
         "api/finance/",
         include("apps.finance.urls")
     ),
+
+    path(
+        "api/schools/",
+        include("apps.schools.urls")
+    ),
+    path(
+        "api/clusters/",
+        include("apps.clusters.urls")
+    ),
 ]

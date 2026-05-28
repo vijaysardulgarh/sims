@@ -8,9 +8,7 @@ import {
   useState
 } from "react";
 
-import postTypeService
-from "../post-types/postTypeService";
-
+import postTypeService from "../../post-types/services/postTypeService";
 const SanctionedPostForm = ({
 
   initialData = {},

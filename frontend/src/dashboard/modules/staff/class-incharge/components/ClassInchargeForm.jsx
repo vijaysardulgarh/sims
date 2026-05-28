@@ -8,14 +8,9 @@ import {
   useState
 } from "react";
 
-import classService from
-"../../academics/classes/classService";
-
-import sectionService from
-"../../academics/sections/sectionService";
-
-import staffService from
-"../../staff/services/staffService";
+import classService from "../../../academics/classes/services/classService";
+import sectionService from "../../../academics/sections/services/sectionService";
+import staffService from "../../profiles/services/staffService";
 
 const ClassInchargeForm = ({
 

@@ -15,11 +15,9 @@ import {
 
 import toast from "react-hot-toast";
 
-import TeacherAttendanceForm
-from "./TeacherAttendanceForm";
+import TeacherAttendanceForm from "../components/TeacherAttendanceForm";
 
-import teacherAttendanceService
-from "./teacherAttendanceService";
+import teacherAttendanceService from "../services/teacherAttendanceService";
 
 const EditTeacherAttendance = () => {
 

@@ -21,10 +21,12 @@ import accountsRoutes from "./accounts/routes/accountsRoutes";
 // import feesRoutes from "./fees/routes/feesRoutes";
 // import hostelRoutes from "./hostel/routes/hostelRoutes";
 // import libraryRoutes from "./library/routes/libraryRoutes";
-//import staffRoutes from "./staff/routes/staffRoutes";
- import studentsRoutes from "./students/routes/studentsRoutes";
+import staffRoutes from "./staff/routes/staffRoutes";
+import studentsRoutes from "./students/routes/studentsRoutes";
 // import timetableRoutes from "./timetable/routes/timetableRoutes";
 // import transportRoutes from "./transport/routes/transportRoutes";
+import schoolRoutes from "./schools/routes/schoolRoutes";
+import clusterRoutes from "./cluster/routes/clusterRoutes";
 
 // =====================================
 // ROUTES
@@ -56,10 +58,12 @@ const moduleRoutes = (
     {feesRoutes}
     {hostelRoutes}
     {libraryRoutes} */}
-    {/* {staffRoutes} */}
+    {staffRoutes}
     {studentsRoutes}
     {/* {timetableRoutes}
     {transportRoutes} */}
+    {schoolRoutes}
+    {clusterRoutes}
 
   </>
 );

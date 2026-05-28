@@ -37,3 +37,7 @@ from apps.accounts.user_roles.admin import (
 from apps.accounts.role_permissions.admin import (
     RolePermissionAdmin
 )
+
+from apps.accounts.modules.admin import (
+    ModuleAdmin
+)

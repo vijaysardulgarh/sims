@@ -15,11 +15,9 @@ import {
 
 import toast from "react-hot-toast";
 
-import ClassInchargeForm
-from "./ClassInchargeForm";
+import ClassInchargeForm from "../components/ClassInchargeForm";
 
-import classInchargeService
-from "./classInchargeService";
+import classInchargeService from "../services/classInchargeService";
 
 const EditClassIncharge = () => {
 
