@@ -8,11 +8,14 @@ import {
     CheckCircle2
 } from "lucide-react";
 
-import permissionService from "../../permissions/services/permissionService";
+import permissionService from
+"../../permissions/services/permissionService";
 
-import roleService from "../../roles/services/roleService";
+import roleService from
+"../../roles/services/roleService";
 
-import rolePermissionService from "../services/rolePermissionsService";
+import rolePermissionService from
+"../services/rolePermissionsService";
 
 
 const RolePermissionsForm = ({
@@ -117,9 +120,7 @@ const RolePermissionsForm = ({
                 );
 
             console.log(
-
                 "ROLE PERMISSIONS:",
-
                 rolePermissionsData
             );
 
@@ -198,14 +199,33 @@ const RolePermissionsForm = ({
 
                 (acc, permission) => {
 
+                    // =========================
+                    // MODULE NAME
+                    // =========================
+
                     const module =
-                        permission.module ||
-                        "General";
+
+                        permission.code
+                            ?.split(".")[0]
+
+                            ?.replaceAll("_", " ")
+
+                            || "General";
+
+
+                    // =========================
+                    // CREATE MODULE
+                    // =========================
 
                     if (!acc[module]) {
 
                         acc[module] = [];
                     }
+
+
+                    // =========================
+                    // PUSH PERMISSION
+                    // =========================
 
                     acc[module].push(
                         permission
@@ -495,7 +515,14 @@ const RolePermissionsForm = ({
                                             "
                                         >
 
-                                            {module}
+                                            {
+                                                module.charAt(0)
+                                                    .toUpperCase()
+
+                                                +
+
+                                                module.slice(1)
+                                            }
 
                                         </h3>
 

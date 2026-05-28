@@ -3,7 +3,7 @@
 // File: timetableSlotService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL TIMETABLE SLOTS

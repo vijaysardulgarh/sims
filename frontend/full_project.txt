@@ -268,392 +268,6 @@ export const responsibilityMenus = {
   
   };
 ==================================================
-FILE: ./src/dashboard/home/components/QuickActions.jsx
-==================================================
-import {
-    Link
-  } from "react-router-dom";
-  
-  
-  const QuickActions = () => {
-  
-    const actions = [
-  
-      {
-        label: "Add Student",
-  
-        path: "/dashboard/students/add",
-      },
-  
-      {
-        label: "Take Attendance",
-  
-        path: "/dashboard/attendance",
-      },
-  
-      {
-        label: "Create Exam",
-  
-        path: "/dashboard/exams/create",
-      },
-  
-      {
-        label: "Fee Collection",
-  
-        path: "/dashboard/fees",
-      },
-    ];
-  
-  
-    return (
-  
-      <div
-        className="
-          bg-white
-          rounded-2xl
-          p-6
-          shadow-sm
-        "
-      >
-  
-        <h2
-          className="
-            text-xl
-            font-bold
-            mb-5
-          "
-        >
-  
-          Quick Actions
-  
-        </h2>
-  
-        <div
-          className="
-            grid
-            grid-cols-2
-            md:grid-cols-4
-            gap-4
-          "
-        >
-  
-          {
-            actions.map((action) => (
-  
-              <Link
-  
-                key={action.path}
-  
-                to={action.path}
-  
-                className="
-                  bg-blue-600
-                  hover:bg-blue-700
-                  text-white
-                  rounded-xl
-                  px-4
-                  py-4
-                  text-center
-                  font-medium
-                  transition
-                "
-              >
-  
-                {action.label}
-  
-              </Link>
-            ))
-          }
-  
-        </div>
-  
-      </div>
-    );
-  };
-  
-  export default QuickActions;
-==================================================
-FILE: ./src/dashboard/home/components/StatCard.jsx
-==================================================
-const StatCard = ({
-
-    title,
-  
-    value,
-  
-  }) => {
-  
-    return (
-  
-      <div
-        className="
-          bg-white
-          rounded-2xl
-          shadow-sm
-          p-6
-        "
-      >
-  
-        <p className="text-gray-500 text-sm">
-  
-          {title}
-  
-        </p>
-  
-        <h2
-          className="
-            text-3xl
-            font-bold
-            text-gray-800
-            mt-2
-          "
-        >
-  
-          {value}
-  
-        </h2>
-  
-      </div>
-    );
-  };
-  
-  export default StatCard;
-==================================================
-FILE: ./src/dashboard/home/pages/DashboardHomePage.jsx
-==================================================
-import {
-    useAuth
-} from "../../modules/accounts/auth/context/AuthContext";
-
-import StatCard
-from "../components/StatCard";
-
-import QuickActions
-from "../components/QuickActions";
-  
-  
-  const DashboardHomePage = () => {
-  
-    const {
-      user
-    } = useAuth();
-  
-    const roles =
-      user?.roles || [];
-  
-  
-    return (
-  
-      <div className="space-y-6">
-  
-        {/* HEADER */}
-        <div>
-  
-          <h1 className="text-3xl font-bold text-gray-800">
-  
-            Welcome Back
-  
-          </h1>
-  
-          <p className="text-gray-500 mt-2">
-  
-            {user?.school_name}
-  
-          </p>
-  
-        </div>
-  
-  
-        {/* STATS */}
-        <div
-          className="
-            grid
-            grid-cols-1
-            md:grid-cols-2
-            xl:grid-cols-4
-            gap-6
-          "
-        >
-  
-          <StatCard
-            title="Students"
-            value="2,540"
-          />
-  
-          <StatCard
-            title="Teachers"
-            value="120"
-          />
-  
-          <StatCard
-            title="Attendance"
-            value="94%"
-          />
-  
-          <StatCard
-            title="Fees Collected"
-            value="₹12.4L"
-          />
-  
-        </div>
-  
-  
-        {/* QUICK ACTIONS */}
-        <QuickActions />
-  
-  
-        {/* ROLE BASED CONTENT */}
-  
-        {
-          roles.includes(
-            "PRINCIPAL"
-          ) && (
-  
-            <div
-              className="
-                bg-white
-                rounded-2xl
-                p-6
-                shadow-sm
-              "
-            >
-  
-              <h2 className="text-xl font-bold mb-4">
-  
-                Principal Overview
-  
-              </h2>
-  
-              <p className="text-gray-600">
-  
-                School performance analytics,
-                attendance trends,
-                examination insights,
-                and staff monitoring.
-  
-              </p>
-  
-            </div>
-          )
-        }
-  
-  
-        {
-          roles.includes(
-            "TEACHER"
-          ) && (
-  
-            <div
-              className="
-                bg-white
-                rounded-2xl
-                p-6
-                shadow-sm
-              "
-            >
-  
-              <h2 className="text-xl font-bold mb-4">
-  
-                Teacher Dashboard
-  
-              </h2>
-  
-              <p className="text-gray-600">
-  
-                Today's timetable,
-                pending homework,
-                assignments,
-                and attendance tasks.
-  
-              </p>
-  
-            </div>
-          )
-        }
-  
-      </div>
-    );
-  };
-  
-  export default DashboardHomePage;
-==================================================
-FILE: ./src/dashboard/layouts/AuthLayout.jsx
-==================================================
-
-==================================================
-FILE: ./src/dashboard/layouts/DashboardLayout.jsx
-==================================================
-import { Outlet } from "react-router-dom";
-
-import Sidebar from "../shared/components/navigation/Sidebar";
-
-import TopNavbar from "../shared/components/navigation/TopNavbar";
-
-const DashboardLayout = () => {
-
-  return (
-
-    <div
-      className="
-        h-screen
-        overflow-hidden
-        bg-gray-100
-        flex
-      "
-    >
-
-      {/* ===================================== */}
-      {/* SIDEBAR */}
-      {/* ===================================== */}
-
-      <Sidebar />
-
-      {/* ===================================== */}
-      {/* MAIN CONTENT */}
-      {/* ===================================== */}
-
-      <div
-        className="
-          flex-1
-          flex
-          flex-col
-          overflow-hidden
-        "
-      >
-
-        {/* ===================================== */}
-        {/* TOP NAVBAR */}
-        {/* ===================================== */}
-
-        <TopNavbar />
-
-        {/* ===================================== */}
-        {/* PAGE CONTENT */}
-        {/* ===================================== */}
-
-        <main
-          className="
-            flex-1
-            overflow-y-auto
-            overflow-x-hidden
-            p-6
-            custom-scrollbar
-          "
-        >
-
-          <Outlet />
-
-        </main>
-
-      </div>
-
-    </div>
-
-  );
-};
-
-export default DashboardLayout;
-==================================================
 FILE: ./src/dashboard/modules/academics/AcademicCalendar.jsx
 ==================================================
 
@@ -1997,7 +1611,7 @@ FILE: ./src/dashboard/modules/academics/class-subjects/services/classSubjectServ
 // File: classSubjectService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL CLASS SUBJECTS
@@ -2894,7 +2508,7 @@ export default EditClass;
 ==================================================
 FILE: ./src/dashboard/modules/academics/classes/services/classService.js
 ==================================================
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 const classService = {
 
@@ -3774,7 +3388,7 @@ FILE: ./src/dashboard/modules/academics/classrooms/services/classroomService.js
 // File: classroomService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL CLASSROOMS
@@ -4582,7 +4196,7 @@ const TimetablePreview = () => {
 ==================================================
 FILE: ./src/dashboard/modules/academics/dashboard/services/academicDashboardService.js
 ==================================================
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 const academicDashboardService = {
 
@@ -5516,7 +5130,7 @@ FILE: ./src/dashboard/modules/academics/days/services/dayService.js
 // File: dayService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL DAYS
@@ -6454,7 +6068,7 @@ FILE: ./src/dashboard/modules/academics/mediums/services/mediumService.js
 // File: mediumService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL MEDIUMS
@@ -7363,7 +6977,7 @@ FILE: ./src/dashboard/modules/academics/sections/services/sectionService.js
 // File: sectionService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL SECTIONS
@@ -8307,7 +7921,7 @@ FILE: ./src/dashboard/modules/academics/streams/services/streamService.js
 // File: streamService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL STREAMS
@@ -9029,7 +8643,7 @@ FILE: ./src/dashboard/modules/academics/subjects/services/subjectService.js
 // File: subjectService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL SUBJECTS
@@ -10786,7 +10400,7 @@ FILE: ./src/dashboard/modules/academics/timetable/services/timetableService.js
 // File: timetableService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL TIMETABLES
@@ -11787,7 +11401,7 @@ FILE: ./src/dashboard/modules/academics/timetable-slots/services/timetableSlotSe
 // File: timetableSlotService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL TIMETABLE SLOTS
@@ -21719,6 +21333,954 @@ FILE: ./src/dashboard/modules/fees/Scholarships.jsx
 ==================================================
 
 ==================================================
+FILE: ./src/dashboard/modules/home/components/QuickActions.jsx
+==================================================
+import {
+    Link
+  } from "react-router-dom";
+  
+  
+  const QuickActions = () => {
+  
+    const actions = [
+  
+      {
+        label: "Add Student",
+  
+        path: "/dashboard/students/add",
+      },
+  
+      {
+        label: "Take Attendance",
+  
+        path: "/dashboard/attendance",
+      },
+  
+      {
+        label: "Create Exam",
+  
+        path: "/dashboard/exams/create",
+      },
+  
+      {
+        label: "Fee Collection",
+  
+        path: "/dashboard/fees",
+      },
+    ];
+  
+  
+    return (
+  
+      <div
+        className="
+          bg-white
+          rounded-2xl
+          p-6
+          shadow-sm
+        "
+      >
+  
+        <h2
+          className="
+            text-xl
+            font-bold
+            mb-5
+          "
+        >
+  
+          Quick Actions
+  
+        </h2>
+  
+        <div
+          className="
+            grid
+            grid-cols-2
+            md:grid-cols-4
+            gap-4
+          "
+        >
+  
+          {
+            actions.map((action) => (
+  
+              <Link
+  
+                key={action.path}
+  
+                to={action.path}
+  
+                className="
+                  bg-blue-600
+                  hover:bg-blue-700
+                  text-white
+                  rounded-xl
+                  px-4
+                  py-4
+                  text-center
+                  font-medium
+                  transition
+                "
+              >
+  
+                {action.label}
+  
+              </Link>
+            ))
+          }
+  
+        </div>
+  
+      </div>
+    );
+  };
+  
+  export default QuickActions;
+==================================================
+FILE: ./src/dashboard/modules/home/components/StatCard.jsx
+==================================================
+const StatCard = ({
+
+    title,
+  
+    value,
+  
+  }) => {
+  
+    return (
+  
+      <div
+        className="
+          bg-white
+          rounded-2xl
+          shadow-sm
+          p-6
+        "
+      >
+  
+        <p className="text-gray-500 text-sm">
+  
+          {title}
+  
+        </p>
+  
+        <h2
+          className="
+            text-3xl
+            font-bold
+            text-gray-800
+            mt-2
+          "
+        >
+  
+          {value}
+  
+        </h2>
+  
+      </div>
+    );
+  };
+  
+  export default StatCard;
+==================================================
+FILE: ./src/dashboard/modules/home/layouts/AuthLayout.jsx
+==================================================
+
+==================================================
+FILE: ./src/dashboard/modules/home/layouts/DashboardLayout.jsx
+==================================================
+import { Outlet } from "react-router-dom";
+
+import Sidebar from "../navigation/Sidebar";
+
+import TopNavbar from "../navigation/TopNavbar";
+
+const DashboardLayout = () => {
+
+  return (
+
+    <div
+      className="
+        h-screen
+        overflow-hidden
+        bg-gray-100
+        flex
+      "
+    >
+
+      {/* ===================================== */}
+      {/* SIDEBAR */}
+      {/* ===================================== */}
+
+      <Sidebar />
+
+      {/* ===================================== */}
+      {/* MAIN CONTENT */}
+      {/* ===================================== */}
+
+      <div
+        className="
+          flex-1
+          flex
+          flex-col
+          overflow-hidden
+        "
+      >
+
+        {/* ===================================== */}
+        {/* TOP NAVBAR */}
+        {/* ===================================== */}
+
+        <TopNavbar />
+
+        {/* ===================================== */}
+        {/* PAGE CONTENT */}
+        {/* ===================================== */}
+
+        <main
+          className="
+            flex-1
+            overflow-y-auto
+            overflow-x-hidden
+            p-6
+            custom-scrollbar
+          "
+        >
+
+          <Outlet />
+
+        </main>
+
+      </div>
+
+    </div>
+
+  );
+};
+
+export default DashboardLayout;
+==================================================
+FILE: ./src/dashboard/modules/home/navigation/Sidebar.jsx
+==================================================
+import {
+
+  useEffect,
+
+  useState
+
+} from "react";
+
+import {
+
+  NavLink
+
+} from "react-router-dom";
+
+import api from "../../../../services/api/axios";
+
+
+const Sidebar = () => {
+
+  // =====================================
+  // STATE
+  // =====================================
+
+  const [menus, setMenus] =
+    useState([]);
+
+  const [openMenus, setOpenMenus] =
+    useState({});
+
+
+  // =====================================
+  // LOAD SIDEBAR
+  // =====================================
+
+  useEffect(() => {
+
+    fetchSidebar();
+
+  }, []);
+
+
+  // =====================================
+  // FETCH SIDEBAR
+  // =====================================
+
+  const fetchSidebar = async () => {
+
+    try {
+
+      const response = await api.get(
+
+        "/accounts/modules/sidebar/"
+      );
+
+      console.log(
+        "SIDEBAR DATA:",
+        response.data
+      );
+
+      setMenus(
+        response.data
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Sidebar Error:",
+        error
+      );
+    }
+  };
+
+
+  // =====================================
+  // TOGGLE MENU
+  // =====================================
+
+  const toggleMenu = (menuId) => {
+
+    setOpenMenus((prev) => ({
+
+      ...prev,
+
+      [menuId]: !prev[menuId],
+    }));
+  };
+
+
+  return (
+
+    <aside
+      className="
+        w-64
+        h-screen
+        overflow-hidden
+        bg-gradient-to-b
+        from-blue-950
+        to-blue-900
+        text-white
+        shadow-2xl
+        flex
+        flex-col
+      "
+    >
+
+      {/* ================================= */}
+      {/* LOGO */}
+      {/* ================================= */}
+
+      <div className="p-6 border-b border-blue-800">
+
+        <h1 className="text-3xl font-bold tracking-wide">
+
+          SIMS
+
+        </h1>
+
+        <p className="text-blue-200 text-sm mt-1">
+
+          School ERP System
+
+        </p>
+
+      </div>
+
+
+      {/* ================================= */}
+      {/* NAVIGATION */}
+      {/* ================================= */}
+
+      <nav
+        className="
+          flex-1
+          p-4
+          overflow-y-auto
+        "
+      >
+
+        <div className="space-y-2">
+
+          {
+            menus.map((menu) => {
+
+              const hasChildren =
+
+                menu.children &&
+                menu.children.length > 0;
+
+              const isOpen =
+                openMenus[menu.id];
+
+              return (
+
+                <div
+                  key={menu.id}
+                >
+
+                  {/* ===================== */}
+                  {/* PARENT MENU */}
+                  {/* ===================== */}
+
+                  {
+                    hasChildren ? (
+
+                      <button
+
+                        onClick={() =>
+                          toggleMenu(menu.id)
+                        }
+
+                        className="
+                          w-full
+                          flex
+                          items-center
+                          justify-between
+                          px-4
+                          py-3
+                          rounded-xl
+                          hover:bg-blue-800
+                          transition-all
+                          duration-200
+                          text-left
+                        "
+                      >
+
+                        <span>
+
+                          {menu.name}
+
+                        </span>
+
+                        <span>
+
+                          {
+                            isOpen
+                              ? "−"
+                              : "+"
+                          }
+
+                        </span>
+
+                      </button>
+
+                    ) : (
+
+                      <NavLink
+
+                        to={menu.path || "#"}
+
+                        className={({ isActive }) =>
+
+                          `
+                            block
+                            px-4
+                            py-3
+                            rounded-xl
+                            transition-all
+                            duration-200
+                            ${
+                              isActive
+                                ? "bg-white text-blue-900 font-semibold shadow-md"
+                                : "hover:bg-blue-800 text-blue-100"
+                            }
+                          `
+                        }
+                      >
+
+                        {menu.name}
+
+                      </NavLink>
+                    )
+                  }
+
+
+                  {/* ===================== */}
+                  {/* CHILD MENUS */}
+                  {/* ===================== */}
+
+                  {
+                    hasChildren &&
+                    isOpen && (
+
+                      <div
+                        className="
+                          ml-4
+                          mt-1
+                          space-y-1
+                          border-l
+                          border-blue-700
+                          pl-3
+                        "
+                      >
+
+                        {
+                          menu.children.map((child) => (
+
+                            <NavLink
+
+                              key={child.id}
+
+                              to={child.path || "#"}
+
+                              className={({ isActive }) =>
+
+                                `
+                                  block
+                                  px-4
+                                  py-2
+                                  text-sm
+                                  rounded-lg
+                                  transition-all
+                                  duration-200
+                                  ${
+                                    isActive
+                                      ? "bg-white text-blue-900 font-medium"
+                                      : "hover:bg-blue-800 text-blue-100"
+                                  }
+                                `
+                              }
+                            >
+
+                              {child.name}
+
+                            </NavLink>
+                          ))
+                        }
+
+                      </div>
+                    )
+                  }
+
+                </div>
+              );
+            })
+          }
+
+        </div>
+
+      </nav>
+
+    </aside>
+  );
+};
+
+
+export default Sidebar;
+==================================================
+FILE: ./src/dashboard/modules/home/navigation/TopNavbar.jsx
+==================================================
+import UserDropdown from "./UserDropdown";
+
+const TopNavbar = () => {
+
+  return (
+
+    <div
+      className="
+        w-full
+        bg-white
+        border-b
+        border-gray-200
+        px-6
+        py-4
+        flex
+        items-center
+        justify-between
+        shadow-sm
+      "
+    >
+
+      {/* ===================================== */}
+      {/* LEFT SIDE */}
+      {/* ===================================== */}
+
+      <div>
+
+        <h1
+          className="
+            text-2xl
+            font-bold
+            text-gray-800
+          "
+        >
+
+          Dashboard
+
+        </h1>
+
+        <p
+          className="
+            text-sm
+            text-gray-500
+            mt-1
+          "
+        >
+
+          Welcome back to SIMS ERP
+
+        </p>
+
+      </div>
+
+      {/* ===================================== */}
+      {/* RIGHT SIDE */}
+      {/* ===================================== */}
+
+      <div
+        className="
+          flex
+          items-center
+          gap-4
+        "
+      >
+
+        <UserDropdown />
+
+      </div>
+
+    </div>
+  );
+};
+
+export default TopNavbar;
+==================================================
+FILE: ./src/dashboard/modules/home/navigation/UserDropdown.jsx
+==================================================
+import {
+    useState
+  } from "react";
+  
+import { useAuth } from "../../accounts/auth/context/AuthContext";
+  
+  
+  const UserDropdown = () => {
+  
+    const {
+      user,
+  
+      logout
+    } = useAuth();
+  
+    const [open, setOpen] =
+      useState(false);
+  
+    return (
+  
+      <div className="relative">
+  
+        {/* BUTTON */}
+        <button
+  
+          onClick={() =>
+            setOpen(!open)
+          }
+  
+          className="
+            flex
+            items-center
+            gap-3
+            bg-gray-100
+            hover:bg-gray-200
+            px-4
+            py-2
+            rounded-xl
+            transition
+          "
+        >
+  
+          <div
+            className="
+              w-10
+              h-10
+              rounded-full
+              bg-blue-600
+              text-white
+              flex
+              items-center
+              justify-center
+              font-bold
+            "
+          >
+  
+            {
+              user?.email?.charAt(0)
+            }
+  
+          </div>
+  
+          <div className="text-left">
+  
+            <p className="font-semibold text-gray-800">
+  
+              {user?.email}
+  
+            </p>
+  
+            <p className="text-xs text-gray-500">
+  
+              {
+                user?.roles?.join(", ")
+              }
+  
+            </p>
+  
+          </div>
+  
+        </button>
+  
+  
+        {/* DROPDOWN */}
+        {
+          open && (
+  
+            <div
+              className="
+                absolute
+                right-0
+                mt-3
+                w-60
+                bg-white
+                rounded-2xl
+                shadow-xl
+                border
+                z-50
+                overflow-hidden
+              "
+            >
+  
+              <div className="p-4 border-b">
+  
+                <p className="font-semibold">
+  
+                  {user?.email}
+  
+                </p>
+  
+                <p className="text-sm text-gray-500">
+  
+                  {
+                    user?.roles?.join(", ")
+                  }
+  
+                </p>
+  
+              </div>
+  
+              <button
+                className="
+                  w-full
+                  text-left
+                  px-4
+                  py-3
+                  hover:bg-gray-100
+                "
+              >
+  
+                Profile
+  
+              </button>
+  
+              <button
+                className="
+                  w-full
+                  text-left
+                  px-4
+                  py-3
+                  hover:bg-gray-100
+                "
+              >
+  
+                Settings
+  
+              </button>
+  
+              <button
+  
+                onClick={logout}
+  
+                className="
+                  w-full
+                  text-left
+                  px-4
+                  py-3
+                  hover:bg-red-50
+                  text-red-600
+                "
+              >
+  
+                Logout
+  
+              </button>
+  
+            </div>
+          )
+        }
+  
+      </div>
+    );
+  };
+  
+  export default UserDropdown;
+==================================================
+FILE: ./src/dashboard/modules/home/pages/DashboardHomePage.jsx
+==================================================
+import { useAuth } from "../../accounts/auth/context/AuthContext";
+
+import StatCard
+from "../components/StatCard";
+
+import QuickActions
+from "../components/QuickActions";
+  
+  
+  const DashboardHomePage = () => {
+  
+    const {
+      user
+    } = useAuth();
+  
+    const roles =
+      user?.roles || [];
+  
+  
+    return (
+  
+      <div className="space-y-6">
+  
+        {/* HEADER */}
+        <div>
+  
+          <h1 className="text-3xl font-bold text-gray-800">
+  
+            Welcome Back
+  
+          </h1>
+  
+          <p className="text-gray-500 mt-2">
+  
+            {user?.school_name}
+  
+          </p>
+  
+        </div>
+  
+  
+        {/* STATS */}
+        <div
+          className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            xl:grid-cols-4
+            gap-6
+          "
+        >
+  
+          <StatCard
+            title="Students"
+            value="2,540"
+          />
+  
+          <StatCard
+            title="Teachers"
+            value="120"
+          />
+  
+          <StatCard
+            title="Attendance"
+            value="94%"
+          />
+  
+          <StatCard
+            title="Fees Collected"
+            value="₹12.4L"
+          />
+  
+        </div>
+  
+  
+        {/* QUICK ACTIONS */}
+        <QuickActions />
+  
+  
+        {/* ROLE BASED CONTENT */}
+  
+        {
+          roles.includes(
+            "PRINCIPAL"
+          ) && (
+  
+            <div
+              className="
+                bg-white
+                rounded-2xl
+                p-6
+                shadow-sm
+              "
+            >
+  
+              <h2 className="text-xl font-bold mb-4">
+  
+                Principal Overview
+  
+              </h2>
+  
+              <p className="text-gray-600">
+  
+                School performance analytics,
+                attendance trends,
+                examination insights,
+                and staff monitoring.
+  
+              </p>
+  
+            </div>
+          )
+        }
+  
+  
+        {
+          roles.includes(
+            "TEACHER"
+          ) && (
+  
+            <div
+              className="
+                bg-white
+                rounded-2xl
+                p-6
+                shadow-sm
+              "
+            >
+  
+              <h2 className="text-xl font-bold mb-4">
+  
+                Teacher Dashboard
+  
+              </h2>
+  
+              <p className="text-gray-600">
+  
+                Today's timetable,
+                pending homework,
+                assignments,
+                and attendance tasks.
+  
+              </p>
+  
+            </div>
+          )
+        }
+  
+      </div>
+    );
+  };
+  
+  export default DashboardHomePage;
+==================================================
 FILE: ./src/dashboard/modules/hostel/HostelAttendance.jsx
 ==================================================
 
@@ -21834,7 +22396,7 @@ from "react-router-dom";
 // DASHBOARD HOME
 // =====================================
 
-import DashboardHomePage from "../home/pages/DashboardHomePage";
+import DashboardHomePage from "./home/pages/DashboardHomePage";
 
 
 // =====================================
@@ -28209,7 +28771,7 @@ FILE: ./src/dashboard/modules/staff/staff/services/staffService.js
 // File: staffService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL STAFF
@@ -38406,739 +38968,6 @@ const ConfirmModal = ({
   
   export default ConfirmModal;
 ==================================================
-FILE: ./src/dashboard/shared/components/navigation/Sidebar.jsx
-==================================================
-import { NavLink } from "react-router-dom";
-
-import { useAuth } from "../../../modules/accounts/auth/context/AuthContext";
-
-import { responsibilityMenus } from "../../../config/responsibilityMenus";
-
-
-
-const Sidebar = () => {
-
-  // =====================================
-  // AUTH
-  // =====================================
-
-
-  const { user } = useAuth();
-
-  console.log(user);
-
-
-  // =====================================
-  // NORMALIZED ROLES
-  // =====================================
-
-  /*
-    Supports:
-
-    ["ADMIN"]
-
-    OR
-
-    [
-      {
-        name: "ADMIN"
-      }
-    ]
-
-    OR
-
-    [
-      {
-        code: "ADMIN"
-      }
-    ]
-  */
-
-  const roles =
-
-    user?.roles?.map((role) => {
-
-      // STRING ROLE
-
-      if (typeof role === "string") {
-
-        return role.toUpperCase();
-      }
-
-      // OBJECT ROLE
-
-      return (
-        role?.code ||
-        role?.name ||
-        role?.role_code ||
-        ""
-      ).toUpperCase();
-
-    }) || [];
-
-
-  // =====================================
-  // RESPONSIBILITIES
-  // =====================================
-
-  const responsibilities =
-
-    user?.responsibilities || [];
-
-
-  // =====================================
-  // DEBUG
-  // =====================================
-
-  console.log("USER:", user);
-
-  console.log("ROLES:", roles);
-
-
-  // =====================================
-  // SUPER ADMIN MENU
-  // =====================================
-
-  const superAdminMenu = [
-
-    { name: "Dashboard", path: "/dashboard/super-admin" },
-
-    { name: "Clusters", path: "/dashboard/clusters" },
-
-    { name: "Schools", path: "/dashboard/schools" },
-
-    { name: "Subscriptions", path: "/dashboard/subscriptions" },
-
-    { name: "School Admins", path: "/dashboard/school-admins" },
-
-    { name: "Cluster Admins", path: "/dashboard/cluster-admins" },
-
-    { name: "Users", path: "/dashboard/users" },
-
-    { name: "Global Reports", path: "/dashboard/global-reports" },
-
-    { name: "Settings", path: "/dashboard/settings" },
-  ];
-
-
-  // =====================================
-  // ADMIN MENU
-  // =====================================
-
-  const adminMenu = [
-
-    { name: "Dashboard", path: "/dashboard/admin" },
-
-    { name: "Students", path: "/dashboard/students" },
-
-    { name: "Staff", path: "/dashboard/staff" },
-
-    { name: "Admissions", path: "/dashboard/admissions" },
-
-    { name: "Academics", path: "/dashboard/academics" },
-
-    { name: "Attendance", path: "/dashboard/attendance" },
-
-    { name: "Examinations", path: "/dashboard/examinations" },
-
-    { name: "Fees", path: "/dashboard/fees" },
-
-    { name: "Timetable", path: "/dashboard/timetable" },
-
-    { name: "Library", path: "/dashboard/library" },
-
-    { name: "Transport", path: "/dashboard/transport" },
-
-    { name: "Reports", path: "/dashboard/reports" },
-
-    { name: "Settings", path: "/dashboard/settings" },
-  ];
-
-
-  // =====================================
-  // TEACHER MENU
-  // =====================================
-
-  const teacherMenu = [
-
-    { name: "Dashboard", path: "/dashboard/teacher" },
-
-    { name: "My Classes", path: "/dashboard/my-classes" },
-
-    { name: "Attendance", path: "/dashboard/attendance" },
-
-    { name: "Homework", path: "/dashboard/homework" },
-
-    { name: "Assignments", path: "/dashboard/assignments" },
-
-    { name: "Marks Entry", path: "/dashboard/marks" },
-
-    { name: "Timetable", path: "/dashboard/timetable" },
-  ];
-
-
-  // =====================================
-  // ACCOUNTANT MENU
-  // =====================================
-
-  const accountantMenu = [
-
-    { name: "Dashboard", path: "/dashboard/accountant" },
-
-    { name: "Fees", path: "/dashboard/fees" },
-
-    { name: "Receipts", path: "/dashboard/receipts" },
-
-    { name: "Fee Reports", path: "/dashboard/fee-reports" },
-  ];
-
-
-  // =====================================
-  // ROLE BASED MENU
-  // =====================================
-
-  let menuItems = [];
-
-
-  // SUPER ADMIN
-
-  if (roles.includes("SUPER_ADMIN")) {
-
-    menuItems.push(...superAdminMenu);
-  }
-
-
-  // ADMIN
-
-  if (roles.includes("ADMIN")) {
-
-    menuItems.push(...adminMenu);
-  }
-
-
-  // TEACHER
-
-  if (roles.includes("TEACHER")) {
-
-    menuItems.push(...teacherMenu);
-  }
-
-
-  // ACCOUNTANT
-
-  if (roles.includes("ACCOUNTANT")) {
-
-    menuItems.push(...accountantMenu);
-  }
-
-
-  // =====================================
-  // RESPONSIBILITY MENUS
-  // =====================================
-
-  responsibilities.forEach((responsibility) => {
-
-    const extraMenus =
-
-      responsibilityMenus?.[responsibility];
-
-    if (extraMenus) {
-
-      menuItems.push(...extraMenus);
-    }
-
-  });
-
-
-  // =====================================
-  // REMOVE DUPLICATES
-  // =====================================
-
-  menuItems = [
-
-    ...new Map(
-
-      menuItems.map((item) => [
-
-        item.path,
-
-        item
-      ])
-    ).values()
-  ];
-
-
-  // =====================================
-  // DEBUG
-  // =====================================
-
-  console.log("MENU ITEMS:", menuItems);
-
-
-  return (
-
-    <aside
-      className="
-        w-64
-        h-screen
-        overflow-hidden
-        bg-gradient-to-b
-        from-blue-950
-        to-blue-900
-        text-white
-        shadow-2xl
-        flex
-        flex-col
-      "
-    >
-
-      {/* LOGO */}
-
-      <div className="p-6 border-b border-blue-800">
-
-        <h1 className="text-3xl font-bold tracking-wide">
-
-          SIMS
-
-        </h1>
-
-        <p className="text-blue-200 text-sm mt-1">
-
-          School ERP System
-
-        </p>
-
-
-        {/* ROLE BADGES */}
-
-        <div className="mt-4 flex flex-wrap gap-2">
-
-          {
-            roles.map((role) => (
-
-              <span
-                key={role}
-                className="
-                  bg-white/10
-                  px-3
-                  py-1
-                  rounded-full
-                  text-xs
-                  uppercase
-                  tracking-wider
-                  text-blue-100
-                "
-              >
-
-                {role}
-
-              </span>
-            ))
-          }
-
-        </div>
-
-      </div>
-
-
-      {/* NAVIGATION */}
-
-      <nav
-        className="
-          flex-1
-          p-4
-          space-y-2
-          overflow-y-auto
-        "
-      >
-
-        {
-          menuItems.length === 0 && (
-
-            <div className="text-blue-200 text-sm">
-
-              No menu items available
-
-            </div>
-          )
-        }
-
-
-        {
-          menuItems.map((item) => (
-
-            <NavLink
-
-              key={item.path}
-
-              to={item.path}
-
-              className={({ isActive }) =>
-
-                `
-                  block
-                  px-4
-                  py-3
-                  rounded-xl
-                  transition-all
-                  duration-200
-                  ${
-                    isActive
-                      ? "bg-white text-blue-900 font-semibold shadow-md"
-                      : "hover:bg-blue-800 text-blue-100"
-                  }
-                `
-              }
-            >
-
-              {item.name}
-
-            </NavLink>
-          ))
-        }
-
-      </nav>
-
-    </aside>
-  );
-};
-
-
-export default Sidebar;
-==================================================
-FILE: ./src/dashboard/shared/components/navigation/TopNavbar.jsx
-==================================================
-import { useAuth } from "../../../modules/accounts/auth/context/AuthContext";
-
-
-const TopNavbar = () => {
-
-// =====================================
-// AUTH
-// =====================================
-
-const {
-
-  user,
-
-  logout
-
-} = useAuth();
-
-
-// =====================================
-// ROLES
-// =====================================
-
-const roles =
-  user?.roles || [];
-
-
-// =====================================
-// USER NAME
-// =====================================
-
-const userName =
-
-  user?.first_name ||
-
-  user?.email ||
-
-  "User";
-
-
-// =====================================
-// USER INITIAL
-// =====================================
-
-const userInitial =
-
-  userName.charAt(0).toUpperCase();
-
-
-return (
-
-  <header
-    className="
-      bg-white
-      shadow-sm
-      h-16
-      flex
-      items-center
-      justify-between
-      px-6
-    "
-  >
-
-    {/* LEFT SIDE */}
-    <div>
-
-      <h1 className="text-xl font-semibold text-gray-700">
-
-        School Management System
-
-      </h1>
-
-      <p className="text-sm text-gray-500">
-
-        {user?.school_name}
-
-      </p>
-
-    </div>
-
-
-    {/* RIGHT SIDE */}
-    <div className="flex items-center gap-4">
-
-      {/* USER INFO */}
-      <div className="text-right">
-
-        <p className="font-semibold text-gray-700">
-
-          {userName}
-
-        </p>
-
-        <p className="text-sm text-gray-500">
-
-          {roles.join(", ")}
-
-        </p>
-
-      </div>
-
-
-      {/* AVATAR */}
-      <div
-        className="
-          w-10
-          h-10
-          rounded-full
-          bg-blue-900
-          text-white
-          flex
-          items-center
-          justify-center
-          font-bold
-        "
-      >
-
-        {userInitial}
-
-      </div>
-
-
-      {/* LOGOUT BUTTON */}
-      <button
-
-        onClick={logout}
-
-        className="
-          bg-red-500
-          hover:bg-red-600
-          text-white
-          px-4
-          py-2
-          rounded-xl
-          text-sm
-          font-medium
-          transition
-        "
-      >
-
-        Logout
-
-      </button>
-
-    </div>
-
-  </header>
-);
-};
-
-export default TopNavbar;
-==================================================
-FILE: ./src/dashboard/shared/components/navigation/UserDropdown.jsx
-==================================================
-import {
-    useState
-  } from "react";
-  
-  import {
-    useAuth
-  } from "../../../../auth/context/AuthContext";
-  
-  
-  const UserDropdown = () => {
-  
-    const {
-      user,
-  
-      logout
-    } = useAuth();
-  
-    const [open, setOpen] =
-      useState(false);
-  
-    return (
-  
-      <div className="relative">
-  
-        {/* BUTTON */}
-        <button
-  
-          onClick={() =>
-            setOpen(!open)
-          }
-  
-          className="
-            flex
-            items-center
-            gap-3
-            bg-gray-100
-            hover:bg-gray-200
-            px-4
-            py-2
-            rounded-xl
-            transition
-          "
-        >
-  
-          <div
-            className="
-              w-10
-              h-10
-              rounded-full
-              bg-blue-600
-              text-white
-              flex
-              items-center
-              justify-center
-              font-bold
-            "
-          >
-  
-            {
-              user?.email?.charAt(0)
-            }
-  
-          </div>
-  
-          <div className="text-left">
-  
-            <p className="font-semibold text-gray-800">
-  
-              {user?.email}
-  
-            </p>
-  
-            <p className="text-xs text-gray-500">
-  
-              {
-                user?.roles?.join(", ")
-              }
-  
-            </p>
-  
-          </div>
-  
-        </button>
-  
-  
-        {/* DROPDOWN */}
-        {
-          open && (
-  
-            <div
-              className="
-                absolute
-                right-0
-                mt-3
-                w-60
-                bg-white
-                rounded-2xl
-                shadow-xl
-                border
-                z-50
-                overflow-hidden
-              "
-            >
-  
-              <div className="p-4 border-b">
-  
-                <p className="font-semibold">
-  
-                  {user?.email}
-  
-                </p>
-  
-                <p className="text-sm text-gray-500">
-  
-                  {
-                    user?.roles?.join(", ")
-                  }
-  
-                </p>
-  
-              </div>
-  
-              <button
-                className="
-                  w-full
-                  text-left
-                  px-4
-                  py-3
-                  hover:bg-gray-100
-                "
-              >
-  
-                Profile
-  
-              </button>
-  
-              <button
-                className="
-                  w-full
-                  text-left
-                  px-4
-                  py-3
-                  hover:bg-gray-100
-                "
-              >
-  
-                Settings
-  
-              </button>
-  
-              <button
-  
-                onClick={logout}
-  
-                className="
-                  w-full
-                  text-left
-                  px-4
-                  py-3
-                  hover:bg-red-50
-                  text-red-600
-                "
-              >
-  
-                Logout
-  
-              </button>
-  
-            </div>
-          )
-        }
-  
-      </div>
-    );
-  };
-  
-  export default UserDropdown;
-==================================================
 FILE: ./src/dashboard/shared/components/StatCard.jsx
 ==================================================
 const StatCard = ({ title, value }) => {
@@ -42370,7 +42199,7 @@ import LoginPage from "../dashboard/modules/accounts/auth/pages/LoginPage";
 // =====================================
 
 import DashboardLayout
-from "../dashboard/layouts/DashboardLayout";
+from "../dashboard/modules/home/layouts/DashboardLayout";
 
 import moduleRoutes
 from "../dashboard/modules/moduleRoutes";

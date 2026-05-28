@@ -3,7 +3,7 @@
 // File: subjectService.js
 // ============================================
 
-import api from "../../../../../utils/api";
+import api from "../../../../../services/api/axios";
 
 // ============================================
 // GET ALL SUBJECTS

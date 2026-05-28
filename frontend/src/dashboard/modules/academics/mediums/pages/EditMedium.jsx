@@ -15,9 +15,9 @@ import {
 
 import toast from "react-hot-toast";
 
-import MediumForm from "./MediumForm";
+import MediumForm from "../components/MediumForm";
 
-import mediumService from "./mediumService";
+import mediumService from "../services/mediumService";
 
 const EditMedium = () => {
 

@@ -15,9 +15,9 @@ import {
 
 import toast from "react-hot-toast";
 
-import ClassroomForm from "./ClassroomForm";
+import ClassroomForm from "../components/ClassroomForm";
 
-import classroomService from "./classroomService";
+import classroomService from "../services/classroomService";
 
 
 

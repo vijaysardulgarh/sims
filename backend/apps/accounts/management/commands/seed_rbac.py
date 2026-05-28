@@ -48,85 +48,85 @@ RBAC_CONFIG = {
             {
                 "name": "Subjects",
                 "slug": "subjects",
-                "path": "/dashboard/subjects",
+                "path": "/dashboard/academics/subjects",
             },
 
             {
                 "name": "Class Subjects",
                 "slug": "class-subjects",
-                "path": "/dashboard/class-subjects",
+                "path": "/dashboard/academicsclass-subjects",
             },
 
             {
                 "name": "Teacher Subject Assignments",
                 "slug": "teacher-subject-assignments",
-                "path": "/dashboard/teacher-subject-assignments",
+                "path": "/dashboard/academics/teacher-subject-assignments",
             },
 
             {
                 "name": "Classes",
                 "slug": "classes",
-                "path": "/dashboard/classes",
+                "path": "/dashboard/academics/classes",
             },
 
             {
                 "name": "Sections",
                 "slug": "sections",
-                "path": "/dashboard/sections",
+                "path": "/dashboard/academics/sections",
             },
 
             {
                 "name": "Streams",
                 "slug": "streams",
-                "path": "/dashboard/streams",
+                "path": "/dashboard/academics/streams",
             },
 
             {
                 "name": "Mediums",
                 "slug": "mediums",
-                "path": "/dashboard/mediums",
+                "path": "/dashboard/academics/mediums",
             },
 
             {
                 "name": "Classrooms",
                 "slug": "classrooms",
-                "path": "/dashboard/classrooms",
+                "path": "/dashboard/academics/classrooms",
             },
 
             {
                 "name": "Timetables",
                 "slug": "timetables",
-                "path": "/dashboard/timetables",
+                "path": "/dashboard/academics/timetables",
             },
 
             {
                 "name": "Timetable Slots",
                 "slug": "timetable-slots",
-                "path": "/dashboard/timetable-slots",
+                "path": "/dashboard/academics/timetable-slots",
             },
 
             {
                 "name": "Timetable Generator",
                 "slug": "timetable-generator",
-                "path": "/dashboard/timetable-generator",
+                "path": "/dashboard/academics/timetable-generator",
             },
 
             {
                 "name": "Timetable Drag Drop",
                 "slug": "timetable-drag-drop",
-                "path": "/dashboard/timetable-drag-drop",
+                "path": "/dashboard/academics/timetable-drag-drop",
             },
 
             {
                 "name": "Days",
                 "slug": "days",
-                "path": "/dashboard/days",
+                "path": "/dashboard/academics/days",
             },
 
             {
                 "name": "Academic Reports",
                 "slug": "academic-reports",
-                "path": "/dashboard/academic-reports",
+                "path": "/dashboard/academics/academic-reports",
             },
         ]
     },
@@ -144,49 +144,49 @@ RBAC_CONFIG = {
             {
                 "name": "Users",
                 "slug": "users",
-                "path": "/dashboard/users",
+                "path": "/dashboard/accounts/users",
             },
 
             {
                 "name": "Roles",
                 "slug": "roles",
-                "path": "/dashboard/roles",
+                "path": "/dashboard/accounts/roles",
             },
 
             {
                 "name": "Permissions",
                 "slug": "permissions",
-                "path": "/dashboard/permissions",
+                "path": "/dashboard/accounts/permissions",
             },
 
             {
                 "name": "User Roles",
                 "slug": "user-roles",
-                "path": "/dashboard/user-roles",
+                "path": "/dashboard/accounts/user-roles",
             },
 
             {
                 "name": "Role Permissions",
                 "slug": "role-permissions",
-                "path": "/dashboard/role-permissions",
+                "path": "/dashboard/accounts/role-permissions",
             },
 
             {
                 "name": "User Permissions",
                 "slug": "user-permissions",
-                "path": "/dashboard/user-permissions",
+                "path": "/dashboard/accounts/user-permissions",
             },
 
             {
                 "name": "Modules",
                 "slug": "modules",
-                "path": "/dashboard/modules",
+                "path": "/dashboard/accounts/modules",
             },
 
             {
                 "name": "Reports",
                 "slug": "account-reports",
-                "path": "/dashboard/account-reports",
+                "path": "/dashboard/accounts/account-reports",
             },
         ]
     },
@@ -204,55 +204,55 @@ RBAC_CONFIG = {
             {
                 "name": "Associations",
                 "slug": "associations",
-                "path": "/dashboard/associations",
+                "path": "/dashboard/associations/associations",
             },
 
             {
                 "name": "Association Roles",
                 "slug": "association-roles",
-                "path": "/dashboard/association-roles",
+                "path": "/dashboard/associations/association-roles",
             },
 
             {
                 "name": "Association Members",
                 "slug": "association-members",
-                "path": "/dashboard/association-members",
+                "path": "/dashboard/associations/association-members",
             },
 
             {
                 "name": "Association Meetings",
                 "slug": "association-meetings",
-                "path": "/dashboard/association-meetings",
+                "path": "/dashboard/associations/association-meetings",
             },
 
             {
                 "name": "Extracurricular Activities",
                 "slug": "extracurricular-activities",
-                "path": "/dashboard/extracurricular-activities",
+                "path": "/dashboard/associations/extracurricular-activities",
             },
 
             {
                 "name": "SMC Members",
                 "slug": "smc-members",
-                "path": "/dashboard/smc-members",
+                "path": "/dashboard/associations/smc-members",
             },
 
             {
                 "name": "Staff Association Role Assignments",
                 "slug": "staff-association-role-assignments",
-                "path": "/dashboard/staff-association-role-assignments",
+                "path": "/dashboard/associations/staff-association-role-assignments",
             },
 
             {
                 "name": "Student Association Role Assignments",
                 "slug": "student-association-role-assignments",
-                "path": "/dashboard/student-association-role-assignments",
+                "path": "/dashboard/associations/student-association-role-assignments",
             },
 
             {
                 "name": "Reports",
                 "slug": "association-reports",
-                "path": "/dashboard/association-reports",
+                "path": "/dashboard/associations/association-reports",
             },
         ]
     },
@@ -300,37 +300,37 @@ RBAC_CONFIG = {
             {
                 "name": "Exam",
                 "slug": "exam",
-                "path": "/dashboard/exam",
+                "path": "/dashboard/exams/exam",
             },
 
             {
                 "name": "Notifications",
                 "slug": "notifications",
-                "path": "/dashboard/notifications",
+                "path": "/dashboard/exams/notifications",
             },
 
             {
                 "name": "Online Exams",
                 "slug": "online-exams",
-                "path": "/dashboard/online-exams",
+                "path": "/dashboard/exams/online-exams",
             },
 
             {
                 "name": "Question Banks",
                 "slug": "question-banks",
-                "path": "/dashboard/question-banks",
+                "path": "/dashboard/exams/question-banks",
             },
 
             {
                 "name": "Schedules",
                 "slug": "schedules",
-                "path": "/dashboard/schedules",
+                "path": "/dashboard/exams/schedules",
             },
 
             {
                 "name": "Reports",
                 "slug": "exam-reports",
-                "path": "/dashboard/exam-reports",
+                "path": "/dashboard/exams/exam-reports",
             },
         ]
     },
@@ -348,25 +348,25 @@ RBAC_CONFIG = {
             {
                 "name": "Fees Payments",
                 "slug": "fees-payments",
-                "path": "/dashboard/fees-payments",
+                "path": "/dashboard/finance/fees-payments",
             },
 
             {
                 "name": "Fees Structure",
                 "slug": "fees-structure",
-                "path": "/dashboard/fees-structure",
+                "path": "/dashboard/finance/fees-structure",
             },
 
             {
                 "name": "Student Fees",
                 "slug": "student-fees",
-                "path": "/dashboard/student-fees",
+                "path": "/dashboard/finance/student-fees",
             },
 
             {
                 "name": "Reports",
                 "slug": "finance-reports",
-                "path": "/dashboard/finance-reports",
+                "path": "/dashboard/finance/finance-reports",
             },
         ]
     },
@@ -384,31 +384,31 @@ RBAC_CONFIG = {
             {
                 "name": "Books",
                 "slug": "books",
-                "path": "/dashboard/books",
+                "path": "/dashboard/library/books",
             },
 
             {
                 "name": "Book Issues",
                 "slug": "book-issues",
-                "path": "/dashboard/book-issues",
+                "path": "/dashboard/library/book-issues",
             },
 
             {
                 "name": "Book Categories",
                 "slug": "book-categories",
-                "path": "/dashboard/book-categories",
+                "path": "/dashboard/library/book-categories",
             },
 
             {
                 "name": "Accessions",
                 "slug": "accessions",
-                "path": "/dashboard/accessions",
+                "path": "/dashboard/library/accessions",
             },
 
             {
                 "name": "Reports",
                 "slug": "library-reports",
-                "path": "/dashboard/library-reports",
+                "path": "/dashboard/library/library-reports",
             },
         ]
     },
@@ -418,8 +418,9 @@ RBAC_CONFIG = {
     # ======================================
 
     "schools": {
-
-        "path": None,
+        "name": "School",
+        "slug": "school-dashbaord",
+        "path": "/dashboard/schools",
 
         "children": [
 
@@ -456,19 +457,19 @@ RBAC_CONFIG = {
             {
                 "name": "Cluster Schools",
                 "slug": "cluster-schools",
-                "path": "/dashboard/cluster-schools",
+                "path": "/dashboard/cluster/cluster-schools",
             },
 
             {
                 "name": "Cluster Staff",
                 "slug": "cluster-staff",
-                "path": "/dashboard/cluster-staff",
+                "path": "/dashboard/cluster/cluster-staff",
             },
 
             {
                 "name": "Cluster Reports",
                 "slug": "cluster-reports",
-                "path": "/dashboard/cluster-reports",
+                "path": "/dashboard/cluster/cluster-reports",
             },
         ]
     },
@@ -486,25 +487,25 @@ RBAC_CONFIG = {
             {
                 "name": "Staff Profiles",
                 "slug": "staff-profiles",
-                "path": "/dashboard/staff-profiles",
+                "path": "/dashboard/staff/staff-profiles",
             },
 
             {
                 "name": "Post Types",
                 "slug": "post-types",
-                "path": "/dashboard/post-types",
+                "path": "/dashboard/staff/post-types",
             },
 
             {
                 "name": "Sanctioned Posts",
                 "slug": "sanctioned-posts",
-                "path": "/dashboard/sanctioned-posts",
+                "path": "/dashboard/staff/sanctioned-posts",
             },
 
             {
                 "name": "Class Incharge",
                 "slug": "class-incharge",
-                "path": "/dashboard/class-incharge",
+                "path": "/dashboard/staff/class-incharge",
             },
 
             {
@@ -534,25 +535,25 @@ RBAC_CONFIG = {
             {
                 "name": "Student Profiles",
                 "slug": "student-profiles",
-                "path": "/dashboard/student-profiles",
+                "path": "/dashboard/students/student-profiles",
             },
 
             {
                 "name": "Student Achievements",
                 "slug": "student-achievements",
-                "path": "/dashboard/student-achievements",
+                "path": "/dashboard/students/student-achievements",
             },
 
             {
                 "name": "Student Achievers",
                 "slug": "student-achievers",
-                "path": "/dashboard/student-achievers",
+                "path": "/dashboard/students/student-achievers",
             },
 
             {
                 "name": "Student Reports",
                 "slug": "student-reports",
-                "path": "/dashboard/student-reports",
+                "path": "/dashboard/students/student-reports",
             },
         ]
     },
@@ -570,19 +571,19 @@ RBAC_CONFIG = {
             {
                 "name": "Vehicles",
                 "slug": "vehicles",
-                "path": "/dashboard/vehicles",
+                "path": "/dashboard/transport/vehicles",
             },
 
             {
                 "name": "Routes",
                 "slug": "routes",
-                "path": "/dashboard/routes",
+                "path": "/dashboard/transport/routes",
             },
 
             {
                 "name": "Drivers",
                 "slug": "drivers",
-                "path": "/dashboard/drivers",
+                "path": "/dashboard/transport/drivers",
             },
 
             {
@@ -612,25 +613,25 @@ RBAC_CONFIG = {
             {
                 "name": "Pages",
                 "slug": "pages",
-                "path": "/dashboard/pages",
+                "path": "/dashboard/website/pages",
             },
 
             {
                 "name": "Banners",
                 "slug": "banners",
-                "path": "/dashboard/banners",
+                "path": "/dashboard/website/banners",
             },
 
             {
                 "name": "News",
                 "slug": "news",
-                "path": "/dashboard/news",
+                "path": "/dashboard/website/news",
             },
 
             {
                 "name": "Gallery",
                 "slug": "gallery",
-                "path": "/dashboard/gallery",
+                "path": "/dashboard/website/gallery",
             },
         ]
     },
