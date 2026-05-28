@@ -1,10 +1,10 @@
 # =============================================================================
-# associations/urls.py
+# apps/associations/urls.py
 # =============================================================================
 
 from django.urls import (
+    include,
     path,
-    include
 )
 
 urlpatterns = [
@@ -14,8 +14,12 @@ urlpatterns = [
     # =========================================================================
 
     path(
+
         "associations/",
-        include("apps.associations.associations.urls")
+
+        include(
+            "apps.associations.associations.urls"
+        )
     ),
 
     # =========================================================================
@@ -23,27 +27,35 @@ urlpatterns = [
     # =========================================================================
 
     path(
+
         "association-roles/",
-        include("apps.associations.association_roles.urls")
+
+        include(
+            "apps.associations.association_roles.urls"
+        )
     ),
 
     # =========================================================================
-    # STAFF ROLE ASSIGNMENTS
+    # STAFF ASSOCIATION ROLE ASSIGNMENTS
     # =========================================================================
 
     path(
+
         "staff-role-assignments/",
+
         include(
             "apps.associations.staff_association_role_assignments.urls"
         )
     ),
 
     # =========================================================================
-    # STUDENT ROLE ASSIGNMENTS
+    # STUDENT ASSOCIATION ROLE ASSIGNMENTS
     # =========================================================================
 
     path(
+
         "student-role-assignments/",
+
         include(
             "apps.associations.student_association_role_assignments.urls"
         )
@@ -54,7 +66,9 @@ urlpatterns = [
     # =========================================================================
 
     path(
+
         "association-members/",
+
         include(
             "apps.associations.association_members.urls"
         )
@@ -65,18 +79,22 @@ urlpatterns = [
     # =========================================================================
 
     path(
+
         "association-meetings/",
+
         include(
             "apps.associations.association_meetings.urls"
         )
     ),
 
     # =========================================================================
-    # SMC MEMBERS
+    # SCHOOL MANAGEMENT COMMITTEE MEMBERS
     # =========================================================================
 
     path(
+
         "smc-members/",
+
         include(
             "apps.associations.smc_members.urls"
         )
@@ -87,10 +105,11 @@ urlpatterns = [
     # =========================================================================
 
     path(
+
         "extracurricular-activities/",
+
         include(
             "apps.associations.extracurricular_activities.urls"
         )
     ),
-
 ]

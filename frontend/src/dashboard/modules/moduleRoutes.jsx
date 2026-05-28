@@ -27,6 +27,7 @@ import studentsRoutes from "./students/routes/studentsRoutes";
 // import transportRoutes from "./transport/routes/transportRoutes";
 import schoolRoutes from "./schools/routes/schoolRoutes";
 import clusterRoutes from "./cluster/routes/clusterRoutes";
+import associationModuleRoutes from "./associations/routes/associationModuleRoutes";
 
 // =====================================
 // ROUTES
@@ -64,6 +65,7 @@ const moduleRoutes = (
     {transportRoutes} */}
     {schoolRoutes}
     {clusterRoutes}
+    {associationModuleRoutes}
 
   </>
 );

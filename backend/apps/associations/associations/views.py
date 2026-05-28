@@ -4,84 +4,107 @@
 
 from django.shortcuts import get_object_or_404
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import (
+    IsAuthenticated
+)
 
-from apps.associations.associations.models import Association
+from apps.associations.associations.models import (
+    Association
+)
+
+from apps.associations.associations.serializers import (
+    AssociationSerializer
+)
+
 from apps.core.common.views import BaseAPIView
 
 
-class AssociationListAPIView(BaseAPIView):
+# =============================================================================
+# ASSOCIATION LIST
+# =============================================================================
 
-    permission_classes = [IsAuthenticated]
+class AssociationListAPIView(
+    BaseAPIView
+):
 
-    def get(self, request):
+    permission_classes = [
+        IsAuthenticated
+    ]
 
-        school = getattr(request, "school", None)
+    # =========================================================================
+    # QUERYSET
+    # =========================================================================
+
+    def get_queryset(self):
+
+        school = getattr(
+            self.request,
+            "school",
+            None
+        )
 
         academic_session = getattr(
-            request,
+            self.request,
             "academic_session",
             None
         )
 
-        queryset = (
+        return (
 
             Association.objects.filter(
+
                 school=school,
+
                 academic_session=academic_session,
+
                 is_active=True,
                 is_deleted=False,
             )
 
             .select_related(
-                "chairperson",
+                "school",
                 "academic_session",
+                "chairperson",
+            )
+
+            .prefetch_related(
+                "documents"
             )
 
             .order_by(
-                "priority",
+                "-priority",
                 "name"
             )
         )
 
-        data = []
+    # =========================================================================
+    # LIST
+    # =========================================================================
 
-        for association in queryset:
+    def get(self, request):
 
-            data.append({
+        queryset = self.get_queryset()
 
-                "id":
-                    association.id,
+        serializer = AssociationSerializer(
+            queryset,
+            many=True
+        )
 
-                "name":
-                    association.name,
+        return self.success_response(
+            data=serializer.data
+        )
 
-                "association_type":
-                    association.association_type,
+    # =========================================================================
+    # CREATE
+    # =========================================================================
 
-                "chairperson":
+    def post(self, request):
 
-                    association.chairperson.name
-                    if association.chairperson
-                    else None,
-
-                "status":
-                    association.status,
-
-                "slug":
-                    association.slug,
-            })
-
-        return self.success_response(data=data)
-
-
-class CommitteeDetailAPIView(BaseAPIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, pk):
-
-        school = getattr(request, "school", None)
+        school = getattr(
+            request,
+            "school",
+            None
+        )
 
         academic_session = getattr(
             request,
@@ -89,20 +112,104 @@ class CommitteeDetailAPIView(BaseAPIView):
             None
         )
 
-        committee = get_object_or_404(
+        data = request.data.copy()
+
+        if school:
+
+            data["school"] = school.id
+
+        if academic_session:
+
+            data["academic_session"] = (
+                academic_session.id
+            )
+
+        serializer = AssociationSerializer(
+            data=data
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return self.success_response(
+
+                data=serializer.data,
+
+                message=(
+                    "Association created successfully"
+                )
+            )
+
+        return self.error_response(
+            errors=serializer.errors
+        )
+
+
+# =============================================================================
+# COMMITTEE DETAIL
+# =============================================================================
+
+class CommitteeDetailAPIView(
+    BaseAPIView
+):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    # =========================================================================
+    # QUERYSET
+    # =========================================================================
+
+    def get_queryset(self):
+
+        school = getattr(
+            self.request,
+            "school",
+            None
+        )
+
+        academic_session = getattr(
+            self.request,
+            "academic_session",
+            None
+        )
+
+        return (
 
             Association.objects.filter(
+
                 school=school,
+
                 academic_session=academic_session,
+
                 association_type="Committee",
+
                 is_active=True,
                 is_deleted=False,
             )
 
-            .prefetch_related(
-                "roles__assigned_staff__staff"
-            ),
+            .select_related(
+                "school",
+                "academic_session",
+                "chairperson",
+            )
 
+            .prefetch_related(
+                "documents",
+                "roles__assigned_staff__staff"
+            )
+        )
+
+    # =========================================================================
+    # DETAIL
+    # =========================================================================
+
+    def get(self, request, pk):
+
+        committee = get_object_or_404(
+            self.get_queryset(),
             pk=pk
         )
 
@@ -122,7 +229,7 @@ class CommitteeDetailAPIView(BaseAPIView):
                         assignment.staff.id,
 
                     "name":
-                        assignment.staff.name,
+                        str(assignment.staff),
                 })
 
             roles.append({
@@ -146,6 +253,24 @@ class CommitteeDetailAPIView(BaseAPIView):
 
                 "association_type":
                     committee.association_type,
+
+                "status":
+                    committee.status,
+
+                "slug":
+                    committee.slug,
+
+                "description":
+                    committee.description,
+
+                "tasks":
+                    committee.tasks,
+
+                "chairperson":
+
+                    str(committee.chairperson)
+                    if committee.chairperson
+                    else None,
 
                 "roles":
                     roles,
