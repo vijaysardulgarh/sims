@@ -1,3 +1,3 @@
-from apps.academics.structure.sessions.models import (
+from apps.academics.sessions.models import (
     AcademicSession
 )

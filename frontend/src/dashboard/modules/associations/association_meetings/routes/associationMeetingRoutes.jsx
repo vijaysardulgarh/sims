@@ -1,28 +1,46 @@
 // ============================================
-// ASSOCIATION MEETINGS
+// IMPORTS
 // ============================================
 
-const associationMeetingRoutes = [
+import { Route } from 'react-router-dom';
 
-    {
-        path: 'associations/association-meetings',
-        element: <AssociationMeetingListPage />,
-    },
+import AssociationMeetingListPage from '../pages/AssociationMeetingListPage';
 
-    {
-        path: 'associations/association-meetings/create',
-        element: <AssociationMeetingCreatePage />,
-    },
+import AssociationMeetingCreatePage from '../pages/AssociationMeetingCreatePage';
 
-    {
-        path: 'associations/association-meetings/edit/:id',
-        element: <AssociationMeetingEditPage />,
-    },
+import AssociationMeetingEditPage from '../pages/AssociationMeetingEditPage';
 
-    {
-        path: 'associations/association-meetings/:id',
-        element: <AssociationMeetingDetailPage />,
-    },
-];
+import AssociationMeetingDetailPage from '../pages/AssociationMeetingDetailPage';
+
+// ============================================
+// ROUTES
+// ============================================
+
+const associationMeetingRoutes = (
+
+    <>
+
+        <Route
+            path="associations/association-meetings"
+            element={<AssociationMeetingListPage />}
+        />
+
+        <Route
+            path="associations/association-meetings/create"
+            element={<AssociationMeetingCreatePage />}
+        />
+
+        <Route
+            path="associations/association-meetings/edit/:id"
+            element={<AssociationMeetingEditPage />}
+        />
+
+        <Route
+            path="associations/association-meetings/:id"
+            element={<AssociationMeetingDetailPage />}
+        />
+
+    </>
+);
 
 export default associationMeetingRoutes;

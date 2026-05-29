@@ -101,6 +101,10 @@ INSTALLED_APPS = [
     "apps.exams",
     
     "apps.transport",
+
+    "apps.timetables",
+    
+    "apps.infrastructure",
 ]
 
 

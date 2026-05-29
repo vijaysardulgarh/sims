@@ -1,28 +1,35 @@
-// ============================================
-// ASSOCIATION MEMBERS
-// ============================================
+import { Route } from 'react-router-dom';
 
-const associationMemberRoutes = [
+import AssociationMemberListPage from '../pages/AssociationMemberListPage';
+import AssociationMemberCreatePage from '../pages/AssociationMemberCreatePage';
+import AssociationMemberEditPage from '../pages/AssociationMemberEditPage';
+import AssociationMemberDetailPage from '../pages/AssociationMemberDetailPage';
 
-    {
-        path: 'associations/association-members',
-        element: <AssociationMemberListPage />,
-    },
+const associationMemberRoutes = (
 
-    {
-        path: 'associations/association-members/create',
-        element: <AssociationMemberCreatePage />,
-    },
+    <>
 
-    {
-        path: 'associations/association-members/edit/:id',
-        element: <AssociationMemberEditPage />,
-    },
+        <Route
+            path="associations/association_members"
+            element={<AssociationMemberListPage />}
+        />
 
-    {
-        path: 'associations/association-members/:id',
-        element: <AssociationMemberDetailPage />,
-    },
-];
+        <Route
+            path="associations/association_members/create"
+            element={<AssociationMemberCreatePage />}
+        />
+
+        <Route
+            path="associations/association_members/:id"
+            element={<AssociationMemberDetailPage />}
+        />
+
+        <Route
+            path="associations/association_members/edit/:id"
+            element={<AssociationMemberEditPage />}
+        />
+
+    </>
+);
 
 export default associationMemberRoutes;

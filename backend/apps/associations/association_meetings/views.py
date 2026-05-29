@@ -2,22 +2,44 @@
 # associations/views/association_meeting_views.py
 # =============================================================================
 
-from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+
+from rest_framework.permissions import (
+    IsAuthenticated
+)
 
 from apps.associations.association_meetings.models import (
     AssociationMeeting
 )
 
-from apps.core.common.views import BaseAPIView
+from apps.associations.association_meetings.serializers import (
+    AssociationMeetingSerializer
+)
+
+from apps.core.common.views import (
+    BaseAPIView
+)
 
 
-class AssociationMeetingAPIView(BaseAPIView):
+# =============================================================================
+# LIST + CREATE
+# =============================================================================
 
-    permission_classes = [IsAuthenticated]
+class AssociationMeetingAPIView(
+    BaseAPIView
+):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
 
     def get(self, request):
 
-        school = getattr(request, "school", None)
+        school = getattr(
+            request,
+            "school",
+            None
+        )
 
         academic_session = getattr(
             request,
@@ -39,29 +61,120 @@ class AssociationMeetingAPIView(BaseAPIView):
                 "minutes_document",
             )
 
-            .order_by("-meeting_date")
+            .order_by(
+                "-meeting_date"
+            )
         )
 
-        data = []
+        serializer = (
+            AssociationMeetingSerializer(
+                meetings,
+                many=True
+            )
+        )
 
-        for meeting in meetings:
+        return self.success_response(
+            data=serializer.data
+        )
 
-            data.append({
+    def post(self, request):
 
-                "id":
-                    meeting.id,
+        serializer = (
+            AssociationMeetingSerializer(
+                data=request.data
+            )
+        )
 
-                "association":
-                    meeting.association.name,
+        if serializer.is_valid():
 
-                "meeting_date":
-                    meeting.meeting_date,
+            serializer.save()
 
-                "location":
-                    meeting.location,
+            return self.success_response(
+                data=serializer.data,
+                message=(
+                    "Association Meeting created successfully"
+                )
+            )
 
-                "agenda":
-                    meeting.agenda,
-            })
+        return self.error_response(
+            errors=serializer.errors
+        )
 
-        return self.success_response(data=data)
+
+# =============================================================================
+# DETAIL + UPDATE + DELETE
+# =============================================================================
+
+class AssociationMeetingDetailAPIView(
+    BaseAPIView
+):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+    def get(self, request, pk):
+
+        meeting = get_object_or_404(
+            AssociationMeeting,
+            pk=pk,
+            is_deleted=False,
+        )
+
+        serializer = (
+            AssociationMeetingSerializer(
+                meeting
+            )
+        )
+
+        return self.success_response(
+            data=serializer.data
+        )
+
+    def put(self, request, pk):
+
+        meeting = get_object_or_404(
+            AssociationMeeting,
+            pk=pk,
+            is_deleted=False,
+        )
+
+        serializer = (
+            AssociationMeetingSerializer(
+                meeting,
+                data=request.data,
+                partial=True
+            )
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return self.success_response(
+                data=serializer.data,
+                message=(
+                    "Association Meeting updated successfully"
+                )
+            )
+
+        return self.error_response(
+            errors=serializer.errors
+        )
+
+    def delete(self, request, pk):
+
+        meeting = get_object_or_404(
+            AssociationMeeting,
+            pk=pk,
+            is_deleted=False,
+        )
+
+        meeting.is_deleted = True
+        meeting.save()
+
+        return self.success_response(
+            message=(
+                "Association Meeting deleted successfully"
+            )
+        )

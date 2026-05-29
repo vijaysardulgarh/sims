@@ -2,7 +2,7 @@ from collections import (
     defaultdict
 )
 
-from apps.academics.curriculum.class_subjects import (
+from apps.timetables.class_subjects import (
     ClassSubject
 )
 

@@ -12,7 +12,7 @@ from apps.students.profiles.models import (
     Student
 )
 
-from apps.academics.curriculum.subjects.models import (
+from apps.timetables.subjects.models import (
     Subject
 )
 

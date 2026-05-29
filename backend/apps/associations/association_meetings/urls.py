@@ -5,10 +5,15 @@
 from django.urls import path
 
 from apps.associations.association_meetings.views import (
-    AssociationMeetingAPIView
+    AssociationMeetingAPIView,
+    AssociationMeetingDetailAPIView,
 )
 
 urlpatterns = [
+
+    # =========================================================================
+    # LIST + CREATE
+    # =========================================================================
 
     path(
 
@@ -17,5 +22,18 @@ urlpatterns = [
         AssociationMeetingAPIView.as_view(),
 
         name="association-meeting-list"
+    ),
+
+    # =========================================================================
+    # DETAIL + UPDATE + DELETE
+    # =========================================================================
+
+    path(
+
+        "<int:pk>/",
+
+        AssociationMeetingDetailAPIView.as_view(),
+
+        name="association-meeting-detail"
     ),
 ]

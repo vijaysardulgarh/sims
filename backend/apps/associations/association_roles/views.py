@@ -24,7 +24,7 @@ from apps.core.common.views import (
 
 
 # =============================================================================
-# ASSOCIATION ROLE LIST
+# ASSOCIATION ROLE LIST + CREATE
 # =============================================================================
 
 class AssociationRoleListAPIView(
@@ -35,10 +35,11 @@ class AssociationRoleListAPIView(
         IsAuthenticated
     ]
 
-    def get(
-        self,
-        request
-    ):
+    # =========================================================================
+    # LIST
+    # =========================================================================
+
+    def get(self, request):
 
         school = getattr(
             request,
@@ -89,9 +90,38 @@ class AssociationRoleListAPIView(
             data=serializer.data
         )
 
+    # =========================================================================
+    # CREATE
+    # =========================================================================
+
+    def post(self, request):
+
+        serializer = (
+            AssociationRoleSerializer(
+                data=request.data
+            )
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return self.success_response(
+
+                data=serializer.data,
+
+                message=(
+                    "Association Role created successfully"
+                )
+            )
+
+        return self.error_response(
+            errors=serializer.errors
+        )
+
 
 # =============================================================================
-# ASSOCIATION ROLE DETAIL
+# ASSOCIATION ROLE DETAIL + UPDATE + DELETE
 # =============================================================================
 
 class AssociationRoleDetailAPIView(
@@ -101,6 +131,10 @@ class AssociationRoleDetailAPIView(
     permission_classes = [
         IsAuthenticated
     ]
+
+    # =========================================================================
+    # DETAIL
+    # =========================================================================
 
     def get(
         self,
@@ -151,4 +185,81 @@ class AssociationRoleDetailAPIView(
 
         return self.success_response(
             data=serializer.data
+        )
+
+    # =========================================================================
+    # UPDATE
+    # =========================================================================
+
+    def put(
+        self,
+        request,
+        pk
+    ):
+
+        association_role = get_object_or_404(
+
+            AssociationRole,
+
+            pk=pk,
+
+            is_deleted=False
+        )
+
+        serializer = (
+            AssociationRoleSerializer(
+
+                association_role,
+
+                data=request.data,
+
+                partial=True
+            )
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return self.success_response(
+
+                data=serializer.data,
+
+                message=(
+                    "Association Role updated successfully"
+                )
+            )
+
+        return self.error_response(
+            errors=serializer.errors
+        )
+
+    # =========================================================================
+    # DELETE
+    # =========================================================================
+
+    def delete(
+        self,
+        request,
+        pk
+    ):
+
+        association_role = get_object_or_404(
+
+            AssociationRole,
+
+            pk=pk,
+
+            is_deleted=False
+        )
+
+        association_role.is_deleted = True
+
+        association_role.save()
+
+        return self.success_response(
+
+            message=(
+                "Association Role deleted successfully"
+            )
         )

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from collections import defaultdict
 
-from apps.academics.curriculum.class_subjects.models import (
+from apps.timetables.class_subjects.models import (
     ClassSubject
 )
 

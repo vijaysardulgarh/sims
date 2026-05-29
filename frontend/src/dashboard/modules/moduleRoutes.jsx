@@ -64,6 +64,7 @@ const moduleRoutes = (
     {/* {timetableRoutes}
     {transportRoutes} */}
     {schoolRoutes}
+    
     {clusterRoutes}
     {associationModuleRoutes}
 
