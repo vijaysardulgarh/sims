@@ -12,3 +12,12 @@ from apps.academics.structure.streams.admin import (
 from apps.academics.curriculum.subjects.admin import (
     SubjectAdmin
 )
+from apps.academics.structure.mediums.admin import (
+    MediumAdmin
+)
+from apps.academics.structure.classrooms.admin import (
+    ClassroomAdmin
+)
+from apps.academics.structure.sessions.admin import (
+    AcademicSessionAdmin
+)

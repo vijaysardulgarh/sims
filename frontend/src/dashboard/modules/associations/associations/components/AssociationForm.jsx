@@ -2,7 +2,10 @@
 // IMPORTS
 // ============================================
 
-import { useState } from 'react';
+import {
+    useState,
+    useEffect
+} from 'react';
 
 // ============================================
 // COMPONENT
@@ -14,29 +17,62 @@ const AssociationForm = ({
     loading,
 }) => {
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] =
+        useState({
 
-        name:
-            initialData.name || '',
+            name: '',
 
-        association_type:
-            initialData.association_type || 'Club',
+            association_type: 'Club',
 
-        status:
-            initialData.status || 'Active',
+            status: 'Active',
 
-        description:
-            initialData.description || '',
+            description: '',
 
-        tasks:
-            initialData.tasks || '',
+            tasks: '',
 
-        priority:
-            initialData.priority || 0,
+            priority: 0,
 
-        show_on_website:
-            initialData.show_on_website ?? true,
-    });
+            show_on_website: true,
+        });
+
+    // ========================================
+    // LOAD INITIAL DATA
+    // ========================================
+
+    useEffect(() => {
+
+        if (
+            initialData &&
+            Object.keys(initialData).length > 0
+        ) {
+
+            setFormData({
+
+                name:
+                    initialData.name || '',
+
+                association_type:
+                    initialData.association_type || 'Club',
+
+                status:
+                    initialData.status || 'Active',
+
+                description:
+                    initialData.description || '',
+
+                tasks:
+                    initialData.tasks || '',
+
+                priority:
+                    initialData.priority || 0,
+
+                show_on_website:
+                    initialData.show_on_website ?? true,
+            });
+
+        }
+
+    }, [initialData]);
 
     // ========================================
     // HANDLE CHANGE
@@ -52,13 +88,16 @@ const AssociationForm = ({
         } = e.target;
 
         setFormData((prev) => ({
+
             ...prev,
 
             [name]:
                 type === 'checkbox'
                     ? checked
                     : value,
+
         }));
+
     };
 
     // ========================================
@@ -70,7 +109,12 @@ const AssociationForm = ({
         e.preventDefault();
 
         onSubmit(formData);
+
     };
+
+    // ========================================
+    // UI
+    // ========================================
 
     return (
 
@@ -93,6 +137,7 @@ const AssociationForm = ({
                     className="w-full border rounded-xl p-3"
                     required
                 />
+
             </div>
 
             <div>
@@ -119,7 +164,9 @@ const AssociationForm = ({
                     <option value="Nodal">
                         Nodal
                     </option>
+
                 </select>
+
             </div>
 
             <div>
@@ -146,7 +193,9 @@ const AssociationForm = ({
                     <option value="Archived">
                         Archived
                     </option>
+
                 </select>
+
             </div>
 
             <div>
@@ -162,6 +211,7 @@ const AssociationForm = ({
                     rows={4}
                     className="w-full border rounded-xl p-3"
                 />
+
             </div>
 
             <div>
@@ -177,6 +227,7 @@ const AssociationForm = ({
                     rows={4}
                     className="w-full border rounded-xl p-3"
                 />
+
             </div>
 
             <div>
@@ -192,6 +243,7 @@ const AssociationForm = ({
                     onChange={handleChange}
                     className="w-full border rounded-xl p-3"
                 />
+
             </div>
 
             <div className="flex items-center gap-3">
@@ -206,12 +258,19 @@ const AssociationForm = ({
                 <label>
                     Show on Website
                 </label>
+
             </div>
 
             <button
                 type="submit"
                 disabled={loading}
-                className="bg-black text-white px-6 py-3 rounded-xl"
+                className="
+                    bg-black
+                    text-white
+                    px-6
+                    py-3
+                    rounded-xl
+                "
             >
 
                 {
@@ -219,9 +278,13 @@ const AssociationForm = ({
                         ? 'Saving...'
                         : 'Save Association'
                 }
+
             </button>
+
         </form>
+
     );
+
 };
 
 export default AssociationForm;

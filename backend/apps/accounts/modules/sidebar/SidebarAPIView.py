@@ -44,8 +44,6 @@ class SidebarAPIView(
 
         user = request.user
 
-        print("USER:", user)
-
         # ==================================
         # USER ROLES
         # ==================================
@@ -61,22 +59,12 @@ class SidebarAPIView(
             "role"
         )
 
-        print(
-            "USER ROLES:",
-            user_roles
-        )
-
         roles = [
 
             user_role.role
 
             for user_role in user_roles
         ]
-
-        print(
-            "ROLES:",
-            roles
-        )
 
         if not roles:
 
@@ -105,11 +93,6 @@ class SidebarAPIView(
             )
         )
 
-        print(
-            "ROLE PERMISSIONS:",
-            role_permissions
-        )
-
         # ==================================
         # MODULE IDS
         # ==================================
@@ -125,11 +108,6 @@ class SidebarAPIView(
                     flat=True
                 )
             )
-        )
-
-        print(
-            "MODULE IDS:",
-            module_ids
         )
 
         # ==================================
@@ -159,22 +137,12 @@ class SidebarAPIView(
             "name"
         )
 
-        print(
-            "MODULES:",
-            modules
-        )
-
         # ==================================
         # PARENT MODULES
         # ==================================
 
         parent_modules = modules.filter(
             parent__isnull=True
-        )
-
-        print(
-            "PARENT MODULES:",
-            parent_modules
         )
 
         sidebar_data = []
@@ -187,11 +155,6 @@ class SidebarAPIView(
 
             children = modules.filter(
                 parent_id=parent.id
-            )
-
-            print(
-                f"CHILDREN OF {parent.name}:",
-                children
             )
 
             sidebar_data.append({
@@ -224,11 +187,6 @@ class SidebarAPIView(
                     for child in children
                 ]
             })
-
-        print(
-            "SIDEBAR DATA:",
-            sidebar_data
-        )
 
         return Response(
             sidebar_data

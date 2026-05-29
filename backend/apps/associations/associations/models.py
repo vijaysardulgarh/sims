@@ -12,10 +12,6 @@ from apps.core.common.base.models import SessionBaseModel
 
 class Association(SessionBaseModel):
 
-    # ============================================
-    # CONSTANTS
-    # ============================================
-
     TYPE_CLUB = "Club"
     TYPE_COMMITTEE = "Committee"
     TYPE_NODAL = "Nodal"
@@ -23,10 +19,6 @@ class Association(SessionBaseModel):
     STATUS_ACTIVE = "Active"
     STATUS_INACTIVE = "Inactive"
     STATUS_ARCHIVED = "Archived"
-
-    # ============================================
-    # CHOICES
-    # ============================================
 
     TYPE_CHOICES = [
         (TYPE_CLUB, "Club"),
@@ -39,10 +31,6 @@ class Association(SessionBaseModel):
         (STATUS_INACTIVE, "Inactive"),
         (STATUS_ARCHIVED, "Archived"),
     ]
-
-    # ============================================
-    # BASIC INFORMATION
-    # ============================================
 
     name = models.CharField(
         max_length=255,
@@ -62,10 +50,6 @@ class Association(SessionBaseModel):
         db_index=True
     )
 
-    # ============================================
-    # RELATIONS
-    # ============================================
-
     chairperson = models.ForeignKey(
         "staff.Staff",
         on_delete=models.SET_NULL,
@@ -80,10 +64,6 @@ class Association(SessionBaseModel):
         blank=True
     )
 
-    # ============================================
-    # CONTENT
-    # ============================================
-
     description = models.TextField(
         blank=True,
         null=True
@@ -92,10 +72,6 @@ class Association(SessionBaseModel):
     tasks = models.TextField(
         blank=True
     )
-
-    # ============================================
-    # WEBSITE
-    # ============================================
 
     show_on_website = models.BooleanField(
         default=True
@@ -112,10 +88,6 @@ class Association(SessionBaseModel):
         db_index=True
     )
 
-    # ============================================
-    # META
-    # ============================================
-
     class Meta:
 
         verbose_name = "Association"
@@ -126,127 +98,6 @@ class Association(SessionBaseModel):
             "-priority",
             "name"
         ]
-
-        constraints = [
-
-            models.UniqueConstraint(
-                fields=[
-                    "school",
-                    "academic_session",
-                    "slug"
-                ],
-                name=(
-                    "unique_association_slug_"
-                    "per_school_session"
-                )
-            ),
-
-            models.UniqueConstraint(
-                fields=[
-                    "school",
-                    "academic_session",
-                    "name"
-                ],
-                name=(
-                    "unique_association_name_"
-                    "per_school_session"
-                )
-            ),
-        ]
-
-        indexes = [
-
-            models.Index(
-                fields=[
-                    "school",
-                    "academic_session",
-                    "association_type"
-                ]
-            ),
-
-            models.Index(
-                fields=[
-                    "school",
-                    "academic_session",
-                    "status"
-                ]
-            ),
-        ]
-
-    # ============================================
-    # VALIDATIONS
-    # ============================================
-
-    def clean(self):
-
-        self.name = self.name.strip()
-
-        if not self.name:
-
-            raise ValidationError({
-                "name":
-                    "Association name cannot be empty"
-            })
-
-        if (
-            self.chairperson and
-            self.chairperson.school != self.school
-        ):
-
-            raise ValidationError({
-                "chairperson":
-                    "Chairperson must belong "
-                    "to same school"
-            })
-
-    # ============================================
-    # SAVE
-    # ============================================
-
-    def save(self, *args, **kwargs):
-
-        if not self.slug:
-
-            base_slug = slugify(self.name)
-
-            with transaction.atomic():
-
-                slug = base_slug
-
-                counter = 1
-
-                while (
-
-                    Association.objects
-
-                    .select_for_update()
-
-                    .filter(
-                        school=self.school,
-                        academic_session=(
-                            self.academic_session
-                        ),
-                        slug=slug
-                    )
-
-                    .exclude(pk=self.pk)
-
-                    .exists()
-                ):
-
-                    slug = (
-                        f"{base_slug}-{counter}"
-                    )
-
-                    counter += 1
-
-                self.slug = slug
-
-        super().save(*args, **kwargs)
-
-    # ============================================
-    # STRING
-    # ============================================
 
     def __str__(self):
 

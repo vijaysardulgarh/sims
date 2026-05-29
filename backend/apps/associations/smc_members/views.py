@@ -1,59 +1,31 @@
-# =============================================================================
-# associations/views/smc_member_views.py
-# =============================================================================
+from rest_framework.viewsets import (
+    ModelViewSet
+)
 
-from rest_framework.permissions import IsAuthenticated
+from apps.associations.smc_members.models import (
+    SMCMember
+)
 
-from apps.associations.smc_members.models import SMCMember
-from apps.core.common.views import BaseAPIView
+from apps.associations.smc_members.serializers import (
+    SMCMemberSerializer
+)
 
 
-class SMCMemberAPIView(BaseAPIView):
+class SMCMemberViewSet(
+    ModelViewSet
+):
 
-    permission_classes = [IsAuthenticated]
+    serializer_class = (
+        SMCMemberSerializer
+    )
 
-    def get(self, request):
+    queryset = (
 
-        school = getattr(request, "school", None)
+        SMCMember.objects.all()
 
-        if not school:
-
-            return self.error_response(
-                message="School not found.",
-                status_code=400
-            )
-
-        academic_session = getattr(
-            request,
-            "academic_session",
-            None
+        .order_by(
+            "priority",
+            "name"
         )
 
-        queryset = (
-
-            SMCMember.objects.filter(
-                school=school,
-                academic_session=academic_session,
-                is_active=True,
-                is_deleted=False
-            )
-
-            .order_by(
-                "priority",
-                "name"
-            )
-        )
-
-        data = list(
-
-            queryset.values(
-                "id",
-                "name",
-                "position",
-                "contact_number",
-                "email",
-                "show_on_website",
-            )
-        )
-
-        return self.success_response(data=data)
+    )

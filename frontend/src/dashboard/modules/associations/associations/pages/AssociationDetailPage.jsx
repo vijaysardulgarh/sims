@@ -2,9 +2,15 @@
 // IMPORTS
 // ============================================
 
-import { useEffect, useState } from 'react';
+import {
+    useEffect,
+    useState
+} from 'react';
 
-import { useParams } from 'react-router-dom';
+import {
+    useParams,
+    useNavigate
+} from 'react-router-dom';
 
 import associationService from '../services/associationService';
 
@@ -16,7 +22,13 @@ const AssociationDetailPage = () => {
 
     const { id } = useParams();
 
-    const [association, setAssociation] = useState(null);
+    const navigate = useNavigate();
+
+    const [association, setAssociation] =
+        useState(null);
+
+    const [loading, setLoading] =
+        useState(true);
 
     // ========================================
     // FETCH DETAIL
@@ -28,29 +40,93 @@ const AssociationDetailPage = () => {
 
             try {
 
-                const response = await (
-                    associationService.getById(id)
+                const response =
+                    await associationService.getById(
+                        id
+                    );
+
+                console.log(
+                    'Association Detail:',
+                    response
                 );
 
                 setAssociation(
-                    response.data
+                    response?.data || response
                 );
+
             }
 
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    'Association Detail Error:',
+                    error
+                );
+
             }
+
+            finally {
+
+                setLoading(
+                    false
+                );
+
+            }
+
         };
 
         fetchDetail();
 
     }, [id]);
 
+    // ========================================
+    // LOADING
+    // ========================================
+
+    if (loading) {
+
+        return (
+
+            <div className="p-6">
+
+                Loading...
+
+            </div>
+
+        );
+
+    }
+
+    // ========================================
+    // NOT FOUND
+    // ========================================
+
     if (!association) {
 
-        return <div>Loading...</div>;
+        return (
+
+            <div className="p-6">
+
+                Association not found
+
+            </div>
+
+        );
+
     }
+
+    // ========================================
+    // DEBUG
+    // ========================================
+
+    console.log(
+        'DETAIL ASSOCIATION:',
+        association
+    );
+
+    // ========================================
+    // UI
+    // ========================================
 
     return (
 
@@ -59,41 +135,155 @@ const AssociationDetailPage = () => {
             <div className="bg-white rounded-2xl shadow p-6 space-y-4">
 
                 <h1 className="text-3xl font-bold">
-                    {association.name}
+
+                    {association.name || '-'}
+
                 </h1>
 
                 <p>
-                    <strong>Type:</strong>
+
+                    <strong>
+                        Type:
+                    </strong>
+
                     {' '}
-                    {association.association_type}
+
+                    {
+                        association.association_type_display ||
+                        association.association_type ||
+                        '-'
+                    }
+
                 </p>
 
                 <p>
-                    <strong>Status:</strong>
+
+                    <strong>
+                        Status:
+                    </strong>
+
                     {' '}
-                    {association.status}
+
+                    {
+                        association.status_display ||
+                        association.status ||
+                        '-'
+                    }
+
                 </p>
 
                 <p>
-                    <strong>Description:</strong>
+
+                    <strong>
+                        Description:
+                    </strong>
+
                     {' '}
-                    {association.description}
+
+                    {
+                        association.description ||
+                        '-'
+                    }
+
                 </p>
 
                 <p>
-                    <strong>Tasks:</strong>
+
+                    <strong>
+                        Tasks:
+                    </strong>
+
                     {' '}
-                    {association.tasks}
+
+                    {
+                        association.tasks ||
+                        '-'
+                    }
+
                 </p>
 
                 <p>
-                    <strong>Chairperson:</strong>
+
+                    <strong>
+                        Chairperson:
+                    </strong>
+
                     {' '}
-                    {association.chairperson}
+
+                    {
+                        association.chairperson_name ||
+                        '-'
+                    }
+
                 </p>
+
+                <div className="flex gap-3 pt-4">
+
+                    <button
+
+                        onClick={() =>
+                            navigate(
+                                '/dashboard/associations/associations'
+                            )
+                        }
+
+                        className="
+                            bg-gray-600
+                            text-white
+                            px-5
+                            py-2
+                            rounded-xl
+                        "
+                    >
+                        Back
+                    </button>
+
+                    <button
+
+                        onClick={() => {
+
+                            console.log(
+                                'Association:',
+                                association
+                            );
+
+                            if (
+                                !association?.id
+                            ) {
+
+                                alert(
+                                    'Association ID not found'
+                                );
+
+                                return;
+
+                            }
+
+                            navigate(
+                                `/dashboard/associations/associations/edit/${association.id}`
+                            );
+
+                        }}
+
+                        className="
+                            bg-blue-600
+                            text-white
+                            px-5
+                            py-2
+                            rounded-xl
+                        "
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
+
     );
+
 };
 
 export default AssociationDetailPage;

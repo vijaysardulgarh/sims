@@ -32,7 +32,9 @@ const AssociationCreatePage = () => {
 
             await associationService.create(data);
 
-            navigate('/dashboard/associations');
+            navigate(
+                '/dashboard/associations/associations'
+            );
         }
 
         catch (error) {
@@ -60,8 +62,11 @@ const AssociationCreatePage = () => {
                     onSubmit={handleSubmit}
                     loading={loading}
                 />
+
             </div>
+
         </div>
+
     );
 };
 

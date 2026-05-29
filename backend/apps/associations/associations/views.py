@@ -16,7 +16,9 @@ from apps.associations.associations.serializers import (
     AssociationSerializer
 )
 
-from apps.core.common.views import BaseAPIView
+from apps.core.common.views import (
+    BaseAPIView
+)
 
 
 # =============================================================================
@@ -81,13 +83,16 @@ class AssociationListAPIView(
     # LIST
     # =========================================================================
 
-    def get(self, request):
+    def get(
+        self,
+        request
+    ):
 
-        queryset = self.get_queryset()
-
-        serializer = AssociationSerializer(
-            queryset,
-            many=True
+        serializer = (
+            AssociationSerializer(
+                self.get_queryset(),
+                many=True
+            )
         )
 
         return self.success_response(
@@ -98,7 +103,10 @@ class AssociationListAPIView(
     # CREATE
     # =========================================================================
 
-    def post(self, request):
+    def post(
+        self,
+        request
+    ):
 
         school = getattr(
             request,
@@ -116,7 +124,9 @@ class AssociationListAPIView(
 
         if school:
 
-            data["school"] = school.id
+            data["school"] = (
+                school.id
+            )
 
         if academic_session:
 
@@ -124,8 +134,10 @@ class AssociationListAPIView(
                 academic_session.id
             )
 
-        serializer = AssociationSerializer(
-            data=data
+        serializer = (
+            AssociationSerializer(
+                data=data
+            )
         )
 
         if serializer.is_valid():
@@ -147,10 +159,10 @@ class AssociationListAPIView(
 
 
 # =============================================================================
-# COMMITTEE DETAIL
+# ASSOCIATION DETAIL
 # =============================================================================
 
-class CommitteeDetailAPIView(
+class AssociationDetailAPIView(
     BaseAPIView
 ):
 
@@ -184,8 +196,6 @@ class CommitteeDetailAPIView(
 
                 academic_session=academic_session,
 
-                association_type="Committee",
-
                 is_active=True,
                 is_deleted=False,
             )
@@ -197,8 +207,7 @@ class CommitteeDetailAPIView(
             )
 
             .prefetch_related(
-                "documents",
-                "roles__assigned_staff__staff"
+                "documents"
             )
         )
 
@@ -206,73 +215,151 @@ class CommitteeDetailAPIView(
     # DETAIL
     # =========================================================================
 
-    def get(self, request, pk):
+    def get(
+        self,
+        request,
+        pk
+    ):
 
-        committee = get_object_or_404(
-            self.get_queryset(),
-            pk=pk
+        association = (
+            get_object_or_404(
+
+                self.get_queryset(),
+
+                pk=pk
+            )
         )
 
-        roles = []
+        serializer = (
+            AssociationSerializer(
+                association
+            )
+        )
 
-        for role in committee.roles.all():
+        return self.success_response(
+            data=serializer.data
+        )
 
-            assigned_staff = []
+    # =========================================================================
+    # UPDATE
+    # =========================================================================
 
-            for assignment in (
-                role.assigned_staff.all()
-            ):
+    def put(
+        self,
+        request,
+        pk
+    ):
 
-                assigned_staff.append({
+        association = (
+            get_object_or_404(
 
-                    "id":
-                        assignment.staff.id,
+                self.get_queryset(),
 
-                    "name":
-                        str(assignment.staff),
-                })
+                pk=pk
+            )
+        )
 
-            roles.append({
+        data = request.data.copy()
 
-                "role":
-                    role.title,
+        serializer = (
+            AssociationSerializer(
 
-                "staff":
-                    assigned_staff,
-            })
+                association,
+
+                data=data
+            )
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return self.success_response(
+
+                data=serializer.data,
+
+                message=(
+                    "Association updated successfully"
+                )
+            )
+
+        return self.error_response(
+            errors=serializer.errors
+        )
+
+    # =========================================================================
+    # PARTIAL UPDATE
+    # =========================================================================
+
+    def patch(
+        self,
+        request,
+        pk
+    ):
+
+        association = (
+            get_object_or_404(
+
+                self.get_queryset(),
+
+                pk=pk
+            )
+        )
+
+        serializer = (
+            AssociationSerializer(
+
+                association,
+
+                data=request.data,
+
+                partial=True
+            )
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return self.success_response(
+
+                data=serializer.data,
+
+                message=(
+                    "Association updated successfully"
+                )
+            )
+
+        return self.error_response(
+            errors=serializer.errors
+        )
+
+    # =========================================================================
+    # DELETE
+    # =========================================================================
+
+    def delete(
+        self,
+        request,
+        pk
+    ):
+
+        association = (
+            get_object_or_404(
+
+                self.get_queryset(),
+
+                pk=pk
+            )
+        )
+
+        association.is_deleted = True
+
+        association.save()
 
         return self.success_response(
 
-            data={
-
-                "id":
-                    committee.id,
-
-                "name":
-                    committee.name,
-
-                "association_type":
-                    committee.association_type,
-
-                "status":
-                    committee.status,
-
-                "slug":
-                    committee.slug,
-
-                "description":
-                    committee.description,
-
-                "tasks":
-                    committee.tasks,
-
-                "chairperson":
-
-                    str(committee.chairperson)
-                    if committee.chairperson
-                    else None,
-
-                "roles":
-                    roles,
-            }
+            message=(
+                "Association deleted successfully"
+            )
         )

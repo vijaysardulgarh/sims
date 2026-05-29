@@ -2,7 +2,10 @@
 // IMPORTS
 // ============================================
 
-import { useEffect, useState } from 'react';
+import {
+    useEffect,
+    useState,
+} from 'react';
 
 import {
     useNavigate,
@@ -23,9 +26,14 @@ const AssociationEditPage = () => {
 
     const navigate = useNavigate();
 
-    const [association, setAssociation] = useState(null);
+    const [association, setAssociation] =
+        useState({});
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] =
+        useState(false);
+
+    const [pageLoading, setPageLoading] =
+        useState(true);
 
     // ========================================
     // FETCH DETAIL
@@ -37,19 +45,38 @@ const AssociationEditPage = () => {
 
             try {
 
-                const response = await (
-                    associationService.getById(id)
+                const response =
+                    await associationService.getById(
+                        id
+                    );
+
+                console.log(
+                    'EDIT RESPONSE:',
+                    response
                 );
 
                 setAssociation(
-                    response.data
+                    response?.data || response
                 );
+
             }
 
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    error
+                );
+
             }
+
+            finally {
+
+                setPageLoading(
+                    false
+                );
+
+            }
+
         };
 
         fetchDetail();
@@ -57,38 +84,69 @@ const AssociationEditPage = () => {
     }, [id]);
 
     // ========================================
-    // HANDLE SUBMIT
+    // SUBMIT
     // ========================================
 
-    const handleSubmit = async (data) => {
+    const handleSubmit = async (
+        data
+    ) => {
 
         try {
 
-            setLoading(true);
+            setLoading(
+                true
+            );
 
             await associationService.update(
                 id,
                 data
             );
 
-            navigate('/dashboard/associations');
+            navigate(
+                '/dashboard/associations/associations'
+            );
+
         }
 
         catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
         }
 
         finally {
 
-            setLoading(false);
+            setLoading(
+                false
+            );
+
         }
+
     };
 
-    if (!association) {
+    // ========================================
+    // LOADING
+    // ========================================
 
-        return <div>Loading...</div>;
+    if (pageLoading) {
+
+        return (
+
+            <div className="p-6">
+
+                Loading...
+
+            </div>
+
+        );
+
     }
+
+    // ========================================
+    // UI
+    // ========================================
 
     return (
 
@@ -97,7 +155,9 @@ const AssociationEditPage = () => {
             <div className="bg-white p-6 rounded-2xl shadow max-w-3xl">
 
                 <h1 className="text-3xl font-bold mb-6">
+
                     Edit Association
+
                 </h1>
 
                 <AssociationForm
@@ -105,9 +165,13 @@ const AssociationEditPage = () => {
                     onSubmit={handleSubmit}
                     loading={loading}
                 />
+
             </div>
+
         </div>
+
     );
+
 };
 
 export default AssociationEditPage;

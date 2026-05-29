@@ -1,24 +1,8 @@
-// ============================================
-// IMPORTS
-// ============================================
-
 import api from '../../../../../services/api/axios';
-
-// ============================================
-// API ENDPOINT
-// ============================================
 
 const BASE_URL = '/associations/associations/';
 
-// ============================================
-// ASSOCIATION SERVICE
-// ============================================
-
 const associationService = {
-
-    // ========================================
-    // GET ALL
-    // ========================================
 
     getAll: async () => {
 
@@ -29,22 +13,14 @@ const associationService = {
         return response.data;
     },
 
-    // ========================================
-    // GET DETAIL
-    // ========================================
-
     getById: async (id) => {
 
         const response = await api.get(
-            `${BASE_URL}committees/${id}/`
+            `${BASE_URL}${id}/`
         );
 
         return response.data;
     },
-
-    // ========================================
-    // CREATE
-    // ========================================
 
     create: async (data) => {
 
@@ -56,10 +32,6 @@ const associationService = {
         return response.data;
     },
 
-    // ========================================
-    // UPDATE
-    // ========================================
-
     update: async (id, data) => {
 
         const response = await api.put(
@@ -69,10 +41,6 @@ const associationService = {
 
         return response.data;
     },
-
-    // ========================================
-    // DELETE
-    // ========================================
 
     delete: async (id) => {
 

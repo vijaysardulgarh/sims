@@ -1,13 +1,13 @@
 # =============================================================================
-# associations/smc_members/urls.py
+# academics/sessions/urls.py
 # =============================================================================
 
 from rest_framework.routers import (
     DefaultRouter
 )
 
-from apps.associations.smc_members.views import (
-    SMCMemberViewSet
+from apps.academics.structure.sessions.views import (
+    AcademicSessionViewSet
 )
 
 router = (
@@ -16,8 +16,8 @@ router = (
 
 router.register(
     r"",
-    SMCMemberViewSet,
-    basename="smc-member"
+    AcademicSessionViewSet,
+    basename="academic-session"
 )
 
 urlpatterns = (

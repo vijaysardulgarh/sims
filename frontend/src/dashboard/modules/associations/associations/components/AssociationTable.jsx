@@ -1,17 +1,18 @@
-// ============================================
-// IMPORTS
-// ============================================
-
 import { Link } from 'react-router-dom';
 
-// ============================================
-// COMPONENT
-// ============================================
-
 const AssociationTable = ({
-    associations,
+    associations = [],
     onDelete,
 }) => {
+
+    if (!Array.isArray(associations)) {
+
+        return (
+            <div>
+                Invalid association data
+            </div>
+        );
+    }
 
     return (
 
@@ -42,7 +43,9 @@ const AssociationTable = ({
                         <th className="text-left p-4">
                             Actions
                         </th>
+
                     </tr>
+
                 </thead>
 
                 <tbody>
@@ -68,38 +71,47 @@ const AssociationTable = ({
                                 </td>
 
                                 <td className="p-4">
-                                    {item.chairperson}
+                                    {item.chairperson_name || '-'}
                                 </td>
 
                                 <td className="p-4 flex gap-3">
 
                                     <Link
-                                        to={`${item.id}`}
+                                        to={`/dashboard/associations/associations/${item.id}`}
                                         className="text-blue-600"
                                     >
                                         View
                                     </Link>
 
                                     <Link
-                                        to={`edit/${item.id}`}
+                                        to={`/dashboard/associations/associations/edit/${item.id}`}
                                         className="text-green-600"
                                     >
                                         Edit
                                     </Link>
 
                                     <button
-                                        onClick={() => onDelete(item.id)}
+                                        onClick={() =>
+                                            onDelete(item.id)
+                                        }
                                         className="text-red-600"
                                     >
                                         Delete
                                     </button>
+
                                 </td>
+
                             </tr>
+
                         ))
                     }
+
                 </tbody>
+
             </table>
+
         </div>
+
     );
 };
 

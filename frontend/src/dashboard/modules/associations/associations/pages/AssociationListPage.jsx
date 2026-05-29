@@ -32,14 +32,28 @@ const AssociationListPage = () => {
                 associationService.getAll()
             );
 
+            console.log(
+                'Association API Response:',
+                response
+            );
+
             setAssociations(
-                response.data || []
+
+                Array.isArray(
+                    response?.data
+                )
+
+                    ? response.data
+
+                    : []
             );
         }
 
         catch (error) {
 
             console.error(error);
+
+            setAssociations([]);
         }
 
         finally {
@@ -81,7 +95,11 @@ const AssociationListPage = () => {
 
     if (loading) {
 
-        return <div>Loading...</div>;
+        return (
+            <div>
+                Loading...
+            </div>
+        );
     }
 
     return (
@@ -100,12 +118,22 @@ const AssociationListPage = () => {
                 >
                     Create Association
                 </Link>
+
             </div>
 
             <AssociationTable
-                associations={associations}
+
+                associations={
+                    Array.isArray(
+                        associations
+                    )
+                        ? associations
+                        : []
+                }
+
                 onDelete={handleDelete}
             />
+
         </div>
     );
 };

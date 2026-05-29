@@ -44,6 +44,13 @@ urlpatterns = [
         )
     ),
 
+    path(
+        "sessions/",
+        include(
+            "apps.academics.structure.sessions.urls"
+        )
+    ),
+
     # =====================================
     # CURRICULUM
     # =====================================

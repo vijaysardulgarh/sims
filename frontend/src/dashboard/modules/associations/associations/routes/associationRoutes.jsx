@@ -5,11 +5,8 @@
 import { Route } from 'react-router-dom';
 
 import AssociationListPage from '../pages/AssociationListPage';
-
 import AssociationCreatePage from '../pages/AssociationCreatePage';
-
 import AssociationEditPage from '../pages/AssociationEditPage';
-
 import AssociationDetailPage from '../pages/AssociationDetailPage';
 
 // ============================================
@@ -20,47 +17,28 @@ const associationRoutes = (
 
     <>
 
-        {/* ================================= */}
-        {/* ASSOCIATION LIST */}
-        {/* ================================= */}
-
         <Route
-            path="associations"
+            path="associations/associations"
             element={<AssociationListPage />}
         />
 
-        {/* ================================= */}
-        {/* CREATE */}
-        {/* ================================= */}
-
         <Route
-            path="associations/create"
+            path="associations/associations/create"
             element={<AssociationCreatePage />}
         />
 
-        {/* ================================= */}
-        {/* EDIT */}
-        {/* ================================= */}
-
         <Route
-            path="associations/edit/:id"
+            path="associations/associations/edit/:id"
             element={<AssociationEditPage />}
         />
 
-        {/* ================================= */}
-        {/* DETAIL */}
-        {/* ================================= */}
-
         <Route
-            path="associations/:id"
+            path="associations/associations/:id"
             element={<AssociationDetailPage />}
         />
 
     </>
-);
 
-// ============================================
-// EXPORT
-// ============================================
+);
 
 export default associationRoutes;

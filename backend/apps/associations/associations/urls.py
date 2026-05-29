@@ -7,7 +7,7 @@ from django.urls import path
 from apps.associations.associations.views import (
 
     AssociationListAPIView,
-    CommitteeDetailAPIView,
+    AssociationDetailAPIView,
 )
 
 # =============================================================================
@@ -23,7 +23,7 @@ app_name = "associations"
 urlpatterns = [
 
     # ============================================
-    # ASSOCIATION LIST
+    # ASSOCIATION LIST & CREATE
     # ============================================
 
     path(
@@ -36,15 +36,15 @@ urlpatterns = [
     ),
 
     # ============================================
-    # COMMITTEE DETAIL
+    # ASSOCIATION DETAIL
     # ============================================
 
     path(
 
-        "committees/<int:pk>/",
+        "<int:pk>/",
 
-        CommitteeDetailAPIView.as_view(),
+        AssociationDetailAPIView.as_view(),
 
-        name="committee-detail"
+        name="association-detail"
     ),
 ]

@@ -4,15 +4,17 @@
 
 from django.contrib import admin
 
-from apps.associations.models import Association
+from apps.associations.models import (
+    Association
+)
 
 
-@admin.register(Association)
-class AssociationAdmin(admin.ModelAdmin):
-
-    # ============================================
-    # LIST PAGE
-    # ============================================
+@admin.register(
+    Association
+)
+class AssociationAdmin(
+    admin.ModelAdmin
+):
 
     list_display = (
         "id",
@@ -39,29 +41,12 @@ class AssociationAdmin(admin.ModelAdmin):
         "is_active",
     )
 
-    ordering = (
-        "-priority",
-        "name",
-    )
-
-    list_per_page = 25
-
-    date_hierarchy = "created_at"
-
-    # ============================================
-    # SEARCH
-    # ============================================
-
     search_fields = (
         "name",
         "slug",
         "school__name",
         "chairperson__name",
     )
-
-    # ============================================
-    # FILTERS
-    # ============================================
 
     list_filter = (
         "association_type",
@@ -73,9 +58,14 @@ class AssociationAdmin(admin.ModelAdmin):
         "school",
     )
 
-    # ============================================
-    # PERFORMANCE
-    # ============================================
+    ordering = (
+        "-priority",
+        "name",
+    )
+
+    list_per_page = 25
+
+    date_hierarchy = "created_at"
 
     list_select_related = (
         "school",
@@ -93,10 +83,6 @@ class AssociationAdmin(admin.ModelAdmin):
         "documents",
     )
 
-    # ============================================
-    # READONLY
-    # ============================================
-
     readonly_fields = (
         "slug",
         "created_at",
@@ -104,10 +90,6 @@ class AssociationAdmin(admin.ModelAdmin):
         "created_by",
         "updated_by",
     )
-
-    # ============================================
-    # FIELDSETS
-    # ============================================
 
     fieldsets = (
 
@@ -119,8 +101,8 @@ class AssociationAdmin(admin.ModelAdmin):
                     "academic_session",
                     "name",
                     "association_type",
-                    "slug",
                     "chairperson",
+                    "slug",
                     "priority",
                 )
             }
@@ -146,7 +128,7 @@ class AssociationAdmin(admin.ModelAdmin):
         ),
 
         (
-            "Website & Status",
+            "Status",
             {
                 "fields": (
                     "status",
@@ -158,9 +140,11 @@ class AssociationAdmin(admin.ModelAdmin):
         ),
 
         (
-            "System Information",
+            "Audit Information",
             {
-                "classes": ("collapse",),
+                "classes": (
+                    "collapse",
+                ),
 
                 "fields": (
                     "created_at",
@@ -172,11 +156,10 @@ class AssociationAdmin(admin.ModelAdmin):
         ),
     )
 
-    # ============================================
-    # QUERYSET OPTIMIZATION
-    # ============================================
-
-    def get_queryset(self, request):
+    def get_queryset(
+        self,
+        request
+    ):
 
         return (
 
@@ -197,10 +180,6 @@ class AssociationAdmin(admin.ModelAdmin):
             )
         )
 
-    # ============================================
-    # AUTO AUDIT FIELDS
-    # ============================================
-
     def save_model(
         self,
         request,
@@ -211,9 +190,13 @@ class AssociationAdmin(admin.ModelAdmin):
 
         if not obj.pk:
 
-            obj.created_by = request.user
+            obj.created_by = (
+                request.user
+            )
 
-        obj.updated_by = request.user
+        obj.updated_by = (
+            request.user
+        )
 
         super().save_model(
             request,

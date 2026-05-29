@@ -1,28 +1,64 @@
 // ============================================
-// SMC MEMBERS
+// IMPORTS
 // ============================================
 
-const smcMemberRoutes = [
+import { Route } from "react-router-dom";
 
-    {
-        path: 'associations/smc-members',
-        element: <SmcMemberListPage />,
-    },
+import SMCMembersList from "../pages/SMCMembersList";
+import SMCMemberCreate from "../pages/SMCMemberCreate";
+import SMCMemberEdit from "../pages/SMCMemberEdit";
+import SMCMemberView from "../pages/SMCMemberView";
 
-    {
-        path: 'associations/smc-members/create',
-        element: <SmcMemberCreatePage />,
-    },
+// ============================================
+// ROUTES
+// ============================================
 
-    {
-        path: 'associations/smc-members/edit/:id',
-        element: <SmcMemberEditPage />,
-    },
+const smcMemberRoutes = (
 
-    {
-        path: 'associations/smc-members/:id',
-        element: <SmcMemberDetailPage />,
-    },
-];
+    <>
+
+        {/* ================================= */}
+        {/* LIST */}
+        {/* ================================= */}
+
+        <Route
+            path="associations/smc-members"
+            element={<SMCMembersList />}
+        />
+
+        {/* ================================= */}
+        {/* CREATE */}
+        {/* ================================= */}
+
+        <Route
+            path="associations/smc-members/create"
+            element={<SMCMemberCreate />}
+        />
+
+        {/* ================================= */}
+        {/* EDIT */}
+        {/* ================================= */}
+
+        <Route
+            path="associations/smc-members/edit/:id"
+            element={<SMCMemberEdit />}
+        />
+
+        {/* ================================= */}
+        {/* DETAIL */}
+        {/* ================================= */}
+
+        <Route
+            path="associations/smc-members/:id"
+            element={<SMCMemberView />}
+        />
+
+    </>
+
+);
+
+// ============================================
+// EXPORT
+// ============================================
 
 export default smcMemberRoutes;

@@ -73,7 +73,7 @@
 // ============================================
 
 import associationRoutes from '../associations/routes/associationRoutes';
-
+import smcMemberRoutes from '../smc_members/routes/smcMemberRoutes';
 // ============================================
 // ASSOCIATIONS MODULE ROUTES
 // ============================================
@@ -87,6 +87,10 @@ const associationModuleRoutes = (
         {/* ================================= */}
 
         {associationRoutes}
+        {/* ================================= */}
+        {/* SMC MEMBERS */}
+        {/* ================================= */}
+        {smcMemberRoutes}
 
     </>
 );
