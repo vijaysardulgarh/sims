@@ -16,7 +16,11 @@ import {
 import toast from "react-hot-toast";
 
 import SectionForm from "../components/SectionForm";
+
 import sectionService from "../services/sectionService";
+
+import classService from "../../classes/services/classService";
+
 
 const EditSection = () => {
 
@@ -35,26 +39,49 @@ const EditSection = () => {
     setInitialData] =
     useState({});
 
+  const [classes,
+    setClasses] =
+    useState([]);
+
   // ============================================
-  // FETCH SECTION
+  // LOAD DATA
   // ============================================
 
   useEffect(() => {
 
-    fetchSection();
+    loadData();
 
-  }, []);
+  }, [id]);
 
-  const fetchSection = async () => {
+  const loadData = async () => {
 
     try {
 
-      const response =
-        await sectionService.getSection(id);
+      const [
 
-      setInitialData(response);
+        sectionResponse,
+
+        classesResponse
+
+      ] = await Promise.all([
+
+        sectionService.getSection(id),
+
+        classService.getClasses(),
+      ]);
+
+      setInitialData(
+        sectionResponse
+      );
+
+      setClasses(
+        classesResponse.results ||
+        classesResponse
+      );
 
     } catch (error) {
+
+      console.error(error);
 
       toast.error(
         "Failed to load section"
@@ -70,7 +97,9 @@ const EditSection = () => {
   // UPDATE SECTION
   // ============================================
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (
+    data
+  ) => {
 
     try {
 
@@ -90,6 +119,8 @@ const EditSection = () => {
       );
 
     } catch (error) {
+
+      console.error(error);
 
       toast.error(
 
@@ -126,19 +157,27 @@ const EditSection = () => {
 
       <div>
 
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-800
-        ">
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-gray-800
+          "
+        >
+
           Edit Section
+
         </h1>
 
-        <p className="
-          text-gray-500
-          mt-1
-        ">
+        <p
+          className="
+            text-gray-500
+            mt-1
+          "
+        >
+
           Update section details
+
         </p>
 
       </div>
@@ -146,6 +185,8 @@ const EditSection = () => {
       <SectionForm
 
         initialData={initialData}
+
+        classes={classes}
 
         onSubmit={handleSubmit}
 

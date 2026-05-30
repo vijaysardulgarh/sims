@@ -34,7 +34,7 @@ class SectionViewSet(
 
         "name",
 
-        "class_obj__class_order"
+        "class_obj__display_order",
     ]
 
     filterset_fields = [
@@ -45,7 +45,9 @@ class SectionViewSet(
 
         "medium",
 
-        "sub_stream"
+        "sub_stream",
+
+        "is_active",
     ]
 
     def get_queryset(self):
@@ -55,6 +57,7 @@ class SectionViewSet(
             Section.objects
 
             .select_related(
+                "school",
                 "class_obj",
                 "stream",
                 "medium",

@@ -19,6 +19,7 @@ class SectionAdmin(
         "sub_stream",
         "medium",
         "classroom",
+        "is_active",
     )
 
     search_fields = (
@@ -32,11 +33,21 @@ class SectionAdmin(
         "stream",
         "medium",
         "sub_stream",
+        "is_active",
     )
 
     ordering = (
-        "class_obj",
+        "class_obj__display_order",
+        "class_obj__name",
         "name",
+    )
+
+    list_select_related = (
+        "school",
+        "class_obj",
+        "stream",
+        "medium",
+        "classroom",
     )
 
     list_per_page = 25

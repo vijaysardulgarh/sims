@@ -54,8 +54,57 @@ class SectionSerializer(
             "stream_name",
 
             "sub_stream",
+
+            "is_active",
+
+            "created_at",
+            "updated_at",
         ]
 
         read_only_fields = [
-            "school"
+
+            "school",
+
+            "created_at",
+            "updated_at",
         ]
+
+    def validate(self, attrs):
+
+        class_obj = attrs.get(
+            "class_obj",
+            getattr(
+                self.instance,
+                "class_obj",
+                None
+            )
+        )
+
+        stream = attrs.get(
+            "stream",
+            getattr(
+                self.instance,
+                "stream",
+                None
+            )
+        )
+
+        sub_stream = attrs.get(
+            "sub_stream",
+            getattr(
+                self.instance,
+                "sub_stream",
+                None
+            )
+        )
+
+        if sub_stream and not stream:
+
+            raise serializers.ValidationError(
+                {
+                    "sub_stream":
+                    "Sub-stream requires a stream."
+                }
+            )
+
+        return attrs

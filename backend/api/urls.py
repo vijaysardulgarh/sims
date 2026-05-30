@@ -106,4 +106,9 @@ urlpatterns = [
         "api/clusters/",
         include("apps.clusters.urls")
     ),
+
+    path(
+        "api/infrastructure/",
+        include("apps.infrastructure.urls")
+    ),
 ]

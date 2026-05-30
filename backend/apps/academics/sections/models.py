@@ -20,7 +20,10 @@ from apps.academics.classes.models import (
     Class
 )
 
-from apps.core.common.base.models import SchoolBaseModel
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
 
 class Section(
     SchoolBaseModel
@@ -34,7 +37,6 @@ class Section(
 
         ("Vocational", "Vocational"),
     ]
-
 
     class_obj = models.ForeignKey(
         Class,
@@ -81,6 +83,8 @@ class Section(
 
     def clean(self):
 
+        super().clean()
+
         if self.name:
 
             self.name = (
@@ -92,7 +96,21 @@ class Section(
             raise ValidationError(
                 {
                     "sub_stream":
-                        "Sub-stream requires a stream"
+                    "Sub-stream requires a stream."
+                }
+            )
+
+        if (
+            self.class_obj
+            and self.school
+            and self.class_obj.school
+            and self.class_obj.school != self.school
+        ):
+
+            raise ValidationError(
+                {
+                    "class_obj":
+                    "Class must belong to the same school."
                 }
             )
 
@@ -109,6 +127,23 @@ class Section(
             "name"
         ]
 
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "school",
+                    "class_obj"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school",
+                    "name"
+                ]
+            ),
+        ]
+
         constraints = [
 
             models.UniqueConstraint(
@@ -123,4 +158,7 @@ class Section(
 
     def __str__(self):
 
-        return f"{self.class_obj} - {self.name}"
+        return (
+            f"{self.class_obj.name} - "
+            f"{self.name}"
+        )

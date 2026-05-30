@@ -20,7 +20,9 @@ import Pagination from "../../../../dashboard/shared/components/crud/Pagination"
 import CrudHeader from "../../../../dashboard/shared/components/crud/CrudHeader";
 import ActionButtons from "../../../../dashboard/shared/components/crud/ActionButtons";
 import ConfirmModal from "../../../../dashboard/shared/components/modals/ConfirmModal";
+
 import sectionService from "../services/sectionService";
+
 
 const SectionsList = () => {
 
@@ -70,9 +72,15 @@ const SectionsList = () => {
 
           : response.results || [];
 
-      setSections(sectionsData);
+      setSections(
+        sectionsData
+      );
 
     } catch (error) {
+
+      console.error(
+        error
+      );
 
       toast.error(
         "Failed to load sections"
@@ -94,7 +102,9 @@ const SectionsList = () => {
   // DELETE SECTION
   // ============================================
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (
+    id
+  ) => {
 
     try {
 
@@ -110,6 +120,10 @@ const SectionsList = () => {
 
     } catch (error) {
 
+      console.error(
+        error
+      );
+
       toast.error(
         "Delete failed"
       );
@@ -121,14 +135,42 @@ const SectionsList = () => {
   // ============================================
 
   const filteredSections =
-    sections.filter((section) =>
+    sections.filter((section) => {
 
-      section.name
-        ?.toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
-    );
+      const searchText =
+        search.toLowerCase();
+
+      return (
+
+        section.name
+          ?.toLowerCase()
+          .includes(searchText)
+
+        ||
+
+        section.class_name
+          ?.toLowerCase()
+          .includes(searchText)
+
+        ||
+
+        section.medium_name
+          ?.toLowerCase()
+          .includes(searchText)
+
+        ||
+
+        section.stream_name
+          ?.toLowerCase()
+          .includes(searchText)
+
+        ||
+
+        section.classroom_name
+          ?.toLowerCase()
+          .includes(searchText)
+      );
+    });
 
   // ============================================
   // PAGINATION
@@ -136,7 +178,9 @@ const SectionsList = () => {
 
   const totalPages =
     Math.ceil(
+
       filteredSections.length /
+
       itemsPerPage
     );
 
@@ -157,13 +201,33 @@ const SectionsList = () => {
   const columns = [
 
     {
-      key: "name",
-      label: "Section Name",
+      key: "class_name",
+      label: "Class",
     },
 
     {
-      key: "capacity",
-      label: "Capacity",
+      key: "name",
+      label: "Section",
+    },
+
+    {
+      key: "medium_name",
+      label: "Medium",
+    },
+
+    {
+      key: "stream_name",
+      label: "Stream",
+    },
+
+    {
+      key: "sub_stream",
+      label: "Sub Stream",
+    },
+
+    {
+      key: "classroom_name",
+      label: "Classroom",
     },
 
     {
@@ -177,31 +241,54 @@ const SectionsList = () => {
   // ============================================
 
   const tableData =
-    paginatedSections.map((section) => ({
+    paginatedSections.map(
+      (section) => ({
 
-      ...section,
+        ...section,
 
-      actions: (
+        class_name:
+          section.class_name || "-",
 
-        <ActionButtons
+        medium_name:
+          section.medium_name || "-",
 
-          onEdit={() =>
-            navigate(
-              `/dashboard/academics/sections/edit/${section.id}`
-            )
-          }
+        stream_name:
+          section.stream_name || "-",
 
-          onDelete={() => {
+        sub_stream:
+          section.sub_stream || "-",
 
-            setSelectedSectionId(
-              section.id
-            );
+        classroom_name:
+          section.classroom_name || "-",
 
-            setIsModalOpen(true);
-          }}
-        />
-      ),
-    }));
+        actions: (
+
+          <ActionButtons
+
+            onEdit={() =>
+              navigate(
+                `/dashboard/academics/sections/edit/${section.id}`
+              )
+            }
+
+            onDelete={() => {
+
+              setSelectedSectionId(
+                section.id
+              );
+
+              setIsModalOpen(
+                true
+              );
+            }}
+          />
+        ),
+      })
+    );
+
+  // ============================================
+  // LOADING
+  // ============================================
 
   if (loading) {
 
@@ -214,6 +301,10 @@ const SectionsList = () => {
       </div>
     );
   }
+
+  // ============================================
+  // UI
+  // ============================================
 
   return (
 
@@ -241,34 +332,48 @@ const SectionsList = () => {
         value={search}
 
         onChange={(e) =>
-          setSearch(e.target.value)
+          setSearch(
+            e.target.value
+          )
         }
       />
 
       <DataTable
+
         columns={columns}
+
         data={tableData}
       />
 
       <Pagination
 
-        currentPage={currentPage}
+        currentPage={
+          currentPage
+        }
 
-        totalPages={totalPages}
+        totalPages={
+          totalPages
+        }
 
-        onPageChange={setCurrentPage}
+        onPageChange={
+          setCurrentPage
+        }
       />
 
       <ConfirmModal
 
-        isOpen={isModalOpen}
+        isOpen={
+          isModalOpen
+        }
 
         title="Delete Section"
 
         message="Are you sure you want to delete this section?"
 
         onCancel={() =>
-          setIsModalOpen(false)
+          setIsModalOpen(
+            false
+          )
         }
 
         onConfirm={() => {
@@ -277,8 +382,9 @@ const SectionsList = () => {
             selectedSectionId
           );
 
-          setIsModalOpen(false);
-
+          setIsModalOpen(
+            false
+          );
         }}
       />
 

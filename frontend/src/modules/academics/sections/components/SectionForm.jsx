@@ -12,6 +12,14 @@ const SectionForm = ({
 
   initialData = {},
 
+  classes = [],
+
+  mediums = [],
+
+  streams = [],
+
+  classrooms = [],
+
   onSubmit,
 
   loading = false,
@@ -19,7 +27,7 @@ const SectionForm = ({
 }) => {
 
   // ============================================
-  // SECTION OPTIONS
+  // OPTIONS
   // ============================================
 
   const sectionOptions = [
@@ -32,6 +40,15 @@ const SectionForm = ({
     "F",
   ];
 
+  const subStreamOptions = [
+
+    "Medical",
+
+    "Non-Medical",
+
+    "Vocational",
+  ];
+
   // ============================================
   // FORM STATE
   // ============================================
@@ -39,13 +56,21 @@ const SectionForm = ({
   const [formData, setFormData] =
     useState({
 
+      class_obj: "",
+
       name: "",
 
-      capacity: "",
+      medium: "",
+
+      stream: "",
+
+      sub_stream: "",
+
+      classroom: "",
     });
 
   // ============================================
-  // PREFILL FORM
+  // PREFILL
   // ============================================
 
   useEffect(() => {
@@ -57,11 +82,23 @@ const SectionForm = ({
 
       setFormData({
 
+        class_obj:
+          initialData.class_obj || "",
+
         name:
           initialData.name || "",
 
-        capacity:
-          initialData.capacity || "",
+        medium:
+          initialData.medium || "",
+
+        stream:
+          initialData.stream || "",
+
+        sub_stream:
+          initialData.sub_stream || "",
+
+        classroom:
+          initialData.classroom || "",
       });
     }
 
@@ -73,7 +110,10 @@ const SectionForm = ({
 
   const handleChange = (e) => {
 
-    const { name, value } = e.target;
+    const {
+      name,
+      value
+    } = e.target;
 
     setFormData({
 
@@ -84,7 +124,7 @@ const SectionForm = ({
   };
 
   // ============================================
-  // HANDLE SUBMIT
+  // SUBMIT
   // ============================================
 
   const handleSubmit = (e) => {
@@ -107,17 +147,81 @@ const SectionForm = ({
       "
     >
 
-      {/* SECTION NAME */}
+      {/* CLASS */}
 
       <div>
 
-        <label className="
-          block
-          mb-2
-          text-sm
-          font-medium
-        ">
-          Section Name
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
+
+          Class
+
+        </label>
+
+        <select
+
+          name="class_obj"
+
+          value={formData.class_obj}
+
+          onChange={handleChange}
+
+          className="
+            w-full
+            border
+            rounded-lg
+            p-3
+          "
+
+          required
+        >
+
+          <option value="">
+            Select Class
+          </option>
+
+          {
+
+            classes.map(
+              (cls) => (
+
+                <option
+                  key={cls.id}
+                  value={cls.id}
+                >
+
+                  {cls.name}
+
+                </option>
+              )
+            )
+          }
+
+        </select>
+
+      </div>
+
+      {/* SECTION */}
+
+      <div>
+
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
+
+          Section
+
         </label>
 
         <select
@@ -145,10 +249,10 @@ const SectionForm = ({
           {
 
             sectionOptions.map(
-              (section, index) => (
+              (section) => (
 
                 <option
-                  key={index}
+                  key={section}
                   value={section}
                 >
 
@@ -163,30 +267,30 @@ const SectionForm = ({
 
       </div>
 
-      {/* CAPACITY */}
+      {/* MEDIUM */}
 
       <div>
 
-        <label className="
-          block
-          mb-2
-          text-sm
-          font-medium
-        ">
-          Capacity
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
+
+          Medium
+
         </label>
 
-        <input
+        <select
 
-          type="number"
+          name="medium"
 
-          name="capacity"
-
-          value={formData.capacity}
+          value={formData.medium}
 
           onChange={handleChange}
-
-          placeholder="Enter section capacity"
 
           className="
             w-full
@@ -194,7 +298,204 @@ const SectionForm = ({
             rounded-lg
             p-3
           "
-        />
+        >
+
+          <option value="">
+            Select Medium
+          </option>
+
+          {
+
+            mediums.map(
+              (medium) => (
+
+                <option
+                  key={medium.id}
+                  value={medium.id}
+                >
+
+                  {medium.name}
+
+                </option>
+              )
+            )
+          }
+
+        </select>
+
+      </div>
+
+      {/* STREAM */}
+
+      <div>
+
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
+
+          Stream
+
+        </label>
+
+        <select
+
+          name="stream"
+
+          value={formData.stream}
+
+          onChange={handleChange}
+
+          className="
+            w-full
+            border
+            rounded-lg
+            p-3
+          "
+        >
+
+          <option value="">
+            Select Stream
+          </option>
+
+          {
+
+            streams.map(
+              (stream) => (
+
+                <option
+                  key={stream.id}
+                  value={stream.id}
+                >
+
+                  {stream.name}
+
+                </option>
+              )
+            )
+          }
+
+        </select>
+
+      </div>
+
+      {/* SUB STREAM */}
+
+      <div>
+
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
+
+          Sub Stream
+
+        </label>
+
+        <select
+
+          name="sub_stream"
+
+          value={formData.sub_stream}
+
+          onChange={handleChange}
+
+          className="
+            w-full
+            border
+            rounded-lg
+            p-3
+          "
+        >
+
+          <option value="">
+            Select Sub Stream
+          </option>
+
+          {
+
+            subStreamOptions.map(
+              (item) => (
+
+                <option
+                  key={item}
+                  value={item}
+                >
+
+                  {item}
+
+                </option>
+              )
+            )
+          }
+
+        </select>
+
+      </div>
+
+      {/* CLASSROOM */}
+
+      <div>
+
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
+
+          Classroom
+
+        </label>
+
+        <select
+
+          name="classroom"
+
+          value={formData.classroom}
+
+          onChange={handleChange}
+
+          className="
+            w-full
+            border
+            rounded-lg
+            p-3
+          "
+        >
+
+          <option value="">
+            Select Classroom
+          </option>
+
+          {
+
+            classrooms.map(
+              (classroom) => (
+
+                <option
+                  key={classroom.id}
+                  value={classroom.id}
+                >
+
+                  {classroom.name}
+
+                </option>
+              )
+            )
+          }
+
+        </select>
 
       </div>
 
@@ -213,12 +514,18 @@ const SectionForm = ({
           py-3
           rounded-xl
           hover:bg-blue-700
+          disabled:opacity-50
         "
       >
 
-        {loading
-          ? "Saving..."
-          : "Save Section"}
+        {
+
+          loading
+
+            ? "Saving..."
+
+            : "Save Section"
+        }
 
       </button>
 

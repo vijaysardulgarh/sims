@@ -13,7 +13,7 @@ const getClassrooms = async () => {
 
   const response =
     await api.get(
-      "/academics/classrooms/"
+      "/infrastructure/classrooms/"
     );
 
   return response.data;
@@ -27,7 +27,7 @@ const getClassroom = async (id) => {
 
   const response =
     await api.get(
-      `/academics/classrooms/${id}/`
+      `/infrastructure/classrooms/${id}/`
     );
 
   return response.data;
@@ -41,7 +41,7 @@ const createClassroom = async (data) => {
 
   const response =
     await api.post(
-      "/academics/classrooms/",
+      "/infrastructure/classrooms/",
       data
     );
 
@@ -59,7 +59,7 @@ const updateClassroom = async (
 
   const response =
     await api.put(
-      `/academics/classrooms/${id}/`,
+      `/infrastructure/classrooms/${id}/`,
       data
     );
 
@@ -74,7 +74,7 @@ const deleteClassroom = async (id) => {
 
   const response =
     await api.delete(
-      `/academics/classrooms/${id}/`
+      `/infrastructure/classrooms/${id}/`
     );
 
   return response.data;

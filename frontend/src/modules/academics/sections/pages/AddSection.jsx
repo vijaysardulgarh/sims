@@ -4,7 +4,8 @@
 // ============================================
 
 import {
-  useState
+  useState,
+  useEffect
 } from "react";
 
 import {
@@ -15,10 +16,16 @@ import toast from "react-hot-toast";
 
 import SectionForm from "../components/SectionForm";
 
-// import sectionService from
-// "../../../services/academics/sectionService";
-
 import sectionService from "../services/sectionService";
+
+import classService from "../../classes/services/classService";
+
+import mediumService from "../../mediums/services/mediumService";
+
+import streamService from "../../streams/services/streamService";
+
+import classroomService from "../../../infrastructure/classrooms/services/classroomService";
+
 
 const AddSection = () => {
 
@@ -27,11 +34,90 @@ const AddSection = () => {
   const [loading, setLoading] =
     useState(false);
 
+  const [classes, setClasses] =
+    useState([]);
+
+  const [mediums, setMediums] =
+    useState([]);
+
+  const [streams, setStreams] =
+    useState([]);
+
+  const [classrooms, setClassrooms] =
+    useState([]);
+
+  // ============================================
+  // LOAD DATA
+  // ============================================
+
+  useEffect(() => {
+
+    loadData();
+
+  }, []);
+
+  const loadData = async () => {
+
+    try {
+
+      const [
+
+        classesResponse,
+
+        mediumsResponse,
+
+        streamsResponse,
+
+        classroomsResponse,
+
+      ] = await Promise.all([
+
+        classService.getClasses(),
+
+        mediumService.getMediums(),
+
+        streamService.getStreams(),
+
+        classroomService.getClassrooms(),
+      ]);
+
+      setClasses(
+        classesResponse.results ||
+        classesResponse
+      );
+
+      setMediums(
+        mediumsResponse.results ||
+        mediumsResponse
+      );
+
+      setStreams(
+        streamsResponse.results ||
+        streamsResponse
+      );
+
+      setClassrooms(
+        classroomsResponse.results ||
+        classroomsResponse
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error(
+        "Failed to load form data"
+      );
+    }
+  };
+
   // ============================================
   // CREATE SECTION
   // ============================================
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (
+    data
+  ) => {
 
     try {
 
@@ -51,7 +137,7 @@ const AddSection = () => {
 
     } catch (error) {
 
-      console.log(error);
+      console.error(error);
 
       toast.error(
 
@@ -76,25 +162,43 @@ const AddSection = () => {
 
       <div>
 
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-800
-        ">
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-gray-800
+          "
+        >
+
           Add Section
+
         </h1>
 
-        <p className="
-          text-gray-500
-          mt-1
-        ">
+        <p
+          className="
+            text-gray-500
+            mt-1
+          "
+        >
+
           Create new section
+
         </p>
 
       </div>
 
       <SectionForm
+
+        classes={classes}
+
+        mediums={mediums}
+
+        streams={streams}
+
+        classrooms={classrooms}
+
         onSubmit={handleSubmit}
+
         loading={loading}
       />
 
