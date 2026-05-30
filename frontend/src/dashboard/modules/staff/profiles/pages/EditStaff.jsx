@@ -16,7 +16,6 @@ import {
 import toast from "react-hot-toast";
 
 import StaffForm from "../components/StaffForm";
-
 import staffService from "../services/staffService";
 
 const EditStaff = () => {
@@ -34,7 +33,7 @@ const EditStaff = () => {
   const navigate = useNavigate();
 
   // ============================================
-  // STATES
+  // STATE
   // ============================================
 
   const [staff, setStaff] =
@@ -51,7 +50,7 @@ const EditStaff = () => {
 
     fetchStaff();
 
-  }, []);
+  }, [id]);
 
   const fetchStaff = async () => {
 
@@ -66,7 +65,7 @@ const EditStaff = () => {
 
     } catch (error) {
 
-      console.log(error);
+      console.error(error);
 
       toast.error(
         "Failed to load staff"
@@ -79,7 +78,7 @@ const EditStaff = () => {
   };
 
   // ============================================
-  // UPDATE STAFF
+  // UPDATE
   // ============================================
 
   const handleSubmit = async (
@@ -91,15 +90,12 @@ const EditStaff = () => {
       setLoading(true);
 
       await staffService.updateStaff(
-
         id,
-
         formData
-
       );
 
       toast.success(
-        "Staff Updated Successfully"
+        "Staff updated successfully"
       );
 
       navigate(
@@ -108,10 +104,17 @@ const EditStaff = () => {
 
     } catch (error) {
 
-      console.log(error);
+      console.error(error);
 
       toast.error(
-        "Failed to update staff"
+
+        error.response?.data
+
+          ? JSON.stringify(
+              error.response.data
+            )
+
+          : "Failed to update staff"
       );
 
     } finally {
@@ -134,9 +137,7 @@ const EditStaff = () => {
           text-2xl
           font-bold
         ">
-
           Loading...
-
         </h1>
 
       </div>
@@ -158,18 +159,14 @@ const EditStaff = () => {
           font-bold
           text-gray-800
         ">
-
           Edit Staff
-
         </h1>
 
         <p className="
           text-gray-500
           mt-1
         ">
-
           Update staff details
-
         </p>
 
       </div>

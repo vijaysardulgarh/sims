@@ -9,53 +9,159 @@ import {
 } from "react";
 
 import postTypeService from "../../post-types/services/postTypeService";
-
+import subjectService from "../../../academics/subjects/services/subjectService";
 
 const StaffForm = ({
-
   initialData = {},
-
   onSubmit,
-
   loading = false,
-
 }) => {
 
-  // ============================================
-  // STATES
-  // ============================================
+  const [postTypes, setPostTypes] =
+    useState([]);
 
-  const [postTypes,
-    setPostTypes] =
+  const [subjects, setSubjects] =
     useState([]);
 
   const [formData, setFormData] =
     useState({
 
+      employee_id: "",
+
       name: "",
+
+      gender: "",
+
+      father_name: "",
+
+      mother_name: "",
+
+      spouse_name: "",
 
       email: "",
 
       mobile_number: "",
 
-      employee_id: "",
+      aadhar_number: "",
+
+      post_type: "",
+
+      staff_role: "Teaching",
+
+      employment_type: "",
+
+      subject: "",
 
       qualification: "",
 
+      date_of_birth: "",
+
       joining_date: "",
 
-      post_type: "",
-    });
+      current_joining_date: "",
 
-  // ============================================
-  // FETCH POST TYPES
-  // ============================================
+      retirement_date: "",
+
+      priority: 1,
+
+      max_periods_per_week: 40,
+
+      category: "",
+
+      bio: "",
+
+      is_active: true,
+    });
 
   useEffect(() => {
 
     fetchPostTypes();
 
+    fetchSubjects();
+
   }, []);
+
+  useEffect(() => {
+
+    if (
+      initialData &&
+      Object.keys(initialData).length
+    ) {
+
+      setFormData({
+
+        employee_id:
+          initialData.employee_id || "",
+
+        name:
+          initialData.name || "",
+
+        gender:
+          initialData.gender || "",
+
+        father_name:
+          initialData.father_name || "",
+
+        mother_name:
+          initialData.mother_name || "",
+
+        spouse_name:
+          initialData.spouse_name || "",
+
+        email:
+          initialData.email || "",
+
+        mobile_number:
+          initialData.mobile_number || "",
+
+        aadhar_number:
+          initialData.aadhar_number || "",
+
+        post_type:
+          initialData.post_type || "",
+
+        staff_role:
+          initialData.staff_role || "Teaching",
+
+        employment_type:
+          initialData.employment_type || "",
+
+        subject:
+          initialData.subject || "",
+
+        qualification:
+          initialData.qualification || "",
+
+        date_of_birth:
+          initialData.date_of_birth || "",
+
+        joining_date:
+          initialData.joining_date || "",
+
+        current_joining_date:
+          initialData.current_joining_date || "",
+
+        retirement_date:
+          initialData.retirement_date || "",
+
+        priority:
+          initialData.priority || 1,
+
+        max_periods_per_week:
+          initialData.max_periods_per_week || 40,
+
+        category:
+          initialData.category || "",
+
+        bio:
+          initialData.bio || "",
+
+        is_active:
+          initialData.is_active ?? true,
+      });
+    }
+
+  }, [initialData]);
 
   const fetchPostTypes = async () => {
 
@@ -79,63 +185,50 @@ const StaffForm = ({
     }
   };
 
-  // ============================================
-  // PREFILL
-  // ============================================
+  const fetchSubjects = async () => {
 
-  useEffect(() => {
+    try {
 
-    if (
-      initialData &&
-      Object.keys(initialData).length > 0
-    ) {
+      const response =
+        await subjectService.getSubjects();
 
-      setFormData({
+      setSubjects(
 
-        name:
-          initialData.name || "",
+        Array.isArray(response)
 
-        email:
-          initialData.email || "",
+          ? response
 
-        mobile_number:
-          initialData.mobile_number || "",
+          : response.results || []
+      );
 
-        employee_id:
-          initialData.employee_id || "",
+    } catch (error) {
 
-        qualification:
-          initialData.qualification || "",
-
-        joining_date:
-          initialData.joining_date || "",
-
-        post_type:
-          initialData.post_type || "",
-      });
+      console.log(error);
     }
-
-  }, [initialData]);
-
-  // ============================================
-  // HANDLE CHANGE
-  // ============================================
+  };
 
   const handleChange = (e) => {
 
-    const { name, value } = e.target;
+    const {
+      name,
+      value,
+      type,
+      checked
+    } = e.target;
 
     setFormData({
 
       ...formData,
 
-      [name]: value,
+      [name]:
+
+        type === "checkbox"
+
+          ? checked
+
+          : value,
     });
   };
-
-  // ============================================
-  // SUBMIT
-  // ============================================
 
   const handleSubmit = (e) => {
 
@@ -143,6 +236,9 @@ const StaffForm = ({
 
     onSubmit(formData);
   };
+
+  const inputClass =
+    "w-full border rounded-xl px-4 py-3";
 
   return (
 
@@ -157,266 +253,291 @@ const StaffForm = ({
       "
     >
 
-      {/* NAME */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Name
-        </label>
+      <div className="
+        grid
+        grid-cols-1
+        md:grid-cols-2
+        gap-6
+      ">
 
         <input
-
-          type="text"
-
-          name="name"
-
-          value={formData.name}
-
+          name="employee_id"
+          placeholder="Employee ID"
+          value={formData.employee_id}
           onChange={handleChange}
+          className={inputClass}
+        />
 
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
-
+        <input
+          name="name"
+          placeholder="Name"
+          value={formData.name}
+          onChange={handleChange}
+          className={inputClass}
           required
         />
 
-      </div>
-
-      {/* EMAIL */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Email
-        </label>
-
-        <input
-
-          type="email"
-
-          name="email"
-
-          value={formData.email}
-
+        <select
+          name="gender"
+          value={formData.gender}
           onChange={handleChange}
+          className={inputClass}
+        >
+          <option value="">
+            Select Gender
+          </option>
 
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
-        />
+          <option value="Male">
+            Male
+          </option>
 
-      </div>
+          <option value="Female">
+            Female
+          </option>
 
-      {/* MOBILE */}
+          <option value="Other">
+            Other
+          </option>
 
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Mobile Number
-        </label>
+        </select>
 
         <input
-
-          type="text"
-
           name="mobile_number"
-
+          placeholder="Mobile Number"
           value={formData.mobile_number}
-
           onChange={handleChange}
-
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
+          className={inputClass}
         />
-
-      </div>
-
-      {/* EMPLOYEE ID */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Employee ID
-        </label>
 
         <input
-
-          type="text"
-
-          name="employee_id"
-
-          value={formData.employee_id}
-
+          name="email"
+          placeholder="Email"
+          value={formData.email}
           onChange={handleChange}
-
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
+          className={inputClass}
         />
-
-      </div>
-
-      {/* QUALIFICATION */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Qualification
-        </label>
 
         <input
-
-          type="text"
-
-          name="qualification"
-
-          value={formData.qualification}
-
+          name="aadhar_number"
+          placeholder="Aadhaar Number"
+          value={formData.aadhar_number}
           onChange={handleChange}
-
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
+          className={inputClass}
         />
-
-      </div>
-
-      {/* JOINING DATE */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Joining Date
-        </label>
 
         <input
-
-          type="date"
-
-          name="joining_date"
-
-          value={formData.joining_date}
-
+          name="father_name"
+          placeholder="Father Name"
+          value={formData.father_name}
           onChange={handleChange}
-
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
+          className={inputClass}
         />
 
-      </div>
+        <input
+          name="mother_name"
+          placeholder="Mother Name"
+          value={formData.mother_name}
+          onChange={handleChange}
+          className={inputClass}
+        />
 
-      {/* POST TYPE */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Post Type
-        </label>
+        <input
+          name="spouse_name"
+          placeholder="Spouse Name"
+          value={formData.spouse_name}
+          onChange={handleChange}
+          className={inputClass}
+        />
 
         <select
-
           name="post_type"
-
           value={formData.post_type}
-
           onChange={handleChange}
-
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
+          className={inputClass}
         >
-
           <option value="">
             Select Post Type
           </option>
 
-          {
+          {postTypes.map((item) => (
 
-            postTypes.map((item) => (
+            <option
+              key={item.id}
+              value={item.id}
+            >
+              {item.name}
+            </option>
 
-              <option
-                key={item.id}
-                value={item.id}
-              >
-
-                {item.name}
-
-              </option>
-            ))
-          }
+          ))}
 
         </select>
 
+        <select
+          name="staff_role"
+          value={formData.staff_role}
+          onChange={handleChange}
+          className={inputClass}
+        >
+          <option value="Teaching">
+            Teaching
+          </option>
+
+          <option value="Non Teaching">
+            Non Teaching
+          </option>
+
+          <option value="Admin">
+            Admin
+          </option>
+
+          <option value="Support">
+            Support
+          </option>
+
+        </select>
+
+        <select
+          name="employment_type"
+          value={formData.employment_type}
+          onChange={handleChange}
+          className={inputClass}
+        >
+          <option value="">
+            Select Employment Type
+          </option>
+
+          <option value="Regular">
+            Regular
+          </option>
+
+          <option value="Contract">
+            Contract
+          </option>
+
+          <option value="Guest">
+            Guest
+          </option>
+
+          <option value="Part Time">
+            Part Time
+          </option>
+
+        </select>
+
+        <select
+          name="subject"
+          value={formData.subject}
+          onChange={handleChange}
+          className={inputClass}
+        >
+          <option value="">
+            Select Subject
+          </option>
+
+          {subjects.map((item) => (
+
+            <option
+              key={item.id}
+              value={item.id}
+            >
+              {item.name}
+            </option>
+
+          ))}
+
+        </select>
+
+        <input
+          name="qualification"
+          placeholder="Qualification"
+          value={formData.qualification}
+          onChange={handleChange}
+          className={inputClass}
+        />
+
+        <input
+          type="date"
+          name="date_of_birth"
+          value={formData.date_of_birth}
+          onChange={handleChange}
+          className={inputClass}
+        />
+
+        <input
+          type="date"
+          name="joining_date"
+          value={formData.joining_date}
+          onChange={handleChange}
+          className={inputClass}
+        />
+
+        <input
+          type="date"
+          name="current_joining_date"
+          value={formData.current_joining_date}
+          onChange={handleChange}
+          className={inputClass}
+        />
+
+        <input
+          type="date"
+          name="retirement_date"
+          value={formData.retirement_date}
+          onChange={handleChange}
+          className={inputClass}
+        />
+
+        <input
+          type="number"
+          name="priority"
+          value={formData.priority}
+          onChange={handleChange}
+          className={inputClass}
+        />
+
+        <input
+          type="number"
+          name="max_periods_per_week"
+          value={formData.max_periods_per_week}
+          onChange={handleChange}
+          className={inputClass}
+        />
+
+        <input
+          name="category"
+          placeholder="Category"
+          value={formData.category}
+          onChange={handleChange}
+          className={inputClass}
+        />
+
       </div>
 
-      {/* BUTTON */}
+      <textarea
+        name="bio"
+        placeholder="Bio"
+        value={formData.bio}
+        onChange={handleChange}
+        rows={4}
+        className={inputClass}
+      />
+
+      <label className="flex items-center gap-2">
+
+        <input
+          type="checkbox"
+          name="is_active"
+          checked={formData.is_active}
+          onChange={handleChange}
+        />
+
+        Active
+
+      </label>
 
       <button
-
         type="submit"
-
         disabled={loading}
-
         className="
           bg-blue-600
           hover:bg-blue-700
@@ -428,9 +549,7 @@ const StaffForm = ({
       >
 
         {loading
-
           ? "Saving..."
-
           : "Save Staff"}
 
       </button>

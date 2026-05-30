@@ -1,316 +1,440 @@
+// ============================================
+// IMPORTS
+// ============================================
+
 import {
-  useState,
-  useEffect
+    useState,
+    useEffect
 } from "react";
 
 import {
-  useParams,
-  useNavigate
+    useParams,
+    useNavigate
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
 import smcMemberService from "../services/smcMemberService";
 
+// ============================================
+// COMPONENT
+// ============================================
+
 const SMCMemberView = () => {
 
-  // =====================================
-  // ROUTER
-  // =====================================
+    // ============================================
+    // ROUTER
+    // ============================================
 
-  const { id } =
-    useParams();
+    const { id } =
+        useParams();
 
-  const navigate =
-    useNavigate();
+    const navigate =
+        useNavigate();
 
-  // =====================================
-  // STATE
-  // =====================================
+    // ============================================
+    // STATE
+    // ============================================
 
-  const [member, setMember] =
-    useState(null);
+    const [member, setMember] =
+        useState(null);
 
-  const [loading, setLoading] =
-    useState(true);
+    const [loading, setLoading] =
+        useState(true);
 
-  // =====================================
-  // FETCH MEMBER
-  // =====================================
+    // ============================================
+    // FETCH MEMBER
+    // ============================================
 
-  useEffect(() => {
+    useEffect(() => {
 
-    const fetchMember =
-      async () => {
+        const fetchMember =
+            async () => {
 
-        try {
+                try {
 
-          const response =
-            await smcMemberService
-              .getSMCMember(id);
+                    const response =
+                        await smcMemberService
+                            .getSMCMember(id);
 
-          setMember(
-            response
-          );
+                    setMember(
+                        response
+                    );
 
-        } catch (error) {
+                } catch (error) {
 
-          console.error(error);
+                    console.error(error);
 
-          toast.error(
-            "Failed to load member"
-          );
+                    toast.error(
+                        "Failed to load member"
+                    );
 
-        } finally {
+                } finally {
 
-          setLoading(false);
+                    setLoading(false);
 
-        }
+                }
 
-      };
+            };
 
-    fetchMember();
+        fetchMember();
 
-  }, [id]);
+    }, [id]);
 
-  // =====================================
-  // LOADING
-  // =====================================
+    // ============================================
+    // LOADING
+    // ============================================
 
-  if (loading) {
+    if (loading) {
+
+        return (
+
+            <div className="p-6">
+
+                Loading...
+
+            </div>
+
+        );
+
+    }
+
+    // ============================================
+    // NOT FOUND
+    // ============================================
+
+    if (!member) {
+
+        return (
+
+            <div className="p-6">
+
+                Member not found
+
+            </div>
+
+        );
+
+    }
+
+    // ============================================
+    // UI
+    // ============================================
 
     return (
 
-      <div className="p-6">
+        <div className="space-y-6">
 
-        Loading...
+            <div
+                className="
+                    bg-white
+                    rounded-2xl
+                    shadow
+                    p-6
+                "
+            >
 
-      </div>
+                {/* ======================================== */}
+                {/* TITLE */}
+                {/* ======================================== */}
 
-    );
+                <h1
+                    className="
+                        text-3xl
+                        font-bold
+                        mb-6
+                    "
+                >
+                    SMC Member Details
+                </h1>
 
-  }
+                {/* ======================================== */}
+                {/* PHOTO */}
+                {/* ======================================== */}
 
-  // =====================================
-  // NOT FOUND
-  // =====================================
+                {
 
-  if (!member) {
+                    member.photo && (
 
-    return (
+                        <div className="mb-6">
 
-      <div className="p-6">
+                            <img
+                                src={member.photo}
+                                alt={member.name}
+                                className="
+                                    w-32
+                                    h-32
+                                    rounded-xl
+                                    object-cover
+                                    border
+                                "
+                            />
 
-        Member not found
+                        </div>
 
-      </div>
+                    )
 
-    );
+                }
 
-  }
+                {/* ======================================== */}
+                {/* DETAILS */}
+                {/* ======================================== */}
 
-  // =====================================
-  // UI
-  // =====================================
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        md:grid-cols-2
+                        gap-6
+                    "
+                >
 
-  return (
+                    <div>
 
-    <div className="space-y-6">
+                        <strong>
+                            Name:
+                        </strong>
 
-      <div className="
-        bg-white
-        rounded-2xl
-        shadow
-        p-6
-      ">
+                        <p>
+                            {member.name || "-"}
+                        </p>
 
-        <h1 className="
-          text-3xl
-          font-bold
-          mb-6
-        ">
-          SMC Member Details
-        </h1>
+                    </div>
 
-        <div className="
-          grid
-          grid-cols-1
-          md:grid-cols-2
-          gap-6
-        ">
+                    <div>
 
-          <div>
+                        <strong>
+                            Position:
+                        </strong>
 
-            <strong>
-              Name:
-            </strong>
+                        <p>
+                            {member.position || "-"}
+                        </p>
 
-            <p>
-              {member.name || "-"}
-            </p>
+                    </div>
 
-          </div>
+                    <div>
 
-          <div>
+                        <strong>
+                            Gender:
+                        </strong>
 
-            <strong>
-              Position:
-            </strong>
+                        <p>
+                            {member.gender || "-"}
+                        </p>
 
-            <p>
-              {member.position || "-"}
-            </p>
+                    </div>
 
-          </div>
+                    <div>
 
-          <div>
+                        <strong>
+                            Category:
+                        </strong>
 
-            <strong>
-              Contact Number:
-            </strong>
+                        <p>
+                            {member.category || "-"}
+                        </p>
 
-            <p>
-              {
-                member.contact_number ||
-                "-"
-              }
-            </p>
+                    </div>
 
-          </div>
+                    <div>
 
-          <div>
+                        <strong>
+                            Contact Number:
+                        </strong>
 
-            <strong>
-              Email:
-            </strong>
+                        <p>
+                            {
+                                member.contact_number ||
+                                "-"
+                            }
+                        </p>
 
-            <p>
-              {
-                member.email ||
-                "-"
-              }
-            </p>
+                    </div>
 
-          </div>
+                    <div>
 
-          <div>
+                        <strong>
+                            Email:
+                        </strong>
 
-            <strong>
-              Priority:
-            </strong>
+                        <p>
+                            {
+                                member.email ||
+                                "-"
+                            }
+                        </p>
 
-            <p>
-              {
-                member.priority ??
-                "-"
-              }
-            </p>
+                    </div>
 
-          </div>
+                    <div>
 
-          <div>
+                        <strong>
+                            Nomination Date:
+                        </strong>
 
-            <strong>
-              Show On Website:
-            </strong>
+                        <p>
+                            {
+                                member.nomination_date ||
+                                "-"
+                            }
+                        </p>
 
-            <p>
+                    </div>
 
-              {
+                    <div>
 
-                member.show_on_website
+                        <strong>
+                            Tenure End Date:
+                        </strong>
 
-                  ? "Yes"
+                        <p>
+                            {
+                                member.tenure_end_date ||
+                                "-"
+                            }
+                        </p>
 
-                  : "No"
+                    </div>
 
-              }
+                    <div>
 
-            </p>
+                        <strong>
+                            Priority:
+                        </strong>
 
-          </div>
+                        <p>
+                            {
+                                member.priority ??
+                                "-"
+                            }
+                        </p>
 
-          <div>
+                    </div>
 
-            <strong>
-              Status:
-            </strong>
+                    <div>
 
-            <p>
+                        <strong>
+                            Show On Website:
+                        </strong>
 
-              {
+                        <p>
 
-                member.is_active
+                            {
 
-                  ? "Active"
+                                member.show_on_website
 
-                  : "Inactive"
+                                    ? "Yes"
 
-              }
+                                    : "No"
 
-            </p>
+                            }
 
-          </div>
+                        </p>
+
+                    </div>
+
+                    <div className="md:col-span-2">
+
+                        <strong>
+                            Address:
+                        </strong>
+
+                        <p>
+                            {
+                                member.address ||
+                                "-"
+                            }
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {/* ======================================== */}
+                {/* REMARKS */}
+                {/* ======================================== */}
+
+                <div className="mt-6">
+
+                    <strong>
+                        Remarks:
+                    </strong>
+
+                    <p
+                        className="
+                            mt-2
+                            text-gray-700
+                            whitespace-pre-wrap
+                        "
+                    >
+                        {
+                            member.remarks ||
+                            "-"
+                        }
+                    </p>
+
+                </div>
+
+                {/* ======================================== */}
+                {/* ACTIONS */}
+                {/* ======================================== */}
+
+                <div
+                    className="
+                        mt-8
+                        flex
+                        gap-3
+                    "
+                >
+
+                    <button
+
+                        onClick={() =>
+                            navigate(
+                                "/dashboard/associations/smc-members"
+                            )
+                        }
+
+                        className="
+                            bg-gray-600
+                            hover:bg-gray-700
+                            text-white
+                            px-6
+                            py-3
+                            rounded-xl
+                        "
+                    >
+                        Back
+                    </button>
+
+                    <button
+
+                        onClick={() =>
+                            navigate(
+                                `/dashboard/associations/smc-members/edit/${id}`
+                            )
+                        }
+
+                        className="
+                            bg-blue-600
+                            hover:bg-blue-700
+                            text-white
+                            px-6
+                            py-3
+                            rounded-xl
+                        "
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
-        {/* ========================= */}
-        {/* ACTIONS */}
-        {/* ========================= */}
-
-        <div className="
-          mt-8
-          flex
-          gap-3
-        ">
-
-          <button
-
-            onClick={() =>
-              navigate(
-                "/dashboard/associations/smc-members"
-              )
-            }
-
-            className="
-              bg-gray-600
-              hover:bg-gray-700
-              text-white
-              px-6
-              py-3
-              rounded-xl
-            "
-          >
-            Back
-          </button>
-
-          <button
-
-            onClick={() =>
-              navigate(
-                `/dashboard/associations/smc-members/edit/${id}`
-              )
-            }
-
-            className="
-              bg-blue-600
-              hover:bg-blue-700
-              text-white
-              px-6
-              py-3
-              rounded-xl
-            "
-          >
-            Edit
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  );
+    );
 
 };
 

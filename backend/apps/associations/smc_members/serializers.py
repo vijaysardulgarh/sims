@@ -37,15 +37,31 @@ class SMCMemberSerializer(
             "academic_session",
             "academic_session_name",
 
+            # Basic Details
             "name",
             "position",
+            "gender",
+            "category",
 
             "contact_number",
             "email",
+            "address",
 
+            # Tenure
+            "nomination_date",
+            "tenure_end_date",
+
+            # Media
+            "photo",
+
+            # Display Settings
             "priority",
             "show_on_website",
 
+            # Notes
+            "remarks",
+
+            # Base Model Fields
             "is_active",
             "is_deleted",
 

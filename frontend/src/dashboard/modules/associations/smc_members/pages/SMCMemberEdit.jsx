@@ -1,11 +1,15 @@
+// ============================================
+// IMPORTS
+// ============================================
+
 import {
-  useState,
-  useEffect
+    useState,
+    useEffect
 } from "react";
 
 import {
-  useNavigate,
-  useParams
+    useNavigate,
+    useParams
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -14,179 +18,270 @@ import SMCMemberForm from "../components/SMCMemberForm";
 
 import smcMemberService from "../services/smcMemberService";
 
+// ============================================
+// COMPONENT
+// ============================================
+
 const SMCMemberEdit = () => {
 
-  // =====================================
-  // NAVIGATION
-  // =====================================
+    // ============================================
+    // NAVIGATION
+    // ============================================
 
-  const navigate =
-    useNavigate();
+    const navigate =
+        useNavigate();
 
-  const { id } =
-    useParams();
+    const { id } =
+        useParams();
 
-  // =====================================
-  // STATE
-  // =====================================
+    // ============================================
+    // STATE
+    // ============================================
 
-  const [loading, setLoading] =
-    useState(false);
+    const [loading, setLoading] =
+        useState(false);
 
-  const [initialData,
-    setInitialData] =
-    useState({});
+    const [initialData,
+        setInitialData] =
+        useState({});
 
-  const [pageLoading,
-    setPageLoading] =
-    useState(true);
+    const [pageLoading,
+        setPageLoading] =
+        useState(true);
 
-  // =====================================
-  // LOAD MEMBER
-  // =====================================
+    // ============================================
+    // LOAD MEMBER
+    // ============================================
 
-  useEffect(() => {
+    useEffect(() => {
 
-    const fetchMember =
-      async () => {
+        const fetchMember =
+            async () => {
 
-        try {
+                try {
 
-          const response =
-            await smcMemberService
-              .getSMCMember(id);
+                    const response =
+                        await smcMemberService
+                            .getSMCMember(id);
 
-          setInitialData(
-            response
-          );
+                    console.log(
+                        "MEMBER DATA:",
+                        response
+                    );
 
-        } catch (error) {
+                    setInitialData(
+                        response
+                    );
 
-          console.error(error);
+                } catch (error) {
 
-          toast.error(
-            "Failed to load member"
-          );
+                    console.error(
+                        "LOAD ERROR:",
+                        error.response?.data
+                    );
 
-        } finally {
+                    console.error(error);
 
-          setPageLoading(false);
+                    toast.error(
+                        "Failed to load member"
+                    );
 
-        }
+                } finally {
 
-      };
+                    setPageLoading(false);
 
-    fetchMember();
+                }
 
-  }, [id]);
+            };
 
-  // =====================================
-  // UPDATE MEMBER
-  // =====================================
+        fetchMember();
 
-  const handleSubmit =
-    async (formData) => {
+    }, [id]);
 
-      try {
+    // ============================================
+    // UPDATE MEMBER
+    // ============================================
 
-        setLoading(true);
+    const handleSubmit =
+        async (formData) => {
 
-        await smcMemberService
-          .updateSMCMember(
-            id,
-            formData
-          );
+            try {
 
-        toast.success(
-          "SMC Member Updated Successfully"
+                setLoading(true);
+
+                console.log(
+                    "UPDATE ID:",
+                    id
+                );
+
+                console.log(
+                    "FORM DATA:",
+                    formData
+                );
+
+                Object.keys(formData)
+                    .forEach((key) => {
+
+                        console.log(
+                            `${key}:`,
+                            formData[key]
+                        );
+
+                    });
+
+                const response =
+                    await smcMemberService
+                        .updateSMCMember(
+                            id,
+                            formData
+                        );
+
+                console.log(
+                    "UPDATE RESPONSE:",
+                    response
+                );
+
+                toast.success(
+                    "SMC Member Updated Successfully"
+                );
+
+                navigate(
+                    "/dashboard/associations/smc-members"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "================================="
+                );
+
+                console.error(
+                    "UPDATE ERROR:"
+                );
+
+                console.error(
+                    error.response?.data
+                );
+
+                console.error(
+                    "STATUS:"
+                );
+
+                console.error(
+                    error.response?.status
+                );
+
+                console.error(
+                    "HEADERS:"
+                );
+
+                console.error(
+                    error.response?.headers
+                );
+
+                console.error(
+                    "FULL ERROR:"
+                );
+
+                console.error(
+                    error
+                );
+
+                console.error(
+                    "================================="
+                );
+
+                toast.error(
+                    "Update Failed"
+                );
+
+            } finally {
+
+                setLoading(false);
+
+            }
+
+        };
+
+    // ============================================
+    // LOADING
+    // ============================================
+
+    if (pageLoading) {
+
+        return (
+
+            <div
+                className="
+                    p-6
+                "
+            >
+                Loading...
+            </div>
+
         );
 
-        navigate(
-          "/dashboard/associations/smc-members"
-        );
+    }
 
-      } catch (error) {
-
-        console.error(error);
-
-        toast.error(
-          "Update Failed"
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
-
-  // =====================================
-  // LOADING
-  // =====================================
-
-  if (pageLoading) {
+    // ============================================
+    // UI
+    // ============================================
 
     return (
 
-      <div className="
-        p-6
-      ">
-        Loading...
-      </div>
+        <div className="space-y-6">
+
+            {/* ==================================== */}
+            {/* PAGE HEADER */}
+            {/* ==================================== */}
+
+            <div>
+
+                <h1
+                    className="
+                        text-3xl
+                        font-bold
+                        text-gray-800
+                    "
+                >
+                    Edit SMC Member
+                </h1>
+
+                <p
+                    className="
+                        text-gray-500
+                        mt-1
+                    "
+                >
+                    Update School Management Committee
+                    Member Information
+                </p>
+
+            </div>
+
+            {/* ==================================== */}
+            {/* FORM */}
+            {/* ==================================== */}
+
+            <SMCMemberForm
+
+                initialData={
+                    initialData
+                }
+
+                onSubmit={
+                    handleSubmit
+                }
+
+                loading={
+                    loading
+                }
+
+            />
+
+        </div>
 
     );
-
-  }
-
-  // =====================================
-  // UI
-  // =====================================
-
-  return (
-
-    <div className="space-y-6">
-
-      {/* ============================= */}
-      {/* PAGE HEADER */}
-      {/* ============================= */}
-
-      <div>
-
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-800
-        ">
-          Edit SMC Member
-        </h1>
-
-        <p className="
-          text-gray-500
-          mt-1
-        ">
-          Update School Management Committee Member Information
-        </p>
-
-      </div>
-
-      {/* ============================= */}
-      {/* FORM */}
-      {/* ============================= */}
-
-      <SMCMemberForm
-
-        initialData={initialData}
-
-        onSubmit={handleSubmit}
-
-        loading={loading}
-
-      />
-
-    </div>
-
-  );
 
 };
 

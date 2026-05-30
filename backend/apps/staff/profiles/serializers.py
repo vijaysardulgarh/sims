@@ -3,9 +3,7 @@ from rest_framework import serializers
 from apps.staff.profiles.models import Staff
 
 
-class StaffSerializer(
-    serializers.ModelSerializer
-):
+class StaffSerializer(serializers.ModelSerializer):
 
     # ============================================
     # RELATED FIELDS
@@ -36,8 +34,13 @@ class StaffSerializer(
 
         fields = [
 
-            # BASIC
+            # SYSTEM
             "id",
+
+            # USER
+            "user",
+
+            # BASIC
             "employee_id",
             "name",
             "profile_picture",
@@ -82,9 +85,8 @@ class StaffSerializer(
 
             # STATUS
             "is_active",
-            "is_deleted",
 
-            # SYSTEM
+            # AUDIT
             "created_at",
             "updated_at",
         ]

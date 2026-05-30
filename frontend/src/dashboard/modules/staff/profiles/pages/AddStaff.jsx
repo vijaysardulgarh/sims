@@ -3,18 +3,12 @@
 // File: AddStaff.jsx
 // ============================================
 
-import {
-  useState
-} from "react";
-
-import {
-  useNavigate
-} from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
 import StaffForm from "../components/StaffForm";
-
 import staffService from "../services/staffService";
 
 const AddStaff = () => {
@@ -26,14 +20,14 @@ const AddStaff = () => {
   const navigate = useNavigate();
 
   // ============================================
-  // LOADING
+  // STATE
   // ============================================
 
   const [loading, setLoading] =
     useState(false);
 
   // ============================================
-  // HANDLE SUBMIT
+  // SUBMIT
   // ============================================
 
   const handleSubmit = async (
@@ -45,22 +39,20 @@ const AddStaff = () => {
       setLoading(true);
 
       await staffService.createStaff(
-
         formData
-
       );
 
       toast.success(
-        "Staff Added Successfully"
+        "Staff added successfully"
       );
 
       navigate(
-        "/dashboard/staff/staff-Profiles"
+        "/dashboard/staff/staff-profiles"
       );
 
     } catch (error) {
 
-      console.log(error);
+      console.error(error);
 
       toast.error(
 
@@ -94,18 +86,14 @@ const AddStaff = () => {
           font-bold
           text-gray-800
         ">
-
           Add Staff
-
         </h1>
 
         <p className="
           text-gray-500
           mt-1
         ">
-
-          Create new staff record
-
+          Create a new staff record
         </p>
 
       </div>

@@ -14,22 +14,29 @@ class SMCMemberAdmin(admin.ModelAdmin):
         "id",
         "name",
         "position",
+        "contact_number",
+        "nomination_date",
+        "tenure_end_date",
+        "show_on_website",
         "academic_session",
         "school",
-        "contact_number",
-        "show_on_website",
     )
 
     search_fields = (
         "name",
         "position",
+        "contact_number",
+        "email",
+        "remarks",
         "school__name",
     )
 
     list_filter = (
         "position",
-        "academic_session",
+        "gender",
+        "category",
         "show_on_website",
+        "academic_session",
         "school",
     )
 
@@ -47,4 +54,55 @@ class SMCMemberAdmin(admin.ModelAdmin):
     list_select_related = (
         "school",
         "academic_session",
+    )
+
+    fieldsets = (
+        (
+            "Basic Information",
+            {
+                "fields": (
+                    "name",
+                    "position",
+                    "gender",
+                    "category",
+                )
+            },
+        ),
+        (
+            "Contact Information",
+            {
+                "fields": (
+                    "contact_number",
+                    "email",
+                    "address",
+                )
+            },
+        ),
+        (
+            "Tenure Information",
+            {
+                "fields": (
+                    "nomination_date",
+                    "tenure_end_date",
+                )
+            },
+        ),
+        (
+            "Media & Display",
+            {
+                "fields": (
+                    "photo",
+                    "priority",
+                    "show_on_website",
+                )
+            },
+        ),
+        (
+            "Additional Information",
+            {
+                "fields": (
+                    "remarks",
+                )
+            },
+        ),
     )

@@ -23,7 +23,6 @@ import ConfirmModal from "../../../../shared/components/modals/ConfirmModal";
 
 import staffService from "../services/staffService";
 
-
 const StaffList = () => {
 
   // ============================================
@@ -36,25 +35,18 @@ const StaffList = () => {
   // STATES
   // ============================================
 
-  const [staff, setStaff] =
-    useState([]);
+  const [staff, setStaff] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
 
-  const [currentPage,
-    setCurrentPage] =
-    useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [isModalOpen,
-    setIsModalOpen] =
+  const [isModalOpen, setIsModalOpen] =
     useState(false);
 
-  const [selectedId,
-    setSelectedId] =
+  const [selectedId, setSelectedId] =
     useState(null);
 
   const itemsPerPage = 20;
@@ -72,13 +64,9 @@ const StaffList = () => {
       const response =
         await staffService.getStaff();
 
-      const data =
-
-        Array.isArray(response)
-
-          ? response
-
-          : response.results || [];
+      const data = Array.isArray(response)
+        ? response
+        : response.results || [];
 
       setStaff(data);
 
@@ -103,6 +91,16 @@ const StaffList = () => {
   }, []);
 
   // ============================================
+  // RESET PAGE ON SEARCH
+  // ============================================
+
+  useEffect(() => {
+
+    setCurrentPage(1);
+
+  }, [search]);
+
+  // ============================================
   // DELETE
   // ============================================
 
@@ -110,9 +108,7 @@ const StaffList = () => {
 
     try {
 
-      await staffService.deleteStaff(
-        id
-      );
+      await staffService.deleteStaff(id);
 
       toast.success(
         "Deleted Successfully"
@@ -131,34 +127,75 @@ const StaffList = () => {
   };
 
   // ============================================
-  // FILTER
+  // FILTER DATA
   // ============================================
 
-  const filteredData =
-    staff.filter((item) =>
+  const filteredData = staff.filter((item) => {
+
+    const searchText =
+      search.toLowerCase();
+
+    return (
+
+      (item.employee_id || "")
+        .toLowerCase()
+        .includes(searchText)
+
+      ||
 
       (item.name || "")
-
         .toLowerCase()
+        .includes(searchText)
 
-        .includes(
-          search.toLowerCase()
-        )
+      ||
+
+      (item.email || "")
+        .toLowerCase()
+        .includes(searchText)
+
+      ||
+
+      (item.mobile_number || "")
+        .toLowerCase()
+        .includes(searchText)
+
+      ||
+
+      (item.post_type_name || "")
+        .toLowerCase()
+        .includes(searchText)
+
+      ||
+
+      (item.staff_role || "")
+        .toLowerCase()
+        .includes(searchText)
+
+      ||
+
+      (item.subject_name || "")
+        .toLowerCase()
+        .includes(searchText)
+
+      ||
+
+      (item.school_name || "")
+        .toLowerCase()
+        .includes(searchText)
     );
+  });
 
   // ============================================
   // PAGINATION
   // ============================================
 
-  const totalPages =
-    Math.ceil(
-      filteredData.length /
-      itemsPerPage
-    );
+  const totalPages = Math.ceil(
+    filteredData.length /
+    itemsPerPage
+  );
 
   const paginatedData =
     filteredData.slice(
-
       (currentPage - 1) *
       itemsPerPage,
 
@@ -178,13 +215,23 @@ const StaffList = () => {
     },
 
     {
-      key: "full_name",
+      key: "name",
       label: "Name",
     },
 
     {
-      key: "email",
-      label: "Email",
+      key: "post_type_name",
+      label: "Post Type",
+    },
+
+    {
+      key: "staff_role",
+      label: "Role",
+    },
+
+    {
+      key: "subject_name",
+      label: "Subject",
     },
 
     {
@@ -193,8 +240,8 @@ const StaffList = () => {
     },
 
     {
-      key: "post_type_name",
-      label: "Post Type",
+      key: "status",
+      label: "Status",
     },
 
     {
@@ -212,8 +259,19 @@ const StaffList = () => {
 
       ...item,
 
-      full_name:
-        item.name,
+      subject_name:
+        item.subject_name || "-",
+
+      post_type_name:
+        item.post_type_name || "-",
+
+      mobile_number:
+        item.mobile_number || "-",
+
+      status:
+        item.is_active
+          ? "Active"
+          : "Inactive",
 
       actions: (
 
@@ -282,12 +340,14 @@ const StaffList = () => {
 
       <SearchBox
 
-        placeholder="Search staff..."
+        placeholder="Search by employee ID, name, role, subject, mobile..."
 
         value={search}
 
         onChange={(e) =>
-          setSearch(e.target.value)
+          setSearch(
+            e.target.value
+          )
         }
       />
 
@@ -302,7 +362,9 @@ const StaffList = () => {
 
         totalPages={totalPages}
 
-        onPageChange={setCurrentPage}
+        onPageChange={
+          setCurrentPage
+        }
       />
 
       <ConfirmModal
@@ -319,10 +381,11 @@ const StaffList = () => {
 
         onConfirm={() => {
 
-          handleDelete(selectedId);
+          handleDelete(
+            selectedId
+          );
 
           setIsModalOpen(false);
-
         }}
       />
 
