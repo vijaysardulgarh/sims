@@ -40,30 +40,6 @@ RBAC_CONFIG = {
         "children": [
 
             {
-                "name": "Sessions",
-                "slug": "sessions",
-                "path": "/dashboard/sessions",
-            },
-
-            {
-                "name": "Subjects",
-                "slug": "subjects",
-                "path": "/dashboard/academics/subjects",
-            },
-
-            {
-                "name": "Class Subjects",
-                "slug": "class-subjects",
-                "path": "/dashboard/academics/class-subjects",
-            },
-
-            {
-                "name": "Teacher Subject Assignments",
-                "slug": "teacher-subject-assignments",
-                "path": "/dashboard/academics/teacher-subject-assignments",
-            },
-
-            {
                 "name": "Classes",
                 "slug": "classes",
                 "path": "/dashboard/academics/classes",
@@ -88,46 +64,17 @@ RBAC_CONFIG = {
             },
 
             {
-                "name": "Classrooms",
-                "slug": "classrooms",
-                "path": "/dashboard/academics/classrooms",
+                "name": "Subjects",
+                "slug": "subjects",
+                "path": "/dashboard/academics/subjects",
             },
 
-            {
-                "name": "Timetables",
-                "slug": "timetables",
-                "path": "/dashboard/academics/timetables",
-            },
+             {
+                "name": "Sessions",
+                "slug": "sessions",
+                "path": "/dashboard/sessions",
+            },           
 
-            {
-                "name": "Timetable Slots",
-                "slug": "timetable-slots",
-                "path": "/dashboard/academics/timetable-slots",
-            },
-
-            {
-                "name": "Timetable Generator",
-                "slug": "timetable-generator",
-                "path": "/dashboard/academics/timetable-generator",
-            },
-
-            {
-                "name": "Timetable Drag Drop",
-                "slug": "timetable-drag-drop",
-                "path": "/dashboard/academics/timetable-drag-drop",
-            },
-
-            {
-                "name": "Days",
-                "slug": "days",
-                "path": "/dashboard/academics/days",
-            },
-
-            {
-                "name": "Academic Reports",
-                "slug": "academic-reports",
-                "path": "/dashboard/academics/academic-reports",
-            },
         ]
     },
 
@@ -178,16 +125,11 @@ RBAC_CONFIG = {
             },
 
             {
-                "name": "Modules",
-                "slug": "modules",
-                "path": "/dashboard/accounts/modules",
+                "name": "System Modules",
+                "slug": "system-modules",
+                "path": "/dashboard/accounts/system-modules",
             },
 
-            {
-                "name": "Reports",
-                "slug": "account-reports",
-                "path": "/dashboard/accounts/account-reports",
-            },
         ]
     },
 
@@ -249,11 +191,6 @@ RBAC_CONFIG = {
                 "path": "/dashboard/associations/student-association-role-assignments",
             },
 
-            {
-                "name": "Reports",
-                "slug": "association-reports",
-                "path": "/dashboard/associations/association-reports",
-            },
         ]
     },
 
@@ -326,12 +263,6 @@ RBAC_CONFIG = {
                 "slug": "schedules",
                 "path": "/dashboard/exams/schedules",
             },
-
-            {
-                "name": "Reports",
-                "slug": "exam-reports",
-                "path": "/dashboard/exams/exam-reports",
-            },
         ]
     },
 
@@ -363,14 +294,24 @@ RBAC_CONFIG = {
                 "path": "/dashboard/finance/student-fees",
             },
 
-            {
-                "name": "Reports",
-                "slug": "finance-reports",
-                "path": "/dashboard/finance/finance-reports",
-            },
         ]
     },
 
+
+    "infrastructure": {
+
+        "path": None,
+
+        "children": [
+
+            {
+                "name": "Classrooms",
+                "slug": "classrooms",
+                "path": "/dashboard/academics/classrooms",
+            },
+
+        ]
+    },
     # ======================================
     # LIBRARY
     # ======================================
@@ -405,11 +346,6 @@ RBAC_CONFIG = {
                 "path": "/dashboard/library/accessions",
             },
 
-            {
-                "name": "Reports",
-                "slug": "library-reports",
-                "path": "/dashboard/library/library-reports",
-            },
         ]
     },
 
@@ -436,11 +372,6 @@ RBAC_CONFIG = {
                 "path": "/dashboard/branches",
             },
 
-            {
-                "name": "Reports",
-                "slug": "school-reports",
-                "path": "/dashboard/school-reports",
-            },
         ]
     },
 
@@ -466,11 +397,6 @@ RBAC_CONFIG = {
                 "path": "/dashboard/cluster/cluster-staff",
             },
 
-            {
-                "name": "Cluster Reports",
-                "slug": "cluster-reports",
-                "path": "/dashboard/cluster/cluster-reports",
-            },
         ]
     },
 
@@ -514,11 +440,6 @@ RBAC_CONFIG = {
                 "path": "/dashboard/staff/teacher-attendance",
             },
 
-            {
-                "name": "Reports",
-                "slug": "staff-reports",
-                "path": "/dashboard/staff-reports",
-            },
         ]
     },
 
@@ -550,11 +471,61 @@ RBAC_CONFIG = {
                 "path": "/dashboard/students/student-achievers",
             },
 
+        ]
+    },
+
+    # ======================================
+    # TIMETABLES
+    # ======================================
+
+    "timetables": {
+
+        "path": None,
+
+        "children": [
+
             {
-                "name": "Student Reports",
-                "slug": "student-reports",
-                "path": "/dashboard/students/student-reports",
+                "name": "Class Subjects",
+                "slug": "class-subjects",
+                "path": "/dashboard/academics/class-subjects",
             },
+
+            {
+                "name": "Teacher Subject Assignments",
+                "slug": "teacher-subject-assignments",
+                "path": "/dashboard/academics/teacher-subject-assignments",
+            },
+
+            {
+                "name": "Timetables",
+                "slug": "timetables",
+                "path": "/dashboard/academics/timetables",
+            },
+
+            {
+                "name": "Timetable Slots",
+                "slug": "timetable-slots",
+                "path": "/dashboard/academics/timetable-slots",
+            },
+
+            {
+                "name": "Timetable Generator",
+                "slug": "timetable-generator",
+                "path": "/dashboard/academics/timetable-generator",
+            },
+
+            {
+                "name": "Timetable Drag Drop",
+                "slug": "timetable-drag-drop",
+                "path": "/dashboard/academics/timetable-drag-drop",
+            },
+
+            {
+                "name": "Days",
+                "slug": "days",
+                "path": "/dashboard/academics/days",
+            },
+
         ]
     },
 
@@ -592,11 +563,6 @@ RBAC_CONFIG = {
                 "path": "/dashboard/transport-assignment",
             },
 
-            {
-                "name": "Reports",
-                "slug": "transport-reports",
-                "path": "/dashboard/transport-reports",
-            },
         ]
     },
 
@@ -635,8 +601,74 @@ RBAC_CONFIG = {
             },
         ]
     },
-}
 
+
+    # ======================================
+    # REPORTS
+    # ======================================
+
+    "reports": {
+
+        "path": None,
+
+        "children": [
+
+            {
+                "name": "Student Reports",
+                "slug": "student-reports",
+                "path": "/dashboard/reports/student-reports",
+            },
+
+            {
+                "name": "Staff Reports",
+                "slug": "staff-reports",
+                "path": "/dashboard/reports/staff-reports",
+            },
+
+            {
+                "name": "Academic Reports",
+                "slug": "academic-reports",
+                "path": "/dashboard/reports/academic-reports",
+            },
+
+            {
+                "name": "Finance Reports",
+                "slug": "finance-reports",
+                "path": "/dashboard/reports/finance-reports",
+            },
+
+            {
+                "name": "Library Reports",
+                "slug": "library-reports",
+                "path": "/dashboard/reports/library-reports",
+            },
+
+            {
+                "name": "Transport Reports",
+                "slug": "transport-reports",
+                "path": "/dashboard/reports/transport-reports",
+            },
+
+            {
+                "name": "Association Reports",
+                "slug": "association-reports",
+                "path": "/dashboard/reports/association-reports",
+            },
+
+            {
+                "name": "School Reports",
+                "slug": "school-reports",
+                "path": "/dashboard/reports/school-reports",
+            },
+
+            {
+                "name": "Cluster Reports",
+                "slug": "cluster-reports",
+                "path": "/dashboard/reports/cluster-reports",
+            },
+        ]
+    },
+}    
 
 # ==========================================
 # ACTIONS
@@ -810,27 +842,33 @@ class Command(
                 []
             ):
 
-                child_module, _ = (
-                    Module.objects.get_or_create(
+                child_module, created = Module.objects.get_or_create(
 
-                        name=child["name"],
+                    slug=child["slug"],
 
-                        defaults={
+                    defaults={
 
-                            "parent":
-                                parent_module,
+                        "name": child["name"],
 
-                            "slug":
-                                child["slug"],
+                        "parent": parent_module,
 
-                            "path":
-                                child["path"],
+                        "path": child["path"],
 
-                            "is_menu":
-                                True,
-                        }
-                    )
+                        "is_menu": True,
+                    }
                 )
+
+                if not created:
+
+                    child_module.parent = parent_module
+
+                    child_module.name = child["name"]
+
+                    child_module.path = child["path"]
+
+                    child_module.is_menu = True
+
+                    child_module.save()
 
                 self.stdout.write(
 

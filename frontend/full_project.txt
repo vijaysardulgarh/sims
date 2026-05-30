@@ -1611,7 +1611,7 @@ FILE: ./src/dashboard/modules/academics/class-subjects/services/classSubjectServ
 // File: classSubjectService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL CLASS SUBJECTS
@@ -2508,7 +2508,7 @@ export default EditClass;
 ==================================================
 FILE: ./src/dashboard/modules/academics/classes/services/classService.js
 ==================================================
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 const classService = {
 
@@ -3388,7 +3388,7 @@ FILE: ./src/dashboard/modules/academics/classrooms/services/classroomService.js
 // File: classroomService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL CLASSROOMS
@@ -4196,7 +4196,7 @@ const TimetablePreview = () => {
 ==================================================
 FILE: ./src/dashboard/modules/academics/dashboard/services/academicDashboardService.js
 ==================================================
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 const academicDashboardService = {
 
@@ -5130,7 +5130,7 @@ FILE: ./src/dashboard/modules/academics/days/services/dayService.js
 // File: dayService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL DAYS
@@ -6068,7 +6068,7 @@ FILE: ./src/dashboard/modules/academics/mediums/services/mediumService.js
 // File: mediumService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL MEDIUMS
@@ -6977,7 +6977,7 @@ FILE: ./src/dashboard/modules/academics/sections/services/sectionService.js
 // File: sectionService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL SECTIONS
@@ -7921,7 +7921,7 @@ FILE: ./src/dashboard/modules/academics/streams/services/streamService.js
 // File: streamService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL STREAMS
@@ -8643,7 +8643,7 @@ FILE: ./src/dashboard/modules/academics/subjects/services/subjectService.js
 // File: subjectService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL SUBJECTS
@@ -10400,7 +10400,7 @@ FILE: ./src/dashboard/modules/academics/timetable/services/timetableService.js
 // File: timetableService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL TIMETABLES
@@ -11401,7 +11401,7 @@ FILE: ./src/dashboard/modules/academics/timetable-slots/services/timetableSlotSe
 // File: timetableSlotService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL TIMETABLE SLOTS
@@ -11806,7 +11806,7 @@ import {
   } from "react";
 
   
-  import api from "../../../../../services/api/axios";
+  import api from "../../../../services/api/axios";
   
   export default function ForgotPasswordPage() {
   
@@ -12016,7 +12016,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useState } from "react";
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -12391,7 +12391,7 @@ import {
 } from "react";
 
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 export default function ResetPasswordPage() {
 
@@ -12676,7 +12676,7 @@ export default function ResetPasswordPage() {
 FILE: ./src/dashboard/modules/accounts/auth/services/authService.js
 ==================================================
 import api from
-"../../../../../services/api/axios";
+"../../../../services/api/axios";
 
 
 const API = "/accounts";
@@ -14034,7 +14034,7 @@ export default moduleRoutes;
 ==================================================
 FILE: ./src/dashboard/modules/accounts/modules/services/moduleService.js
 ==================================================
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 
 // ======================================
@@ -15641,7 +15641,7 @@ export default PermissionsListPage;
 ==================================================
 FILE: ./src/dashboard/modules/accounts/permissions/services/permissionService.js
 ==================================================
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 
 const PermissionService = {
@@ -16807,7 +16807,7 @@ export default RolesListPage;
 ==================================================
 FILE: ./src/dashboard/modules/accounts/roles/services/roleService.js
 ==================================================
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 
 const roleService = {
@@ -17947,7 +17947,7 @@ export default RolePermissionsPage;
 ==================================================
 FILE: ./src/dashboard/modules/accounts/role_permissions/services/rolePermissionsService.js
 ==================================================
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 
 const rolePermissionService = {
@@ -19302,7 +19302,7 @@ export default UsersListPage;
 ==================================================
 FILE: ./src/dashboard/modules/accounts/users/services/userService.js
 ==================================================
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 
 const userService = {
@@ -19985,7 +19985,7 @@ FILE: ./src/dashboard/modules/accounts/user_permissions/services/userPermissions
 // frontend/src/modules/accounts/user_permissions/services/userPermissionsService.js
 // =========================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 
 const userPermissionsService = {
@@ -20731,7 +20731,7 @@ export default UserRolesListPage;
 ==================================================
 FILE: ./src/dashboard/modules/accounts/user_roles/services/userRoleService.js
 ==================================================
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 
 const userRoleService = {
@@ -23693,7 +23693,7 @@ FILE: ./src/dashboard/modules/staff/class-incharge/services/classInchargeService
 // File: classInchargeService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL CLASS INCHARGES
@@ -23802,7 +23802,7 @@ FILE: ./src/dashboard/modules/staff/dashboard/dashboardService.js
 // File: dashboardService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // STAFF DASHBOARD
@@ -25235,7 +25235,7 @@ FILE: ./src/dashboard/modules/staff/post-types/services/postTypeService.js
 // File: postTypeService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL POST TYPES
@@ -25514,7 +25514,7 @@ FILE: ./src/dashboard/modules/staff/reports/reportsService.js
 // File: reportService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // STAFF REPORT
@@ -26984,7 +26984,7 @@ FILE: ./src/dashboard/modules/staff/sanctioned-posts/services/sanctionedPostServ
 // File: sanctionedPostService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL
@@ -28771,7 +28771,7 @@ FILE: ./src/dashboard/modules/staff/staff/services/staffService.js
 // File: staffService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL STAFF
@@ -30149,7 +30149,7 @@ FILE: ./src/dashboard/modules/staff/teacher-attendance/services/teacherAttendanc
 // File: teacherAttendanceService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET ALL
@@ -30647,7 +30647,7 @@ FILE: ./src/dashboard/modules/staff/teacher-timetable/teacherTimetableService.js
 // File: teacherTimetableService.js
 // ============================================
 
-import api from "../../../../../services/api/axios";
+import api from "../../../../services/api/axios";
 
 // ============================================
 // GET TEACHER TIMETABLE

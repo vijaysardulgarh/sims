@@ -15,7 +15,6 @@ class Module(AuditBaseModel):
 
     name = models.CharField(
         max_length=100,
-        unique=True,
     )
 
     slug = models.SlugField(

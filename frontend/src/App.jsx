@@ -9,7 +9,7 @@ import AppRoutes from "./routes/AppRoutes";
 // AUTH PROVIDER
 // =====================================
 
-import { AuthProvider } from "./dashboard/modules/accounts/auth/context/AuthContext";
+import { AuthProvider } from "./modules/accounts/auth/context/AuthContext";
 
 
 export default function App() {

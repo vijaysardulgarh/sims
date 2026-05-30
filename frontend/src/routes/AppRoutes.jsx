@@ -17,7 +17,7 @@ from "../website/routes/WebsiteRoutes";
 // AUTH
 // =====================================
 
-import LoginPage from "../dashboard/modules/accounts/auth/pages/LoginPage";
+import LoginPage from "../modules/accounts/auth/pages/LoginPage";
 
 
 // =====================================
@@ -25,10 +25,10 @@ import LoginPage from "../dashboard/modules/accounts/auth/pages/LoginPage";
 // =====================================
 
 import DashboardLayout
-from "../dashboard/modules/home/layouts/DashboardLayout";
+from "../modules/home/layouts/DashboardLayout";
 
 import moduleRoutes
-from "../dashboard/modules/moduleRoutes";
+from "../modules/moduleRoutes";
 
 import ProtectedRoute
 from "./ProtectedRoute";
