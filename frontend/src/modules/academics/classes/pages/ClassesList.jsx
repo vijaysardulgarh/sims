@@ -7,8 +7,7 @@ import {
   useNavigate
 } from "react-router-dom";
 
-import toast
-from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import DataTable from "../../../../dashboard/shared/components/crud/DataTable";
 import SearchBox from "../../../../dashboard/shared/components/crud/SearchBox";
@@ -16,6 +15,7 @@ import Pagination from "../../../../dashboard/shared/components/crud/Pagination"
 import CrudHeader from "../../../../dashboard/shared/components/crud/CrudHeader";
 import ActionButtons from "../../../../dashboard/shared/components/crud/ActionButtons";
 import ConfirmModal from "../../../../dashboard/shared/components/modals/ConfirmModal";
+
 import classService from "../services/classService";
 
 
@@ -67,10 +67,6 @@ const ClassesList = () => {
       const response =
         await classService.getClasses();
 
-      // =========================
-      // SAFE ARRAY
-      // =========================
-
       const classesData =
 
         Array.isArray(response)
@@ -79,51 +75,9 @@ const ClassesList = () => {
 
           : response.results || [];
 
-      // =========================
-      // CUSTOM CLASS ORDER
-      // =========================
-
-      const classOrder = {
-
-        "Sixth": 1,
-        "Seventh": 2,
-        "Eighth": 3,
-        "Nineth": 4,
-        "Ninth": 4,
-        "Tenth": 5,
-        "Eleventh": 6,
-        "Twelfth": 7,
-
-        "6TH": 1,
-        "7TH": 2,
-        "8TH": 3,
-        "9TH": 4,
-        "10TH": 5,
-        "11TH": 6,
-        "12TH": 7,
-      };
-
-      // =========================
-      // SORT CLASSES
-      // =========================
-
-      const sortedClasses = [
-
-        ...classesData
-
-      ].sort((a, b) => {
-
-        return (
-
-          (classOrder[a.name] || 999)
-
-          -
-
-          (classOrder[b.name] || 999)
-        );
-      });
-
-      setClasses(sortedClasses);
+      setClasses(
+        classesData
+      );
 
     } catch (error) {
 
@@ -221,8 +175,8 @@ const ClassesList = () => {
     },
 
     {
-      key: "class_order",
-      label: "Order",
+      key: "display_order",
+      label: "Display Order",
     },
 
     {
@@ -304,7 +258,9 @@ const ClassesList = () => {
         value={search}
 
         onChange={(e) =>
-          setSearch(e.target.value)
+          setSearch(
+            e.target.value
+          )
         }
       />
 
@@ -325,7 +281,9 @@ const ClassesList = () => {
 
         totalPages={totalPages}
 
-        onPageChange={setCurrentPage}
+        onPageChange={
+          setCurrentPage
+        }
       />
 
       <ConfirmModal

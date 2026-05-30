@@ -22,7 +22,7 @@ const ClassForm = ({
 
       name: "",
 
-      class_order: "",
+      display_order: "",
     });
 
   // =========================
@@ -41,8 +41,8 @@ const ClassForm = ({
         name:
           initialData.name || "",
 
-        class_order:
-          initialData.class_order || "",
+        display_order:
+          initialData.display_order || "",
       });
     }
 
@@ -133,7 +133,7 @@ const ClassForm = ({
       </div>
 
       {/* ===================== */}
-      {/* CLASS ORDER */}
+      {/* DISPLAY ORDER */}
       {/* ===================== */}
 
       <div>
@@ -145,7 +145,7 @@ const ClassForm = ({
           font-medium
         ">
 
-          Class Order
+          Display Order
 
         </label>
 
@@ -153,13 +153,13 @@ const ClassForm = ({
 
           type="number"
 
-          name="class_order"
+          name="display_order"
 
-          value={formData.class_order}
+          value={formData.display_order}
 
           onChange={handleChange}
 
-          placeholder="Enter class order"
+          placeholder="Enter display order"
 
           className="
             w-full

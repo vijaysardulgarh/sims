@@ -8,10 +8,10 @@ import {
   useParams
 } from "react-router-dom";
 
-import toast
-from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import ClassForm from "../components/ClassForm";
+
 import classService from "../services/classService";
 
 
@@ -36,22 +36,36 @@ const EditClass = () => {
 
     fetchClass();
 
-  }, []);
+  }, [id]);
 
   const fetchClass = async () => {
 
     try {
 
-      const response =
-        await classService.getClass(id);
+      setLoading(true);
 
-      setInitialData(response);
+      const response =
+        await classService.getClass(
+          id
+        );
+
+      setInitialData(
+        response
+      );
 
     } catch (error) {
+
+      console.error(
+        error
+      );
 
       toast.error(
         "Failed to load class"
       );
+
+    } finally {
+
+      setLoading(false);
     }
   };
 
@@ -59,7 +73,9 @@ const EditClass = () => {
   // UPDATE CLASS
   // =========================
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (
+    data
+  ) => {
 
     try {
 
@@ -80,8 +96,23 @@ const EditClass = () => {
 
     } catch (error) {
 
+      console.error(
+        error
+      );
+
+      console.log(
+        error.response?.data
+      );
+
       toast.error(
-        "Update failed"
+
+        error.response?.data
+
+          ? JSON.stringify(
+              error.response.data
+            )
+
+          : "Update failed"
       );
 
     } finally {
@@ -94,10 +125,12 @@ const EditClass = () => {
 
     <div className="space-y-6">
 
-      <h1 className="
-        text-2xl
-        font-bold
-      ">
+      <h1
+        className="
+          text-2xl
+          font-bold
+        "
+      >
 
         Edit Class
 
@@ -105,11 +138,17 @@ const EditClass = () => {
 
       <ClassForm
 
-        initialData={initialData}
+        initialData={
+          initialData
+        }
 
-        onSubmit={handleSubmit}
+        onSubmit={
+          handleSubmit
+        }
 
-        loading={loading}
+        loading={
+          loading
+        }
       />
 
     </div>
