@@ -14,7 +14,8 @@ class ClassAdmin(
         "id",
         "name",
         "school",
-        "class_order",
+        "display_order",
+        "is_active",
     )
 
     search_fields = (
@@ -24,10 +25,11 @@ class ClassAdmin(
 
     list_filter = (
         "school",
+        "is_active",
     )
 
     ordering = (
-        "class_order",
+        "display_order",
         "name",
     )
 

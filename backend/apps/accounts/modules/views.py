@@ -25,7 +25,8 @@ class ModuleListCreateAPIView(
 
         return Module.objects.filter(
 
-            is_deleted=False
+            is_deleted=False,
+            parent__isnull=True,
 
         ).select_related(
 

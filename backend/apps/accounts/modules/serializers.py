@@ -30,6 +30,16 @@ class RecursiveModuleSerializer(
         obj
     ):
 
+        visited = self.context.get(
+            "visited",
+            set(),
+        )
+
+        if obj.id in visited:
+            return []
+
+        visited.add(obj.id)
+
         children = obj.children.filter(
             is_deleted=False,
             is_active=True,
@@ -41,6 +51,9 @@ class RecursiveModuleSerializer(
         return RecursiveModuleSerializer(
             children,
             many=True,
+            context={
+                "visited": visited,
+            },
         ).data
 
 
@@ -86,3 +99,33 @@ class ModuleSerializer(
 
             "children",
         ]
+
+    def validate_parent(
+        self,
+        value
+    ):
+
+        if (
+            self.instance
+            and value
+            and value.id == self.instance.id
+        ):
+            raise serializers.ValidationError(
+                "A module cannot be its own parent."
+            )
+
+        current = value
+
+        while current:
+
+            if (
+                self.instance
+                and current.id == self.instance.id
+            ):
+                raise serializers.ValidationError(
+                    "Circular parent relationship detected."
+                )
+
+            current = current.parent
+
+        return value

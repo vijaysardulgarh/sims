@@ -7,7 +7,7 @@ from apps.academics.classes.views import (
 router = DefaultRouter()
 
 router.register(
-    r"classes",
+    r"",
     ClassViewSet,
     basename="class"
 )

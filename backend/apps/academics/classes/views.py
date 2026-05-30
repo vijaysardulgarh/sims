@@ -20,22 +20,25 @@ class ClassViewSet(
     )
 
     search_fields = [
-        "name"
+        "name",
     ]
 
     ordering_fields = [
         "name",
-        "class_order"
+        "display_order",
     ]
 
     filterset_fields = [
-        "class_order"
+        "display_order",
+        "is_active",
     ]
 
     def get_queryset(self):
 
         queryset = (
-            Class.objects.all()
+            Class.objects.select_related(
+                "school"
+            )
         )
 
         return self.filter_queryset_by_school(

@@ -144,8 +144,8 @@ RBAC_CONFIG = {
         "children": [
 
             {
-                "name": "Associations",
-                "slug": "associations",
+                "name": "Committees",
+                "slug": "committees",
                 "path": "/dashboard/associations/associations",
             },
 
@@ -361,9 +361,9 @@ RBAC_CONFIG = {
         "children": [
 
             {
-                "name": "School Settings",
-                "slug": "school-settings",
-                "path": "/dashboard/school-settings",
+                "name": "School Records",
+                "slug": "school-records",
+                "path": "/dashboard/schools",
             },
 
             {
@@ -387,8 +387,8 @@ RBAC_CONFIG = {
 
             {
                 "name": "Cluster Schools",
-                "slug": "cluster-schools",
-                "path": "/dashboard/cluster/cluster-schools",
+                "slug": "clusters-schools",
+                "path": "/dashboard/cluster/clusters",
             },
 
             {
@@ -404,7 +404,7 @@ RBAC_CONFIG = {
     # STAFF
     # ======================================
 
-    "staff": {
+    "human-resources": {
 
         "path": None,
 
@@ -497,8 +497,8 @@ RBAC_CONFIG = {
             },
 
             {
-                "name": "Timetables",
-                "slug": "timetables",
+                "name": "Timetable Record",
+                "slug": "timetable-record",
                 "path": "/dashboard/academics/timetables",
             },
 
@@ -797,12 +797,14 @@ class Command(
             parent_module, _ = (
                 Module.objects.get_or_create(
 
-                    name=parent_slug.title(),
+                    slug=parent_slug,
 
                     defaults={
 
-                        "slug":
-                            parent_slug,
+                        "name": (
+                            config.get("name")
+                            or parent_slug.replace("-", " ").title()
+                        ),
 
                         "path":
                             config.get("path"),
@@ -859,6 +861,12 @@ class Command(
                 )
 
                 if not created:
+
+                    if child_module.id == parent_module.id:
+                        raise ValueError(
+                            f"Module '{child_module.slug}' "
+                            f"cannot be its own parent."
+                        )
 
                     child_module.parent = parent_module
 

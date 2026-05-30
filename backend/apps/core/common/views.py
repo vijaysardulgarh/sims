@@ -64,6 +64,16 @@ class SchoolFilteredViewSet(
         queryset
     ):
 
+        user = self.request.user
+
+        # Super Admin -> See all records
+
+        if user.is_superuser:
+
+            return queryset.filter(
+                is_deleted=False
+            )
+
         school = self.get_school()
 
         if not school:
@@ -100,11 +110,23 @@ class SchoolFilteredViewSet(
         serializer
     ):
 
+        user = self.request.user
+
+        # Super Admin
+
+        if user.is_superuser:
+
+            serializer.save(
+                created_by=user
+            )
+
+            return
+
         serializer.save(
 
             school=self.get_school(),
 
-            created_by=self.request.user
+            created_by=user
         )
 
     # =====================================

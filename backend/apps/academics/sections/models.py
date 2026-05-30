@@ -105,7 +105,7 @@ class Section(
     class Meta:
 
         ordering = [
-            "class_obj__class_order",
+            "class_obj__display_order",
             "name"
         ]
 
