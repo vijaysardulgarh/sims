@@ -1,8 +1,3 @@
-// ============================================
-// CLASSROOM FORM
-// File: ClassroomForm.jsx
-// ============================================
-
 import {
   useState,
   useEffect
@@ -23,14 +18,12 @@ const ClassroomForm = ({
 
       name: "",
 
-      room_number: "",
-
       capacity: "",
-    });
 
-  // ============================================
-  // PREFILL FORM
-  // ============================================
+      floor: "",
+
+      description: "",
+    });
 
   useEffect(() => {
 
@@ -44,19 +37,18 @@ const ClassroomForm = ({
         name:
           initialData.name || "",
 
-        room_number:
-          initialData.room_number || "",
-
         capacity:
           initialData.capacity || "",
+
+        floor:
+          initialData.floor || "",
+
+        description:
+          initialData.description || "",
       });
     }
 
   }, [initialData]);
-
-  // ============================================
-  // HANDLE CHANGE
-  // ============================================
 
   const handleChange = (e) => {
 
@@ -70,15 +62,14 @@ const ClassroomForm = ({
     });
   };
 
-  // ============================================
-  // HANDLE SUBMIT
-  // ============================================
-
   const handleSubmit = (e) => {
 
     e.preventDefault();
 
-    onSubmit(formData);
+    onSubmit({
+      ...formData,
+      capacity: Number(formData.capacity),
+    });
   };
 
   return (
@@ -98,12 +89,14 @@ const ClassroomForm = ({
 
       <div>
 
-        <label className="
-          block
-          mb-2
-          text-sm
-          font-medium
-        ">
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
           Classroom Name
         </label>
 
@@ -112,7 +105,7 @@ const ClassroomForm = ({
           name="name"
           value={formData.name}
           onChange={handleChange}
-          placeholder="Enter classroom name"
+          placeholder="e.g. Computer Lab"
           className="
             w-full
             border
@@ -124,45 +117,18 @@ const ClassroomForm = ({
 
       </div>
 
-      {/* ROOM NUMBER */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          text-sm
-          font-medium
-        ">
-          Room Number
-        </label>
-
-        <input
-          type="text"
-          name="room_number"
-          value={formData.room_number}
-          onChange={handleChange}
-          placeholder="Enter room number"
-          className="
-            w-full
-            border
-            rounded-lg
-            p-3
-          "
-        />
-
-      </div>
-
       {/* CAPACITY */}
 
       <div>
 
-        <label className="
-          block
-          mb-2
-          text-sm
-          font-medium
-        ">
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
           Capacity
         </label>
 
@@ -171,7 +137,8 @@ const ClassroomForm = ({
           name="capacity"
           value={formData.capacity}
           onChange={handleChange}
-          placeholder="Enter classroom capacity"
+          placeholder="Enter capacity"
+          min="1"
           className="
             w-full
             border
@@ -182,7 +149,69 @@ const ClassroomForm = ({
 
       </div>
 
-      {/* BUTTON */}
+      {/* FLOOR */}
+
+      <div>
+
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
+          Floor
+        </label>
+
+        <input
+          type="text"
+          name="floor"
+          value={formData.floor}
+          onChange={handleChange}
+          placeholder="Ground Floor"
+          className="
+            w-full
+            border
+            rounded-lg
+            p-3
+          "
+        />
+
+      </div>
+
+      {/* DESCRIPTION */}
+
+      <div>
+
+        <label
+          className="
+            block
+            mb-2
+            text-sm
+            font-medium
+          "
+        >
+          Description
+        </label>
+
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          rows="4"
+          placeholder="Optional description"
+          className="
+            w-full
+            border
+            rounded-lg
+            p-3
+          "
+        />
+
+      </div>
+
+      {/* SUBMIT */}
 
       <button
         type="submit"
@@ -194,6 +223,7 @@ const ClassroomForm = ({
           py-3
           rounded-xl
           hover:bg-blue-700
+          disabled:opacity-50
         "
       >
 

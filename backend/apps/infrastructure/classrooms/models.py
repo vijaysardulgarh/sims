@@ -1,17 +1,16 @@
 from django.db import models
 
-from django.core.exceptions import (
-    ValidationError
-)
+from django.core.exceptions import ValidationError
 
 from apps.core.common.base.models import SchoolBaseModel
+
+
 class Classroom(
     SchoolBaseModel
 ):
 
-
     name = models.CharField(
-        max_length=20,
+        max_length=50,
         db_index=True
     )
 
@@ -25,6 +24,11 @@ class Classroom(
         null=True
     )
 
+    description = models.TextField(
+        blank=True,
+        null=True
+    )
+
     def clean(self):
 
         if self.name:
@@ -33,12 +37,18 @@ class Classroom(
                 self.name.strip().upper()
             )
 
+        if self.floor:
+
+            self.floor = (
+                self.floor.strip()
+            )
+
         if self.capacity <= 0:
 
             raise ValidationError(
                 {
                     "capacity":
-                        "Capacity must be greater than 0"
+                        "Capacity must be greater than 0."
                 }
             )
 
@@ -67,4 +77,4 @@ class Classroom(
 
     def __str__(self):
 
-        return f"Room {self.name}"
+        return self.name

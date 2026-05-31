@@ -21,17 +21,18 @@ class ClassroomViewSet(
 
     search_fields = [
         "name",
-        "floor"
+        "floor",
+        "description",
     ]
 
     ordering_fields = [
         "name",
         "capacity",
-        "floor"
+        "floor",
     ]
 
     filterset_fields = [
-        "floor"
+        "floor",
     ]
 
     def get_queryset(self):

@@ -19,8 +19,9 @@ class ClassroomSerializer(
             "name",
             "capacity",
             "floor",
+            "description",
         ]
 
         read_only_fields = [
-            "school"
+            "school",
         ]

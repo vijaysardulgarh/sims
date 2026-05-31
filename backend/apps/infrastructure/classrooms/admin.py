@@ -1,34 +1,66 @@
-from django.contrib import admin
+from django.db import models
+from django.core.exceptions import ValidationError
 
-from apps.infrastructure.classrooms.models import (
-    Classroom
-)
+from apps.core.common.base.models import SchoolBaseModel
 
 
-@admin.register(Classroom)
-class ClassroomAdmin(
-    admin.ModelAdmin
-):
+class Classroom(SchoolBaseModel):
 
-    list_display = (
-        "id",
-        "name",
-        "school",
-        "capacity",
-        "floor",
+    name = models.CharField(
+        max_length=50,
+        db_index=True
     )
 
-    search_fields = (
-        "name",
-        "school__name",
+    capacity = models.PositiveIntegerField(
+        default=40
     )
 
-    list_filter = (
-        "school",
+    floor = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
     )
 
-    ordering = (
-        "name",
+    description = models.TextField(
+        blank=True,
+        null=True
     )
 
-    list_per_page = 25
+    def clean(self):
+
+        if self.name:
+            self.name = self.name.strip().upper()
+
+        if self.floor:
+            self.floor = self.floor.strip()
+
+        if self.capacity < 1:
+            raise ValidationError(
+                {
+                    "capacity": "Capacity must be greater than 0."
+                }
+            )
+
+    def save(self, *args, **kwargs):
+
+        self.full_clean()
+
+        super().save(*args, **kwargs)
+
+    class Meta:
+
+        ordering = ["name"]
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "name"
+                ],
+                name="unique_classroom_per_school"
+            )
+        ]
+
+    def __str__(self):
+
+        return self.name

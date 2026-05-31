@@ -39,7 +39,7 @@ const AddClassroom = () => {
       );
 
       navigate(
-        "/dashboard/academics/classrooms"
+        "/dashboard/infrastructure/classrooms"
       );
 
     } catch (error) {
@@ -69,18 +69,22 @@ const AddClassroom = () => {
 
       <div>
 
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-800
-        ">
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-gray-800
+          "
+        >
           Add Classroom
         </h1>
 
-        <p className="
-          text-gray-500
-          mt-1
-        ">
+        <p
+          className="
+            text-gray-500
+            mt-1
+          "
+        >
           Create new classroom
         </p>
 

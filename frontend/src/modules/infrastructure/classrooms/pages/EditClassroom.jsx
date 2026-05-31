@@ -19,8 +19,6 @@ import ClassroomForm from "../components/ClassroomForm";
 
 import classroomService from "../services/classroomService";
 
-
-
 const EditClassroom = () => {
 
   const { id } = useParams();
@@ -53,9 +51,13 @@ const EditClassroom = () => {
     try {
 
       const response =
-        await classroomService.getClassroom(id);
+        await classroomService.getClassroom(
+          id
+        );
 
-      setInitialData(response);
+      setInitialData(
+        response
+      );
 
     } catch (error) {
 
@@ -89,7 +91,7 @@ const EditClassroom = () => {
       );
 
       navigate(
-        "/dashboard/academics/classrooms"
+        "/dashboard/infrastructure/classrooms"
       );
 
     } catch (error) {
@@ -129,18 +131,22 @@ const EditClassroom = () => {
 
       <div>
 
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-800
-        ">
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-gray-800
+          "
+        >
           Edit Classroom
         </h1>
 
-        <p className="
-          text-gray-500
-          mt-1
-        ">
+        <p
+          className="
+            text-gray-500
+            mt-1
+          "
+        >
           Update classroom details
         </p>
 

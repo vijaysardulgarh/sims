@@ -27,8 +27,7 @@ const ClassroomsList = () => {
 
   const navigate = useNavigate();
 
-  const [classrooms,
-    setClassrooms] =
+  const [classrooms, setClassrooms] =
     useState([]);
 
   const [loading, setLoading] =
@@ -37,12 +36,10 @@ const ClassroomsList = () => {
   const [search, setSearch] =
     useState("");
 
-  const [currentPage,
-    setCurrentPage] =
+  const [currentPage, setCurrentPage] =
     useState(1);
 
-  const [isModalOpen,
-    setIsModalOpen] =
+  const [isModalOpen, setIsModalOpen] =
     useState(false);
 
   const [selectedClassroomId,
@@ -72,7 +69,9 @@ const ClassroomsList = () => {
 
           : response.results || [];
 
-      setClassrooms(classroomsData);
+      setClassrooms(
+        classroomsData
+      );
 
     } catch (error) {
 
@@ -164,13 +163,18 @@ const ClassroomsList = () => {
     },
 
     {
-      key: "room_number",
-      label: "Room Number",
+      key: "floor",
+      label: "Floor",
     },
 
     {
       key: "capacity",
       label: "Capacity",
+    },
+
+    {
+      key: "description",
+      label: "Description",
     },
 
     {
@@ -184,31 +188,33 @@ const ClassroomsList = () => {
   // ============================================
 
   const tableData =
-    paginatedClassrooms.map((classroom) => ({
+    paginatedClassrooms.map(
+      (classroom) => ({
 
-      ...classroom,
+        ...classroom,
 
-      actions: (
+        actions: (
 
-        <ActionButtons
+          <ActionButtons
 
-          onEdit={() =>
-            navigate(
-              `/dashboard/academics/classrooms/edit/${classroom.id}`
-            )
-          }
+            onEdit={() =>
+              navigate(
+                `/dashboard/infrastructure/classrooms/${classroom.id}/edit`
+              )
+            }
 
-          onDelete={() => {
+            onDelete={() => {
 
-            setSelectedClassroomId(
-              classroom.id
-            );
+              setSelectedClassroomId(
+                classroom.id
+              );
 
-            setIsModalOpen(true);
-          }}
-        />
-      ),
-    }));
+              setIsModalOpen(true);
+            }}
+          />
+        ),
+      })
+    );
 
   if (loading) {
 
@@ -236,7 +242,7 @@ const ClassroomsList = () => {
 
         onAdd={() =>
           navigate(
-            "/dashboard/academics/classrooms/add"
+            "/dashboard/infrastructure/classrooms/add"
           )
         }
       />
@@ -248,7 +254,9 @@ const ClassroomsList = () => {
         value={search}
 
         onChange={(e) =>
-          setSearch(e.target.value)
+          setSearch(
+            e.target.value
+          )
         }
       />
 
@@ -263,7 +271,9 @@ const ClassroomsList = () => {
 
         totalPages={totalPages}
 
-        onPageChange={setCurrentPage}
+        onPageChange={
+          setCurrentPage
+        }
       />
 
       <ConfirmModal
@@ -285,7 +295,6 @@ const ClassroomsList = () => {
           );
 
           setIsModalOpen(false);
-
         }}
       />
 
