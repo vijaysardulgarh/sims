@@ -83,22 +83,38 @@ const SectionForm = ({
       setFormData({
 
         class_obj:
-          initialData.class_obj || "",
+          initialData.class_obj
+            ? String(
+                initialData.class_obj
+              )
+            : "",
 
         name:
           initialData.name || "",
 
         medium:
-          initialData.medium || "",
+          initialData.medium
+            ? String(
+                initialData.medium
+              )
+            : "",
 
         stream:
-          initialData.stream || "",
+          initialData.stream
+            ? String(
+                initialData.stream
+              )
+            : "",
 
         sub_stream:
           initialData.sub_stream || "",
 
         classroom:
-          initialData.classroom || "",
+          initialData.classroom
+            ? String(
+                initialData.classroom
+              )
+            : "",
       });
     }
 
@@ -193,7 +209,7 @@ const SectionForm = ({
 
                 <option
                   key={cls.id}
-                  value={cls.id}
+                  value={String(cls.id)}
                 >
 
                   {cls.name}
@@ -311,7 +327,9 @@ const SectionForm = ({
 
                 <option
                   key={medium.id}
-                  value={medium.id}
+                  value={String(
+                    medium.id
+                  )}
                 >
 
                   {medium.name}
@@ -369,7 +387,9 @@ const SectionForm = ({
 
                 <option
                   key={stream.id}
-                  value={stream.id}
+                  value={String(
+                    stream.id
+                  )}
                 >
 
                   {stream.name}
@@ -485,7 +505,9 @@ const SectionForm = ({
 
                 <option
                   key={classroom.id}
-                  value={classroom.id}
+                  value={String(
+                    classroom.id
+                  )}
                 >
 
                   {classroom.name}

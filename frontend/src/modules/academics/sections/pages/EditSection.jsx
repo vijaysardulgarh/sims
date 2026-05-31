@@ -21,6 +21,12 @@ import sectionService from "../services/sectionService";
 
 import classService from "../../classes/services/classService";
 
+import mediumService from "../../mediums/services/mediumService";
+
+import streamService from "../../streams/services/streamService";
+
+import classroomService from "../../../infrastructure/classrooms/services/classroomService";
+
 
 const EditSection = () => {
 
@@ -43,6 +49,18 @@ const EditSection = () => {
     setClasses] =
     useState([]);
 
+  const [mediums,
+    setMediums] =
+    useState([]);
+
+  const [streams,
+    setStreams] =
+    useState([]);
+
+  const [classrooms,
+    setClassrooms] =
+    useState([]);
+
   // ============================================
   // LOAD DATA
   // ============================================
@@ -61,14 +79,31 @@ const EditSection = () => {
 
         sectionResponse,
 
-        classesResponse
+        classesResponse,
+
+        mediumsResponse,
+
+        streamsResponse,
+
+        classroomsResponse
 
       ] = await Promise.all([
 
         sectionService.getSection(id),
 
         classService.getClasses(),
+
+        mediumService.getMediums(),
+
+        streamService.getStreams(),
+
+        classroomService.getClassrooms(),
       ]);
+
+      console.log(
+        "SECTION RESPONSE:",
+        sectionResponse
+      );
 
       setInitialData(
         sectionResponse
@@ -77,6 +112,21 @@ const EditSection = () => {
       setClasses(
         classesResponse.results ||
         classesResponse
+      );
+
+      setMediums(
+        mediumsResponse.results ||
+        mediumsResponse
+      );
+
+      setStreams(
+        streamsResponse.results ||
+        streamsResponse
+      );
+
+      setClassrooms(
+        classroomsResponse.results ||
+        classroomsResponse
       );
 
     } catch (error) {
@@ -139,6 +189,10 @@ const EditSection = () => {
     }
   };
 
+  // ============================================
+  // LOADING
+  // ============================================
+
   if (pageLoading) {
 
     return (
@@ -150,6 +204,10 @@ const EditSection = () => {
       </div>
     );
   }
+
+  // ============================================
+  // UI
+  // ============================================
 
   return (
 
@@ -187,6 +245,12 @@ const EditSection = () => {
         initialData={initialData}
 
         classes={classes}
+
+        mediums={mediums}
+
+        streams={streams}
+
+        classrooms={classrooms}
 
         onSubmit={handleSubmit}
 
