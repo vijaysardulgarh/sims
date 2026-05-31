@@ -343,3 +343,261 @@ finance
 transport
 hostel
 admissions
+
+
+
+
+Recommended Build Order
+1. buildings
+2. floors
+3. rooms
+4. classrooms
+5. laboratories
+6. libraries
+7. auditoriums
+8. playgrounds
+9. asset-categories
+10. assets
+11. maintenance-records
+12. facilities
+Module 1: Buildings
+apps/
+└── infrastructure/
+    └── buildings/
+Fields
+school
+name
+code
+description
+number_of_floors
+is_active
+
+Example:
+
+Main Academic Block
+Administrative Block
+Science Block
+Primary Wing
+Module 2: Floors
+apps/
+└── infrastructure/
+    └── floors/
+Fields
+school
+building
+name
+floor_number
+description
+
+Example:
+
+Ground Floor
+First Floor
+Second Floor
+Module 3: Rooms
+apps/
+└── infrastructure/
+    └── rooms/
+Fields
+school
+building
+floor
+
+room_number
+room_name
+
+capacity
+
+area
+
+status
+
+Example:
+
+101
+102
+Principal Office
+Staff Room
+Accounts Office
+Module 4: Classrooms
+apps/
+└── infrastructure/
+    └── classrooms/
+Fields
+school
+
+building
+floor
+room
+
+classroom_code
+
+capacity
+
+smart_classroom
+
+air_conditioned
+
+status
+
+Example:
+
+Classroom A1
+Classroom B2
+Module 5: Laboratories
+apps/
+└── infrastructure/
+    └── laboratories/
+Fields
+school
+
+name
+
+lab_type
+
+building
+room
+
+capacity
+
+incharge
+
+Lab Types:
+
+Physics
+Chemistry
+Biology
+Computer
+Language
+Mathematics
+Module 6: Libraries
+apps/
+└── infrastructure/
+    └── libraries/
+Fields
+school
+
+name
+
+building
+room
+
+capacity
+
+librarian
+Module 7: Auditoriums
+apps/
+└── infrastructure/
+    └── auditoriums/
+Fields
+school
+
+name
+
+capacity
+
+building
+
+air_conditioned
+
+status
+Module 8: Playgrounds
+apps/
+└── infrastructure/
+    └── playgrounds/
+Fields
+school
+
+name
+
+sport_type
+
+area
+
+status
+
+Examples:
+
+Football Ground
+Cricket Ground
+Basketball Court
+Module 9: Asset Categories
+apps/
+└── infrastructure/
+    └── asset-categories/
+
+Examples:
+
+Furniture
+Computer
+Projector
+Sports Equipment
+Lab Equipment
+Vehicle
+Module 10: Assets
+apps/
+└── infrastructure/
+    └── assets/
+
+Fields:
+
+school
+
+asset_category
+
+asset_code
+
+name
+
+purchase_date
+
+purchase_cost
+
+location
+
+status
+Module 11: Maintenance Records
+apps/
+└── infrastructure/
+    └── maintenance-records/
+
+Fields:
+
+school
+
+asset
+
+maintenance_date
+
+cost
+
+vendor
+
+remarks
+Module 12: Facilities
+apps/
+└── infrastructure/
+    └── facilities/
+
+Examples:
+
+CCTV
+WiFi
+RO Water
+Medical Room
+Transport Facility
+Hostel Facility
+Infrastructure App Final Structure
+infrastructure/
+├── buildings/
+├── floors/
+├── rooms/
+├── classrooms/
+├── laboratories/
+├── libraries/
+├── auditoriums/
+├── playgrounds/
+├── asset-categories/
+├── assets/
+├── maintenance-records/
+└── facilities/
