@@ -25,7 +25,7 @@ import staffRoutes from "./staff/routes/staffRoutes";
 import studentsRoutes from "./students/routes/studentsRoutes";
 // import timetableRoutes from "./timetable/routes/timetableRoutes";
 // import transportRoutes from "./transport/routes/transportRoutes";
-import schoolRoutes from "./schools/routes/schoolRoutes";
+import schoolsRoutes from "./schools/routes/schoolsRoutes.jsx";
 import clusterRoutes from "./cluster/routes/clusterRoutes";
 import associationModuleRoutes from "./associations/routes/associationModuleRoutes";
 import infrastructureRoutes from "./infrastructure/routes/infrastructureRoutes.jsx";
@@ -64,7 +64,7 @@ const moduleRoutes = (
     {studentsRoutes}
     {/* {timetableRoutes}
     {transportRoutes} */}
-    {schoolRoutes}
+    {schoolsRoutes}
     {infrastructureRoutes}
     {clusterRoutes}
     {associationModuleRoutes}

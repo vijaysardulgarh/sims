@@ -5,10 +5,6 @@ from apps.core.common.base.models import (
 )
 
 
-# ==========================================
-# BRANCH MODEL
-# ==========================================
-
 class Branch(
     SchoolBaseModel
 ):
@@ -18,60 +14,57 @@ class Branch(
     )
 
     code = models.CharField(
-        max_length=50
+        max_length=50,
+        unique=True
     )
 
     address = models.TextField(
-        blank=True,
-        null=True
+        blank=True
+    )
+
+    city = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    state = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    pincode = models.CharField(
+        max_length=20,
+        blank=True
     )
 
     phone = models.CharField(
         max_length=20,
-        blank=True,
-        null=True
+        blank=True
     )
 
-    is_active = models.BooleanField(
-        default=True
+    email = models.EmailField(
+        blank=True
     )
 
-    # ======================================
-    # STRING
-    # ======================================
+    principal_name = models.CharField(
+        max_length=255,
+        blank=True
+    )
 
-    def __str__(
-        self
-    ):
-
-        return self.name
-
-    # ======================================
-    # META
-    # ======================================
+    is_head_office = models.BooleanField(
+        default=False
+    )
 
     class Meta:
 
-        ordering = [
-            "name"
-        ]
+        db_table = "branches"
 
-        indexes = [
+        verbose_name = "Branch"
 
-            models.Index(
-                fields=["school"]
-            ),
+        verbose_name_plural = "Branches"
 
-            models.Index(
-                fields=["is_active"]
-            ),
+        ordering = ["name"]
 
-            models.Index(
-                fields=["is_deleted"]
-            ),
-        ]
+    def __str__(self):
 
-        unique_together = (
-            "school",
-            "code"
-        )
+        return self.name

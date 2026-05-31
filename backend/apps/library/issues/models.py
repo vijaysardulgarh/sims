@@ -10,7 +10,6 @@ from django.core.exceptions import (
 
 from django.utils import timezone
 
-from apps.schools.models import School
 from apps.library.accessions.models import BookAccession
 from apps.accounts.models import User
 from apps.core.common.base.models import SchoolBaseModel
@@ -28,12 +27,6 @@ class BookIssue(SchoolBaseModel):
         ("lost", "Lost"),
     ]
 
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-        related_name="book_issues",
-        db_index=True
-    )
 
     accession = models.ForeignKey(
         BookAccession,

@@ -1,6 +1,5 @@
 from django.db import models
 
-from apps.schools.models import School
 from apps.academics.classes.models import Class
 from apps.academics.streams.models import Stream
 from apps.academics.sections.models import Section
@@ -17,7 +16,7 @@ class Student(AuditBaseModel):
     )
     srn = models.CharField(primary_key=True, max_length=11)
     school_code = models.CharField(max_length=20, blank=True, null=True)
-    school = models.ForeignKey(School,on_delete=models.CASCADE,related_name="students")
+    
     
     admission_date = models.DateField(blank=True, null=True)
     student_class = models.ForeignKey(Class,on_delete=models.SET_NULL,related_name="students",null=True,blank=True,db_index=True)
@@ -75,7 +74,6 @@ class Student(AuditBaseModel):
     religion=models.CharField(max_length=50, blank=True, null=True)
     class Meta:
         indexes = [
-            models.Index(fields=["school"]),
             models.Index(fields=["section"]),
         ]
     def __str__(self):

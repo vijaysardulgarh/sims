@@ -17,7 +17,6 @@ from django.core.exceptions import (
 from django.utils import timezone
 
 from apps.finance.student_fees.models import StudentFee
-from apps.schools.models import School
 from apps.accounts.users.models import User
 from apps.core.common.base.models import SchoolBaseModel
 

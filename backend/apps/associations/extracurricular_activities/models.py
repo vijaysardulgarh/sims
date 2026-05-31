@@ -1,5 +1,5 @@
 # =============================================================================
-# associations/models/extracurricular_activity.py
+# associations/extracurricular_activities/models.py
 # =============================================================================
 
 from django.db import models

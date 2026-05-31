@@ -105,6 +105,10 @@ INSTALLED_APPS = [
     "apps.timetables",
     
     "apps.infrastructure",
+
+    "apps.compliance",
+
+    "apps.communications",
 ]
 
 

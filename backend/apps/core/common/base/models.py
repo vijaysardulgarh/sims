@@ -85,6 +85,8 @@ class SchoolBaseModel(
 
         related_name="%(class)s_objects",
 
+        db_index=True,
+
         null=True,
 
         blank=True
@@ -110,6 +112,8 @@ class SessionBaseModel(
         on_delete=models.CASCADE,
 
         related_name="%(class)s_objects",
+
+        db_index=True,
 
         null=True,
 

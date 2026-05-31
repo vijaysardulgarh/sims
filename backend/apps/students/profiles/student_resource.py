@@ -15,7 +15,7 @@ from apps.students.profiles.models import (
     Student
 )
 
-from apps.schools.models import (
+from apps.schools.schools.models import (
     School
 )
 

@@ -17,7 +17,7 @@ class StudentAdmin(
     list_display = (
         "srn",
         "full_name_aadhar",
-        "school",
+
         "student_class",
         "section",
         "roll_number",
@@ -34,7 +34,7 @@ class StudentAdmin(
     )
 
     list_filter = (
-        "school",
+
         "student_class",
         "section",
         "gender",
@@ -42,14 +42,14 @@ class StudentAdmin(
     )
 
     ordering = (
-        "school",
+
         "student_class",
         "section",
         "roll_number",
     )
 
     autocomplete_fields = (
-        "school",
+
         "student_class",
         "stream",
         "section",

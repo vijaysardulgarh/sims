@@ -1,7 +1,6 @@
 from django.db import models
 
 from apps.staff.profiles.models import Staff
-from apps.schools.models import School
 from apps.core.common.base.models import SchoolBaseModel
 
 class TeacherAttendance(SchoolBaseModel):

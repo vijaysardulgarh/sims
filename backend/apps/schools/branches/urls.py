@@ -1,34 +1,17 @@
-from django.urls import (
-    path
+from rest_framework.routers import (
+    DefaultRouter
 )
 
-from apps.schools.branches.views import (
-
-    BranchListCreateAPIView,
-
-    BranchDetailAPIView
+from .views import (
+    BranchViewSet
 )
 
+router = DefaultRouter()
 
-urlpatterns = [
+router.register(
+    "",
+    BranchViewSet,
+    basename="branches"
+)
 
-    # =====================================
-    # BRANCH LIST / CREATE
-    # =====================================
-
-    path(
-        "",
-        BranchListCreateAPIView.as_view(),
-        name="branch-list-create"
-    ),
-
-    # =====================================
-    # BRANCH DETAIL
-    # =====================================
-
-    path(
-        "<int:pk>/",
-        BranchDetailAPIView.as_view(),
-        name="branch-detail"
-    ),
-]
+urlpatterns = router.urls

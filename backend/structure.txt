@@ -1,0 +1,345 @@
+apps/
+│
+├── core/
+│
+├── accounts/
+│
+├── system_modules/
+│
+├── clusters/
+│
+├── schools/
+│   │
+│   ├── models/
+│   │   ├── school.py
+│   │   └── __init__.py
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── school-profile/
+│   │   │   │
+│   │   │   ├── about-school/
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── views.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── services.py
+│   │   │   │
+│   │   │   ├── principals/
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── views.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── services.py
+│   │   │   │
+│   │   │   └── galleries/
+│   │   │       ├── models.py
+│   │   │       ├── serializers.py
+│   │   │       ├── views.py
+│   │   │       ├── urls.py
+│   │   │       └── services.py
+│   │   │
+│   │   └── school-settings/
+│   │       ├── academic-settings/
+│   │       ├── attendance-settings/
+│   │       ├── grading-settings/
+│   │       └── session-settings/
+│   │
+│   ├── serializers/
+│   ├── views/
+│   ├── urls.py
+│   └── services/
+│
+├── communications/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── news/
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── services.py
+│   │   │
+│   │   ├── events/
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── services.py
+│   │   │
+│   │   ├── announcements/
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── services.py
+│   │   │
+│   │   ├── notices/
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── services.py
+│   │   │
+│   │   └── faqs/
+│   │       ├── models.py
+│   │       ├── serializers.py
+│   │       ├── views.py
+│   │       ├── urls.py
+│   │       └── services.py
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── associations/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── extracurricular-activities/
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── services.py
+│   │   │
+│   │   ├── clubs/
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── services.py
+│   │   │
+│   │   ├── houses/
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── services.py
+│   │   │
+│   │   ├── competitions/
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── services.py
+│   │   │
+│   │   ├── meetings/
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── services.py
+│   │   │
+│   │   └── student-council/
+│   │       ├── models.py
+│   │       ├── serializers.py
+│   │       ├── views.py
+│   │       ├── urls.py
+│   │       └── services.py
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── students/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── student-profiles/
+│   │   ├── admissions/
+│   │   ├── attendance/
+│   │   ├── discipline/
+│   │   ├── achievements/
+│   │   ├── achievers/
+│   │   ├── medical-records/
+│   │   ├── documents/
+│   │   └── parent-relations/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── staff/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── staff-profiles/
+│   │   ├── departments/
+│   │   ├── attendance/
+│   │   ├── payroll/
+│   │   ├── leaves/
+│   │   ├── qualifications/
+│   │   └── appraisals/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── academics/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── classes/
+│   │   ├── sections/
+│   │   ├── subjects/
+│   │   ├── syllabi/
+│   │   ├── lesson-plans/
+│   │   ├── assignments/
+│   │   ├── study-materials/
+│   │   └── academic-sessions/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── examinations/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── exams/
+│   │   ├── marks/
+│   │   ├── report-cards/
+│   │   ├── grading/
+│   │   ├── result-processing/
+│   │   └── hall-tickets/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── timetables/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── class-timetables/
+│   │   ├── teacher-timetables/
+│   │   ├── exam-timetables/
+│   │   └── substitutions/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── infrastructure/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── buildings/
+│   │   ├── rooms/
+│   │   ├── laboratories/
+│   │   ├── libraries/
+│   │   ├── sports-facilities/
+│   │   ├── transport-facilities/
+│   │   ├── hostel-facilities/
+│   │   └── inventories/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── compliance/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── mandatory-public-disclosures/
+│   │   ├── affiliations/
+│   │   ├── certificates/
+│   │   ├── inspections/
+│   │   └── policies/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── finance/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── fee-structures/
+│   │   ├── fee-collections/
+│   │   ├── invoices/
+│   │   ├── expenses/
+│   │   ├── scholarships/
+│   │   └── accounting/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── transport/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── vehicles/
+│   │   ├── routes/
+│   │   ├── drivers/
+│   │   └── gps-tracking/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+├── hostel/
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── rooms/
+│   │   ├── allocations/
+│   │   ├── wardens/
+│   │   └── mess-management/
+│   │
+│   ├── urls.py
+│   └── services/
+│
+└── admissions/
+    │
+    ├── modules/
+    │   │
+    │   ├── applications/
+    │   ├── enquiries/
+    │   ├── entrance-tests/
+    │   ├── interviews/
+    │   └── registrations/
+    │
+    ├── urls.py
+    └── services/
+
+
+
+
+
+apps/
+│
+├── accounts/
+├── clusters/
+├── schools/
+├── staff/
+├── students/
+├── academics/
+├── examinations/
+├── timetables/
+├── infrastructure/
+├── associations/
+├── communications/
+├── compliance/
+├── admissions/
+├── transport/
+├── hostel/
+├── finance/
+├── system_modules/
+└── core/    
+
+
+Base Models
+-----------
+AuditBaseModel
+SchoolBaseModel
+SessionBaseModel
+
+Core Apps
+---------
+schools
+academics
+staff
+students
+examinations
+timetables
+communications
+associations
+infrastructure
+compliance
+finance
+transport
+hostel
+admissions

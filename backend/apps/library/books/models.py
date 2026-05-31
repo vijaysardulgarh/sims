@@ -7,7 +7,7 @@ from django.db.models import (
 from django.core.exceptions import (
     ValidationError
 )
-from apps.schools.models import School
+
 from apps.core.common.base.models import SchoolBaseModel
 
 class Book(SchoolBaseModel):
@@ -23,12 +23,6 @@ class Book(SchoolBaseModel):
         ("damaged", "Damaged"),
     ]
 
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-        related_name="books",
-        db_index=True
-    )
 
     title = models.CharField(
         max_length=255,

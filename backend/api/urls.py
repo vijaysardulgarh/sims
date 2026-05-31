@@ -111,4 +111,13 @@ urlpatterns = [
         "api/infrastructure/",
         include("apps.infrastructure.urls")
     ),
+
+    path(
+        "api/compliance/",
+        include("apps.compliance.urls")
+    ),
+    path(
+        "api/communications/",
+        include("apps.communications.urls")
+    ),
 ]

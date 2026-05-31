@@ -8,7 +8,6 @@ from django.core.exceptions import (
     ValidationError
 )
 
-from apps.schools.models import School
 from apps.academics.classes.models import Class
 from apps.academics.streams.models import Stream
 from apps.core.common.base.models import SchoolBaseModel

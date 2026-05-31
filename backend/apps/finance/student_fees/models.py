@@ -8,19 +8,14 @@ from django.core.exceptions import (
     ValidationError
 )
 
-from apps.schools.models import School
+
 from apps.students.profiles.models import Student
 from apps.finance.fee_structures.models import FeeStructure
 from apps.core.common.base.models import SchoolBaseModel
 
 class StudentFee(SchoolBaseModel):
 
-    school = models.ForeignKey(
-        School,
-        on_delete=models.CASCADE,
-        related_name="student_fees",
-        db_index=True
-    )
+
 
     student = models.ForeignKey(
         Student,
