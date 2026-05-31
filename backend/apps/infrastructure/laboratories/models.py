@@ -8,7 +8,7 @@ from apps.infrastructure.rooms.models import (
     Room
 )
 
-from apps.staff.staffs.models import (
+from apps.staff.profiles.models import (
     Staff
 )
 

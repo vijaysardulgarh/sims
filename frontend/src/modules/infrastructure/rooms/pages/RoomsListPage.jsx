@@ -1,4 +1,5 @@
-import CrudListPage from '../../../../components/common/crud/CrudListPage';
+import CrudListPage from '../../../../shared/components/common/crud/CrudListPage';
+
 
 const RoomsListPage = () => {
 

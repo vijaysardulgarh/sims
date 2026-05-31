@@ -1,35 +1,57 @@
 from django.urls import (
     include,
-    path
+    path,
 )
 
 urlpatterns = [
 
     path(
-        "news/",
+        '',
         include(
-            "apps.communications.news.urls"
+            'apps.communications.communication_categories.urls'
         )
     ),
 
     path(
-        "events/",
+        '',
         include(
-            "apps.communications.events.urls"
+            'apps.communications.communication_templates.urls'
         )
     ),
 
     path(
-        "notices/",
+        '',
         include(
-            "apps.communications.notices.urls"
+            'apps.communications.notifications.urls'
         )
     ),
 
     path(
-        "circulars/",
+        '',
         include(
-            "apps.communications.circulars.urls"
+            'apps.communications.circulars.urls'
         )
     ),
+
+    path(
+        '',
+        include(
+            'apps.communications.notices.urls'
+        )
+    ),
+
+    path(
+        '',
+        include(
+            'apps.communications.news.urls'
+        )
+    ),
+
+    path(
+        '',
+        include(
+            'apps.communications.events.urls'
+        )
+    ),
+
 ]

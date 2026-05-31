@@ -1,21 +1,56 @@
-import { useState } from 'react';
+import {
+    useEffect,
+    useState,
+} from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import {
+    useNavigate,
+    useParams,
+} from 'react-router-dom';
 
-import api from '../../../services/api/axios';
+import api from '../../../../services/api/axios';
 
-const CrudCreatePage = ({
+const CrudEditPage = ({
     title,
     endpoint,
     FormComponent,
     redirectPath,
 }) => {
 
+    const { id } =
+        useParams();
+
     const navigate =
         useNavigate();
 
     const [formData, setFormData] =
         useState({});
+
+    useEffect(() => {
+
+        loadRecord();
+
+    }, []);
+
+    const loadRecord =
+        async () => {
+
+            try {
+
+                const response =
+                    await api.get(
+                        `${endpoint}${id}/`
+                    );
+
+                setFormData(
+                    response.data
+                );
+
+            } catch (error) {
+
+                console.error(error);
+            }
+        };
 
     const handleSubmit =
         async (e) => {
@@ -24,8 +59,8 @@ const CrudCreatePage = ({
 
             try {
 
-                await api.post(
-                    endpoint,
+                await api.put(
+                    `${endpoint}${id}/`,
                     formData
                 );
 
@@ -68,7 +103,7 @@ const CrudCreatePage = ({
                         btn-primary
                     "
                 >
-                    Save
+                    Update
                 </button>
 
             </form>
@@ -77,4 +112,4 @@ const CrudCreatePage = ({
     );
 };
 
-export default CrudCreatePage;
+export default CrudEditPage;
