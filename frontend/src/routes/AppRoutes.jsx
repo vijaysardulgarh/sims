@@ -1,17 +1,15 @@
-import {
-  Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
+// src/routes/AppRoutes.jsx
 
+import {
+    Routes,
+    Route,
+} from "react-router-dom";
 
 // =====================================
 // WEBSITE
 // =====================================
 
-import WebsiteRoutes
-from "../website/routes/WebsiteRoutes";
-
+import WebsiteRoutes from "../website/routes/WebsiteRoutes";
 
 // =====================================
 // AUTH
@@ -19,103 +17,72 @@ from "../website/routes/WebsiteRoutes";
 
 import LoginPage from "../modules/accounts/auth/pages/LoginPage";
 
-
 // =====================================
 // DASHBOARD
 // =====================================
 
-import DashboardLayout
-from "../modules/home/layouts/DashboardLayout";
+import DashboardLayout from "../modules/home/layouts/DashboardLayout";
+import moduleRoutes from "../modules/moduleRoutes";
+import ProtectedRoute from "./ProtectedRoute";
 
-import moduleRoutes
-from "../modules/moduleRoutes";
+// =====================================
+// COMPONENT SHOWCASE
+// =====================================
 
-import ProtectedRoute
-from "./ProtectedRoute";
-
-import ComponentShowcasePage
-from "../pages/ComponentShowcasePage";
-
+import ComponentShowcasePage from "../pages/ComponentShowcasePage";
 
 // =====================================
 // APP ROUTES
 // =====================================
 
 const AppRoutes = () => {
+    return (
+        <Routes>
 
-  return (
+            {/* ============================= */}
+            {/* LOGIN */}
+            {/* ============================= */}
 
-      <Routes>
+            <Route
+                path="/login"
+                element={<LoginPage />}
+            />
 
-          {/* ============================= */}
-          {/* LOGIN */}
-          {/* ============================= */}
-
-          <Route
-
-              path="/login"
-
-              element={<LoginPage />}
-          />
-
-
-          {/* ============================= */}
-          {/* DASHBOARD */}
-          {/* ============================= */}
-
-          <Route
-
-              path="/dashboard/*"
-
-              element={
-
-                  <ProtectedRoute>
-
-                      <DashboardLayout />
-
-                  </ProtectedRoute>
-              }
-          >
-
-              {moduleRoutes}
-
-          </Route>
+            {/* ============================= */}
+            {/* COMPONENT SHOWCASE */}
+            {/* ============================= */}
 
             <Route
                 path="/component-showcase"
                 element={<ComponentShowcasePage />}
             />
-          {/* ============================= */}
-          {/* WEBSITE */}
-          {/* ============================= */}
 
-          <Route
+            {/* ============================= */}
+            {/* DASHBOARD (PROTECTED) */}
+            {/* ============================= */}
 
-              path="/*"
+            <Route
+                path="/dashboard/*"
+                element={
+                    <ProtectedRoute>
+                        <DashboardLayout />
+                    </ProtectedRoute>
+                }
+            >
+                {moduleRoutes}
+            </Route>
 
-              element={<WebsiteRoutes />}
-          />
+            {/* ============================= */}
+            {/* PUBLIC WEBSITE */}
+            {/* ============================= */}
 
+            <Route
+                path="/*"
+                element={<WebsiteRoutes />}
+            />
 
-          {/* ============================= */}
-          {/* FALLBACK */}
-          {/* ============================= */}
-
-          <Route
-
-              path="*"
-
-              element={
-                  <Navigate
-                      to="/login"
-                      replace
-                  />
-              }
-          />
-
-      </Routes>
-  );
+        </Routes>
+    );
 };
-
 
 export default AppRoutes;

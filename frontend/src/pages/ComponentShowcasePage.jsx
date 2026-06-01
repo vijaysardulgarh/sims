@@ -1,36 +1,26 @@
 import { useState } from "react";
 
+import PageHeader from "../components/ui/PageHeader";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Select from "../components/ui/Select";
 import Textarea from "../components/ui/Textarea";
-import Checkbox from "../components/ui/Checkbox";
-import Switch from "../components/ui/Switch";
-import Card from "../components/ui/Card";
-import Badge from "../components/ui/Badge";
-import Loader from "../components/ui/Loader";
+import DateInput from "../components/forms/DateInput";
 
-import ConfirmDialog from "../components/dialogs/ConfirmDialog";
-import DeleteDialog from "../components/dialogs/DeleteDialog";
+import Tabs from "../components/ui/Tabs";
 
 import CrudDrawer from "../components/crud/CrudDrawer";
+import SearchBar from "../components/crud/SearchBar";
+import DataTable from "../components/crud/DataTable";
+import Pagination from "../components/crud/Pagination";
 
-const ComponentShowcasePage = () => {
+import FileUpload from "../components/forms/FileUpload";
+import ImageUpload from "../components/forms/ImageUpload";
 
-    const [formData, setFormData] = useState({
-        name: "",
-        code: "",
-        status: "active",
-        description: "",
-        agree: false,
-        enabled: true,
-    });
+const StudentShowcasePage = () => {
 
-    const [confirmOpen, setConfirmOpen] =
-        useState(false);
-
-    const [deleteOpen, setDeleteOpen] =
-        useState(false);
+    const [search, setSearch] =
+        useState("");
 
     const [drawerOpen, setDrawerOpen] =
         useState(false);
@@ -38,264 +28,133 @@ const ComponentShowcasePage = () => {
     const [activeTab, setActiveTab] =
         useState("Basic Info");
 
-    const tabs = [
-        "Basic Info",
-        "Academic",
-        "Guardian",
-        "Documents",
-    ];
+    const [studentPhoto, setStudentPhoto] =
+        useState(null);
 
-    const handleChange = (event) => {
+    const [birthCertificate, setBirthCertificate] =
+        useState(null);
 
-        const {
-            name,
-            value,
-            type,
-            checked,
-        } = event.target;
+    const [page, setPage] =
+        useState(1);
 
-        setFormData((prev) => ({
-            ...prev,
-            [name]:
-                type === "checkbox"
-                    ? checked
-                    : value,
-        }));
+    const [formData, setFormData] =
+        useState({
+            admission_no: "",
+            first_name: "",
+            last_name: "",
+            gender: "",
+            dob: "",
+            class_name: "",
+            section: "",
+            father_name: "",
+            mother_name: "",
+            address: "",
+        });
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]:
+                e.target.value,
+        });
     };
 
+    const columns = [
+        {
+            key: "admission_no",
+            label: "Admission No",
+        },
+        {
+            key: "name",
+            label: "Student Name",
+        },
+        {
+            key: "class_name",
+            label: "Class",
+        },
+        {
+            key: "section",
+            label: "Section",
+        },
+        {
+            key: "status",
+            label: "Status",
+        },
+    ];
+
+    const data = [
+        {
+            id: 1,
+            admission_no: "ADM001",
+            name: "Rahul Sharma",
+            class_name: "10",
+            section: "A",
+            status: "Active",
+        },
+        {
+            id: 2,
+            admission_no: "ADM002",
+            name: "Priya Singh",
+            class_name: "9",
+            section: "B",
+            status: "Active",
+        },
+        {
+            id: 3,
+            admission_no: "ADM003",
+            name: "Amit Kumar",
+            class_name: "8",
+            section: "A",
+            status: "Inactive",
+        },
+    ];
+
     return (
+        <div className="p-6 space-y-6">
 
-        <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
-
-            <h1 className="text-3xl font-bold">
-                ERP Component Playground
-            </h1>
-
-            {/* Buttons */}
-
-            <Card title="Buttons">
-
-                <div className="flex gap-3 flex-wrap">
-
-                    <Button variant="primary">
-                        Save
-                    </Button>
-
-                    <Button variant="secondary">
-                        Cancel
-                    </Button>
-
-                    <Button variant="success">
-                        Approve
-                    </Button>
-
-                    <Button variant="danger">
-                        Delete
-                    </Button>
-
-                </div>
-
-            </Card>
-
-            {/* Inputs */}
-
-            <Card title="Inputs">
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                    <Input
-                        label="Building Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                    />
-
-                    <Input
-                        label="Building Code"
-                        name="code"
-                        value={formData.code}
-                        onChange={handleChange}
-                    />
-
-                    <Select
-                        label="Status"
-                        name="status"
-                        value={formData.status}
-                        onChange={handleChange}
-                        options={[
-                            {
-                                value: "active",
-                                label: "Active",
-                            },
-                            {
-                                value: "inactive",
-                                label: "Inactive",
-                            },
-                        ]}
-                    />
-
-                    <div className="md:col-span-2">
-
-                        <Textarea
-                            label="Description"
-                            name="description"
-                            value={formData.description}
-                            onChange={handleChange}
-                        />
-
-                    </div>
-
-                </div>
-
-            </Card>
-
-            {/* Checkbox & Switch */}
-
-            <Card title="Checkbox & Switch">
-
-                <div className="space-y-4">
-
-                    <Checkbox
-                        label="I Agree"
-                        name="agree"
-                        checked={formData.agree}
-                        onChange={handleChange}
-                    />
-
-                    <Switch
-                        label="Enabled"
-                        checked={formData.enabled}
-                        onChange={() =>
-                            setFormData((prev) => ({
-                                ...prev,
-                                enabled:
-                                    !prev.enabled,
-                            }))
-                        }
-                    />
-
-                </div>
-
-            </Card>
-
-            {/* Badges */}
-
-            <Card title="Badges">
-
-                <div className="flex gap-3">
-
-                    <Badge variant="success">
-                        Active
-                    </Badge>
-
-                    <Badge variant="danger">
-                        Inactive
-                    </Badge>
-
-                    <Badge variant="warning">
-                        Pending
-                    </Badge>
-
-                    <Badge variant="primary">
-                        Draft
-                    </Badge>
-
-                </div>
-
-            </Card>
-
-            {/* Loader */}
-
-            <Card title="Loader">
-
-                <Loader />
-
-            </Card>
-
-            {/* Dialogs */}
-
-            <Card title="Dialogs">
-
-                <div className="flex gap-3">
-
+            <PageHeader
+                title="Students"
+                subtitle="Student Management Showcase"
+                breadcrumbs={[
+                    "Dashboard",
+                    "Academics",
+                    "Students",
+                ]}
+                actions={
                     <Button
                         onClick={() =>
-                            setConfirmOpen(true)
+                            setDrawerOpen(true)
                         }
                     >
-                        Open Confirm Dialog
+                        Add Student
                     </Button>
-
-                    <Button
-                        variant="danger"
-                        onClick={() =>
-                            setDeleteOpen(true)
-                        }
-                    >
-                        Open Delete Dialog
-                    </Button>
-
-                </div>
-
-            </Card>
-
-            {/* Drawer */}
-
-            <Card title="Crud Drawer">
-
-                <Button
-                    onClick={() =>
-                        setDrawerOpen(true)
-                    }
-                >
-                    Open Drawer
-                </Button>
-
-            </Card>
-
-            {/* Current Form Data */}
-
-            <Card title="Current State">
-
-                <pre className="bg-gray-100 p-4 rounded overflow-auto">
-                    {JSON.stringify(
-                        formData,
-                        null,
-                        2
-                    )}
-                </pre>
-
-            </Card>
-
-            {/* Confirm Dialog */}
-
-            <ConfirmDialog
-                open={confirmOpen}
-                title="Activate Record"
-                message="Do you want to activate this record?"
-                onCancel={() =>
-                    setConfirmOpen(false)
                 }
-                onConfirm={() => {
-                    alert("Confirmed");
-                    setConfirmOpen(false);
-                }}
             />
 
-            {/* Delete Dialog */}
-
-            <DeleteDialog
-                open={deleteOpen}
-                onCancel={() =>
-                    setDeleteOpen(false)
-                }
-                onDelete={() => {
-                    alert("Deleted");
-                    setDeleteOpen(false);
-                }}
+            <SearchBar
+                value={search}
+                onChange={setSearch}
             />
 
-            {/* Drawer */}
+            <DataTable
+                columns={columns}
+                data={data}
+                onView={(row) =>
+                    console.log(row)
+                }
+                onEdit={(row) =>
+                    console.log(row)
+                }
+                onDelete={(row) =>
+                    console.log(row)
+                }
+            />
+
+            <Pagination
+                currentPage={page}
+                totalPages={10}
+                onPageChange={setPage}
+            />
 
             <CrudDrawer
                 open={drawerOpen}
@@ -303,38 +162,247 @@ const ComponentShowcasePage = () => {
                 onClose={() =>
                     setDrawerOpen(false)
                 }
-                tabs={tabs}
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
             >
 
-                <div className="space-y-4">
+                <Tabs
+                    tabs={[
+                        "Basic Info",
+                        "Academic",
+                        "Guardian",
+                        "Documents",
+                    ]}
+                    activeTab={activeTab}
+                    onChange={setActiveTab}
+                />
 
-                    <h2 className="font-semibold">
-                        {activeTab}
-                    </h2>
+                <div className="mt-6">
 
-                    <Input
-                        label="Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                    />
+                    {activeTab ===
+                        "Basic Info" && (
+                        <div className="grid grid-cols-2 gap-4">
 
-                    <Input
-                        label="Code"
-                        name="code"
-                        value={formData.code}
-                        onChange={handleChange}
-                    />
+                            <ImageUpload
+                                label="Student Photo"
+                                image={
+                                    studentPhoto
+                                        ? URL.createObjectURL(
+                                              studentPhoto
+                                          )
+                                        : null
+                                }
+                                onChange={
+                                    setStudentPhoto
+                                }
+                            />
 
-                    <Textarea
-                        label="Description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                    />
+                            <Input
+                                label="Admission No"
+                                name="admission_no"
+                                value={
+                                    formData.admission_no
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                            />
 
+                            <Input
+                                label="First Name"
+                                name="first_name"
+                                value={
+                                    formData.first_name
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                            />
+
+                            <Input
+                                label="Last Name"
+                                name="last_name"
+                                value={
+                                    formData.last_name
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                            />
+
+                            <Select
+                                label="Gender"
+                                name="gender"
+                                value={
+                                    formData.gender
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                                options={[
+                                    {
+                                        value:
+                                            "Male",
+                                        label:
+                                            "Male",
+                                    },
+                                    {
+                                        value:
+                                            "Female",
+                                        label:
+                                            "Female",
+                                    },
+                                ]}
+                            />
+
+                            <DateInput
+                                label="Date of Birth"
+                                name="dob"
+                                value={
+                                    formData.dob
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                            />
+
+                        </div>
+                    )}
+
+                    {activeTab ===
+                        "Academic" && (
+                        <div className="grid grid-cols-2 gap-4">
+
+                            <Select
+                                label="Class"
+                                name="class_name"
+                                value={
+                                    formData.class_name
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                                options={[
+                                    {
+                                        value:
+                                            "10",
+                                        label:
+                                            "10",
+                                    },
+                                    {
+                                        value:
+                                            "9",
+                                        label:
+                                            "9",
+                                    },
+                                ]}
+                            />
+
+                            <Select
+                                label="Section"
+                                name="section"
+                                value={
+                                    formData.section
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                                options={[
+                                    {
+                                        value:
+                                            "A",
+                                        label:
+                                            "A",
+                                    },
+                                    {
+                                        value:
+                                            "B",
+                                        label:
+                                            "B",
+                                    },
+                                ]}
+                            />
+
+                        </div>
+                    )}
+
+                    {activeTab ===
+                        "Guardian" && (
+                        <div className="grid grid-cols-2 gap-4">
+
+                            <Input
+                                label="Father Name"
+                                name="father_name"
+                                value={
+                                    formData.father_name
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                            />
+
+                            <Input
+                                label="Mother Name"
+                                name="mother_name"
+                                value={
+                                    formData.mother_name
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                            />
+
+                            <div className="col-span-2">
+
+                                <Textarea
+                                    label="Address"
+                                    name="address"
+                                    value={
+                                        formData.address
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                />
+
+                            </div>
+
+                        </div>
+                    )}
+
+                    {activeTab ===
+                        "Documents" && (
+                        <FileUpload
+                            label="Birth Certificate"
+                            fileName={
+                                birthCertificate?.name
+                            }
+                            onChange={
+                                setBirthCertificate
+                            }
+                        />
+                    )}
+
+                </div>
+
+                <div
+                    className="
+                        flex
+                        justify-end
+                        gap-3
+                        mt-6
+                    "
+                >
+                    <Button
+                        variant="secondary"
+                        onClick={() =>
+                            setDrawerOpen(false)
+                        }
+                    >
+                        Cancel
+                    </Button>
+
+                    <Button>
+                        Save Student
+                    </Button>
                 </div>
 
             </CrudDrawer>
@@ -343,4 +411,4 @@ const ComponentShowcasePage = () => {
     );
 };
 
-export default ComponentShowcasePage;
+export default StudentShowcasePage;

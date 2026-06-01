@@ -194,6 +194,122 @@ RBAC_CONFIG = {
         ]
     },
 
+
+    # ======================================
+    # COMMUNICATIONS
+    # ======================================
+
+    "communications": {
+
+        "path": None,
+
+        "children": [
+
+            {
+                "name": "Circulars",
+                "slug": "circulars",
+                "path": "/dashboard/communications/circulars",
+            },
+
+            {
+                "name": "Events",
+                "slug": "events",
+                "path": "/dashboard/communications/events",
+            },
+
+            {
+                "name": "Notices",
+                "slug": "notices",
+                "path": "/dashboard/communications/notices",
+            },
+
+            {
+                "name": "News",
+                "slug": "news",
+                "path": "/dashboard/communications/news",
+            },
+
+            {
+                "name": "Faqs",
+                "slug": "faqs",
+                "path": "/dashboard/communications/faqs",
+            },
+
+            {
+                "name": "communication-templates",
+                "slug": "communication-templates",
+                "path": "/dashboard/communications/communication-templates",
+            },
+
+            {
+                "name": "Communication Categories",
+                "slug": "communication-categories",
+                "path": "/dashboard/communications/communication-categories",
+            },
+
+            {
+                "name": "Notifications",
+                "slug": "notifications",
+                "path": "/dashboard/communications/notifications",
+            },
+        ]
+    },
+
+    # ======================================
+    # COMPLIANCE
+    # ======================================
+
+    "compliance": {
+
+        "path": None,
+
+        "children": [
+
+            {
+                "name": "Affiliations",
+                "slug": "affiliations",
+                "path": "/dashboard/compliance/affiliations",
+            },
+
+            {
+                "name": "Certificates",
+                "slug": "certificates",
+                "path": "/dashboard/compliance/certificates",
+            },
+
+            {
+                "name": "Compliance Documents",
+                "slug": "compliance-documents",
+                "path": "/dashboard/compliance/compliance-documents",
+            },
+
+            {
+                "name": "Inspections",
+                "slug": "inspections",
+                "path": "/dashboard/compliance/inspections",
+            },
+
+            {
+                "name": "Mandatory Public Disclosures",
+                "slug": "mandatory-public-disclosures",
+                "path": "/dashboard/compliance/mandatory-public-disclosures",
+            },
+
+            {
+                "name": "policies",
+                "slug": "policies",
+                "path": "/dashboard/compliance/policies",
+            },
+
+            {
+                "name": "Recognitions",
+                "slug": "recognitions",
+                "path": "/dashboard/compliance/recognitions",
+            },
+
+        ]
+    },
+
     # ======================================
     # DOCUMENTS
     # ======================================
@@ -301,13 +417,87 @@ RBAC_CONFIG = {
     "infrastructure": {
 
         "path": None,
+        
 
         "children": [
 
             {
+                "name": "Buildings",
+                "slug": "buildings",
+                "path": "/dashboard/infrastructure/buildings",
+            },
+
+            {
                 "name": "Classrooms",
                 "slug": "classrooms",
-                "path": "/dashboard/academics/classrooms",
+                "path": "/dashboard/infrastructure/classrooms",
+            },
+
+
+            {
+                "name": "Floors",
+                "slug": "floors",
+                "path": "/dashboard/infrastructure/floors",
+            },
+
+            {
+                "name": "Rooms",
+                "slug": "rooms",
+                "path": "/dashboard/infrastructure/rooms",
+            },  
+
+            {
+                "name": "laboratories",
+                "slug": "laboratories",
+                "path": "/dashboard/infrastructure/laboratories",
+            },
+
+            {
+                "name": "auditoriums",
+                "slug": "auditoriums",
+                "path": "/dashboard/infrastructure/auditoriums",
+            },
+
+            {
+                "name": "facilities",
+                "slug": "facilities",
+                "path": "/dashboard/infrastructure/facilities",
+            },
+
+            {
+                "name": "Hostel-Facilities",
+                "slug": "hostel-facilities",    
+                "path": "/dashboard/infrastructure/hostel-facilities",
+            },
+
+            {
+                "name": "inventories",
+                "slug": "inventories",
+                "path": "/dashboard/infrastructure/inventories",
+            },
+
+            {
+                "name": "libraries",
+                "slug": "libraries",
+                "path": "/dashboard/infrastructure/libraries",
+            },
+
+            {
+                "name": "Playgrounds",
+                "slug": "playgrounds",
+                "path": "/dashboard/infrastructure/playgrounds",
+            },
+
+            {
+                "name": "Sports-Facilities",
+                "slug": "sports-facilities",
+                "path": "/dashboard/infrastructure/sports-facilities",
+            },
+
+            {
+                "name": "Transport-Facilities",
+                "slug": "transport-facilities",
+                "path": "/dashboard/infrastructure/transport-facilities",
             },
 
         ]
@@ -361,15 +551,39 @@ RBAC_CONFIG = {
         "children": [
 
             {
+                "name": "About School",
+                "slug": "about-school",
+                "path": "/dashboard/schools/about-school",
+            },
+
+            {
                 "name": "School Records",
                 "slug": "school-records",
-                "path": "/dashboard/schools",
+                "path": "/dashboard/schools/schools",
             },
 
             {
                 "name": "Branches",
                 "slug": "branches",
-                "path": "/dashboard/branches",
+                "path": "/dashboard/schools/branches",
+            },
+
+            {
+                "name": "Galleries",
+                "slug": "galleries",
+                "path": "/dashboard/schools/galleries",
+            },
+
+            {
+                "name": "Principals",
+                "slug": "principals",
+                "path": "/dashboard/schools/principals",
+            },
+
+            {
+                "name": "School-Settings",
+                "slug": "school-settings",
+                "path": "/dashboard/schools/school-settings",
             },
 
         ]
