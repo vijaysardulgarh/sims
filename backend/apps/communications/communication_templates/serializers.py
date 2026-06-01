@@ -1,18 +1,44 @@
 from rest_framework import serializers
 
 from .models import (
-    CommunicationCategory
+    CommunicationTemplate
 )
 
 
-class CommunicationCategorySerializer(
+class CommunicationTemplateSerializer(
     serializers.ModelSerializer
 ):
+
+    category_name = serializers.CharField(
+        source='category.name',
+        read_only=True
+    )
 
     class Meta:
 
         model = (
-            CommunicationCategory
+            CommunicationTemplate
         )
 
-        fields = '__all__'
+        fields = [
+
+            'id',
+
+            'category',
+            'category_name',
+
+            'name',
+            'subject',
+            'content',
+
+            'is_active',
+
+            'created_at',
+            'updated_at',
+        ]
+
+        read_only_fields = [
+
+            'created_at',
+            'updated_at',
+        ]

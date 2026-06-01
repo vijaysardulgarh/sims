@@ -33,6 +33,9 @@ from "../modules/moduleRoutes";
 import ProtectedRoute
 from "./ProtectedRoute";
 
+import ComponentShowcasePage
+from "../pages/ComponentShowcasePage";
+
 
 // =====================================
 // APP ROUTES
@@ -78,7 +81,10 @@ const AppRoutes = () => {
 
           </Route>
 
-
+            <Route
+                path="/component-showcase"
+                element={<ComponentShowcasePage />}
+            />
           {/* ============================= */}
           {/* WEBSITE */}
           {/* ============================= */}

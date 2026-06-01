@@ -603,3 +603,5 @@ infrastructure/
 ├── assets/
 ├── maintenance-records/
 └── facilities/
+
+syllabi,lesson-plans,assignments,study-materials,academic-sessions

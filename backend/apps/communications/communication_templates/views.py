@@ -1,22 +1,26 @@
 from rest_framework import viewsets
 
 from .models import (
-    CommunicationCategory
+    CommunicationTemplate
 )
 
 from .serializers import (
-    CommunicationCategorySerializer
+    CommunicationTemplateSerializer
 )
 
 
-class CommunicationCategoryViewSet(
+class CommunicationTemplateViewSet(
     viewsets.ModelViewSet
 ):
 
     queryset = (
-        CommunicationCategory.objects.all()
+        CommunicationTemplate.objects
+        .select_related(
+            'category'
+        )
+        .all()
     )
 
     serializer_class = (
-        CommunicationCategorySerializer
+        CommunicationTemplateSerializer
     )

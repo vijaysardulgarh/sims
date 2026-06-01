@@ -1,12 +1,10 @@
-import api from '../../../../services/api/axios';
+import api
+from "../../../../services/api/axios";
 
-const endpoint = '/infrastructure/buildings/';
+const endpoint = "/buildings/";
 
 export const getBuildings = () =>
     api.get(endpoint);
-
-export const getBuilding = (id) =>
-    api.get(`${endpoint}${id}/`);
 
 export const createBuilding = (data) =>
     api.post(endpoint, data);
@@ -20,9 +18,7 @@ export const updateBuilding = (
         data
     );
 
-export const deleteBuilding = (
-    id
-) =>
+export const deleteBuilding = (id) =>
     api.delete(
         `${endpoint}${id}/`
     );
