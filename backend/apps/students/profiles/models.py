@@ -3,10 +3,10 @@ from django.db import models
 from apps.academics.classes.models import Class
 from apps.academics.streams.models import Stream
 from apps.academics.sections.models import Section
-from apps.core.common.base.models import AuditBaseModel
+from apps.core.common.base.models import SchoolBaseModel
 from django.conf import settings
 
-class Student(AuditBaseModel):
+class Student(SchoolBaseModel):
     user = models.OneToOneField(
     settings.AUTH_USER_MODEL,
     on_delete=models.SET_NULL,

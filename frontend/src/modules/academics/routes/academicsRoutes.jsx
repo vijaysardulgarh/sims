@@ -25,20 +25,6 @@ import sectionRoutes from
 import subjectRoutes from
 "../subjects/routes/subjectRoutes";
 
-// import classSubjectRoutes from
-// "../../timetables/class-subjects/routes/classSubjectRoutes";
-
-// import dayRoutes from
-// "../../timetables/days/routes/dayRoutes";
-
-// import timetableSlotRoutes from
-// "../../timetables/timetable-slots/routes/timetableSlotRoutes";
-
-// import timetableRoutes from
-// "../../timetables/timetable/routes/timetableRoutes";
-
-// import classroomRoutes from
-// "../../infrastructure/classrooms/routes/classroomRoutes";
 
 import mediumRoutes from
 "../mediums/routes/mediumRoutes";
@@ -73,16 +59,6 @@ const academicsRoutes = (
     {sectionRoutes}
 
     {subjectRoutes}
-
-    {/* {classSubjectRoutes}
-
-    {dayRoutes}
-
-    {timetableSlotRoutes}
-
-    {timetableRoutes}
-
-    {classroomRoutes} */}
 
     {mediumRoutes}
 

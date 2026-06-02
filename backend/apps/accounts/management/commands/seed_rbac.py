@@ -668,9 +668,9 @@ RBAC_CONFIG = {
         "children": [
 
             {
-                "name": "Student Profiles",
-                "slug": "student-profiles",
-                "path": "/dashboard/students/student-profiles",
+                "name": "Student List",
+                "slug": "student-list",
+                "path": "/dashboard/students/list",
             },
 
             {
@@ -683,6 +683,12 @@ RBAC_CONFIG = {
                 "name": "Student Achievers",
                 "slug": "student-achievers",
                 "path": "/dashboard/students/student-achievers",
+            },
+
+            {
+                "name": "Student Strength",
+                "slug": "student-strength",
+                "path": "/dashboard/students/reports/student-strength",
             },
 
         ]

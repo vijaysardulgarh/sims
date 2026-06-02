@@ -14,6 +14,13 @@ const ClassForm = ({
 }) => {
 
   // =========================
+  // EDIT MODE
+  // =========================
+
+  const isEdit =
+    Boolean(initialData?.id);
+
+  // =========================
   // FORM STATE
   // =========================
 
@@ -42,7 +49,7 @@ const ClassForm = ({
           initialData.name || "",
 
         display_order:
-          initialData.display_order || "",
+          initialData.display_order ?? "",
       });
     }
 
@@ -54,14 +61,17 @@ const ClassForm = ({
 
   const handleChange = (e) => {
 
-    const { name, value } = e.target;
+    const {
+      name,
+      value
+    } = e.target;
 
-    setFormData({
+    setFormData((prev) => ({
 
-      ...formData,
+      ...prev,
 
       [name]: value,
-    });
+    }));
   };
 
   // =========================
@@ -72,7 +82,19 @@ const ClassForm = ({
 
     e.preventDefault();
 
-    onSubmit(formData);
+    const payload = {
+
+      ...formData,
+    };
+
+    if (
+      payload.display_order === ""
+    ) {
+
+      delete payload.display_order;
+    }
+
+    onSubmit(payload);
   };
 
   return (
@@ -94,12 +116,14 @@ const ClassForm = ({
 
       <div>
 
-        <label className="
-          mb-2
-          block
-          text-sm
-          font-medium
-        ">
+        <label
+          className="
+            mb-2
+            block
+            text-sm
+            font-medium
+          "
+        >
 
           Class Name
 
@@ -134,47 +158,54 @@ const ClassForm = ({
 
       {/* ===================== */}
       {/* DISPLAY ORDER */}
+      {/* EDIT ONLY */}
       {/* ===================== */}
 
-      <div>
+      {isEdit && (
 
-        <label className="
-          mb-2
-          block
-          text-sm
-          font-medium
-        ">
+        <div>
 
-          Display Order
+          <label
+            className="
+              mb-2
+              block
+              text-sm
+              font-medium
+            "
+          >
 
-        </label>
+            Display Order
 
-        <input
+          </label>
 
-          type="number"
+          <input
 
-          name="display_order"
+            type="number"
 
-          value={formData.display_order}
+            name="display_order"
 
-          onChange={handleChange}
+            value={formData.display_order}
 
-          placeholder="Enter display order"
+            onChange={handleChange}
 
-          className="
-            w-full
-            rounded-lg
-            border
-            p-3
-            focus:outline-none
-            focus:ring-2
-            focus:ring-blue-500
-          "
+            placeholder="Enter display order"
 
-          required
-        />
+            min="0"
 
-      </div>
+            className="
+              w-full
+              rounded-lg
+              border
+              p-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+            "
+          />
+
+        </div>
+
+      )}
 
       {/* ===================== */}
       {/* BUTTON */}
@@ -198,10 +229,10 @@ const ClassForm = ({
       >
 
         {loading
-
           ? "Saving..."
-
-          : "Save Class"}
+          : isEdit
+            ? "Update Class"
+            : "Save Class"}
 
       </button>
 

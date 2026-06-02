@@ -1,34 +1,21 @@
 import { Route } from "react-router-dom";
 
-import StudentsList from "../pages/StudentsList";
-import AddStudent from "../pages/AddStudent";
-import EditStudent from "../pages/EditStudent";
-import StudentProfile from "../pages/StudentProfile";
+import studentListRoutes from
+  "../studentsList/routes/studentListRoutes";
+
+import reportsRoutes from
+  "../reports/routes/reportsRoutes";
 
 const studentsRoutes = (
+
   <Route path="students">
 
-    <Route
-      path=""
-      element={<StudentsList />}
-    />
+    {studentListRoutes}
 
-    <Route
-      path="add"
-      element={<AddStudent />}
-    />
-
-    <Route
-      path="edit/:id"
-      element={<EditStudent />}
-    />
-
-    <Route
-      path="profile/:id"
-      element={<StudentProfile />}
-    />
+    {reportsRoutes}
 
   </Route>
+
 );
 
 export default studentsRoutes;

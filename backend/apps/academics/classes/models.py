@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Max
 
 from apps.core.common.base.models import SchoolBaseModel
 
@@ -12,7 +13,8 @@ class Class(
     )
 
     display_order = models.PositiveIntegerField(
-        default=0
+        default=0,
+        blank=True
     )
 
     def clean(self):
@@ -27,9 +29,33 @@ class Class(
 
     def save(self, *args, **kwargs):
 
+        # Auto-generate display order only on create
+        if self._state.adding and not self.display_order:
+
+            max_order = (
+                Class.objects
+                .filter(
+                    school=self.school
+                )
+                .aggregate(
+                    Max("display_order")
+                )
+                .get(
+                    "display_order__max"
+                )
+                or 0
+            )
+
+            self.display_order = (
+                max_order + 1
+            )
+
         self.full_clean()
 
-        super().save(*args, **kwargs)
+        super().save(
+            *args,
+            **kwargs
+        )
 
     class Meta:
 

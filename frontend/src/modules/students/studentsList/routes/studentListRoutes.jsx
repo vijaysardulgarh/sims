@@ -1,0 +1,34 @@
+import { Route } from "react-router-dom";
+
+import StudentsList from "../pages/StudentsList";
+import AddStudent from "../pages/AddStudent";
+import EditStudent from "../pages/EditStudent";
+import StudentProfile from "../pages/StudentProfile";
+
+const studentsListRoutes = (
+  <Route path="list">
+
+    <Route
+      index
+      element={<StudentsList />}
+    />
+
+    <Route
+      path="add"
+      element={<AddStudent />}
+    />
+
+    <Route
+      path="edit/:id"
+      element={<EditStudent />}
+    />
+
+    <Route
+      path="profile/:id"
+      element={<StudentProfile />}
+    />
+
+  </Route>
+);
+
+export default studentsListRoutes;
