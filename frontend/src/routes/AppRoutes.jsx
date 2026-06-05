@@ -5,6 +5,9 @@ import {
     Route,
 } from "react-router-dom";
 
+import RollCallPrintPage
+from "../modules/students/reports/roll-call/pages/RollCallPrintPage";
+
 // =====================================
 // WEBSITE
 // =====================================
@@ -79,6 +82,16 @@ const AppRoutes = () => {
             <Route
                 path="/*"
                 element={<WebsiteRoutes />}
+            />
+
+
+            <Route
+                path="/print/roll-call"
+                element={
+                    <ProtectedRoute>
+                        <RollCallPrintPage />
+                    </ProtectedRoute>
+                }
             />
 
         </Routes>
