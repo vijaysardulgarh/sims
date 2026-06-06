@@ -67,8 +67,31 @@ class AuditBaseModel(
     class Meta:
 
         abstract = True
+# =============================================================================
+# CLUSTER BASE MODEL                    
+# =============================================================================
+class ClusterBaseModel(
+    AuditBaseModel
+):
 
+    cluster = models.ForeignKey(
 
+        "clusters.Cluster",
+
+        on_delete=models.CASCADE,
+
+        related_name="%(class)s_objects",
+
+        db_index=True,
+
+        null=True,
+
+        blank=True
+    )
+
+    class Meta:
+
+        abstract = True
 # =============================================================================
 # SCHOOL BASE MODEL
 # =============================================================================

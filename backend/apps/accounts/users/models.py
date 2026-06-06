@@ -9,7 +9,7 @@ from django.core.exceptions import (
 from django.db import models
 
 from apps.core.common.base.models import (
-    SchoolBaseModel
+    AuditBaseModel
 )
 
 from apps.accounts.users.managers import (
@@ -23,7 +23,7 @@ from apps.accounts.users.managers import (
 
 class User(
     AbstractUser,
-    SchoolBaseModel
+    AuditBaseModel
 ):
 
     objects = UserManager()
@@ -171,10 +171,6 @@ class User(
 
             models.Index(
                 fields=["email"]
-            ),
-
-            models.Index(
-                fields=["school"]
             ),
 
             models.Index(

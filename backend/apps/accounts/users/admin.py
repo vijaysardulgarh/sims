@@ -30,8 +30,6 @@ class CustomUserAdmin(
 
         "email",
 
-        "school",
-
         "is_staff",
 
         "is_superuser",
@@ -62,7 +60,6 @@ class CustomUserAdmin(
 
         "last_name",
 
-        "school__name",
     )
 
     # =====================================
@@ -71,7 +68,6 @@ class CustomUserAdmin(
 
     list_filter = (
 
-        "school",
 
         "is_staff",
 
@@ -136,15 +132,6 @@ class CustomUserAdmin(
             }
         ),
 
-        (
-            "School Information",
-
-            {
-                "fields": (
-                    "school",
-                )
-            }
-        ),
 
         (
             "Personal Information",
@@ -247,8 +234,6 @@ class CustomUserAdmin(
                 "fields": (
 
                     "email",
-
-                    "school",
 
                     "password1",
 

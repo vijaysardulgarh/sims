@@ -22,10 +22,6 @@ class LoginSerializer(
         attrs
     ):
 
-        # ==================================
-        # AUTHENTICATE USER
-        # ==================================
-
         super().validate(
             attrs
         )
@@ -52,31 +48,40 @@ class LoginSerializer(
 
             and
 
-            user.school
-
-            and
-
-            request_school != user.school
-
-            and
-
             not user.is_superuser
         ):
 
-            raise serializers.ValidationError(
+            has_access = (
 
-                "Invalid school login."
+                user.user_roles.filter(
+
+                    school=request_school,
+
+                    is_active=True,
+
+                    is_deleted=False
+
+                )
+
+                .exists()
             )
 
+            if not has_access:
+
+                raise serializers.ValidationError(
+
+                    "Invalid school login."
+                )
+
         # ==================================
-        # GENERATE CUSTOM TOKEN
+        # TOKEN
         # ==================================
 
         refresh = self.get_token(
             user
         )
 
-        data = {
+        return {
 
             "refresh": str(
                 refresh
@@ -86,8 +91,6 @@ class LoginSerializer(
                 refresh.access_token
             ),
         }
-
-        return data
 
     # ======================================
     # TOKEN
@@ -129,35 +132,45 @@ class LoginSerializer(
         )
 
         # ==================================
-        # SCHOOL
+        # SCHOOLS
         # ==================================
 
-        token["school_id"] = getattr(
+        user_roles = (
 
-            user.school,
+            user.user_roles.filter(
 
-            "id",
+                is_active=True,
 
-            None
+                is_deleted=False
+
+            )
+
+            .select_related(
+                "school",
+                "role"
+            )
         )
 
-        token["school_name"] = getattr(
+        token["schools"] = [
 
-            user.school,
+            {
 
-            "name",
+                "id": ur.school.id,
 
-            None
-        )
+                "name": ur.school.name,
 
-        token["school_slug"] = getattr(
+                "slug": getattr(
+                    ur.school,
+                    "slug",
+                    None
+                ),
 
-            user.school,
+            }
 
-            "slug",
+            for ur in user_roles
 
-            None
-        )
+            if ur.school
+        ]
 
         # ==================================
         # ROLES
@@ -165,14 +178,7 @@ class LoginSerializer(
 
         token["roles"] = list(
 
-            user.user_roles.filter(
-
-            
-
-                is_active=True,
-
-                is_deleted=False
-            )
+            user_roles
 
             .values_list(
 
@@ -192,11 +198,10 @@ class LoginSerializer(
 
             user.user_roles.filter(
 
-           
-
                 is_active=True,
 
                 is_deleted=False
+
             )
 
             .values_list(
