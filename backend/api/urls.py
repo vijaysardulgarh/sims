@@ -84,11 +84,6 @@ urlpatterns = [
     # ======================================
 
     path(
-        "api/website/",
-        include("apps.website.urls")
-    ),
-
-    path(
         "api/documents/",
         include("apps.documents.urls")
     ),

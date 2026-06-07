@@ -91,8 +91,6 @@ INSTALLED_APPS = [
     "apps.students",
 
     "apps.accounts",
-
-    "apps.website",
     
     "import_export",
 
