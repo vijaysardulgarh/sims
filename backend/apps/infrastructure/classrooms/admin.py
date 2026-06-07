@@ -1,66 +1,80 @@
-from django.db import models
-from django.core.exceptions import ValidationError
+from django.contrib import admin
 
-from apps.core.common.base.models import SchoolBaseModel
+from apps.infrastructure.classrooms.models import (
+    Classroom
+)
 
 
-class Classroom(SchoolBaseModel):
+@admin.register(Classroom)
+class ClassroomAdmin(
+    admin.ModelAdmin
+):
 
-    name = models.CharField(
-        max_length=50,
-        db_index=True
+    list_display = (
+
+        "classroom_code",
+
+        "room",
+
+        "floor",
+
+        "capacity",
+
+        "smart_classroom",
+
+        "internet_enabled",
+
+        "is_active",
     )
 
-    capacity = models.PositiveIntegerField(
-        default=40
+    list_display_links = (
+
+        "classroom_code",
     )
 
-    floor = models.CharField(
-        max_length=20,
-        blank=True,
-        null=True
+    search_fields = (
+
+        "classroom_code",
+
+        "room__room_name",
+
+        "room__room_number",
     )
 
-    description = models.TextField(
-        blank=True,
-        null=True
+    list_filter = (
+
+        "smart_classroom",
+
+        "air_conditioned",
+
+        "projector_available",
+
+        "internet_enabled",
+
+        "is_active",
     )
 
-    def clean(self):
+    autocomplete_fields = (
 
-        if self.name:
-            self.name = self.name.strip().upper()
+        "room",
 
-        if self.floor:
-            self.floor = self.floor.strip()
+        "floor",
+    )
 
-        if self.capacity < 1:
-            raise ValidationError(
-                {
-                    "capacity": "Capacity must be greater than 0."
-                }
-            )
+    ordering = (
 
-    def save(self, *args, **kwargs):
+        "classroom_code",
+    )
 
-        self.full_clean()
+    list_per_page = 25
 
-        super().save(*args, **kwargs)
+    readonly_fields = (
 
-    class Meta:
+        "created_at",
 
-        ordering = ["name"]
+        "updated_at",
 
-        constraints = [
-            models.UniqueConstraint(
-                fields=[
-                    "school",
-                    "name"
-                ],
-                name="unique_classroom_per_school"
-            )
-        ]
+        "created_by",
 
-    def __str__(self):
-
-        return self.name
+        "updated_by",
+    )

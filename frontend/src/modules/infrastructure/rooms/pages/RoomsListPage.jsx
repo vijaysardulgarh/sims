@@ -1,6 +1,5 @@
 import CrudListPage from '../../../../shared/components/common/crud/CrudListPage';
 
-
 const RoomsListPage = () => {
 
     const columns = [
@@ -31,7 +30,7 @@ const RoomsListPage = () => {
         },
 
         {
-            key: 'room_type',
+            key: 'room_type_display',
             label: 'Type',
         },
 
@@ -39,6 +38,13 @@ const RoomsListPage = () => {
             key: 'capacity',
             label: 'Capacity',
         },
+
+        {
+            key: 'is_active',
+            label: 'Status',
+            type: 'boolean',
+        },
+
     ];
 
     return (
@@ -49,7 +55,10 @@ const RoomsListPage = () => {
             columns={columns}
             addPath="/dashboard/infrastructure/rooms/add"
             editPath="/dashboard/infrastructure/rooms/edit"
+            searchPlaceholder="Search rooms..."
+            deleteEndpoint="/infrastructure/rooms/"
         />
+
     );
 };
 

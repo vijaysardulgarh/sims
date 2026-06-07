@@ -1,255 +1,318 @@
-// ============================================
-// MEDIUM FORM
-// File: MediumForm.jsx
-// ============================================
-
 import {
-  useState,
-  useEffect
+    useState,
+    useEffect
 } from "react";
 
-const MediumForm = ({
+const AcademicSessionForm = ({
 
-  initialData = {},
+    initialData = {},
 
-  onSubmit,
+    onSubmit,
 
-  loading = false,
+    loading = false,
 
 }) => {
 
-  // ============================================
-  // MEDIUM OPTIONS
-  // ============================================
+    // ============================================
+    // FORM STATE
+    // ============================================
 
-  const mediumOptions = [
+    const [formData, setFormData] =
+        useState({
 
-    "English",
+            name: "",
 
-    "Hindi",
+            start_date: "",
 
-    "Punjabi",
+            end_date: "",
 
-    "Sanskrit",
+            is_current: false,
 
-    "Urdu",
-  ];
+        });
 
-  // ============================================
-  // FORM STATE
-  // ============================================
+    // ============================================
+    // PREFILL FORM
+    // ============================================
 
-  const [formData, setFormData] =
-    useState({
+    useEffect(() => {
 
-      name: "",
+        if (
+            initialData &&
+            Object.keys(initialData).length > 0
+        ) {
 
-      code: "",
-    });
+            setFormData({
 
-  // ============================================
-  // PREFILL FORM
-  // ============================================
+                name:
+                    initialData.name || "",
 
-  useEffect(() => {
+                start_date:
+                    initialData.start_date || "",
 
-    if (
-      initialData &&
-      Object.keys(initialData).length > 0
-    ) {
+                end_date:
+                    initialData.end_date || "",
 
-      setFormData({
+                is_current:
+                    initialData.is_current || false,
 
-        name:
-          initialData.name || "",
+            });
+        }
 
-        code:
-          initialData.code || "",
-      });
-    }
+    }, [initialData]);
 
-  }, [initialData]);
+    // ============================================
+    // HANDLE CHANGE
+    // ============================================
 
-  // ============================================
-  // HANDLE MEDIUM CHANGE
-  // ============================================
+    const handleChange = (e) => {
 
-  const handleMediumChange = (e) => {
+        const {
+            name,
+            value,
+            type,
+            checked,
+        } = e.target;
 
-    const selectedMedium =
-      e.target.value;
+        setFormData({
 
-    setFormData({
+            ...formData,
 
-      ...formData,
+            [name]:
+                type === "checkbox"
+                    ? checked
+                    : value,
 
-      name: selectedMedium,
+        });
+    };
 
-      code:
-        selectedMedium
-          .substring(0, 3)
-          .toUpperCase(),
-    });
-  };
+    // ============================================
+    // HANDLE SUBMIT
+    // ============================================
 
-  // ============================================
-  // HANDLE CHANGE
-  // ============================================
+    const handleSubmit = (e) => {
 
-  const handleChange = (e) => {
+        e.preventDefault();
 
-    const { name, value } = e.target;
+        onSubmit(formData);
+    };
 
-    setFormData({
+    return (
 
-      ...formData,
-
-      [name]: value,
-    });
-  };
-
-  // ============================================
-  // HANDLE SUBMIT
-  // ============================================
-
-  const handleSubmit = (e) => {
-
-    e.preventDefault();
-
-    onSubmit(formData);
-  };
-
-  return (
-
-    <form
-      onSubmit={handleSubmit}
-      className="
-        bg-white
-        p-6
-        rounded-2xl
-        shadow
-        space-y-6
-      "
-    >
-
-      {/* MEDIUM NAME */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          text-sm
-          font-medium
-        ">
-          Medium Name
-        </label>
-
-        <select
-
-          name="name"
-
-          value={formData.name}
-
-          onChange={handleMediumChange}
-
-          className="
-            w-full
-            border
-            rounded-lg
-            p-3
-          "
-
-          required
+        <form
+            onSubmit={handleSubmit}
+            className="
+                bg-white
+                p-6
+                rounded-2xl
+                shadow
+                space-y-6
+            "
         >
 
-          <option value="">
-            Select Medium
-          </option>
+            {/* SESSION NAME */}
 
-          {
+            <div>
 
-            mediumOptions.map(
-              (medium, index) => (
+                <label
+                    className="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                    "
+                >
+                    Session Name
+                </label>
 
-                <option
-                  key={index}
-                  value={medium}
+                <input
+
+                    type="text"
+
+                    name="name"
+
+                    value={formData.name}
+
+                    onChange={handleChange}
+
+                    placeholder="2025-2026"
+
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        p-3
+                    "
+
+                    required
+
+                />
+
+            </div>
+
+            {/* START DATE */}
+
+            <div>
+
+                <label
+                    className="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                    "
+                >
+                    Start Date
+                </label>
+
+                <input
+
+                    type="date"
+
+                    name="start_date"
+
+                    value={
+                        formData.start_date
+                    }
+
+                    onChange={
+                        handleChange
+                    }
+
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        p-3
+                    "
+
+                    required
+
+                />
+
+            </div>
+
+            {/* END DATE */}
+
+            <div>
+
+                <label
+                    className="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                    "
+                >
+                    End Date
+                </label>
+
+                <input
+
+                    type="date"
+
+                    name="end_date"
+
+                    value={
+                        formData.end_date
+                    }
+
+                    onChange={
+                        handleChange
+                    }
+
+                    min={
+                        formData.start_date
+                    }
+
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        p-3
+                    "
+
+                    required
+
+                />
+
+            </div>
+
+            {/* CURRENT SESSION */}
+
+            <div>
+
+                <label
+                    className="
+                        flex
+                        items-center
+                        gap-3
+                    "
                 >
 
-                  {medium}
+                    <input
 
-                </option>
-              )
-            )
-          }
+                        type="checkbox"
 
-        </select>
+                        name="is_current"
 
-      </div>
+                        checked={
+                            formData.is_current
+                        }
 
-      {/* MEDIUM CODE */}
+                        onChange={
+                            handleChange
+                        }
 
-      <div>
+                        className="
+                            h-4
+                            w-4
+                        "
 
-        <label className="
-          block
-          mb-2
-          text-sm
-          font-medium
-        ">
-          Medium Code
-        </label>
+                    />
 
-        <input
+                    <span
+                        className="
+                            text-sm
+                            font-medium
+                        "
+                    >
+                        Set as Current Academic Session
+                    </span>
 
-          type="text"
+                </label>
 
-          name="code"
+            </div>
 
-          value={formData.code}
+            {/* BUTTON */}
 
-          onChange={handleChange}
+            <button
 
-          readOnly
+                type="submit"
 
-          className="
-            w-full
-            border
-            rounded-lg
-            p-3
-            bg-gray-100
-          "
-        />
+                disabled={loading}
 
-      </div>
+                className="
+                    bg-blue-600
+                    text-white
+                    px-6
+                    py-3
+                    rounded-xl
+                    hover:bg-blue-700
+                    disabled:opacity-50
+                "
+            >
 
-      {/* BUTTON */}
+                {loading
+                    ? "Saving..."
+                    : initialData?.id
+                        ? "Update Session"
+                        : "Save Session"}
 
-      <button
+            </button>
 
-        type="submit"
+        </form>
 
-        disabled={loading}
-
-        className="
-          bg-blue-600
-          text-white
-          px-6
-          py-3
-          rounded-xl
-          hover:bg-blue-700
-        "
-      >
-
-        {loading
-          ? "Saving..."
-          : "Save Medium"}
-
-      </button>
-
-    </form>
-  );
+    );
 };
 
-export default MediumForm;
+export default AcademicSessionForm;

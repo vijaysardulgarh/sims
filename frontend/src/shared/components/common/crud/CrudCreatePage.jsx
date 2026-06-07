@@ -1,14 +1,21 @@
-import { useState } from 'react';
+import {
+    useState,
+} from "react";
 
-import { useNavigate } from 'react-router-dom';
+import {
+    useNavigate,
+} from "react-router-dom";
 
-import api from '../../../../services/api/axios';
+import toast from "react-hot-toast";
+
+import api from "../../../../services/api/axios";
 
 const CrudCreatePage = ({
     title,
     endpoint,
     FormComponent,
     redirectPath,
+    successMessage = "Record created successfully.",
 }) => {
 
     const navigate =
@@ -17,6 +24,54 @@ const CrudCreatePage = ({
     const [formData, setFormData] =
         useState({});
 
+    const [saving, setSaving] =
+        useState(false);
+
+    // ==========================================
+    // ERROR HANDLER
+    // ==========================================
+
+    const handleApiErrors = (
+        error
+    ) => {
+
+        const errors =
+            error.response?.data;
+
+        if (!errors) {
+
+            toast.error(
+                "Something went wrong."
+            );
+
+            return;
+        }
+
+        Object.entries(
+            errors
+        ).forEach(
+            ([field, messages]) => {
+
+                const value =
+                    Array.isArray(
+                        messages
+                    )
+                        ? messages.join(
+                              ", "
+                          )
+                        : messages;
+
+                toast.error(
+                    `${field}: ${value}`
+                );
+            }
+        );
+    };
+
+    // ==========================================
+    // CREATE
+    // ==========================================
+
     const handleSubmit =
         async (e) => {
 
@@ -24,9 +79,17 @@ const CrudCreatePage = ({
 
             try {
 
+                setSaving(
+                    true
+                );
+
                 await api.post(
                     endpoint,
                     formData
+                );
+
+                toast.success(
+                    successMessage
                 );
 
                 navigate(
@@ -35,43 +98,164 @@ const CrudCreatePage = ({
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    error
+                );
+
+                handleApiErrors(
+                    error
+                );
+
+            } finally {
+
+                setSaving(
+                    false
+                );
             }
         };
 
+    // ==========================================
+    // PAGE
+    // ==========================================
+
     return (
-        <div className="container-fluid">
 
-            <h3 className="mb-3">
-                {title}
-            </h3>
+        <div
+            className="
+                container-fluid
+            "
+        >
 
-            <form
-                onSubmit={
-                    handleSubmit
-                }
+            <div
+                className="
+                    d-flex
+                    justify-content-between
+                    align-items-center
+                    mb-4
+                "
             >
 
-                <FormComponent
-                    formData={
-                        formData
-                    }
-                    setFormData={
-                        setFormData
-                    }
-                />
-
-                <button
-                    type="submit"
+                <h3
                     className="
-                        btn
-                        btn-primary
+                        mb-0
                     "
                 >
-                    Save
+                    {title}
+                </h3>
+
+                <button
+                    type="button"
+                    className="
+                        btn
+                        btn-outline-secondary
+                    "
+                    onClick={() =>
+                        navigate(
+                            redirectPath
+                        )
+                    }
+                >
+                    Back
                 </button>
 
-            </form>
+            </div>
+
+            <div
+                className="
+                    card
+                    shadow-sm
+                    border-0
+                "
+            >
+
+                <div
+                    className="
+                        card-body
+                    "
+                >
+
+                    <form
+                        onSubmit={
+                            handleSubmit
+                        }
+                    >
+
+                        <FormComponent
+
+                            formData={
+                                formData
+                            }
+
+                            setFormData={
+                                setFormData
+                            }
+
+                            loading={
+                                saving
+                            }
+
+                        />
+
+                        <div
+                            className="
+                                d-flex
+                                gap-2
+                                mt-4
+                            "
+                        >
+
+                            <button
+
+                                type="submit"
+
+                                disabled={
+                                    saving
+                                }
+
+                                className="
+                                    btn
+                                    btn-primary
+                                "
+                            >
+
+                                {saving
+                                    ? "Saving..."
+                                    : "Save"}
+
+                            </button>
+
+                            <button
+
+                                type="button"
+
+                                disabled={
+                                    saving
+                                }
+
+                                className="
+                                    btn
+                                    btn-light
+                                "
+
+                                onClick={() =>
+                                    navigate(
+                                        redirectPath
+                                    )
+                                }
+
+                            >
+
+                                Cancel
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
     );

@@ -1,14 +1,9 @@
-// ============================================
-// ADD CLASSROOM
-// File: AddClassroom.jsx
-// ============================================
-
 import {
-  useState
+    useState
 } from "react";
 
 import {
-  useNavigate
+    useNavigate
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -17,86 +12,134 @@ import ClassroomForm from "../components/ClassroomForm";
 
 import classroomService from "../services/classroomService";
 
+
+// ============================================
+// ADD CLASSROOM
+// ============================================
+
 const AddClassroom = () => {
 
-  const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
-  const [loading, setLoading] =
-    useState(false);
+    const [loading, setLoading] =
+        useState(false);
 
-  const handleSubmit = async (data) => {
+    // ========================================
+    // SUBMIT
+    // ========================================
 
-    try {
-
-      setLoading(true);
-
-      await classroomService.createClassroom(
+    const handleSubmit = async (
         data
-      );
+    ) => {
 
-      toast.success(
-        "Classroom created successfully"
-      );
+        try {
 
-      navigate(
-        "/dashboard/infrastructure/classrooms"
-      );
+            setLoading(true);
 
-    } catch (error) {
+            await classroomService.createClassroom(
+                data
+            );
 
-      console.log(error);
+            toast.success(
+                "Classroom created successfully"
+            );
 
-      toast.error(
+            navigate(
+                "/dashboard/infrastructure/classrooms"
+            );
 
-        error.response?.data
+        } catch (error) {
 
-          ? JSON.stringify(
-              error.response.data
-            )
+            console.error(
+                error
+            );
 
-          : "Failed to create classroom"
-      );
+            const errors =
+                error?.response?.data;
 
-    } finally {
+            if (
 
-      setLoading(false);
-    }
-  };
+                errors &&
 
-  return (
+                typeof errors ===
+                    "object"
+            ) {
 
-    <div className="space-y-6">
+                Object.entries(
+                    errors
+                ).forEach(
 
-      <div>
+                    ([field, value]) => {
 
-        <h1
-          className="
-            text-3xl
-            font-bold
-            text-gray-800
-          "
-        >
-          Add Classroom
-        </h1>
+                        toast.error(
 
-        <p
-          className="
-            text-gray-500
-            mt-1
-          "
-        >
-          Create new classroom
-        </p>
+                            `${field}: ${Array.isArray(value)
 
-      </div>
+                                ? value.join(", ")
 
-      <ClassroomForm
-        onSubmit={handleSubmit}
-        loading={loading}
-      />
+                                : value}`
+                        );
+                    }
+                );
 
-    </div>
-  );
+            } else {
+
+                toast.error(
+                    "Failed to create classroom"
+                );
+            }
+
+        } finally {
+
+            setLoading(false);
+        }
+    };
+
+    // ========================================
+    // UI
+    // ========================================
+
+    return (
+
+        <div className="space-y-6">
+
+            <div>
+
+                <h1
+                    className="
+                        text-3xl
+                        font-bold
+                        text-gray-800
+                    "
+                >
+                    Add Classroom
+                </h1>
+
+                <p
+                    className="
+                        text-gray-500
+                        mt-1
+                    "
+                >
+                    Create a new classroom
+                </p>
+
+            </div>
+
+            <ClassroomForm
+
+                onSubmit={
+                    handleSubmit
+                }
+
+                loading={
+                    loading
+                }
+            />
+
+        </div>
+    );
 };
 
 export default AddClassroom;

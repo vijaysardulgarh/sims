@@ -1,18 +1,76 @@
 import api from '../../../../services/api/axios';
 
-const endpoint = '/infrastructure/rooms/';
+const BASE_URL =
+    '/infrastructure/rooms/';
 
-export const getRooms = () =>
-    api.get(endpoint);
+// ==========================================
+// GET ALL ROOMS
+// ==========================================
 
-export const getRoom = (id) =>
-    api.get(`${endpoint}${id}/`);
+export const getRooms = (
+    params = {}
+) =>
+    api.get(
+        BASE_URL,
+        { params }
+    );
 
-export const createRoom = (data) =>
-    api.post(endpoint, data);
+// ==========================================
+// GET SINGLE ROOM
+// ==========================================
 
-export const updateRoom = (id, data) =>
-    api.put(`${endpoint}${id}/`, data);
+export const getRoom = (
+    id
+) =>
+    api.get(
+        `${BASE_URL}${id}/`
+    );
 
-export const deleteRoom = (id) =>
-    api.delete(`${endpoint}${id}/`);
+// ==========================================
+// CREATE ROOM
+// ==========================================
+
+export const createRoom = (
+    data
+) =>
+    api.post(
+        BASE_URL,
+        data
+    );
+
+// ==========================================
+// UPDATE ROOM
+// ==========================================
+
+export const updateRoom = (
+    id,
+    data
+) =>
+    api.put(
+        `${BASE_URL}${id}/`,
+        data
+    );
+
+// ==========================================
+// PATCH ROOM
+// ==========================================
+
+export const patchRoom = (
+    id,
+    data
+) =>
+    api.patch(
+        `${BASE_URL}${id}/`,
+        data
+    );
+
+// ==========================================
+// DELETE ROOM
+// ==========================================
+
+export const deleteRoom = (
+    id
+) =>
+    api.delete(
+        `${BASE_URL}${id}/`
+    );

@@ -29,6 +29,9 @@ import subjectRoutes from
 import mediumRoutes from
 "../mediums/routes/mediumRoutes";
 
+import academicSessionRoutes from
+"../sessions/routes/academicSessionRoutes";
+
 import reportRoutes from
 "../reports/routes/reportRoutes";
 
@@ -61,6 +64,8 @@ const academicsRoutes = (
     {subjectRoutes}
 
     {mediumRoutes}
+
+    {academicSessionRoutes}
 
     {reportRoutes}
   </>

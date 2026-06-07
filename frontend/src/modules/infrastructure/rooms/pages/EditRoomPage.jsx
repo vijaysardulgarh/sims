@@ -11,7 +11,9 @@ const EditRoomPage = () => {
             endpoint="/infrastructure/rooms/"
             FormComponent={RoomForm}
             redirectPath="/dashboard/infrastructure/rooms"
+            successMessage="Room updated successfully."
         />
+
     );
 };
 

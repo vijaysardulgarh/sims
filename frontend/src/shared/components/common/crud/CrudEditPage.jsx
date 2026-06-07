@@ -1,20 +1,25 @@
 import {
     useEffect,
     useState,
-} from 'react';
+    useCallback,
+} from "react";
 
 import {
     useNavigate,
     useParams,
-} from 'react-router-dom';
+} from "react-router-dom";
 
-import api from '../../../../services/api/axios';
+import toast from "react-hot-toast";
+
+import api from "../../../../services/api/axios";
 
 const CrudEditPage = ({
     title,
     endpoint,
     FormComponent,
     redirectPath,
+    successMessage = "Record updated successfully.",
+    method = "put",
 }) => {
 
     const { id } =
@@ -26,31 +31,114 @@ const CrudEditPage = ({
     const [formData, setFormData] =
         useState({});
 
+    const [loading, setLoading] =
+        useState(true);
+
+    const [saving, setSaving] =
+        useState(false);
+
+    // ==========================================
+    // LOAD RECORD
+    // ==========================================
+
+    const loadRecord =
+        useCallback(
+            async () => {
+
+                try {
+
+                    setLoading(
+                        true
+                    );
+
+                    const response =
+                        await api.get(
+                            `${endpoint}${id}/`
+                        );
+
+                    setFormData(
+                        response.data
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+                    toast.error(
+                        "Failed to load record."
+                    );
+
+                    navigate(
+                        redirectPath
+                    );
+
+                } finally {
+
+                    setLoading(
+                        false
+                    );
+                }
+            },
+            [
+                endpoint,
+                id,
+                navigate,
+                redirectPath,
+            ]
+        );
+
     useEffect(() => {
 
         loadRecord();
 
-    }, []);
+    }, [loadRecord]);
 
-    const loadRecord =
-        async () => {
+    // ==========================================
+    // ERROR HANDLER
+    // ==========================================
 
-            try {
+    const handleApiErrors = (
+        error
+    ) => {
 
-                const response =
-                    await api.get(
-                        `${endpoint}${id}/`
-                    );
+        const errors =
+            error.response?.data;
 
-                setFormData(
-                    response.data
+        if (!errors) {
+
+            toast.error(
+                "Something went wrong."
+            );
+
+            return;
+        }
+
+        Object.entries(
+            errors
+        ).forEach(
+            ([field, messages]) => {
+
+                const value =
+                    Array.isArray(
+                        messages
+                    )
+                        ? messages.join(
+                              ", "
+                          )
+                        : messages;
+
+                toast.error(
+                    `${field}: ${value}`
                 );
-
-            } catch (error) {
-
-                console.error(error);
             }
-        };
+        );
+    };
+
+    // ==========================================
+    // SUBMIT
+    // ==========================================
 
     const handleSubmit =
         async (e) => {
@@ -59,9 +147,29 @@ const CrudEditPage = ({
 
             try {
 
-                await api.put(
-                    `${endpoint}${id}/`,
-                    formData
+                setSaving(
+                    true
+                );
+
+                if (
+                    method === "patch"
+                ) {
+
+                    await api.patch(
+                        `${endpoint}${id}/`,
+                        formData
+                    );
+
+                } else {
+
+                    await api.put(
+                        `${endpoint}${id}/`,
+                        formData
+                    );
+                }
+
+                toast.success(
+                    successMessage
                 );
 
                 navigate(
@@ -70,45 +178,206 @@ const CrudEditPage = ({
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    error
+                );
+
+                handleApiErrors(
+                    error
+                );
+
+            } finally {
+
+                setSaving(
+                    false
+                );
             }
         };
 
-    return (
-        <div className="container-fluid">
+    // ==========================================
+    // LOADING
+    // ==========================================
 
-            <h3 className="mb-3">
-                {title}
-            </h3>
+    if (loading) {
 
-            <form
-                onSubmit={
-                    handleSubmit
-                }
+        return (
+
+            <div
+                className="
+                    container-fluid
+                    py-4
+                "
             >
 
-                <FormComponent
-                    formData={
-                        formData
-                    }
-                    setFormData={
-                        setFormData
-                    }
-                />
-
-                <button
-                    type="submit"
+                <div
                     className="
-                        btn
-                        btn-primary
+                        card
+                        shadow-sm
                     "
                 >
-                    Update
+
+                    <div
+                        className="
+                            card-body
+                            text-center
+                        "
+                    >
+
+                        Loading...
+
+                    </div>
+
+                </div>
+
+            </div>
+        );
+    }
+
+    // ==========================================
+    // PAGE
+    // ==========================================
+
+    return (
+
+        <div
+            className="
+                container-fluid
+            "
+        >
+
+            <div
+                className="
+                    d-flex
+                    justify-content-between
+                    align-items-center
+                    mb-4
+                "
+            >
+
+                <h3
+                    className="
+                        mb-0
+                    "
+                >
+                    {title}
+                </h3>
+
+                <button
+                    type="button"
+                    className="
+                        btn
+                        btn-outline-secondary
+                    "
+                    onClick={() =>
+                        navigate(
+                            redirectPath
+                        )
+                    }
+                >
+                    Back
                 </button>
 
-            </form>
+            </div>
+
+            <div
+                className="
+                    card
+                    shadow-sm
+                    border-0
+                "
+            >
+
+                <div
+                    className="
+                        card-body
+                    "
+                >
+
+                    <form
+                        onSubmit={
+                            handleSubmit
+                        }
+                    >
+
+                        <FormComponent
+
+                            formData={
+                                formData
+                            }
+
+                            setFormData={
+                                setFormData
+                            }
+
+                            loading={
+                                saving
+                            }
+
+                        />
+
+                        <div
+                            className="
+                                d-flex
+                                gap-2
+                                mt-4
+                            "
+                        >
+
+                            <button
+
+                                type="submit"
+
+                                disabled={
+                                    saving
+                                }
+
+                                className="
+                                    btn
+                                    btn-primary
+                                "
+                            >
+
+                                {saving
+                                    ? "Updating..."
+                                    : "Update"}
+
+                            </button>
+
+                            <button
+
+                                type="button"
+
+                                disabled={
+                                    saving
+                                }
+
+                                className="
+                                    btn
+                                    btn-light
+                                "
+
+                                onClick={() =>
+                                    navigate(
+                                        redirectPath
+                                    )
+                                }
+
+                            >
+
+                                Cancel
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
+
     );
 };
 

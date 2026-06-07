@@ -1,80 +1,194 @@
 from django.db import models
 
-from django.core.exceptions import ValidationError
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
 
-from apps.core.common.base.models import SchoolBaseModel
+from apps.infrastructure.rooms.models import (
+    Room
+)
 
+from apps.infrastructure.floors.models import (
+    Floor
+)
+
+
+# ==========================================
+# CLASSROOM MODEL
+# ==========================================
 
 class Classroom(
     SchoolBaseModel
 ):
 
-    name = models.CharField(
-        max_length=50,
-        db_index=True
+    # ======================================
+    # ROOM LINK
+    # ======================================
+
+    room = models.OneToOneField(
+
+        Room,
+
+        on_delete=models.CASCADE,
+
+        related_name="classroom"
+    )
+
+    floor = models.ForeignKey(
+
+        Floor,
+
+        on_delete=models.SET_NULL,
+
+        null=True,
+
+        blank=True,
+
+        related_name="classrooms"
+    )
+
+    # ======================================
+    # BASIC INFO
+    # ======================================
+
+    classroom_code = models.CharField(
+
+        max_length=50
     )
 
     capacity = models.PositiveIntegerField(
+
         default=40
     )
 
-    floor = models.CharField(
-        max_length=20,
-        blank=True,
-        null=True
-    )
-
     description = models.TextField(
+
         blank=True,
+
         null=True
     )
 
-    def clean(self):
+    # ======================================
+    # FACILITIES
+    # ======================================
 
-        if self.name:
+    smart_classroom = models.BooleanField(
 
-            self.name = (
-                self.name.strip().upper()
-            )
+        default=False
+    )
 
-        if self.floor:
+    air_conditioned = models.BooleanField(
 
-            self.floor = (
-                self.floor.strip()
-            )
+        default=False
+    )
 
-        if self.capacity <= 0:
+    projector_available = models.BooleanField(
 
-            raise ValidationError(
-                {
-                    "capacity":
-                        "Capacity must be greater than 0."
-                }
-            )
+        default=False
+    )
 
-    def save(self, *args, **kwargs):
+    whiteboard_available = models.BooleanField(
 
-        self.full_clean()
+        default=True
+    )
 
-        super().save(*args, **kwargs)
+    internet_enabled = models.BooleanField(
+
+        default=False
+    )
+
+    # ======================================
+    # STRING
+    # ======================================
+
+    def __str__(
+        self
+    ):
+
+        return (
+            f"{self.classroom_code}"
+        )
+
+    # ======================================
+    # META
+    # ======================================
 
     class Meta:
 
+        db_table = "classrooms"
+
+        verbose_name = (
+            "Classroom"
+        )
+
+        verbose_name_plural = (
+            "Classrooms"
+        )
+
         ordering = [
-            "name"
+            "classroom_code"
         ]
 
         constraints = [
 
             models.UniqueConstraint(
+
                 fields=[
+
                     "school",
-                    "name"
+
+                    "classroom_code"
                 ],
-                name="unique_classroom_per_school"
-            )
+
+                name=(
+                    "unique_school_classroom_code"
+                )
+            ),
+
+            models.UniqueConstraint(
+
+                fields=[
+
+                    "school",
+
+                    "room"
+                ],
+
+                name=(
+                    "unique_school_classroom_room"
+                )
+            ),
         ]
 
-    def __str__(self):
+        indexes = [
 
-        return self.name
+            models.Index(
+                fields=[
+                    "school"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "classroom_code"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "floor"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "is_active"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "is_deleted"
+                ]
+            ),
+        ]

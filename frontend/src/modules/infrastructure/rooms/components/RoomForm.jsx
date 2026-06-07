@@ -13,59 +13,137 @@ const RoomForm = ({
     const [floors, setFloors] =
         useState([]);
 
+    const [loading, setLoading] =
+        useState(false);
+
+    // ==========================================
+    // HANDLE CHANGE
+    // ==========================================
+
+    const handleChange = (
+        field,
+        value
+    ) => {
+
+        setFormData(
+            (prev) => ({
+                ...prev,
+                [field]: value,
+            })
+        );
+    };
+
+    // ==========================================
+    // LOAD INITIAL DATA
+    // ==========================================
+
     useEffect(() => {
 
         loadBuildings();
-        loadFloors();
 
     }, []);
 
-    const loadBuildings = async () => {
+    // ==========================================
+    // LOAD FLOORS BY BUILDING
+    // ==========================================
 
-        try {
+    useEffect(() => {
 
-            const response =
-                await api.get(
-                    '/infrastructure/buildings/'
-                );
+        if (
+            formData.building
+        ) {
 
-            setBuildings(
-                response.data.results ||
-                response.data
+            loadFloors(
+                formData.building
             );
 
-        } catch (error) {
+        } else {
 
-            console.error(error);
+            setFloors([]);
         }
-    };
 
-    const loadFloors = async () => {
+    }, [
+        formData.building
+    ]);
 
-        try {
+    // ==========================================
+    // BUILDINGS
+    // ==========================================
 
-            const response =
-                await api.get(
-                    '/infrastructure/floors/'
+    const loadBuildings =
+        async () => {
+
+            try {
+
+                setLoading(true);
+
+                const response =
+                    await api.get(
+                        '/infrastructure/buildings/'
+                    );
+
+                setBuildings(
+                    response.data.results ||
+                    response.data ||
+                    []
                 );
 
-            setFloors(
-                response.data.results ||
-                response.data
-            );
+            } catch (error) {
 
-        } catch (error) {
+                console.error(
+                    'Failed to load buildings:',
+                    error
+                );
 
-            console.error(error);
-        }
-    };
+            } finally {
+
+                setLoading(false);
+            }
+        };
+
+    // ==========================================
+    // FLOORS
+    // ==========================================
+
+    const loadFloors =
+        async (
+            buildingId
+        ) => {
+
+            try {
+
+                const response =
+                    await api.get(
+                        `/infrastructure/floors/?building=${buildingId}`
+                    );
+
+                setFloors(
+                    response.data.results ||
+                    response.data ||
+                    []
+                );
+
+            } catch (error) {
+
+                console.error(
+                    'Failed to load floors:',
+                    error
+                );
+            }
+        };
 
     return (
-        <>
-            <div className="mb-3">
 
-                <label>
+        <div className="row">
+
+            {/* BUILDING */}
+
+            <div className="col-md-6 mb-3">
+
+                <label className="form-label">
+
                     Building
+
                 </label>
 
                 <select
@@ -74,35 +152,53 @@ const RoomForm = ({
                         formData.building || ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            building:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'building',
+                            Number(
+                                e.target.value
+                            ) || ''
+                        )
                     }
                 >
+
                     <option value="">
+
                         Select Building
+
                     </option>
 
                     {buildings.map(
-                        (building) => (
+                        (
+                            building
+                        ) => (
+
                             <option
-                                key={building.id}
-                                value={building.id}
+                                key={
+                                    building.id
+                                }
+                                value={
+                                    building.id
+                                }
                             >
-                                {building.name}
+                                {
+                                    building.name
+                                }
                             </option>
                         )
                     )}
+
                 </select>
 
             </div>
 
-            <div className="mb-3">
+            {/* FLOOR */}
 
-                <label>
+            <div className="col-md-6 mb-3">
+
+                <label className="form-label">
+
                     Floor
+
                 </label>
 
                 <select
@@ -111,35 +207,53 @@ const RoomForm = ({
                         formData.floor || ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            floor:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'floor',
+                            Number(
+                                e.target.value
+                            ) || ''
+                        )
                     }
                 >
+
                     <option value="">
+
                         Select Floor
+
                     </option>
 
                     {floors.map(
-                        (floor) => (
+                        (
+                            floor
+                        ) => (
+
                             <option
-                                key={floor.id}
-                                value={floor.id}
+                                key={
+                                    floor.id
+                                }
+                                value={
+                                    floor.id
+                                }
                             >
-                                {floor.name}
+                                {
+                                    floor.name
+                                }
                             </option>
                         )
                     )}
+
                 </select>
 
             </div>
 
-            <div className="mb-3">
+            {/* ROOM NUMBER */}
 
-                <label>
+            <div className="col-md-6 mb-3">
+
+                <label className="form-label">
+
                     Room Number
+
                 </label>
 
                 <input
@@ -149,20 +263,23 @@ const RoomForm = ({
                         formData.room_number || ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            room_number:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'room_number',
+                            e.target.value
+                        )
                     }
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* ROOM NAME */}
 
-                <label>
+            <div className="col-md-6 mb-3">
+
+                <label className="form-label">
+
                     Room Name
+
                 </label>
 
                 <input
@@ -172,20 +289,23 @@ const RoomForm = ({
                         formData.room_name || ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            room_name:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'room_name',
+                            e.target.value
+                        )
                     }
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* ROOM TYPE */}
 
-                <label>
+            <div className="col-md-6 mb-3">
+
+                <label className="form-label">
+
                     Room Type
+
                 </label>
 
                 <select
@@ -194,13 +314,13 @@ const RoomForm = ({
                         formData.room_type || ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            room_type:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'room_type',
+                            e.target.value
+                        )
                     }
                 >
+
                     <option value="">
                         Select Type
                     </option>
@@ -241,52 +361,71 @@ const RoomForm = ({
 
             </div>
 
-            <div className="mb-3">
+            {/* AREA */}
 
-                <label>
-                    Area
+            <div className="col-md-3 mb-3">
+
+                <label className="form-label">
+
+                    Area (sq.ft)
+
                 </label>
 
                 <input
                     type="number"
+                    min="0"
                     className="form-control"
                     value={
                         formData.area || ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            area:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'area',
+                            e.target.value
+                        )
                     }
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* CAPACITY */}
 
-                <label>
+            <div className="col-md-3 mb-3">
+
+                <label className="form-label">
+
                     Capacity
+
                 </label>
 
                 <input
                     type="number"
+                    min="0"
                     className="form-control"
                     value={
                         formData.capacity || ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            capacity:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'capacity',
+                            e.target.value
+                        )
                     }
                 />
 
             </div>
-        </>
+
+            {loading && (
+
+                <div className="col-12">
+
+                    Loading...
+
+                </div>
+
+            )}
+
+        </div>
     );
 };
 

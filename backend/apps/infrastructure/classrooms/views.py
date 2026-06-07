@@ -1,6 +1,4 @@
-from apps.core.common.views import (
-    SchoolFilteredViewSet
-)
+from rest_framework import viewsets
 
 from apps.infrastructure.classrooms.models import (
     Classroom
@@ -12,35 +10,91 @@ from apps.infrastructure.classrooms.serializers import (
 
 
 class ClassroomViewSet(
-    SchoolFilteredViewSet
+    viewsets.ModelViewSet
 ):
 
     serializer_class = (
         ClassroomSerializer
     )
 
-    search_fields = [
-        "name",
-        "floor",
-        "description",
-    ]
+    queryset = (
 
-    ordering_fields = [
-        "name",
-        "capacity",
-        "floor",
-    ]
+        Classroom.objects
 
-    filterset_fields = [
-        "floor",
-    ]
-
-    def get_queryset(self):
-
-        queryset = (
-            Classroom.objects.all()
+        .select_related(
+            "room",
+            "floor",
+            "school"
         )
 
-        return self.filter_queryset_by_school(
-            queryset
+        .filter(
+            is_deleted=False
+        )
+    )
+
+    def get_queryset(
+        self
+    ):
+
+        queryset = (
+            super()
+            .get_queryset()
+        )
+
+        room = (
+            self.request
+            .query_params
+            .get("room")
+        )
+
+        floor = (
+            self.request
+            .query_params
+            .get("floor")
+        )
+
+        if room:
+
+            queryset = queryset.filter(
+                room_id=room
+            )
+
+        if floor:
+
+            queryset = queryset.filter(
+                floor_id=floor
+            )
+
+        return queryset
+
+    def perform_create(
+        self,
+        serializer
+    ):
+
+        serializer.save(
+
+            school=(
+                self.request.school
+            ),
+
+            created_by=(
+                self.request.user
+            ),
+
+            updated_by=(
+                self.request.user
+            )
+        )
+
+    def perform_update(
+        self,
+        serializer
+    ):
+
+        serializer.save(
+
+            updated_by=(
+                self.request.user
+            )
         )

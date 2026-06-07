@@ -4,12 +4,12 @@
 // ============================================
 
 import {
-  useEffect,
-  useState
+    useEffect,
+    useState
 } from "react";
 
 import {
-  useNavigate
+    useNavigate
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -25,281 +25,421 @@ import classroomService from "../services/classroomService";
 
 const ClassroomsList = () => {
 
-  const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
-  const [classrooms, setClassrooms] =
-    useState([]);
+    const [classrooms, setClassrooms] =
+        useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+    const [loading, setLoading] =
+        useState(true);
 
-  const [search, setSearch] =
-    useState("");
+    const [search, setSearch] =
+        useState("");
 
-  const [currentPage, setCurrentPage] =
-    useState(1);
+    const [currentPage, setCurrentPage] =
+        useState(1);
 
-  const [isModalOpen, setIsModalOpen] =
-    useState(false);
+    const [isModalOpen, setIsModalOpen] =
+        useState(false);
 
-  const [selectedClassroomId,
-    setSelectedClassroomId] =
-    useState(null);
+    const [
+        selectedClassroomId,
+        setSelectedClassroomId
+    ] = useState(null);
 
-  const itemsPerPage = 20;
+    const itemsPerPage = 20;
 
-  // ============================================
-  // FETCH CLASSROOMS
-  // ============================================
+    // ============================================
+    // FETCH CLASSROOMS
+    // ============================================
 
-  const fetchClassrooms = async () => {
+    const fetchClassrooms = async () => {
 
-    try {
+        try {
 
-      setLoading(true);
+            setLoading(true);
 
-      const response =
-        await classroomService.getClassrooms();
+            const response =
+                await classroomService.getClassrooms();
 
-      const classroomsData =
+            const classroomsData =
 
-        Array.isArray(response)
+                Array.isArray(
+                    response
+                )
 
-          ? response
+                    ? response
 
-          : response.results || [];
+                    : response.results || [];
 
-      setClassrooms(
-        classroomsData
-      );
+            setClassrooms(
+                classroomsData
+            );
 
-    } catch (error) {
+        } catch (error) {
 
-      toast.error(
-        "Failed to load classrooms"
-      );
+            console.error(
+                error
+            );
 
-    } finally {
+            toast.error(
+                "Failed to load classrooms"
+            );
 
-      setLoading(false);
-    }
-  };
+        } finally {
 
-  useEffect(() => {
+            setLoading(false);
+        }
+    };
 
-    fetchClassrooms();
+    useEffect(() => {
 
-  }, []);
+        fetchClassrooms();
 
-  // ============================================
-  // DELETE CLASSROOM
-  // ============================================
+    }, []);
 
-  const handleDelete = async (id) => {
+    // ============================================
+    // DELETE CLASSROOM
+    // ============================================
 
-    try {
-
-      await classroomService.deleteClassroom(
+    const handleDelete = async (
         id
-      );
+    ) => {
 
-      toast.success(
-        "Classroom deleted successfully"
-      );
+        try {
 
-      fetchClassrooms();
+            await classroomService.deleteClassroom(
+                id
+            );
 
-    } catch (error) {
+            toast.success(
+                "Classroom deleted successfully"
+            );
 
-      toast.error(
-        "Delete failed"
-      );
+            fetchClassrooms();
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            toast.error(
+                "Delete failed"
+            );
+        }
+    };
+
+    // ============================================
+    // FILTER DATA
+    // ============================================
+
+    const filteredClassrooms =
+        classrooms.filter(
+
+            (classroom) =>
+
+                classroom.classroom_code
+                    ?.toLowerCase()
+                    .includes(
+                        search.toLowerCase()
+                    )
+
+                ||
+
+                classroom.room_name
+                    ?.toLowerCase()
+                    .includes(
+                        search.toLowerCase()
+                    )
+
+                ||
+
+                classroom.room_number
+                    ?.toLowerCase()
+                    .includes(
+                        search.toLowerCase()
+                    )
+
+                ||
+
+                classroom.floor_name
+                    ?.toLowerCase()
+                    .includes(
+                        search.toLowerCase()
+                    )
+        );
+
+    // ============================================
+    // PAGINATION
+    // ============================================
+
+    const totalPages =
+        Math.ceil(
+
+            filteredClassrooms.length
+
+            /
+
+            itemsPerPage
+        );
+
+    const paginatedClassrooms =
+        filteredClassrooms.slice(
+
+            (
+                currentPage - 1
+            )
+
+            *
+
+            itemsPerPage,
+
+            currentPage
+
+            *
+
+            itemsPerPage
+        );
+
+    // ============================================
+    // TABLE COLUMNS
+    // ============================================
+
+    const columns = [
+
+        {
+            key: "classroom_code",
+            label: "Code",
+        },
+
+        {
+            key: "room_number",
+            label: "Room No.",
+        },
+
+        {
+            key: "room_name",
+            label: "Room Name",
+        },
+
+        {
+            key: "floor_name",
+            label: "Floor",
+        },
+
+        {
+            key: "capacity",
+            label: "Capacity",
+        },
+
+        {
+            key: "smart_classroom",
+            label: "Smart",
+        },
+
+        {
+            key: "air_conditioned",
+            label: "AC",
+        },
+
+        {
+            key: "internet_enabled",
+            label: "Internet",
+        },
+
+        {
+            key: "is_active",
+            label: "Status",
+        },
+
+        {
+            key: "actions",
+            label: "Actions",
+        },
+    ];
+
+    // ============================================
+    // TABLE DATA
+    // ============================================
+
+    const tableData =
+        paginatedClassrooms.map(
+
+            (
+                classroom
+            ) => ({
+
+                ...classroom,
+
+                smart_classroom:
+
+                    classroom.smart_classroom
+
+                        ? "Yes"
+
+                        : "No",
+
+                air_conditioned:
+
+                    classroom.air_conditioned
+
+                        ? "Yes"
+
+                        : "No",
+
+                internet_enabled:
+
+                    classroom.internet_enabled
+
+                        ? "Yes"
+
+                        : "No",
+
+                is_active:
+
+                    classroom.is_active
+
+                        ? "Active"
+
+                        : "Inactive",
+
+                actions: (
+
+                    <ActionButtons
+
+                        onEdit={() =>
+
+                            navigate(
+
+                                `/dashboard/infrastructure/classrooms/${classroom.id}/edit`
+                            )
+                        }
+
+                        onDelete={() => {
+
+                            setSelectedClassroomId(
+                                classroom.id
+                            );
+
+                            setIsModalOpen(
+                                true
+                            );
+                        }}
+                    />
+                ),
+            })
+        );
+
+    // ============================================
+    // LOADING
+    // ============================================
+
+    if (loading) {
+
+        return (
+
+            <div className="p-6">
+
+                Loading classrooms...
+
+            </div>
+        );
     }
-  };
 
-  // ============================================
-  // FILTER DATA
-  // ============================================
-
-  const filteredClassrooms =
-    classrooms.filter((classroom) =>
-
-      classroom.name
-        ?.toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
-    );
-
-  // ============================================
-  // PAGINATION
-  // ============================================
-
-  const totalPages =
-    Math.ceil(
-      filteredClassrooms.length /
-      itemsPerPage
-    );
-
-  const paginatedClassrooms =
-    filteredClassrooms.slice(
-
-      (currentPage - 1) *
-      itemsPerPage,
-
-      currentPage *
-      itemsPerPage
-    );
-
-  // ============================================
-  // TABLE COLUMNS
-  // ============================================
-
-  const columns = [
-
-    {
-      key: "name",
-      label: "Classroom Name",
-    },
-
-    {
-      key: "floor",
-      label: "Floor",
-    },
-
-    {
-      key: "capacity",
-      label: "Capacity",
-    },
-
-    {
-      key: "description",
-      label: "Description",
-    },
-
-    {
-      key: "actions",
-      label: "Actions",
-    },
-  ];
-
-  // ============================================
-  // TABLE DATA
-  // ============================================
-
-  const tableData =
-    paginatedClassrooms.map(
-      (classroom) => ({
-
-        ...classroom,
-
-        actions: (
-
-          <ActionButtons
-
-            onEdit={() =>
-              navigate(
-                `/dashboard/infrastructure/classrooms/${classroom.id}/edit`
-              )
-            }
-
-            onDelete={() => {
-
-              setSelectedClassroomId(
-                classroom.id
-              );
-
-              setIsModalOpen(true);
-            }}
-          />
-        ),
-      })
-    );
-
-  if (loading) {
+    // ============================================
+    // UI
+    // ============================================
 
     return (
 
-      <div className="p-6">
+        <div className="space-y-6">
 
-        Loading classrooms...
+            <CrudHeader
 
-      </div>
+                title="Classrooms"
+
+                description="Manage classrooms"
+
+                addLabel="Add Classroom"
+
+                onAdd={() =>
+
+                    navigate(
+
+                        "/dashboard/infrastructure/classrooms/add"
+                    )
+                }
+            />
+
+            <SearchBox
+
+                placeholder="Search classroom code, room, floor..."
+
+                value={search}
+
+                onChange={(e) =>
+
+                    setSearch(
+                        e.target.value
+                    )
+                }
+            />
+
+            <DataTable
+
+                columns={columns}
+
+                data={tableData}
+            />
+
+            <Pagination
+
+                currentPage={
+                    currentPage
+                }
+
+                totalPages={
+                    totalPages
+                }
+
+                onPageChange={
+                    setCurrentPage
+                }
+            />
+
+            <ConfirmModal
+
+                isOpen={
+                    isModalOpen
+                }
+
+                title="Delete Classroom"
+
+                message="Are you sure you want to delete this classroom?"
+
+                onCancel={() =>
+
+                    setIsModalOpen(
+                        false
+                    )
+                }
+
+                onConfirm={() => {
+
+                    handleDelete(
+                        selectedClassroomId
+                    );
+
+                    setIsModalOpen(
+                        false
+                    );
+                }}
+            />
+
+        </div>
     );
-  }
-
-  return (
-
-    <div className="space-y-6">
-
-      <CrudHeader
-
-        title="Classrooms"
-
-        description="Manage classrooms"
-
-        addLabel="Add Classroom"
-
-        onAdd={() =>
-          navigate(
-            "/dashboard/infrastructure/classrooms/add"
-          )
-        }
-      />
-
-      <SearchBox
-
-        placeholder="Search classrooms..."
-
-        value={search}
-
-        onChange={(e) =>
-          setSearch(
-            e.target.value
-          )
-        }
-      />
-
-      <DataTable
-        columns={columns}
-        data={tableData}
-      />
-
-      <Pagination
-
-        currentPage={currentPage}
-
-        totalPages={totalPages}
-
-        onPageChange={
-          setCurrentPage
-        }
-      />
-
-      <ConfirmModal
-
-        isOpen={isModalOpen}
-
-        title="Delete Classroom"
-
-        message="Are you sure you want to delete this classroom?"
-
-        onCancel={() =>
-          setIsModalOpen(false)
-        }
-
-        onConfirm={() => {
-
-          handleDelete(
-            selectedClassroomId
-          );
-
-          setIsModalOpen(false);
-        }}
-      />
-
-    </div>
-  );
 };
 
 export default ClassroomsList;

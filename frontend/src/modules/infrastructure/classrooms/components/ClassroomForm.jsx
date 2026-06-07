@@ -1,240 +1,685 @@
 import {
-  useState,
-  useEffect
+    useEffect,
+    useState
 } from "react";
+
+import api from "../../../../services/api/axios";
 
 const ClassroomForm = ({
 
-  initialData = {},
+    initialData = {},
 
-  onSubmit,
+    onSubmit,
 
-  loading = false,
+    loading = false,
 
 }) => {
 
-  const [formData, setFormData] =
-    useState({
+    const [rooms, setRooms] =
+        useState([]);
 
-      name: "",
+    const [floors, setFloors] =
+        useState([]);
 
-      capacity: "",
+    const [formData, setFormData] =
+        useState({
 
-      floor: "",
+            room: "",
 
-      description: "",
-    });
+            floor: "",
 
-  useEffect(() => {
+            classroom_code: "",
 
-    if (
-      initialData &&
-      Object.keys(initialData).length > 0
-    ) {
+            capacity: "",
 
-      setFormData({
+            description: "",
 
-        name:
-          initialData.name || "",
+            smart_classroom: false,
 
-        capacity:
-          initialData.capacity || "",
+            air_conditioned: false,
 
-        floor:
-          initialData.floor || "",
+            projector_available: false,
 
-        description:
-          initialData.description || "",
-      });
-    }
+            whiteboard_available: true,
 
-  }, [initialData]);
+            internet_enabled: false,
+        });
 
-  const handleChange = (e) => {
+    // ==========================================
+    // INITIAL DATA
+    // ==========================================
 
-    const { name, value } = e.target;
+    useEffect(() => {
 
-    setFormData({
+        if (
+            initialData &&
+            Object.keys(initialData).length > 0
+        ) {
 
-      ...formData,
+            setFormData({
 
-      [name]: value,
-    });
-  };
+                room:
+                    initialData.room || "",
 
-  const handleSubmit = (e) => {
+                floor:
+                    initialData.floor || "",
 
-    e.preventDefault();
+                classroom_code:
+                    initialData.classroom_code || "",
 
-    onSubmit({
-      ...formData,
-      capacity: Number(formData.capacity),
-    });
-  };
+                capacity:
+                    initialData.capacity || "",
 
-  return (
+                description:
+                    initialData.description || "",
 
-    <form
-      onSubmit={handleSubmit}
-      className="
-        bg-white
-        p-6
-        rounded-2xl
-        shadow
-        space-y-6
-      "
-    >
+                smart_classroom:
+                    initialData.smart_classroom || false,
 
-      {/* CLASSROOM NAME */}
+                air_conditioned:
+                    initialData.air_conditioned || false,
 
-      <div>
+                projector_available:
+                    initialData.projector_available || false,
 
-        <label
-          className="
-            block
-            mb-2
-            text-sm
-            font-medium
-          "
+                whiteboard_available:
+                    initialData.whiteboard_available ?? true,
+
+                internet_enabled:
+                    initialData.internet_enabled || false,
+            });
+        }
+
+    }, [initialData]);
+
+    // ==========================================
+    // LOAD MASTER DATA
+    // ==========================================
+
+    useEffect(() => {
+
+        loadRooms();
+
+        loadFloors();
+
+    }, []);
+
+    // ==========================================
+    // LOAD ROOMS
+    // ==========================================
+
+    const loadRooms = async () => {
+
+        try {
+
+            const response =
+                await api.get(
+                    "/infrastructure/rooms/"
+                );
+
+            setRooms(
+
+                response.data.results ||
+
+                response.data ||
+
+                []
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load rooms",
+                error
+            );
+        }
+    };
+
+    // ==========================================
+    // LOAD FLOORS
+    // ==========================================
+
+    const loadFloors = async () => {
+
+        try {
+
+            const response =
+                await api.get(
+                    "/infrastructure/floors/"
+                );
+
+            setFloors(
+
+                response.data.results ||
+
+                response.data ||
+
+                []
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load floors",
+                error
+            );
+        }
+    };
+
+    // ==========================================
+    // HANDLE CHANGE
+    // ==========================================
+
+    const handleChange = (
+        e
+    ) => {
+
+        const {
+
+            name,
+
+            value
+
+        } = e.target;
+
+        setFormData(
+
+            (prev) => ({
+
+                ...prev,
+
+                [name]: value,
+            })
+        );
+    };
+
+    // ==========================================
+    // HANDLE CHECKBOX
+    // ==========================================
+
+    const handleCheckbox = (
+        e
+    ) => {
+
+        const {
+
+            name,
+
+            checked
+
+        } = e.target;
+
+        setFormData(
+
+            (prev) => ({
+
+                ...prev,
+
+                [name]: checked,
+            })
+        );
+    };
+
+    // ==========================================
+    // SUBMIT
+    // ==========================================
+
+    const handleSubmit = (
+        e
+    ) => {
+
+        e.preventDefault();
+
+        onSubmit({
+
+            ...formData,
+
+            room:
+                Number(
+                    formData.room
+                ),
+
+            floor:
+                formData.floor
+                    ? Number(
+                          formData.floor
+                      )
+                    : null,
+
+            capacity:
+                Number(
+                    formData.capacity
+                ),
+        });
+    };
+
+    return (
+
+        <form
+            onSubmit={
+                handleSubmit
+            }
+            className="
+                bg-white
+                p-6
+                rounded-2xl
+                shadow
+                space-y-6
+            "
         >
-          Classroom Name
-        </label>
 
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="e.g. Computer Lab"
-          className="
-            w-full
-            border
-            rounded-lg
-            p-3
-          "
-          required
-        />
+            {/* ROOM */}
 
-      </div>
+            <div>
 
-      {/* CAPACITY */}
+                <label
+                    className="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                    "
+                >
+                    Room
+                </label>
 
-      <div>
+                <select
 
-        <label
-          className="
-            block
-            mb-2
-            text-sm
-            font-medium
-          "
-        >
-          Capacity
-        </label>
+                    name="room"
 
-        <input
-          type="number"
-          name="capacity"
-          value={formData.capacity}
-          onChange={handleChange}
-          placeholder="Enter capacity"
-          min="1"
-          className="
-            w-full
-            border
-            rounded-lg
-            p-3
-          "
-        />
+                    value={
+                        formData.room
+                    }
 
-      </div>
+                    onChange={
+                        handleChange
+                    }
 
-      {/* FLOOR */}
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        p-3
+                    "
 
-      <div>
+                    required
+                >
 
-        <label
-          className="
-            block
-            mb-2
-            text-sm
-            font-medium
-          "
-        >
-          Floor
-        </label>
+                    <option value="">
+                        Select Room
+                    </option>
 
-        <input
-          type="text"
-          name="floor"
-          value={formData.floor}
-          onChange={handleChange}
-          placeholder="Ground Floor"
-          className="
-            w-full
-            border
-            rounded-lg
-            p-3
-          "
-        />
+                    {rooms.map(
+                        (
+                            room
+                        ) => (
 
-      </div>
+                            <option
+                                key={
+                                    room.id
+                                }
+                                value={
+                                    room.id
+                                }
+                            >
+                                {
+                                    room.room_number
+                                }
 
-      {/* DESCRIPTION */}
+                                {" - "}
 
-      <div>
+                                {
+                                    room.room_name
+                                }
 
-        <label
-          className="
-            block
-            mb-2
-            text-sm
-            font-medium
-          "
-        >
-          Description
-        </label>
+                            </option>
+                        )
+                    )}
 
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          rows="4"
-          placeholder="Optional description"
-          className="
-            w-full
-            border
-            rounded-lg
-            p-3
-          "
-        />
+                </select>
 
-      </div>
+            </div>
 
-      {/* SUBMIT */}
+            {/* FLOOR */}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="
-          bg-blue-600
-          text-white
-          px-6
-          py-3
-          rounded-xl
-          hover:bg-blue-700
-          disabled:opacity-50
-        "
-      >
+            <div>
 
-        {loading
-          ? "Saving..."
-          : "Save Classroom"}
+                <label
+                    className="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                    "
+                >
+                    Floor
+                </label>
 
-      </button>
+                <select
 
-    </form>
-  );
+                    name="floor"
+
+                    value={
+                        formData.floor
+                    }
+
+                    onChange={
+                        handleChange
+                    }
+
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        p-3
+                    "
+                >
+
+                    <option value="">
+                        Select Floor
+                    </option>
+
+                    {floors.map(
+                        (
+                            floor
+                        ) => (
+
+                            <option
+                                key={
+                                    floor.id
+                                }
+                                value={
+                                    floor.id
+                                }
+                            >
+                                {
+                                    floor.name
+                                }
+                            </option>
+                        )
+                    )}
+
+                </select>
+
+            </div>
+
+            {/* CLASSROOM CODE */}
+
+            <div>
+
+                <label
+                    className="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                    "
+                >
+                    Classroom Code
+                </label>
+
+                <input
+
+                    type="text"
+
+                    name="classroom_code"
+
+                    value={
+                        formData.classroom_code
+                    }
+
+                    onChange={
+                        handleChange
+                    }
+
+                    placeholder="CR-101"
+
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        p-3
+                    "
+
+                    required
+                />
+
+            </div>
+
+            {/* CAPACITY */}
+
+            <div>
+
+                <label
+                    className="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                    "
+                >
+                    Capacity
+                </label>
+
+                <input
+
+                    type="number"
+
+                    name="capacity"
+
+                    value={
+                        formData.capacity
+                    }
+
+                    onChange={
+                        handleChange
+                    }
+
+                    min="1"
+
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        p-3
+                    "
+                />
+
+            </div>
+
+            {/* DESCRIPTION */}
+
+            <div>
+
+                <label
+                    className="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                    "
+                >
+                    Description
+                </label>
+
+                <textarea
+
+                    name="description"
+
+                    value={
+                        formData.description
+                    }
+
+                    onChange={
+                        handleChange
+                    }
+
+                    rows="4"
+
+                    className="
+                        w-full
+                        border
+                        rounded-lg
+                        p-3
+                    "
+                />
+
+            </div>
+
+            {/* FEATURES */}
+
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-4
+                "
+            >
+
+                <label>
+
+                    <input
+
+                        type="checkbox"
+
+                        name="smart_classroom"
+
+                        checked={
+                            formData.smart_classroom
+                        }
+
+                        onChange={
+                            handleCheckbox
+                        }
+                    />
+
+                    {" "}
+                    Smart Classroom
+
+                </label>
+
+                <label>
+
+                    <input
+
+                        type="checkbox"
+
+                        name="air_conditioned"
+
+                        checked={
+                            formData.air_conditioned
+                        }
+
+                        onChange={
+                            handleCheckbox
+                        }
+                    />
+
+                    {" "}
+                    Air Conditioned
+
+                </label>
+
+                <label>
+
+                    <input
+
+                        type="checkbox"
+
+                        name="projector_available"
+
+                        checked={
+                            formData.projector_available
+                        }
+
+                        onChange={
+                            handleCheckbox
+                        }
+                    />
+
+                    {" "}
+                    Projector Available
+
+                </label>
+
+                <label>
+
+                    <input
+
+                        type="checkbox"
+
+                        name="whiteboard_available"
+
+                        checked={
+                            formData.whiteboard_available
+                        }
+
+                        onChange={
+                            handleCheckbox
+                        }
+                    />
+
+                    {" "}
+                    Whiteboard Available
+
+                </label>
+
+                <label>
+
+                    <input
+
+                        type="checkbox"
+
+                        name="internet_enabled"
+
+                        checked={
+                            formData.internet_enabled
+                        }
+
+                        onChange={
+                            handleCheckbox
+                        }
+                    />
+
+                    {" "}
+                    Internet Enabled
+
+                </label>
+
+            </div>
+
+            {/* SUBMIT */}
+
+            <button
+
+                type="submit"
+
+                disabled={
+                    loading
+                }
+
+                className="
+                    bg-blue-600
+                    text-white
+                    px-6
+                    py-3
+                    rounded-xl
+                    hover:bg-blue-700
+                    disabled:opacity-50
+                "
+            >
+
+                {loading
+
+                    ? "Saving..."
+
+                    : "Save Classroom"}
+
+            </button>
+
+        </form>
+    );
 };
 
 export default ClassroomForm;

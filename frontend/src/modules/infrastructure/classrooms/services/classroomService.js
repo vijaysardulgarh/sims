@@ -5,80 +5,108 @@
 
 import api from "../../../../services/api/axios";
 
+
 // ============================================
 // GET ALL CLASSROOMS
 // ============================================
 
-const getClassrooms = async () => {
+const getClassrooms = async (
+    params = {}
+) => {
 
-  const response =
-    await api.get(
-      "/infrastructure/classrooms/"
-    );
+    const response =
+        await api.get(
 
-  return response.data;
+            "/infrastructure/classrooms/",
+
+            {
+                params
+            }
+        );
+
+    return response.data;
 };
+
 
 // ============================================
 // GET SINGLE CLASSROOM
 // ============================================
 
-const getClassroom = async (id) => {
+const getClassroom = async (
+    id
+) => {
 
-  const response =
-    await api.get(
-      `/infrastructure/classrooms/${id}/`
-    );
+    const response =
+        await api.get(
 
-  return response.data;
+            `/infrastructure/classrooms/${id}/`
+        );
+
+    return response.data;
 };
+
 
 // ============================================
 // CREATE CLASSROOM
 // ============================================
 
-const createClassroom = async (data) => {
+const createClassroom = async (
+    data
+) => {
 
-  const response =
-    await api.post(
-      "/infrastructure/classrooms/",
-      data
-    );
+    const response =
+        await api.post(
 
-  return response.data;
+            "/infrastructure/classrooms/",
+
+            data
+        );
+
+    return response.data;
 };
+
 
 // ============================================
 // UPDATE CLASSROOM
 // ============================================
 
 const updateClassroom = async (
-  id,
-  data
+
+    id,
+
+    data
+
 ) => {
 
-  const response =
-    await api.put(
-      `/infrastructure/classrooms/${id}/`,
-      data
-    );
+    const response =
+        await api.put(
 
-  return response.data;
+            `/infrastructure/classrooms/${id}/`,
+
+            data
+        );
+
+    return response.data;
 };
+
 
 // ============================================
 // DELETE CLASSROOM
 // ============================================
 
-const deleteClassroom = async (id) => {
+const deleteClassroom = async (
+    id
+) => {
 
-  const response =
-    await api.delete(
-      `/infrastructure/classrooms/${id}/`
-    );
+    const response =
+        await api.delete(
 
-  return response.data;
+            `/infrastructure/classrooms/${id}/`
+        );
+
+    return response.data;
 };
+
 
 // ============================================
 // EXPORT
@@ -86,15 +114,15 @@ const deleteClassroom = async (id) => {
 
 const classroomService = {
 
-  getClassrooms,
+    getClassrooms,
 
-  getClassroom,
+    getClassroom,
 
-  createClassroom,
+    createClassroom,
 
-  updateClassroom,
+    updateClassroom,
 
-  deleteClassroom,
+    deleteClassroom,
 };
 
 export default classroomService;
