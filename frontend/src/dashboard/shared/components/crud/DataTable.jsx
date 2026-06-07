@@ -13,163 +13,98 @@ const DataTable = ({
 
       <table className="min-w-full">
 
-        {/* TABLE HEADER */}
+        {/* =========================
+            TABLE HEADER
+        ========================= */}
 
         <thead className="bg-gray-100">
 
           <tr>
 
+            <th
+              className="
+                px-6
+                py-4
+                text-left
+                text-sm
+                font-semibold
+                text-gray-700
+              "
+            >
+              Sr. No.
+            </th>
+
             {
+              columns.map((column) => (
 
-              columns.map((column, index) => {
+                <th
+                  key={column.key}
+                  className="
+                    px-6
+                    py-4
+                    text-left
+                    text-sm
+                    font-semibold
+                    text-gray-700
+                  "
+                >
+                  {column.label}
+                </th>
 
-                // =========================
-                // AFTER SELECT ADD SR NO
-                // =========================
-
-                if (index === 1) {
-
-                  return (
-
-                    <React.Fragment
-                      key={`header-${column.key}`}
-                    >
-
-                      <th
-                        className="
-                          px-6
-                          py-4
-                          text-left
-                          text-sm
-                          font-semibold
-                          text-gray-700
-                        "
-                      >
-                        Sr. No
-                      </th>
-
-                      <th
-                        className="
-                          px-6
-                          py-4
-                          text-left
-                          text-sm
-                          font-semibold
-                          text-gray-700
-                        "
-                      >
-
-                        {column.label}
-
-                      </th>
-
-                    </React.Fragment>
-                  );
-                }
-
-                return (
-
-                  <th
-                    key={column.key}
-                    className="
-                      px-6
-                      py-4
-                      text-left
-                      text-sm
-                      font-semibold
-                      text-gray-700
-                    "
-                  >
-
-                    {column.label}
-
-                  </th>
-                );
-              })
+              ))
             }
 
           </tr>
 
         </thead>
 
-        {/* TABLE BODY */}
+        {/* =========================
+            TABLE BODY
+        ========================= */}
 
         <tbody>
 
           {
+            data.length > 0 ? (
 
-            data.map((row, index) => (
+              data.map((row, index) => (
 
-              <tr
-                key={row.id || index}
-                className="border-b"
-              >
+                <tr
+                  key={row.id || index}
+                  className="
+                    border-b
+                    hover:bg-gray-50
+                  "
+                >
 
-                {
+                  {/* SR NO */}
 
-                  columns.map((column, columnIndex) => {
-
-                    // =====================
-                    // INSERT SR NO COLUMN
-                    // =====================
-
-                    if (columnIndex === 1) {
-
-                      return (
-
-                        <React.Fragment
-                          key={`body-${index}-${column.key}`}
-                        >
-
-                          <td
-                            className="
-                              px-6
-                              py-4
-                              text-sm
-                              font-semibold
-                              text-gray-700
-                            "
-                          >
-
-                            {
-
-                              (
-                                (currentPage - 1)
-
-                                *
-
-                                itemsPerPage
-                              )
-
-                              +
-
-                              index
-
-                              +
-
-                              1
-                            }
-
-                          </td>
-
-                          <td
-                            className="
-                              px-6
-                              py-4
-                              text-sm
-                              text-gray-600
-                            "
-                          >
-
-                            {row[column.key]}
-
-                          </td>
-
-                        </React.Fragment>
-                      );
+                  <td
+                    className="
+                      px-6
+                      py-4
+                      text-sm
+                      font-medium
+                      text-gray-700
+                    "
+                  >
+                    {
+                      (
+                        (currentPage - 1)
+                        *
+                        itemsPerPage
+                      )
+                      +
+                      index
+                      +
+                      1
                     }
+                  </td>
 
-                    return (
+                  {/* DYNAMIC COLUMNS */}
+
+                  {
+                    columns.map((column) => (
 
                       <td
                         key={`${index}-${column.key}`}
@@ -180,16 +115,35 @@ const DataTable = ({
                           text-gray-600
                         "
                       >
-
                         {row[column.key]}
-
                       </td>
-                    );
-                  })
-                }
+
+                    ))
+                  }
+
+                </tr>
+
+              ))
+
+            ) : (
+
+              <tr>
+
+                <td
+                  colSpan={columns.length + 1}
+                  className="
+                    px-6
+                    py-10
+                    text-center
+                    text-gray-500
+                  "
+                >
+                  No records found
+                </td>
 
               </tr>
-            ))
+
+            )
           }
 
         </tbody>
