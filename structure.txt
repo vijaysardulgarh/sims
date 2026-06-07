@@ -1,0 +1,2395 @@
+sims
+├── .gitignore
+├── README.md
+├── backend
+│   ├── .vscode
+│   │   └── settings.json
+│   ├── api
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── permissions.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── apps
+│   │   ├── academics
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── classes
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── mediums
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   ├── 0002_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── reports
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── subject_strength
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── serializers.py
+│   │   │   │   │   ├── urls.py
+│   │   │   │   │   └── views.py
+│   │   │   │   ├── subjects_offered
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── serializers.py
+│   │   │   │   │   ├── urls.py
+│   │   │   │   │   └── views.py
+│   │   │   │   ├── teacher_workload
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── serializers.py
+│   │   │   │   │   ├── urls.py
+│   │   │   │   │   └── views.py
+│   │   │   │   └── urls.py
+│   │   │   ├── sections
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── sessions
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── streams
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── subjects
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tests.py
+│   │   │   └── urls.py
+│   │   ├── accounts
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── authentication
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── authorization
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── permissions.py
+│   │   │   ├── management
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── commands
+│   │   │   │       ├── __init__.py
+│   │   │   │       └── seed_rbac.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   ├── 0002_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── modules
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── sidebar
+│   │   │   │   │   └── SidebarAPIView.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── permissions
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── role_permissions
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── roles
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tests.py
+│   │   │   ├── urls.py
+│   │   │   ├── user_permissions
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── user_roles
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   └── users
+│   │   │       ├── __init__.py
+│   │   │       ├── admin.py
+│   │   │       ├── managers.py
+│   │   │       ├── models.py
+│   │   │       ├── serializers.py
+│   │   │       ├── urls.py
+│   │   │       └── views.py
+│   │   ├── association
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── extracurricular_activities
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── groups
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── meetings
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── members
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── models.py
+│   │   │   ├── roles
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── smc
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── staff_association_role_assignments
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── student_association_role_assignments
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── temp admin.py
+│   │   │   ├── temp models.py
+│   │   │   ├── temp views.py
+│   │   │   ├── tests.py
+│   │   │   └── urls.py
+│   │   ├── associations
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── association_meetings
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── association_members
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── association_roles
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── associations
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── extracurricular_activities
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── smc_members
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── staff_association_role_assignments
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── student_association_role_assignments
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── temp admin.py
+│   │   │   ├── temp models.py
+│   │   │   ├── temp views.py
+│   │   │   ├── tests.py
+│   │   │   └── urls.py
+│   │   ├── clusters
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── serializers.py
+│   │   │   ├── tests.py
+│   │   │   ├── urls.py
+│   │   │   └── views.py
+│   │   ├── communications
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── circulars
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── communication_categories
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── communication_templates
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── events
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── faqs
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── news
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── notices
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── notifications
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tests.py
+│   │   │   ├── urls.py
+│   │   │   └── views.py
+│   │   ├── compliance
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── affiliations
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── apps.py
+│   │   │   ├── certificates
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── compliance-documents
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── inspections
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── mandatory-public-disclosures
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── policies
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── recognitions
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tests.py
+│   │   │   ├── urls.py
+│   │   │   └── views.py
+│   │   ├── core
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── audit_logs
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── common
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── base
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   └── views.py
+│   │   │   ├── exceptions
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── custom_exceptions.py
+│   │   │   │   └── handlers.py
+│   │   │   ├── notifications
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   └── urls.py
+│   │   │   ├── responses
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── error.py
+│   │   │   │   └── success.py
+│   │   │   ├── settings
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tenancy
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── middleware.py
+│   │   │   │   └── tenant_resolver.py
+│   │   │   ├── tests.py
+│   │   │   ├── utils
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── slug.py
+│   │   │   └── views.py
+│   │   ├── documents
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── tests.py
+│   │   │   ├── urls.py
+│   │   │   └── views.py
+│   │   ├── exams
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── exam_types
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── exams
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── notifications
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── online_exams
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── question_bank
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── schedules
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tests.py
+│   │   │   ├── urls.py
+│   │   │   └── views.py
+│   │   ├── finance
+│   │   │   ├── __init__.py
+│   │   │   ├── apps.py
+│   │   │   ├── fee_payments
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── fee_structures
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── reports
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── analytics
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── charts.py
+│   │   │   │   │   ├── selectors.py
+│   │   │   │   │   ├── serializers.py
+│   │   │   │   │   ├── services.py
+│   │   │   │   │   ├── urls.py
+│   │   │   │   │   └── views.py
+│   │   │   │   ├── constants.py
+│   │   │   │   ├── dashboard
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── selectors.py
+│   │   │   │   │   ├── serializers.py
+│   │   │   │   │   ├── services.py
+│   │   │   │   │   ├── urls.py
+│   │   │   │   │   └── views.py
+│   │   │   │   ├── exports
+│   │   │   │   │   ├── csv_export.py
+│   │   │   │   │   ├── excel_export.py
+│   │   │   │   │   └── pdf_export.py
+│   │   │   │   ├── fee_structure_reports
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── selectors.py
+│   │   │   │   │   ├── serializers.py
+│   │   │   │   │   ├── services.py
+│   │   │   │   │   ├── urls.py
+│   │   │   │   │   └── views.py
+│   │   │   │   ├── filters
+│   │   │   │   │   └── fee_filters.py
+│   │   │   │   ├── payment_reports
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── selectors.py
+│   │   │   │   │   ├── serializers.py
+│   │   │   │   │   ├── services.py
+│   │   │   │   │   ├── urls.py
+│   │   │   │   │   └── views.py
+│   │   │   │   ├── permissions
+│   │   │   │   │   └── report_permissions.py
+│   │   │   │   ├── student_fee_reports
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── selectors.py
+│   │   │   │   │   ├── serializers.py
+│   │   │   │   │   ├── services.py
+│   │   │   │   │   ├── urls.py
+│   │   │   │   │   └── views.py
+│   │   │   │   └── urls.py
+│   │   │   ├── student_fees
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tests.py
+│   │   │   └── urls.py
+│   │   ├── infrastructure
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── asset_categories
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── assets
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── auditoriums
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── buildings
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── classrooms
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── classrooms2
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── facilities
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── floors
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── hostel-facilities
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── inventories
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── laboratories
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── libraries
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── maintenance_records
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── playgrounds
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── rooms
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── sports-facilities
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tests.py
+│   │   │   ├── transport-facilities
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── urls.py
+│   │   │   └── views.py
+│   │   ├── library
+│   │   │   ├── __init__.py
+│   │   │   ├── accessions
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── apps.py
+│   │   │   ├── books
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── categories
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── issues
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── services.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── reports
+│   │   │   │   ├── category-wise
+│   │   │   │   │   └── serializers.py
+│   │   │   │   ├── issued-books
+│   │   │   │   │   └── serializers.py
+│   │   │   │   ├── overdue-books
+│   │   │   │   │   └── serializers.py
+│   │   │   │   └── returned-books
+│   │   │   │       └── serializers.py
+│   │   │   ├── tests.py
+│   │   │   └── urls.py
+│   │   ├── schools
+│   │   │   ├── __init__.py
+│   │   │   ├── about-school
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── apps.py
+│   │   │   ├── branches
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── galleries
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── principals
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── school-settings
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── schools
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── serializers.py
+│   │   │   ├── temp admin.py
+│   │   │   ├── temp models.py
+│   │   │   ├── tempviews.py
+│   │   │   ├── tests.py
+│   │   │   └── urls.py
+│   │   ├── staff
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── class_incharge
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── post_type
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── profiles
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── sanctioned_posts
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── teacher_attendance
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tests.py
+│   │   │   ├── urls.py
+│   │   │   └── views.py
+│   │   ├── students
+│   │   │   ├── __init__.py
+│   │   │   ├── achievements
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── achievers
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── admin.py
+│   │   │   ├── api.py
+│   │   │   ├── apps.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── profiles
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── import_export_api.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── student_resource.py
+│   │   │   │   └── views.py
+│   │   │   ├── reports
+│   │   │   │   ├── other
+│   │   │   │   │   ├── report_bank.py
+│   │   │   │   │   ├── report_bpl.py
+│   │   │   │   │   ├── report_cbse_enrollment.py
+│   │   │   │   │   ├── report_cwsn.py
+│   │   │   │   │   ├── report_rollcall.py
+│   │   │   │   │   ├── report_signin.py
+│   │   │   │   │   ├── report_subject.py
+│   │   │   │   │   ├── report_subject_strength.py
+│   │   │   │   │   └── report_subject_wise.py
+│   │   │   │   ├── roll_call
+│   │   │   │   │   ├── serializers
+│   │   │   │   │   │   ├── __init__.py
+│   │   │   │   │   │   └── serializers.py
+│   │   │   │   │   ├── urls.py
+│   │   │   │   │   └── views
+│   │   │   │   │       ├── __init__.py
+│   │   │   │   │       ├── roll_call_excel.py
+│   │   │   │   │       └── views.py
+│   │   │   │   ├── student_strength
+│   │   │   │   │   ├── serializers
+│   │   │   │   │   │   ├── __init__.py
+│   │   │   │   │   │   └── student_strength.py
+│   │   │   │   │   └── views
+│   │   │   │   │       ├── __init__.py
+│   │   │   │   │       ├── student_strength.py
+│   │   │   │   │       ├── student_strength_excel.py
+│   │   │   │   │       └── student_strength_pdf.py
+│   │   │   │   └── urls.py
+│   │   │   ├── temp api_urls.py
+│   │   │   ├── temp models.py
+│   │   │   ├── temp serializers.py
+│   │   │   ├── tests.py
+│   │   │   ├── urls.py
+│   │   │   └── views.py
+│   │   ├── timetables
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── class_subjects
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── days
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── new timetables
+│   │   │   │   ├── resources
+│   │   │   │   │   ├── lab_assignment.py
+│   │   │   │   │   ├── resource_group.py
+│   │   │   │   │   ├── room_availability.py
+│   │   │   │   │   ├── room_rule.py
+│   │   │   │   │   ├── teacher_availability.py
+│   │   │   │   │   ├── teacher_subject_assignment.py
+│   │   │   │   │   └── teacher_workload.py
+│   │   │   │   ├── rules
+│   │   │   │   │   ├── class_subject_requirement.py
+│   │   │   │   │   ├── scheduling_constraint.py
+│   │   │   │   │   ├── subject_group.py
+│   │   │   │   │   ├── subject_rule.py
+│   │   │   │   │   └── timetable_rule.py
+│   │   │   │   ├── settings
+│   │   │   │   │   ├── period.py
+│   │   │   │   │   ├── shift.py
+│   │   │   │   │   ├── timetable_settings.py
+│   │   │   │   │   └── working_day.py
+│   │   │   │   └── templates
+│   │   │   │       ├── cluster_template.py
+│   │   │   │       ├── template_slot.py
+│   │   │   │       └── timetable_template.py
+│   │   │   ├── teacher_subject_assignments
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── tests.py
+│   │   │   ├── timetable_drag_drop
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── timetable_generator
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── timetable_slots
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── api.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── timetables
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── urls.py
+│   │   │   └── views.py
+│   │   ├── transport
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── drivers
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_initial.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── tests.py
+│   │   │   ├── transport_assignments
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── transport_routes
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   ├── urls.py
+│   │   │   ├── vehicles
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── admin.py
+│   │   │   │   ├── models.py
+│   │   │   │   ├── serializers.py
+│   │   │   │   ├── urls.py
+│   │   │   │   └── views.py
+│   │   │   └── views.py
+│   │   └── website
+│   │       ├── __init__.py
+│   │       ├── admin
+│   │       ├── apps.py
+│   │       ├── migrations
+│   │       │   └── __init__.py
+│   │       ├── models
+│   │       ├── tests.py
+│   │       ├── urls.py
+│   │       ├── views
+│   │       └── views_extra.py
+│   ├── config
+│   │   ├── settings.py
+│   │   └── urls.py
+│   ├── copy.bat
+│   ├── db.sqlite3
+│   ├── manage.py
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── requirements.txt
+│   ├── reset_project.bat
+│   └── structure.txt
+├── frontend
+│   ├── .gitignore
+│   ├── ERP_UI_STANDARDS.md
+│   ├── README.md
+│   ├── copy.bat
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   │   ├── favicon.svg
+│   │   └── icons.svg
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── assets
+│   │   │   ├── hero.png
+│   │   │   ├── react.svg
+│   │   │   └── vite.svg
+│   │   ├── components
+│   │   │   ├── crud
+│   │   │   │   ├── BulkActions.jsx
+│   │   │   │   ├── CrudDrawer.jsx
+│   │   │   │   ├── CrudPage.jsx
+│   │   │   │   ├── DataTable.jsx
+│   │   │   │   ├── ExportButton.jsx
+│   │   │   │   ├── FilterBar.jsx
+│   │   │   │   ├── ImportButton.jsx
+│   │   │   │   ├── Pagination.jsx
+│   │   │   │   ├── SearchBar.jsx
+│   │   │   │   ├── StatusToggle.jsx
+│   │   │   │   └── TableActionMenu.jsx
+│   │   │   ├── dashboard
+│   │   │   │   └── StatsCard.jsx
+│   │   │   ├── dialogs
+│   │   │   │   ├── ConfirmDialog.jsx
+│   │   │   │   ├── DeleteDialog.jsx
+│   │   │   │   ├── ErrorDialog.jsx
+│   │   │   │   └── SuccessDialog.jsx
+│   │   │   ├── forms
+│   │   │   │   ├── CheckboxInput.jsx
+│   │   │   │   ├── DateInput.jsx
+│   │   │   │   ├── DateTimeInput.jsx
+│   │   │   │   ├── FileUpload.jsx
+│   │   │   │   ├── FormBuilder.jsx
+│   │   │   │   ├── ImageUpload.jsx
+│   │   │   │   ├── MultiSelectInput.jsx
+│   │   │   │   ├── NumberInput.jsx
+│   │   │   │   ├── RadioInput.jsx
+│   │   │   │   ├── SelectInput.jsx
+│   │   │   │   └── TextInput.jsx
+│   │   │   ├── layout
+│   │   │   │   ├── PageContainer.jsx
+│   │   │   │   └── PageSection.jsx
+│   │   │   └── ui
+│   │   │       ├── Avatar.jsx
+│   │   │       ├── AvatarGroup.jsx
+│   │   │       ├── Badge.jsx
+│   │   │       ├── Button.jsx
+│   │   │       ├── Card.jsx
+│   │   │       ├── Checkbox.jsx
+│   │   │       ├── EmptyState.jsx
+│   │   │       ├── InfoCard.jsx
+│   │   │       ├── Input.jsx
+│   │   │       ├── Loader.jsx
+│   │   │       ├── PageHeader.jsx
+│   │   │       ├── Select.jsx
+│   │   │       ├── SkeletonLoader.jsx
+│   │   │       ├── StatusBadge.jsx
+│   │   │       ├── Switch.jsx
+│   │   │       ├── Textarea.jsx
+│   │   │       ├── Toast.jsx
+│   │   │       └── tabs.jsx
+│   │   ├── dashboard
+│   │   │   ├── modules
+│   │   │   │   └── accounts
+│   │   │   │       └── system-modules
+│   │   │   │           └── services
+│   │   │   │               └── system-modulesService.js
+│   │   │   ├── services
+│   │   │   │   ├── authApi.js
+│   │   │   │   ├── authService.js
+│   │   │   │   ├── communicationService.js
+│   │   │   │   └── settingsService.js
+│   │   │   ├── shared
+│   │   │   │   ├── components
+│   │   │   │   │   ├── StatCard.jsx
+│   │   │   │   │   ├── cards
+│   │   │   │   │   │   ├── AnalyticsCard.jsx
+│   │   │   │   │   │   ├── InfoCard.jsx
+│   │   │   │   │   │   ├── QuickActionCard.jsx
+│   │   │   │   │   │   ├── ReportCard.jsx
+│   │   │   │   │   │   └── StatsCard.jsx
+│   │   │   │   │   ├── crud
+│   │   │   │   │   │   ├── ActionButtons.jsx
+│   │   │   │   │   │   ├── BulkActions.jsx
+│   │   │   │   │   │   ├── CrudHeader.jsx
+│   │   │   │   │   │   ├── DataTable.jsx
+│   │   │   │   │   │   ├── DeleteModal.jsx
+│   │   │   │   │   │   ├── ExportButton.jsx
+│   │   │   │   │   │   ├── ImportButton.jsx
+│   │   │   │   │   │   ├── Pagination.jsx
+│   │   │   │   │   │   ├── SearchBox.jsx
+│   │   │   │   │   │   ├── StatusToggle.jsx
+│   │   │   │   │   │   └── TableFilters.jsx
+│   │   │   │   │   ├── dashboard
+│   │   │   │   │   │   ├── DashboardGrid.jsx
+│   │   │   │   │   │   ├── DashboardHeader.jsx
+│   │   │   │   │   │   └── DashboardSection.jsx
+│   │   │   │   │   ├── forms
+│   │   │   │   │   │   ├── CheckboxInput.jsx
+│   │   │   │   │   │   ├── DateInput.jsx
+│   │   │   │   │   │   ├── FormSection.jsx
+│   │   │   │   │   │   ├── SelectInput.jsx
+│   │   │   │   │   │   ├── SubmitButton.jsx
+│   │   │   │   │   │   ├── TextInput.jsx
+│   │   │   │   │   │   └── TextareaInput.jsx
+│   │   │   │   │   └── modals
+│   │   │   │   │       └── ConfirmModal.jsx
+│   │   │   │   └── core
+│   │   │   │       ├── audit_logs
+│   │   │   │       │   ├── components
+│   │   │   │       │   │   └── Form.jsx
+│   │   │   │       │   ├── pages
+│   │   │   │       │   │   ├── Details.jsx
+│   │   │   │       │   │   └── List.jsx
+│   │   │   │       │   ├── routes
+│   │   │   │       │   │   └── routes.jsx
+│   │   │   │       │   └── services
+│   │   │   │       │       └── service.js
+│   │   │   │       ├── branches
+│   │   │   │       │   ├── components
+│   │   │   │       │   │   └── Form.jsx
+│   │   │   │       │   ├── pages
+│   │   │   │       │   │   ├── Create.jsx
+│   │   │   │       │   │   ├── Edit.jsx
+│   │   │   │       │   │   └── List.jsx
+│   │   │   │       │   ├── routes
+│   │   │   │       │   │   └── routes.jsx
+│   │   │   │       │   └── services
+│   │   │   │       │       └── service.js
+│   │   │   │       ├── media
+│   │   │   │       │   ├── components
+│   │   │   │       │   │   └── Form.jsx
+│   │   │   │       │   ├── pages
+│   │   │   │       │   │   ├── Folders.jsx
+│   │   │   │       │   │   ├── Library.jsx
+│   │   │   │       │   │   └── Upload.jsx
+│   │   │   │       │   ├── routes
+│   │   │   │       │   │   └── routes.jsx
+│   │   │   │       │   └── services
+│   │   │   │       │       └── service.js
+│   │   │   │       ├── notifications
+│   │   │   │       │   ├── components
+│   │   │   │       │   │   └── Form.jsx
+│   │   │   │       │   ├── pages
+│   │   │   │       │   │   ├── Create.jsx
+│   │   │   │       │   │   ├── List.jsx
+│   │   │   │       │   │   └── Templates.jsx
+│   │   │   │       │   ├── routes
+│   │   │   │       │   │   └── routes.jsx
+│   │   │   │       │   └── services
+│   │   │   │       │       └── service.js
+│   │   │   │       ├── permissions
+│   │   │   │       │   ├── components
+│   │   │   │       │   │   └── Form.jsx
+│   │   │   │       │   ├── pages
+│   │   │   │       │   │   ├── Assign.jsx
+│   │   │   │       │   │   └── List.jsx
+│   │   │   │       │   ├── routes
+│   │   │   │       │   │   └── routes.jsx
+│   │   │   │       │   └── services
+│   │   │   │       │       └── service.js
+│   │   │   │       ├── roles
+│   │   │   │       │   ├── components
+│   │   │   │       │   │   └── Form.jsx
+│   │   │   │       │   ├── pages
+│   │   │   │       │   │   ├── Create.jsx
+│   │   │   │       │   │   ├── Edit.jsx
+│   │   │   │       │   │   ├── List.jsx
+│   │   │   │       │   │   └── RolePermissions.jsx
+│   │   │   │       │   ├── routes
+│   │   │   │       │   │   └── routes.jsx
+│   │   │   │       │   └── services
+│   │   │   │       │       └── service.js
+│   │   │   │       ├── schools
+│   │   │   │       │   ├── components
+│   │   │   │       │   │   └── Form.jsx
+│   │   │   │       │   ├── pages
+│   │   │   │       │   │   ├── Create.jsx
+│   │   │   │       │   │   ├── Edit.jsx
+│   │   │   │       │   │   ├── List.jsx
+│   │   │   │       │   │   └── Profile.jsx
+│   │   │   │       │   ├── routes
+│   │   │   │       │   │   └── routes.jsx
+│   │   │   │       │   └── services
+│   │   │   │       │       └── service.js
+│   │   │   │       ├── settings
+│   │   │   │       │   ├── components
+│   │   │   │       │   │   └── Form.jsx
+│   │   │   │       │   ├── pages
+│   │   │   │       │   │   ├── EmailSettings.jsx
+│   │   │   │       │   │   ├── GeneralSettings.jsx
+│   │   │   │       │   │   ├── SMSSettings.jsx
+│   │   │   │       │   │   └── ThemeSettings.jsx
+│   │   │   │       │   ├── routes
+│   │   │   │       │   │   └── routes.jsx
+│   │   │   │       │   └── services
+│   │   │   │       │       └── service.js
+│   │   │   │       └── users
+│   │   │   │           ├── components
+│   │   │   │           │   └── Form.jsx
+│   │   │   │           ├── pages
+│   │   │   │           │   ├── ChangePassword.jsx
+│   │   │   │           │   ├── Create.jsx
+│   │   │   │           │   ├── Edit.jsx
+│   │   │   │           │   ├── List.jsx
+│   │   │   │           │   └── Profile.jsx
+│   │   │   │           ├── routes
+│   │   │   │           │   └── routes.jsx
+│   │   │   │           └── services
+│   │   │   │               └── service.js
+│   │   │   └── temp roles
+│   │   │       ├── accountant
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── admin
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── clerk
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── cluster-admin
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── hostel-warden
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── librarian
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── parent
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── principal
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── receptionist
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── roleRoutes.jsx
+│   │   │       ├── security-supervisor
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── student
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── subject-teacher
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── super-admin
+│   │   │       │   └── Dashboard.jsx
+│   │   │       ├── teacher
+│   │   │       │   └── Dashboard.jsx
+│   │   │       └── vice-principal
+│   │   │           └── Dashboard.jsx
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── modules
+│   │   │   ├── academics
+│   │   │   │   ├── AcademicCalendar.jsx
+│   │   │   │   ├── Assignments.jsx
+│   │   │   │   ├── Homework.jsx
+│   │   │   │   ├── Syllabus.jsx
+│   │   │   │   ├── classes
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── ClassForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddClass.jsx
+│   │   │   │   │   │   ├── ClassesList.jsx
+│   │   │   │   │   │   └── EditClass.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── classRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── classService.js
+│   │   │   │   ├── dashboard
+│   │   │   │   │   ├── AcademicDashboard.jsx
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── AcademicAlerts.jsx
+│   │   │   │   │   │   ├── AcademicOverview.jsx
+│   │   │   │   │   │   ├── AcademicQuickActions.jsx
+│   │   │   │   │   │   ├── AcademicReports.jsx
+│   │   │   │   │   │   ├── AcademicStats.jsx
+│   │   │   │   │   │   └── TimetablePreview.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── academicDashboardService.js
+│   │   │   │   ├── mediums
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── MediumForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddMedium.jsx
+│   │   │   │   │   │   ├── EditMedium.jsx
+│   │   │   │   │   │   └── MediumsList.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── mediumRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── mediumService.js
+│   │   │   │   ├── reports
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── ClassRoutinePrint.jsx
+│   │   │   │   │   │   ├── SubjectAllocationSheet.jsx
+│   │   │   │   │   │   └── TimetablePrint.jsx
+│   │   │   │   │   └── routes
+│   │   │   │   │       └── reportRoutes.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── academicsRoutes.jsx
+│   │   │   │   ├── sections
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── SectionForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddSection.jsx
+│   │   │   │   │   │   ├── EditSection.jsx
+│   │   │   │   │   │   └── SectionsList.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── sectionRoutes.jsx
+│   │   │   │   │   ├── sectionRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── sectionService.js
+│   │   │   │   ├── streams
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── StreamForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddStream.jsx
+│   │   │   │   │   │   ├── EditStream.jsx
+│   │   │   │   │   │   └── StreamsList.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── streamRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── streamService.js
+│   │   │   │   └── subjects
+│   │   │   │       ├── components
+│   │   │   │       │   └── SubjectForm.jsx
+│   │   │   │       ├── pages
+│   │   │   │       │   ├── AddSubject.jsx
+│   │   │   │       │   ├── EditSubject.jsx
+│   │   │   │       │   └── SubjectsList.jsx
+│   │   │   │       ├── routes
+│   │   │   │       │   └── subjectRoutes.jsx
+│   │   │   │       └── services
+│   │   │   │           └── subjectService.js
+│   │   │   ├── accounts
+│   │   │   │   ├── auth
+│   │   │   │   │   ├── context
+│   │   │   │   │   │   └── AuthContext.jsx
+│   │   │   │   │   ├── hooks
+│   │   │   │   │   │   └── useAuth.js
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── ForgotPasswordPage.jsx
+│   │   │   │   │   │   ├── LoginPage.jsx
+│   │   │   │   │   │   └── ResetPasswordPage.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── authService.js
+│   │   │   │   ├── permissions
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── PermissionForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddPermissionPage.jsx
+│   │   │   │   │   │   ├── EditPermissionPage.jsx
+│   │   │   │   │   │   └── PermissionsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── permissionRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── permissionService.js
+│   │   │   │   ├── role_permissions
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── RolePermissionForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   └── RolePermissionsPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── rolePermissionRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── rolePermissionsService.js
+│   │   │   │   ├── roles
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── RoleForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddRolePage.jsx
+│   │   │   │   │   │   ├── EditRolePage.jsx
+│   │   │   │   │   │   └── RolesListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── roleRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── roleService.js
+│   │   │   │   ├── routes
+│   │   │   │   │   └── accountsRoutes.jsx
+│   │   │   │   ├── system-modules
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── ModuleForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddModulePage.jsx
+│   │   │   │   │   │   ├── EditModulePage.jsx
+│   │   │   │   │   │   └── ModulesListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── systemModulesRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── system-modulesService.js
+│   │   │   │   ├── user_permissions
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   └── UserPermissionsPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── userPermissionRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── userPermissionsService.js
+│   │   │   │   ├── user_roles
+│   │   │   │   │   ├── UserRolesPage.jsx
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── UserRoleForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddUserRolePage.jsx
+│   │   │   │   │   │   ├── EditUserRolePage.jsx
+│   │   │   │   │   │   └── UserRolesListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── userRoleRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── userRoleService.js
+│   │   │   │   └── users
+│   │   │   │       ├── components
+│   │   │   │       │   └── UserForm.jsx
+│   │   │   │       ├── pages
+│   │   │   │       │   ├── AddUserPage.jsx
+│   │   │   │       │   ├── EditUserPage.jsx
+│   │   │   │       │   ├── UserProfilePage.jsx
+│   │   │   │       │   └── UsersListPage.jsx
+│   │   │   │       ├── routes
+│   │   │   │       │   └── userRoutes.jsx
+│   │   │   │       └── services
+│   │   │   │           └── userService.js
+│   │   │   ├── associations
+│   │   │   │   ├── association_meetings
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── AssociationMeetingForm.jsx
+│   │   │   │   │   │   └── AssociationMeetingTable.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AssociationMeetingCreatePage.jsx
+│   │   │   │   │   │   ├── AssociationMeetingDetailPage.jsx
+│   │   │   │   │   │   ├── AssociationMeetingEditPage.jsx
+│   │   │   │   │   │   └── AssociationMeetingListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── associationMeetingRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── associationMeetingService.jsx
+│   │   │   │   ├── association_members
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── AssociationMemberForm.jsx
+│   │   │   │   │   │   └── AssociationMemberTable.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AssociationMemberCreatePage.jsx
+│   │   │   │   │   │   ├── AssociationMemberDetailPage.jsx
+│   │   │   │   │   │   ├── AssociationMemberEditPage.jsx
+│   │   │   │   │   │   └── AssociationMemberListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── associationMemberRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── associationMemberService.jsx
+│   │   │   │   ├── association_roles
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── AssociationRoleForm.jsx
+│   │   │   │   │   │   └── AssociationRoleTable.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AssociationRoleCreatePage.jsx
+│   │   │   │   │   │   ├── AssociationRoleDetailPage.jsx
+│   │   │   │   │   │   ├── AssociationRoleEditPage.jsx
+│   │   │   │   │   │   └── AssociationRoleListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── associationRoleRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── associationRoleService.jsx
+│   │   │   │   ├── associations
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── AssociationForm.jsx
+│   │   │   │   │   │   └── AssociationTable.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AssociationCreatePage.jsx
+│   │   │   │   │   │   ├── AssociationDetailPage.jsx
+│   │   │   │   │   │   ├── AssociationEditPage.jsx
+│   │   │   │   │   │   └── AssociationListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── associationRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── associationService.jsx
+│   │   │   │   ├── extracurricular_activities
+│   │   │   │   │   ├── components
+│   │   │   │   │   ├── pages
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── extracurricularActivityRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   ├── routes
+│   │   │   │   │   └── associationModuleRoutes.jsx
+│   │   │   │   ├── smc_members
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── SMCMemberForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── SMCMemberCreate.jsx
+│   │   │   │   │   │   ├── SMCMemberEdit.jsx
+│   │   │   │   │   │   ├── SMCMemberView.jsx
+│   │   │   │   │   │   └── SMCMembersList.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── smcMemberRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── smcMemberService.js
+│   │   │   │   ├── staff_association_role_assignments
+│   │   │   │   │   ├── components
+│   │   │   │   │   ├── pages
+│   │   │   │   │   ├── routes
+│   │   │   │   │   └── services
+│   │   │   │   └── student_association_role_assignments
+│   │   │   │       ├── components
+│   │   │   │       ├── pages
+│   │   │   │       ├── routes
+│   │   │   │       └── services
+│   │   │   ├── cluster
+│   │   │   │   ├── components
+│   │   │   │   │   └── ClusterForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── ClusterCreatePage.jsx
+│   │   │   │   │   ├── ClusterEditPage.jsx
+│   │   │   │   │   ├── ClusterViewPage.jsx
+│   │   │   │   │   └── ClustersListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── clusterRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── clusterService.js
+│   │   │   ├── communication
+│   │   │   │   ├── Circulars.jsx
+│   │   │   │   ├── Emails.jsx
+│   │   │   │   ├── Notices.jsx
+│   │   │   │   ├── Notifications.jsx
+│   │   │   │   ├── SMS.jsx
+│   │   │   │   ├── circulars
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── CircularForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddCircularPage.jsx
+│   │   │   │   │   │   ├── CircularsListPage.jsx
+│   │   │   │   │   │   └── EditCircularPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── circularRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── circularService.js
+│   │   │   │   ├── communication-categories
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── CommunicationCategoryForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddCommunicationCategoryPage.jsx
+│   │   │   │   │   │   ├── CommunicationCategoriesListPage.jsx
+│   │   │   │   │   │   └── EditCommunicationCategoryPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── communicationCategoryRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── communicationCategoryService.js
+│   │   │   │   ├── communication-templates
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── CommunicationTemplateForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddCommunicationTemplatePage.jsx
+│   │   │   │   │   │   ├── CommunicationTemplatesListPage.jsx
+│   │   │   │   │   │   └── EditCommunicationTemplatePage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── communicationTemplateRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── communicationTemplateService.js
+│   │   │   │   ├── dummy notices announcements
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── AnnouncementForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddAnnouncementPage.jsx
+│   │   │   │   │   │   ├── AnnouncementsListPage.jsx
+│   │   │   │   │   │   └── EditAnnouncementPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── announcementRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── announcementService.js
+│   │   │   │   ├── events
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── EventForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddEventPage.jsx
+│   │   │   │   │   │   ├── EditEventPage.jsx
+│   │   │   │   │   │   └── EventsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── eventRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── eventService.js
+│   │   │   │   ├── news
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── NewsForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddNewsPage.jsx
+│   │   │   │   │   │   ├── EditNewsPage.jsx
+│   │   │   │   │   │   └── NewsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── newsRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── newsService.js
+│   │   │   │   ├── notices
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── NoticeForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddNoticePage.jsx
+│   │   │   │   │   │   ├── EditNoticePage.jsx
+│   │   │   │   │   │   └── NoticesListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── noticeRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── noticeService.js
+│   │   │   │   ├── notifications
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── NotificationForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddNotificationPage.jsx
+│   │   │   │   │   │   ├── EditNotificationPage.jsx
+│   │   │   │   │   │   └── NotificationsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── notificationRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── notificationService.js
+│   │   │   │   └── routes
+│   │   │   │       └── communicationRoutes.jsx
+│   │   │   ├── examinations
+│   │   │   │   ├── CreateExam.jsx
+│   │   │   │   ├── EditExam.jsx
+│   │   │   │   ├── ExamAnalytics.jsx
+│   │   │   │   ├── ExamsList.jsx
+│   │   │   │   ├── HallTickets.jsx
+│   │   │   │   ├── MarksEntry.jsx
+│   │   │   │   ├── ReportCards.jsx
+│   │   │   │   ├── Results.jsx
+│   │   │   │   ├── examService.js
+│   │   │   │   ├── reports
+│   │   │   │   │   └── pages
+│   │   │   │   │       ├── HallTicket.jsx
+│   │   │   │   │       ├── MarksheetPrint.jsx
+│   │   │   │   │       └── ReportCardPrint.jsx
+│   │   │   │   └── routes
+│   │   │   │       └── examinationsRoutes.jsx
+│   │   │   ├── fees
+│   │   │   │   ├── FeeCollection.jsx
+│   │   │   │   ├── FeeConcessions.jsx
+│   │   │   │   ├── FeeDashboard.jsx
+│   │   │   │   ├── FeeReceipts.jsx
+│   │   │   │   ├── FeeReports.jsx
+│   │   │   │   ├── FeeStructures.jsx
+│   │   │   │   ├── OnlinePayments.jsx
+│   │   │   │   ├── PendingFees.jsx
+│   │   │   │   ├── Scholarships.jsx
+│   │   │   │   ├── feesService.js
+│   │   │   │   └── routes
+│   │   │   │       └── feeroutes.jsx
+│   │   │   ├── finance
+│   │   │   │   └── routes
+│   │   │   │       └── financeRoutes.jsx
+│   │   │   ├── home
+│   │   │   │   ├── components
+│   │   │   │   │   ├── QuickActions.jsx
+│   │   │   │   │   └── StatCard.jsx
+│   │   │   │   ├── layouts
+│   │   │   │   │   ├── AuthLayout.jsx
+│   │   │   │   │   └── DashboardLayout.jsx
+│   │   │   │   ├── navigation
+│   │   │   │   │   ├── Sidebar.jsx
+│   │   │   │   │   ├── TopNavbar.jsx
+│   │   │   │   │   └── UserDropdown.jsx
+│   │   │   │   └── pages
+│   │   │   │       └── DashboardHomePage.jsx
+│   │   │   ├── hostel
+│   │   │   │   ├── HostelAttendance.jsx
+│   │   │   │   ├── HostelDashboard.jsx
+│   │   │   │   ├── HostelReports.jsx
+│   │   │   │   ├── HostelStudents.jsx
+│   │   │   │   ├── RoomAllocation.jsx
+│   │   │   │   ├── Rooms.jsx
+│   │   │   │   ├── Visitors.jsx
+│   │   │   │   ├── hostelService.js
+│   │   │   │   ├── reports
+│   │   │   │   │   └── pages
+│   │   │   │   │       ├── HostelIDCard.jsx
+│   │   │   │   │       ├── RoomAllocationSlip.jsx
+│   │   │   │   │       └── VisitorPass.jsx
+│   │   │   │   └── routes
+│   │   │   │       └── hostelRoutes.jsx
+│   │   │   ├── infrastructure
+│   │   │   │   ├── asset-categories
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── AssetCategoryForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddAssetCategoryPage.jsx
+│   │   │   │   │   │   ├── AssetCategoriesListPage.jsx
+│   │   │   │   │   │   └── EditAssetCategoryPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── assetCategoryRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── assetCategoryService.js
+│   │   │   │   ├── assets
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── AssetForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddAssetPage.jsx
+│   │   │   │   │   │   ├── AssetsListPage.jsx
+│   │   │   │   │   │   └── EditAssetPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── assetRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── assetService.js
+│   │   │   │   ├── auditoriums
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── AuditoriumForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddAuditoriumPage.jsx
+│   │   │   │   │   │   ├── AuditoriumsListPage.jsx
+│   │   │   │   │   │   └── EditAuditoriumPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── auditoriumRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── auditoriumService.js
+│   │   │   │   ├── buildings
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── BuildingForm.jsx
+│   │   │   │   │   ├── config
+│   │   │   │   │   │   ├── buildingColumns.js
+│   │   │   │   │   │   └── buildingFields.js
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddBuildingPage.jsx
+│   │   │   │   │   │   ├── BuildingsListPage.jsx
+│   │   │   │   │   │   └── EditBuildingPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── buildingRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── buildingService.js
+│   │   │   │   ├── buildings3
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── BuildingForm.jsx
+│   │   │   │   │   ├── config
+│   │   │   │   │   │   ├── buildingColumns.js
+│   │   │   │   │   │   └── buildingFields.js
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddBuildingPage.jsx
+│   │   │   │   │   │   ├── BuildingsListPage.jsx
+│   │   │   │   │   │   └── EditBuildingPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── buildingRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── buildingService.js
+│   │   │   │   ├── classrooms
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── ClassroomForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddClassroom.jsx
+│   │   │   │   │   │   ├── ClassroomsList.jsx
+│   │   │   │   │   │   └── EditClassroom.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── classroomRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── classroomService.js
+│   │   │   │   ├── classrooms2
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── ClassroomForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddClassroomPage.jsx
+│   │   │   │   │   │   ├── ClassroomsListPage.jsx
+│   │   │   │   │   │   └── EditClassroomPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── classroomRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── classroomService.js
+│   │   │   │   ├── facilities
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── FacilityForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddFacilityPage.jsx
+│   │   │   │   │   │   ├── EditFacilityPage.jsx
+│   │   │   │   │   │   └── FacilitiesListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── facilityRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── facilityService.js
+│   │   │   │   ├── floors
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── FloorForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddFloorPage.jsx
+│   │   │   │   │   │   ├── EditFloorPage.jsx
+│   │   │   │   │   │   └── FloorsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── floorRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── floorService.js
+│   │   │   │   ├── laboratories
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── LaboratoryForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddLaboratoryPage.jsx
+│   │   │   │   │   │   ├── EditLaboratoryPage.jsx
+│   │   │   │   │   │   └── LaboratoriesListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── laboratoryRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── laboratoryService.js
+│   │   │   │   ├── libraries
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── LibraryForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddLibraryPage.jsx
+│   │   │   │   │   │   ├── EditLibraryPage.jsx
+│   │   │   │   │   │   └── LibrariesListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── libraryRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── libraryService.js
+│   │   │   │   ├── maintenance-records
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── MaintenanceRecordForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddMaintenanceRecordPage.jsx
+│   │   │   │   │   │   ├── EditMaintenanceRecordPage.jsx
+│   │   │   │   │   │   └── MaintenanceRecordsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── maintenanceRecordRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── maintenanceRecordService.js
+│   │   │   │   ├── playgrounds
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── PlaygroundForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddPlaygroundPage.jsx
+│   │   │   │   │   │   ├── EditPlaygroundPage.jsx
+│   │   │   │   │   │   └── PlaygroundsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── playgroundRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── playgroundService.js
+│   │   │   │   ├── rooms
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── RoomForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddRoomPage.jsx
+│   │   │   │   │   │   ├── EditRoomPage.jsx
+│   │   │   │   │   │   └── RoomsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── roomRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── roomService.js
+│   │   │   │   └── routes
+│   │   │   │       └── infrastructureRoutes.jsx
+│   │   │   ├── library
+│   │   │   │   ├── LibraryReports.jsx
+│   │   │   │   ├── ReturnBook.jsx
+│   │   │   │   ├── books
+│   │   │   │   │   ├── AddBook.jsx
+│   │   │   │   │   ├── BooksList.jsx
+│   │   │   │   │   └── EditBook.jsx
+│   │   │   │   ├── libraryService.js
+│   │   │   │   └── routes
+│   │   │   │       └── libraryRoutes.jsx
+│   │   │   ├── moduleRoutes.jsx
+│   │   │   ├── reports
+│   │   │   │   ├── ReportsHome.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AdmissionTrendReport.jsx
+│   │   │   │   │   ├── CategoryWiseStudents.jsx
+│   │   │   │   │   ├── ClassWiseAttendanceSummary.jsx
+│   │   │   │   │   ├── DepartmentWiseStaffSummary.jsx
+│   │   │   │   │   ├── FeeCollectionSummary.jsx
+│   │   │   │   │   ├── FreePeriodsAnalysis.jsx
+│   │   │   │   │   ├── GenderDistributionReport.jsx
+│   │   │   │   │   ├── HostelOccupancyReport.jsx
+│   │   │   │   │   ├── LibraryUsageAnalytics.jsx
+│   │   │   │   │   ├── LowAttendanceStudents.jsx
+│   │   │   │   │   ├── MonthlyIncomeReport.jsx
+│   │   │   │   │   ├── MostIssuedBooksReport.jsx
+│   │   │   │   │   ├── OutstandingFeesReport.jsx
+│   │   │   │   │   ├── OverdueBooksAnalytics.jsx
+│   │   │   │   │   ├── RouteWiseStudentsReport.jsx
+│   │   │   │   │   ├── SectionWiseStudentsReport.jsx
+│   │   │   │   │   ├── StaffAttendanceAnalytics.jsx
+│   │   │   │   │   ├── StudentPerformanceAnalytics.jsx
+│   │   │   │   │   ├── StudentStrengthReport.jsx
+│   │   │   │   │   ├── SubjectPerformanceReport.jsx
+│   │   │   │   │   ├── SubjectStrengthReport.jsx
+│   │   │   │   │   ├── TeacherWorkloadAnalytics.jsx
+│   │   │   │   │   ├── TeacherWorkloadReport.jsx
+│   │   │   │   │   ├── TimetableUtilizationReport.jsx
+│   │   │   │   │   └── VacancyReport.jsx
+│   │   │   │   ├── reportService.js
+│   │   │   │   ├── school
+│   │   │   │   │   ├── BPLReport.jsx
+│   │   │   │   │   ├── CBSEEnrollment.jsx
+│   │   │   │   │   ├── CWSNReport.jsx
+│   │   │   │   │   ├── StudentStrength.jsx
+│   │   │   │   │   ├── SubjectStrength.jsx
+│   │   │   │   │   ├── SubjectWiseStudents.jsx
+│   │   │   │   │   └── TimetableReport.jsx
+│   │   │   │   ├── section
+│   │   │   │   │   ├── BankReport.jsx
+│   │   │   │   │   ├── RollCall.jsx
+│   │   │   │   │   ├── SignInSheet.jsx
+│   │   │   │   │   └── StudentSubjects.jsx
+│   │   │   │   └── staff
+│   │   │   │       ├── ClassInchargeReport.jsx
+│   │   │   │       ├── StaffSummary.jsx
+│   │   │   │       └── TeacherAttendance.jsx
+│   │   │   ├── schools
+│   │   │   │   ├── about-schools
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── AboutSchoolForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AboutSchoolListPage.jsx
+│   │   │   │   │   │   ├── AddAboutSchoolPage.jsx
+│   │   │   │   │   │   └── EditAboutSchoolPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── aboutSchoolRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── aboutSchoolService.js
+│   │   │   │   ├── branches
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── BranchForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddBranchPage.jsx
+│   │   │   │   │   │   ├── BranchesListPage.jsx
+│   │   │   │   │   │   └── EditBranchPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── branchRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── branchService.js
+│   │   │   │   ├── components
+│   │   │   │   │   └── SchoolForm.jsx
+│   │   │   │   ├── galleries
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── GalleryForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddGalleryPage.jsx
+│   │   │   │   │   │   ├── EditGalleryPage.jsx
+│   │   │   │   │   │   └── GalleriesListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── galleryRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── galleryService.js
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── SchoolCreatePage.jsx
+│   │   │   │   │   ├── SchoolEditPage.jsx
+│   │   │   │   │   ├── SchoolViewPage.jsx
+│   │   │   │   │   └── SchoolsListPage.jsx
+│   │   │   │   ├── principals
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── PrincipalForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddPrincipalPage.jsx
+│   │   │   │   │   │   ├── EditPrincipalPage.jsx
+│   │   │   │   │   │   └── PrincipalsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── principalRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── principalService.js
+│   │   │   │   ├── routes
+│   │   │   │   │   └── schoolsRoutes.jsx
+│   │   │   │   ├── school-settings
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── SchoolSettingForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddSchoolSettingPage.jsx
+│   │   │   │   │   │   ├── EditSchoolSettingPage.jsx
+│   │   │   │   │   │   └── SchoolSettingsListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── schoolSettingRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── schoolSettingService.js
+│   │   │   │   ├── schools
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── SchoolForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddSchoolPage.jsx
+│   │   │   │   │   │   ├── EditSchoolPage.jsx
+│   │   │   │   │   │   └── SchoolListPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── schoolRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── schoolService.js
+│   │   │   │   └── services
+│   │   │   │       └── schoolService.js
+│   │   │   ├── settings
+│   │   │   │   ├── BackupRestore.jsx
+│   │   │   │   ├── PaymentGateway.jsx
+│   │   │   │   ├── Permissions.jsx
+│   │   │   │   ├── SMSSettings.jsx
+│   │   │   │   ├── SchoolSettings.jsx
+│   │   │   │   ├── SessionSettings.jsx
+│   │   │   │   └── UserRoles.jsx
+│   │   │   ├── staff
+│   │   │   │   ├── LeaveManagement.jsx
+│   │   │   │   ├── SalaryManagement.jsx
+│   │   │   │   ├── StaffProfile.jsx
+│   │   │   │   ├── class-incharge
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── ClassInchargeForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddClassIncharge.jsx
+│   │   │   │   │   │   ├── ClassInchargeList.jsx
+│   │   │   │   │   │   └── EditClassIncharge.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── classInchargeRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── classInchargeService.js
+│   │   │   │   ├── dashboard
+│   │   │   │   │   ├── RecentAttendance.jsx
+│   │   │   │   │   ├── StaffDashboard.jsx
+│   │   │   │   │   ├── StaffStats.jsx
+│   │   │   │   │   └── dashboardService.js
+│   │   │   │   ├── post-types
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── PostTypeForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddPostType.jsx
+│   │   │   │   │   │   ├── EditPostType.jsx
+│   │   │   │   │   │   └── PostTypesList.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── postTypeRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── postTypeService.js
+│   │   │   │   ├── profiles
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── StaffForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddStaff.jsx
+│   │   │   │   │   │   ├── EditStaff.jsx
+│   │   │   │   │   │   ├── StaffList.jsx
+│   │   │   │   │   │   └── StaffProfile.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── staffProfileRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── staffService.js
+│   │   │   │   ├── reports
+│   │   │   │   │   ├── AttendanceReport.jsx
+│   │   │   │   │   ├── StaffReport.jsx
+│   │   │   │   │   ├── VacancyReport.jsx
+│   │   │   │   │   ├── WorkloadReport.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AppointmentLetter.jsx
+│   │   │   │   │   │   ├── ExperienceCertificate.jsx
+│   │   │   │   │   │   ├── SalarySlip.jsx
+│   │   │   │   │   │   └── StaffIDCard.jsx
+│   │   │   │   │   ├── reportsService.js
+│   │   │   │   │   └── routes
+│   │   │   │   │       └── reportRoutes.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── staffRoutes.jsx
+│   │   │   │   ├── sanctioned-posts
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── SanctionedPostForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddSanctionedPost.jsx
+│   │   │   │   │   │   ├── EditSanctionedPost.jsx
+│   │   │   │   │   │   └── SanctionedPostsList.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── sanctionedPostRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── sanctionedPostService.js
+│   │   │   │   ├── staffService.js
+│   │   │   │   ├── teacher-attendance
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── TeacherAttendanceForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddTeacherAttendance.jsx
+│   │   │   │   │   │   ├── EditTeacherAttendance.jsx
+│   │   │   │   │   │   └── TeacherAttendanceList.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── teacherAttendanceRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── teacherAttendanceService.js
+│   │   │   │   └── teacher-timetable
+│   │   │   │       ├── TeacherFreePeriods.jsx
+│   │   │   │       ├── TeacherTimetable.jsx
+│   │   │   │       ├── TeacherWorkload.jsx
+│   │   │   │       ├── teacherTimetableRoutes.jsx
+│   │   │   │       └── teacherTimetableService.js
+│   │   │   ├── students
+│   │   │   │   ├── PromoteStudents.jsx
+│   │   │   │   ├── StudentAttendance.jsx
+│   │   │   │   ├── StudentCertificates.jsx
+│   │   │   │   ├── StudentIDCards.jsx
+│   │   │   │   ├── StudentReports.jsx
+│   │   │   │   ├── reports
+│   │   │   │   │   ├── AdmissionFormPrint.jsx
+│   │   │   │   │   ├── BonafideCertificate.jsx
+│   │   │   │   │   ├── CharacterCertificate.jsx
+│   │   │   │   │   ├── StudentIDCard.jsx
+│   │   │   │   │   ├── TransferCertificate.jsx
+│   │   │   │   │   ├── roll-call
+│   │   │   │   │   │   ├── components
+│   │   │   │   │   │   │   ├── RollCallActions.jsx
+│   │   │   │   │   │   │   ├── RollCallFilters.jsx
+│   │   │   │   │   │   │   ├── RollCallHeader.jsx
+│   │   │   │   │   │   │   ├── RollCallTable.jsx
+│   │   │   │   │   │   │   └── RollCallToolbar.jsx
+│   │   │   │   │   │   ├── exports
+│   │   │   │   │   │   │   ├── exportRollCallExcel.js
+│   │   │   │   │   │   │   ├── exportRollCallPdf.js
+│   │   │   │   │   │   │   └── printRollCall.js
+│   │   │   │   │   │   ├── pages
+│   │   │   │   │   │   │   ├── RollCallPrintPage.jsx
+│   │   │   │   │   │   │   └── RollCallReportPage.jsx
+│   │   │   │   │   │   ├── routes
+│   │   │   │   │   │   │   └── rollCallRoutes.jsx
+│   │   │   │   │   │   └── services
+│   │   │   │   │   │       └── rollCallService.js
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── reportsRoutes.jsx
+│   │   │   │   │   └── student-strength
+│   │   │   │   │       ├── pages
+│   │   │   │   │       │   └── StudentStrengthReport.jsx
+│   │   │   │   │       ├── routes
+│   │   │   │   │       │   └── studentStrengthRoutes.jsx
+│   │   │   │   │       └── services
+│   │   │   │   │           └── studentStrengthService.js
+│   │   │   │   ├── routes
+│   │   │   │   │   └── studentsRoutes.jsx
+│   │   │   │   └── studentsList
+│   │   │   │       ├── components
+│   │   │   │       │   └── StudentForm.jsx
+│   │   │   │       ├── pages
+│   │   │   │       │   ├── AddStudent.jsx
+│   │   │   │       │   ├── EditStudent.jsx
+│   │   │   │       │   ├── StudentProfile.jsx
+│   │   │   │       │   └── StudentsList.jsx
+│   │   │   │       ├── routes
+│   │   │   │       │   └── studentListRoutes.jsx
+│   │   │   │       └── services
+│   │   │   │           └── studentService.js
+│   │   │   ├── timetable
+│   │   │   │   ├── ClassTimetable.jsx
+│   │   │   │   ├── ExamTimetable.jsx
+│   │   │   │   ├── TeacherTimetable.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── CreateTimetable.jsx
+│   │   │   │   │   ├── EditTimetable.jsx
+│   │   │   │   │   └── TimetableList.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── timetableRoutes.jsx
+│   │   │   │   └── timetableService.js
+│   │   │   ├── timetables
+│   │   │   │   ├── class-subjects
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── ClassSubjectForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddClassSubject.jsx
+│   │   │   │   │   │   ├── ClassSubjectsList.jsx
+│   │   │   │   │   │   └── EditClassSubject.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── classSubjectRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── classSubjectService.js
+│   │   │   │   ├── days
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── DayForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddDay.jsx
+│   │   │   │   │   │   ├── DaysList.jsx
+│   │   │   │   │   │   └── EditDay.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── dayRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── dayService.js
+│   │   │   │   ├── timetable
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── TimetableForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AddTimetable.jsx
+│   │   │   │   │   │   ├── EditTimetable.jsx
+│   │   │   │   │   │   ├── GenerateTimetable.jsx
+│   │   │   │   │   │   └── TimetableList.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── timetableRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── timetableService.js
+│   │   │   │   └── timetable-slots
+│   │   │   │       ├── components
+│   │   │   │       │   └── TimetableSlotForm.jsx
+│   │   │   │       ├── pages
+│   │   │   │       │   ├── AddTimetableSlot.jsx
+│   │   │   │       │   ├── EditTimetableSlot.jsx
+│   │   │   │       │   └── TimetableSlotsList.jsx
+│   │   │   │       ├── routes
+│   │   │   │       │   └── timetableSlotRoutes.jsx
+│   │   │   │       └── services
+│   │   │   │           └── timetableSlotService.js
+│   │   │   └── transport
+│   │   │       ├── AddVehicle.jsx
+│   │   │       ├── Drivers.jsx
+│   │   │       ├── EditVehicle.jsx
+│   │   │       ├── PickupPoints.jsx
+│   │   │       ├── Routes.jsx
+│   │   │       ├── TransportReports.jsx
+│   │   │       ├── VehiclesList.jsx
+│   │   │       ├── drivers
+│   │   │       │   ├── components
+│   │   │       │   │   └── DriverForm.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── DriverCreatePage.jsx
+│   │   │       │   │   ├── DriverEditPage.jsx
+│   │   │       │   │   └── DriverListPage.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── driverRoutes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── driverService.js
+│   │   │       ├── routes
+│   │   │       │   └── tansportRoutes.jsx
+│   │   │       ├── transportService.js
+│   │   │       ├── transport_assignments
+│   │   │       │   ├── components
+│   │   │       │   │   └── TransportAssignmentForm.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── TransportAssignmentCreatePage.jsx
+│   │   │       │   │   ├── TransportAssignmentEditPage.jsx
+│   │   │       │   │   └── TransportAssignmentListPage.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── transportAssignmentRoutes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── transportAssignmentService.js
+│   │   │       ├── transport_routes
+│   │   │       │   ├── components
+│   │   │       │   │   └── TransportRouteForm.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── TransportRouteCreatePage.jsx
+│   │   │       │   │   ├── TransportRouteEditPage.jsx
+│   │   │       │   │   └── TransportRouteListPage.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── transportRouteRoutes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── transportRouteService.js
+│   │   │       └── vehicles
+│   │   │           ├── components
+│   │   │           │   └── Form.jsx
+│   │   │           ├── pages
+│   │   │           │   ├── Create.jsx
+│   │   │           │   ├── Edit.jsx
+│   │   │           │   └── List.jsx
+│   │   │           ├── routes
+│   │   │           │   └── vehicleRoutes.jsx
+│   │   │           └── services
+│   │   │               └── Service.js
+│   │   ├── pages
+│   │   │   └── ComponentShowcasePage.jsx
+│   │   ├── routes
+│   │   │   ├── AppRoutes.jsx
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   └── RoleBasedRoute.jsx
+│   │   ├── services
+│   │   │   └── api
+│   │   │       ├── authService.js
+│   │   │       ├── axios.js
+│   │   │       └── index.js
+│   │   ├── shared
+│   │   │   └── components
+│   │   │       ├── cards
+│   │   │       │   ├── AchievementCard.jsx
+│   │   │       │   ├── GalleryCard.jsx
+│   │   │       │   ├── NewsCard.jsx
+│   │   │       │   └── StaffCard.jsx
+│   │   │       ├── common
+│   │   │       │   ├── CTAButton.jsx
+│   │   │       │   ├── HeroSection.jsx
+│   │   │       │   ├── SectionTitle.jsx
+│   │   │       │   └── crud
+│   │   │       │       ├── CrudCreatePage.jsx
+│   │   │       │       ├── CrudEditPage.jsx
+│   │   │       │       └── CrudListPage.jsx
+│   │   │       ├── forms
+│   │   │       │   ├── AdmissionForm.jsx
+│   │   │       │   ├── InquiryForm.jsx
+│   │   │       │   ├── LoginForm.jsx
+│   │   │       │   └── SearchForm.jsx
+│   │   │       └── tables
+│   │   │           ├── StaffSummaryTable.jsx
+│   │   │           ├── StudentStrengthTable.jsx
+│   │   │           ├── SubjectStrengthTable.jsx
+│   │   │           └── TimetableTable.jsx
+│   │   └── website
+│   │       ├── components
+│   │       │   ├── Footer.jsx
+│   │       │   └── Navbar.jsx
+│   │       ├── layouts
+│   │       │   └── WebsiteLayout.jsx
+│   │       ├── pages
+│   │       │   ├── Admissions.jsx
+│   │       │   ├── CampusLife.jsx
+│   │       │   ├── Contact.jsx
+│   │       │   ├── Home.jsx
+│   │       │   ├── about
+│   │       │   │   ├── Leadership.jsx
+│   │       │   │   ├── MandatoryDisclosure.jsx
+│   │       │   │   └── Overview.jsx
+│   │       │   ├── academics
+│   │       │   │   ├── AcademicStructure.jsx
+│   │       │   │   ├── Curriculum.jsx
+│   │       │   │   └── Timetable.jsx
+│   │       │   └── updates
+│   │       │       ├── Downloads.jsx
+│   │       │       └── NewsEvents.jsx
+│   │       └── routes
+│   │           └── WebsiteRoutes.jsx
+│   └── vite.config.js
+├── generate.text
+├── generate_tree.py
+└── structure.txt
