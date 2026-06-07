@@ -1,0 +1,1311 @@
+frontend
+├── .gitignore
+├── ERP_UI_STANDARDS.md
+├── README.md
+├── copy.bat
+├── eslint.config.js
+├── generate_tree.py
+├── generate_tree_execute.text
+├── index.html
+├── package-lock.json
+├── package.json
+├── public
+│   ├── favicon.svg
+│   └── icons.svg
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── assets
+│   │   ├── hero.png
+│   │   ├── react.svg
+│   │   └── vite.svg
+│   ├── components
+│   │   ├── crud
+│   │   │   ├── BulkActions.jsx
+│   │   │   ├── CrudDrawer.jsx
+│   │   │   ├── CrudPage.jsx
+│   │   │   ├── DataTable.jsx
+│   │   │   ├── ExportButton.jsx
+│   │   │   ├── FilterBar.jsx
+│   │   │   ├── ImportButton.jsx
+│   │   │   ├── Pagination.jsx
+│   │   │   ├── SearchBar.jsx
+│   │   │   ├── StatusToggle.jsx
+│   │   │   └── TableActionMenu.jsx
+│   │   ├── dashboard
+│   │   │   └── StatsCard.jsx
+│   │   ├── dialogs
+│   │   │   ├── ConfirmDialog.jsx
+│   │   │   ├── DeleteDialog.jsx
+│   │   │   ├── ErrorDialog.jsx
+│   │   │   └── SuccessDialog.jsx
+│   │   ├── forms
+│   │   │   ├── CheckboxInput.jsx
+│   │   │   ├── DateInput.jsx
+│   │   │   ├── DateTimeInput.jsx
+│   │   │   ├── FileUpload.jsx
+│   │   │   ├── FormBuilder.jsx
+│   │   │   ├── ImageUpload.jsx
+│   │   │   ├── MultiSelectInput.jsx
+│   │   │   ├── NumberInput.jsx
+│   │   │   ├── RadioInput.jsx
+│   │   │   ├── SelectInput.jsx
+│   │   │   └── TextInput.jsx
+│   │   ├── layout
+│   │   │   ├── PageContainer.jsx
+│   │   │   └── PageSection.jsx
+│   │   └── ui
+│   │       ├── Avatar.jsx
+│   │       ├── AvatarGroup.jsx
+│   │       ├── Badge.jsx
+│   │       ├── Button.jsx
+│   │       ├── Card.jsx
+│   │       ├── Checkbox.jsx
+│   │       ├── EmptyState.jsx
+│   │       ├── InfoCard.jsx
+│   │       ├── Input.jsx
+│   │       ├── Loader.jsx
+│   │       ├── PageHeader.jsx
+│   │       ├── Select.jsx
+│   │       ├── SkeletonLoader.jsx
+│   │       ├── StatusBadge.jsx
+│   │       ├── Switch.jsx
+│   │       ├── Textarea.jsx
+│   │       ├── Toast.jsx
+│   │       └── tabs.jsx
+│   ├── dashboard
+│   │   ├── modules
+│   │   │   └── accounts
+│   │   │       └── system-modules
+│   │   │           └── services
+│   │   │               └── system-modulesService.js
+│   │   ├── services
+│   │   │   ├── authApi.js
+│   │   │   ├── authService.js
+│   │   │   ├── communicationService.js
+│   │   │   └── settingsService.js
+│   │   ├── shared
+│   │   │   ├── components
+│   │   │   │   ├── StatCard.jsx
+│   │   │   │   ├── cards
+│   │   │   │   │   ├── AnalyticsCard.jsx
+│   │   │   │   │   ├── InfoCard.jsx
+│   │   │   │   │   ├── QuickActionCard.jsx
+│   │   │   │   │   ├── ReportCard.jsx
+│   │   │   │   │   └── StatsCard.jsx
+│   │   │   │   ├── crud
+│   │   │   │   │   ├── ActionButtons.jsx
+│   │   │   │   │   ├── BulkActions.jsx
+│   │   │   │   │   ├── CrudHeader.jsx
+│   │   │   │   │   ├── DataTable.jsx
+│   │   │   │   │   ├── DeleteModal.jsx
+│   │   │   │   │   ├── ExportButton.jsx
+│   │   │   │   │   ├── ImportButton.jsx
+│   │   │   │   │   ├── Pagination.jsx
+│   │   │   │   │   ├── SearchBox.jsx
+│   │   │   │   │   ├── StatusToggle.jsx
+│   │   │   │   │   └── TableFilters.jsx
+│   │   │   │   ├── dashboard
+│   │   │   │   │   ├── DashboardGrid.jsx
+│   │   │   │   │   ├── DashboardHeader.jsx
+│   │   │   │   │   └── DashboardSection.jsx
+│   │   │   │   ├── forms
+│   │   │   │   │   ├── CheckboxInput.jsx
+│   │   │   │   │   ├── DateInput.jsx
+│   │   │   │   │   ├── FormSection.jsx
+│   │   │   │   │   ├── SelectInput.jsx
+│   │   │   │   │   ├── SubmitButton.jsx
+│   │   │   │   │   ├── TextInput.jsx
+│   │   │   │   │   └── TextareaInput.jsx
+│   │   │   │   └── modals
+│   │   │   │       └── ConfirmModal.jsx
+│   │   │   └── core
+│   │   │       ├── audit_logs
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Details.jsx
+│   │   │       │   │   └── List.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── branches
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Create.jsx
+│   │   │       │   │   ├── Edit.jsx
+│   │   │       │   │   └── List.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── media
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Folders.jsx
+│   │   │       │   │   ├── Library.jsx
+│   │   │       │   │   └── Upload.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── notifications
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Create.jsx
+│   │   │       │   │   ├── List.jsx
+│   │   │       │   │   └── Templates.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── permissions
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Assign.jsx
+│   │   │       │   │   └── List.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── roles
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Create.jsx
+│   │   │       │   │   ├── Edit.jsx
+│   │   │       │   │   ├── List.jsx
+│   │   │       │   │   └── RolePermissions.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── schools
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Create.jsx
+│   │   │       │   │   ├── Edit.jsx
+│   │   │       │   │   ├── List.jsx
+│   │   │       │   │   └── Profile.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── settings
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── EmailSettings.jsx
+│   │   │       │   │   ├── GeneralSettings.jsx
+│   │   │       │   │   ├── SMSSettings.jsx
+│   │   │       │   │   └── ThemeSettings.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       └── users
+│   │   │           ├── components
+│   │   │           │   └── Form.jsx
+│   │   │           ├── pages
+│   │   │           │   ├── ChangePassword.jsx
+│   │   │           │   ├── Create.jsx
+│   │   │           │   ├── Edit.jsx
+│   │   │           │   ├── List.jsx
+│   │   │           │   └── Profile.jsx
+│   │   │           ├── routes
+│   │   │           │   └── routes.jsx
+│   │   │           └── services
+│   │   │               └── service.js
+│   │   └── temp roles
+│   │       ├── accountant
+│   │       │   └── Dashboard.jsx
+│   │       ├── admin
+│   │       │   └── Dashboard.jsx
+│   │       ├── clerk
+│   │       │   └── Dashboard.jsx
+│   │       ├── cluster-admin
+│   │       │   └── Dashboard.jsx
+│   │       ├── hostel-warden
+│   │       │   └── Dashboard.jsx
+│   │       ├── librarian
+│   │       │   └── Dashboard.jsx
+│   │       ├── parent
+│   │       │   └── Dashboard.jsx
+│   │       ├── principal
+│   │       │   └── Dashboard.jsx
+│   │       ├── receptionist
+│   │       │   └── Dashboard.jsx
+│   │       ├── roleRoutes.jsx
+│   │       ├── security-supervisor
+│   │       │   └── Dashboard.jsx
+│   │       ├── student
+│   │       │   └── Dashboard.jsx
+│   │       ├── subject-teacher
+│   │       │   └── Dashboard.jsx
+│   │       ├── super-admin
+│   │       │   └── Dashboard.jsx
+│   │       ├── teacher
+│   │       │   └── Dashboard.jsx
+│   │       └── vice-principal
+│   │           └── Dashboard.jsx
+│   ├── index.css
+│   ├── main.jsx
+│   ├── modules
+│   │   ├── academics
+│   │   │   ├── AcademicCalendar.jsx
+│   │   │   ├── Assignments.jsx
+│   │   │   ├── Homework.jsx
+│   │   │   ├── Syllabus.jsx
+│   │   │   ├── classes
+│   │   │   │   ├── components
+│   │   │   │   │   └── ClassForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddClass.jsx
+│   │   │   │   │   ├── ClassesList.jsx
+│   │   │   │   │   └── EditClass.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── classRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── classService.js
+│   │   │   ├── dashboard
+│   │   │   │   ├── AcademicDashboard.jsx
+│   │   │   │   ├── components
+│   │   │   │   │   ├── AcademicAlerts.jsx
+│   │   │   │   │   ├── AcademicOverview.jsx
+│   │   │   │   │   ├── AcademicQuickActions.jsx
+│   │   │   │   │   ├── AcademicReports.jsx
+│   │   │   │   │   ├── AcademicStats.jsx
+│   │   │   │   │   └── TimetablePreview.jsx
+│   │   │   │   └── services
+│   │   │   │       └── academicDashboardService.js
+│   │   │   ├── mediums
+│   │   │   │   ├── components
+│   │   │   │   │   └── MediumForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddMedium.jsx
+│   │   │   │   │   ├── EditMedium.jsx
+│   │   │   │   │   └── MediumsList.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── mediumRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── mediumService.js
+│   │   │   ├── reports
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── ClassRoutinePrint.jsx
+│   │   │   │   │   ├── SubjectAllocationSheet.jsx
+│   │   │   │   │   └── TimetablePrint.jsx
+│   │   │   │   └── routes
+│   │   │   │       └── reportRoutes.jsx
+│   │   │   ├── routes
+│   │   │   │   └── academicsRoutes.jsx
+│   │   │   ├── sections
+│   │   │   │   ├── components
+│   │   │   │   │   └── SectionForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddSection.jsx
+│   │   │   │   │   ├── EditSection.jsx
+│   │   │   │   │   └── SectionsList.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── sectionRoutes.jsx
+│   │   │   │   ├── sectionRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── sectionService.js
+│   │   │   ├── sessions
+│   │   │   │   ├── components
+│   │   │   │   │   └── AcademicSessionForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AcademicSessionsListPage.jsx
+│   │   │   │   │   ├── AddAcademicSessionPage.jsx
+│   │   │   │   │   └── EditAcademicSessionPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── academicSessionRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── academicSessionService.js
+│   │   │   ├── streams
+│   │   │   │   ├── components
+│   │   │   │   │   └── StreamForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddStream.jsx
+│   │   │   │   │   ├── EditStream.jsx
+│   │   │   │   │   └── StreamsList.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── streamRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── streamService.js
+│   │   │   └── subjects
+│   │   │       ├── components
+│   │   │       │   └── SubjectForm.jsx
+│   │   │       ├── pages
+│   │   │       │   ├── AddSubject.jsx
+│   │   │       │   ├── EditSubject.jsx
+│   │   │       │   └── SubjectsList.jsx
+│   │   │       ├── routes
+│   │   │       │   └── subjectRoutes.jsx
+│   │   │       └── services
+│   │   │           └── subjectService.js
+│   │   ├── accounts
+│   │   │   ├── auth
+│   │   │   │   ├── context
+│   │   │   │   │   └── AuthContext.jsx
+│   │   │   │   ├── hooks
+│   │   │   │   │   └── useAuth.js
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── ForgotPasswordPage.jsx
+│   │   │   │   │   ├── LoginPage.jsx
+│   │   │   │   │   └── ResetPasswordPage.jsx
+│   │   │   │   └── services
+│   │   │   │       └── authService.js
+│   │   │   ├── permissions
+│   │   │   │   ├── components
+│   │   │   │   │   └── PermissionForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddPermissionPage.jsx
+│   │   │   │   │   ├── EditPermissionPage.jsx
+│   │   │   │   │   └── PermissionsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── permissionRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── permissionService.js
+│   │   │   ├── role_permissions
+│   │   │   │   ├── components
+│   │   │   │   │   └── RolePermissionForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   └── RolePermissionsPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── rolePermissionRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── rolePermissionsService.js
+│   │   │   ├── roles
+│   │   │   │   ├── components
+│   │   │   │   │   └── RoleForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddRolePage.jsx
+│   │   │   │   │   ├── EditRolePage.jsx
+│   │   │   │   │   └── RolesListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── roleRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── roleService.js
+│   │   │   ├── routes
+│   │   │   │   └── accountsRoutes.jsx
+│   │   │   ├── system-modules
+│   │   │   │   ├── components
+│   │   │   │   │   └── ModuleForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddModulePage.jsx
+│   │   │   │   │   ├── EditModulePage.jsx
+│   │   │   │   │   └── ModulesListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── systemModulesRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── system-modulesService.js
+│   │   │   ├── user_permissions
+│   │   │   │   ├── pages
+│   │   │   │   │   └── UserPermissionsPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── userPermissionRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── userPermissionsService.js
+│   │   │   ├── user_roles
+│   │   │   │   ├── UserRolesPage.jsx
+│   │   │   │   ├── components
+│   │   │   │   │   └── UserRoleForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddUserRolePage.jsx
+│   │   │   │   │   ├── EditUserRolePage.jsx
+│   │   │   │   │   └── UserRolesListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── userRoleRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── userRoleService.js
+│   │   │   └── users
+│   │   │       ├── components
+│   │   │       │   └── UserForm.jsx
+│   │   │       ├── pages
+│   │   │       │   ├── AddUserPage.jsx
+│   │   │       │   ├── EditUserPage.jsx
+│   │   │       │   ├── UserProfilePage.jsx
+│   │   │       │   └── UsersListPage.jsx
+│   │   │       ├── routes
+│   │   │       │   └── userRoutes.jsx
+│   │   │       └── services
+│   │   │           └── userService.js
+│   │   ├── associations
+│   │   │   ├── association_meetings
+│   │   │   │   ├── components
+│   │   │   │   │   ├── AssociationMeetingForm.jsx
+│   │   │   │   │   └── AssociationMeetingTable.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AssociationMeetingCreatePage.jsx
+│   │   │   │   │   ├── AssociationMeetingDetailPage.jsx
+│   │   │   │   │   ├── AssociationMeetingEditPage.jsx
+│   │   │   │   │   └── AssociationMeetingListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── associationMeetingRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── associationMeetingService.jsx
+│   │   │   ├── association_members
+│   │   │   │   ├── components
+│   │   │   │   │   ├── AssociationMemberForm.jsx
+│   │   │   │   │   └── AssociationMemberTable.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AssociationMemberCreatePage.jsx
+│   │   │   │   │   ├── AssociationMemberDetailPage.jsx
+│   │   │   │   │   ├── AssociationMemberEditPage.jsx
+│   │   │   │   │   └── AssociationMemberListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── associationMemberRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── associationMemberService.jsx
+│   │   │   ├── association_roles
+│   │   │   │   ├── components
+│   │   │   │   │   ├── AssociationRoleForm.jsx
+│   │   │   │   │   └── AssociationRoleTable.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AssociationRoleCreatePage.jsx
+│   │   │   │   │   ├── AssociationRoleDetailPage.jsx
+│   │   │   │   │   ├── AssociationRoleEditPage.jsx
+│   │   │   │   │   └── AssociationRoleListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── associationRoleRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── associationRoleService.jsx
+│   │   │   ├── associations
+│   │   │   │   ├── components
+│   │   │   │   │   ├── AssociationForm.jsx
+│   │   │   │   │   └── AssociationTable.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AssociationCreatePage.jsx
+│   │   │   │   │   ├── AssociationDetailPage.jsx
+│   │   │   │   │   ├── AssociationEditPage.jsx
+│   │   │   │   │   └── AssociationListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── associationRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── associationService.jsx
+│   │   │   ├── extracurricular_activities
+│   │   │   │   ├── components
+│   │   │   │   ├── pages
+│   │   │   │   ├── routes
+│   │   │   │   │   └── extracurricularActivityRoutes.jsx
+│   │   │   │   └── services
+│   │   │   ├── routes
+│   │   │   │   └── associationModuleRoutes.jsx
+│   │   │   ├── smc_members
+│   │   │   │   ├── components
+│   │   │   │   │   └── SMCMemberForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── SMCMemberCreate.jsx
+│   │   │   │   │   ├── SMCMemberEdit.jsx
+│   │   │   │   │   ├── SMCMemberView.jsx
+│   │   │   │   │   └── SMCMembersList.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── smcMemberRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── smcMemberService.js
+│   │   │   ├── staff_association_role_assignments
+│   │   │   │   ├── components
+│   │   │   │   ├── pages
+│   │   │   │   ├── routes
+│   │   │   │   └── services
+│   │   │   └── student_association_role_assignments
+│   │   │       ├── components
+│   │   │       ├── pages
+│   │   │       ├── routes
+│   │   │       └── services
+│   │   ├── cluster
+│   │   │   ├── components
+│   │   │   │   └── ClusterForm.jsx
+│   │   │   ├── pages
+│   │   │   │   ├── ClusterCreatePage.jsx
+│   │   │   │   ├── ClusterEditPage.jsx
+│   │   │   │   ├── ClusterViewPage.jsx
+│   │   │   │   └── ClustersListPage.jsx
+│   │   │   ├── routes
+│   │   │   │   └── clusterRoutes.jsx
+│   │   │   └── services
+│   │   │       └── clusterService.js
+│   │   ├── communication
+│   │   │   ├── Circulars.jsx
+│   │   │   ├── Emails.jsx
+│   │   │   ├── Notices.jsx
+│   │   │   ├── Notifications.jsx
+│   │   │   ├── SMS.jsx
+│   │   │   ├── circulars
+│   │   │   │   ├── components
+│   │   │   │   │   └── CircularForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddCircularPage.jsx
+│   │   │   │   │   ├── CircularsListPage.jsx
+│   │   │   │   │   └── EditCircularPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── circularRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── circularService.js
+│   │   │   ├── communication-categories
+│   │   │   │   ├── components
+│   │   │   │   │   └── CommunicationCategoryForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddCommunicationCategoryPage.jsx
+│   │   │   │   │   ├── CommunicationCategoriesListPage.jsx
+│   │   │   │   │   └── EditCommunicationCategoryPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── communicationCategoryRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── communicationCategoryService.js
+│   │   │   ├── communication-templates
+│   │   │   │   ├── components
+│   │   │   │   │   └── CommunicationTemplateForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddCommunicationTemplatePage.jsx
+│   │   │   │   │   ├── CommunicationTemplatesListPage.jsx
+│   │   │   │   │   └── EditCommunicationTemplatePage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── communicationTemplateRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── communicationTemplateService.js
+│   │   │   ├── dummy notices announcements
+│   │   │   │   ├── components
+│   │   │   │   │   └── AnnouncementForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddAnnouncementPage.jsx
+│   │   │   │   │   ├── AnnouncementsListPage.jsx
+│   │   │   │   │   └── EditAnnouncementPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── announcementRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── announcementService.js
+│   │   │   ├── events
+│   │   │   │   ├── components
+│   │   │   │   │   └── EventForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddEventPage.jsx
+│   │   │   │   │   ├── EditEventPage.jsx
+│   │   │   │   │   └── EventsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── eventRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── eventService.js
+│   │   │   ├── news
+│   │   │   │   ├── components
+│   │   │   │   │   └── NewsForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddNewsPage.jsx
+│   │   │   │   │   ├── EditNewsPage.jsx
+│   │   │   │   │   └── NewsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── newsRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── newsService.js
+│   │   │   ├── notices
+│   │   │   │   ├── components
+│   │   │   │   │   └── NoticeForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddNoticePage.jsx
+│   │   │   │   │   ├── EditNoticePage.jsx
+│   │   │   │   │   └── NoticesListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── noticeRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── noticeService.js
+│   │   │   ├── notifications
+│   │   │   │   ├── components
+│   │   │   │   │   └── NotificationForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddNotificationPage.jsx
+│   │   │   │   │   ├── EditNotificationPage.jsx
+│   │   │   │   │   └── NotificationsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── notificationRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── notificationService.js
+│   │   │   └── routes
+│   │   │       └── communicationRoutes.jsx
+│   │   ├── examinations
+│   │   │   ├── CreateExam.jsx
+│   │   │   ├── EditExam.jsx
+│   │   │   ├── ExamAnalytics.jsx
+│   │   │   ├── ExamsList.jsx
+│   │   │   ├── HallTickets.jsx
+│   │   │   ├── MarksEntry.jsx
+│   │   │   ├── ReportCards.jsx
+│   │   │   ├── Results.jsx
+│   │   │   ├── examService.js
+│   │   │   ├── reports
+│   │   │   │   └── pages
+│   │   │   │       ├── HallTicket.jsx
+│   │   │   │       ├── MarksheetPrint.jsx
+│   │   │   │       └── ReportCardPrint.jsx
+│   │   │   └── routes
+│   │   │       └── examinationsRoutes.jsx
+│   │   ├── fees
+│   │   │   ├── FeeCollection.jsx
+│   │   │   ├── FeeConcessions.jsx
+│   │   │   ├── FeeDashboard.jsx
+│   │   │   ├── FeeReceipts.jsx
+│   │   │   ├── FeeReports.jsx
+│   │   │   ├── FeeStructures.jsx
+│   │   │   ├── OnlinePayments.jsx
+│   │   │   ├── PendingFees.jsx
+│   │   │   ├── Scholarships.jsx
+│   │   │   ├── feesService.js
+│   │   │   └── routes
+│   │   │       └── feeroutes.jsx
+│   │   ├── finance
+│   │   │   └── routes
+│   │   │       └── financeRoutes.jsx
+│   │   ├── home
+│   │   │   ├── components
+│   │   │   │   ├── QuickActions.jsx
+│   │   │   │   └── StatCard.jsx
+│   │   │   ├── layouts
+│   │   │   │   ├── AuthLayout.jsx
+│   │   │   │   └── DashboardLayout.jsx
+│   │   │   ├── navigation
+│   │   │   │   ├── Sidebar.jsx
+│   │   │   │   ├── TopNavbar.jsx
+│   │   │   │   └── UserDropdown.jsx
+│   │   │   └── pages
+│   │   │       └── DashboardHomePage.jsx
+│   │   ├── hostel
+│   │   │   ├── HostelAttendance.jsx
+│   │   │   ├── HostelDashboard.jsx
+│   │   │   ├── HostelReports.jsx
+│   │   │   ├── HostelStudents.jsx
+│   │   │   ├── RoomAllocation.jsx
+│   │   │   ├── Rooms.jsx
+│   │   │   ├── Visitors.jsx
+│   │   │   ├── hostelService.js
+│   │   │   ├── reports
+│   │   │   │   └── pages
+│   │   │   │       ├── HostelIDCard.jsx
+│   │   │   │       ├── RoomAllocationSlip.jsx
+│   │   │   │       └── VisitorPass.jsx
+│   │   │   └── routes
+│   │   │       └── hostelRoutes.jsx
+│   │   ├── infrastructure
+│   │   │   ├── asset-categories
+│   │   │   │   ├── components
+│   │   │   │   │   └── AssetCategoryForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddAssetCategoryPage.jsx
+│   │   │   │   │   ├── AssetCategoriesListPage.jsx
+│   │   │   │   │   └── EditAssetCategoryPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── assetCategoryRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── assetCategoryService.js
+│   │   │   ├── assets
+│   │   │   │   ├── components
+│   │   │   │   │   └── AssetForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddAssetPage.jsx
+│   │   │   │   │   ├── AssetsListPage.jsx
+│   │   │   │   │   └── EditAssetPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── assetRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── assetService.js
+│   │   │   ├── auditoriums
+│   │   │   │   ├── components
+│   │   │   │   │   └── AuditoriumForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddAuditoriumPage.jsx
+│   │   │   │   │   ├── AuditoriumsListPage.jsx
+│   │   │   │   │   └── EditAuditoriumPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── auditoriumRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── auditoriumService.js
+│   │   │   ├── buildings
+│   │   │   │   ├── components
+│   │   │   │   │   └── BuildingForm.jsx
+│   │   │   │   ├── config
+│   │   │   │   │   ├── buildingColumns.js
+│   │   │   │   │   └── buildingFields.js
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddBuildingPage.jsx
+│   │   │   │   │   ├── BuildingsListPage.jsx
+│   │   │   │   │   └── EditBuildingPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── buildingRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── buildingService.js
+│   │   │   ├── buildings3
+│   │   │   │   ├── components
+│   │   │   │   │   └── BuildingForm.jsx
+│   │   │   │   ├── config
+│   │   │   │   │   ├── buildingColumns.js
+│   │   │   │   │   └── buildingFields.js
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddBuildingPage.jsx
+│   │   │   │   │   ├── BuildingsListPage.jsx
+│   │   │   │   │   └── EditBuildingPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── buildingRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── buildingService.js
+│   │   │   ├── classrooms
+│   │   │   │   ├── components
+│   │   │   │   │   └── ClassroomForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddClassroom.jsx
+│   │   │   │   │   ├── ClassroomsList.jsx
+│   │   │   │   │   └── EditClassroom.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── classroomRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── classroomService.js
+│   │   │   ├── classrooms2
+│   │   │   │   ├── components
+│   │   │   │   │   └── ClassroomForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddClassroomPage.jsx
+│   │   │   │   │   ├── ClassroomsListPage.jsx
+│   │   │   │   │   └── EditClassroomPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── classroomRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── classroomService.js
+│   │   │   ├── facilities
+│   │   │   │   ├── components
+│   │   │   │   │   └── FacilityForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddFacilityPage.jsx
+│   │   │   │   │   ├── EditFacilityPage.jsx
+│   │   │   │   │   └── FacilitiesListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── facilityRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── facilityService.js
+│   │   │   ├── floors
+│   │   │   │   ├── components
+│   │   │   │   │   └── FloorForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddFloorPage.jsx
+│   │   │   │   │   ├── EditFloorPage.jsx
+│   │   │   │   │   └── FloorsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── floorRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── floorService.js
+│   │   │   ├── laboratories
+│   │   │   │   ├── components
+│   │   │   │   │   └── LaboratoryForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddLaboratoryPage.jsx
+│   │   │   │   │   ├── EditLaboratoryPage.jsx
+│   │   │   │   │   └── LaboratoriesListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── laboratoryRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── laboratoryService.js
+│   │   │   ├── libraries
+│   │   │   │   ├── components
+│   │   │   │   │   └── LibraryForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddLibraryPage.jsx
+│   │   │   │   │   ├── EditLibraryPage.jsx
+│   │   │   │   │   └── LibrariesListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── libraryRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── libraryService.js
+│   │   │   ├── maintenance-records
+│   │   │   │   ├── components
+│   │   │   │   │   └── MaintenanceRecordForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddMaintenanceRecordPage.jsx
+│   │   │   │   │   ├── EditMaintenanceRecordPage.jsx
+│   │   │   │   │   └── MaintenanceRecordsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── maintenanceRecordRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── maintenanceRecordService.js
+│   │   │   ├── playgrounds
+│   │   │   │   ├── components
+│   │   │   │   │   └── PlaygroundForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddPlaygroundPage.jsx
+│   │   │   │   │   ├── EditPlaygroundPage.jsx
+│   │   │   │   │   └── PlaygroundsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── playgroundRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── playgroundService.js
+│   │   │   ├── rooms
+│   │   │   │   ├── components
+│   │   │   │   │   └── RoomForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddRoomPage.jsx
+│   │   │   │   │   ├── EditRoomPage.jsx
+│   │   │   │   │   └── RoomsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── roomRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── roomService.js
+│   │   │   └── routes
+│   │   │       └── infrastructureRoutes.jsx
+│   │   ├── library
+│   │   │   ├── LibraryReports.jsx
+│   │   │   ├── ReturnBook.jsx
+│   │   │   ├── books
+│   │   │   │   ├── AddBook.jsx
+│   │   │   │   ├── BooksList.jsx
+│   │   │   │   └── EditBook.jsx
+│   │   │   ├── libraryService.js
+│   │   │   └── routes
+│   │   │       └── libraryRoutes.jsx
+│   │   ├── moduleRoutes.jsx
+│   │   ├── reports
+│   │   │   ├── ReportsHome.jsx
+│   │   │   ├── pages
+│   │   │   │   ├── AdmissionTrendReport.jsx
+│   │   │   │   ├── CategoryWiseStudents.jsx
+│   │   │   │   ├── ClassWiseAttendanceSummary.jsx
+│   │   │   │   ├── DepartmentWiseStaffSummary.jsx
+│   │   │   │   ├── FeeCollectionSummary.jsx
+│   │   │   │   ├── FreePeriodsAnalysis.jsx
+│   │   │   │   ├── GenderDistributionReport.jsx
+│   │   │   │   ├── HostelOccupancyReport.jsx
+│   │   │   │   ├── LibraryUsageAnalytics.jsx
+│   │   │   │   ├── LowAttendanceStudents.jsx
+│   │   │   │   ├── MonthlyIncomeReport.jsx
+│   │   │   │   ├── MostIssuedBooksReport.jsx
+│   │   │   │   ├── OutstandingFeesReport.jsx
+│   │   │   │   ├── OverdueBooksAnalytics.jsx
+│   │   │   │   ├── RouteWiseStudentsReport.jsx
+│   │   │   │   ├── SectionWiseStudentsReport.jsx
+│   │   │   │   ├── StaffAttendanceAnalytics.jsx
+│   │   │   │   ├── StudentPerformanceAnalytics.jsx
+│   │   │   │   ├── StudentStrengthReport.jsx
+│   │   │   │   ├── SubjectPerformanceReport.jsx
+│   │   │   │   ├── SubjectStrengthReport.jsx
+│   │   │   │   ├── TeacherWorkloadAnalytics.jsx
+│   │   │   │   ├── TeacherWorkloadReport.jsx
+│   │   │   │   ├── TimetableUtilizationReport.jsx
+│   │   │   │   └── VacancyReport.jsx
+│   │   │   ├── reportService.js
+│   │   │   ├── school
+│   │   │   │   ├── BPLReport.jsx
+│   │   │   │   ├── CBSEEnrollment.jsx
+│   │   │   │   ├── CWSNReport.jsx
+│   │   │   │   ├── StudentStrength.jsx
+│   │   │   │   ├── SubjectStrength.jsx
+│   │   │   │   ├── SubjectWiseStudents.jsx
+│   │   │   │   └── TimetableReport.jsx
+│   │   │   ├── section
+│   │   │   │   ├── BankReport.jsx
+│   │   │   │   ├── RollCall.jsx
+│   │   │   │   ├── SignInSheet.jsx
+│   │   │   │   └── StudentSubjects.jsx
+│   │   │   └── staff
+│   │   │       ├── ClassInchargeReport.jsx
+│   │   │       ├── StaffSummary.jsx
+│   │   │       └── TeacherAttendance.jsx
+│   │   ├── schools
+│   │   │   ├── about-schools
+│   │   │   │   ├── components
+│   │   │   │   │   └── AboutSchoolForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AboutSchoolListPage.jsx
+│   │   │   │   │   ├── AddAboutSchoolPage.jsx
+│   │   │   │   │   └── EditAboutSchoolPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── aboutSchoolRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── aboutSchoolService.js
+│   │   │   ├── branches
+│   │   │   │   ├── components
+│   │   │   │   │   └── BranchForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddBranchPage.jsx
+│   │   │   │   │   ├── BranchesListPage.jsx
+│   │   │   │   │   └── EditBranchPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── branchRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── branchService.js
+│   │   │   ├── components
+│   │   │   │   └── SchoolForm.jsx
+│   │   │   ├── galleries
+│   │   │   │   ├── components
+│   │   │   │   │   └── GalleryForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddGalleryPage.jsx
+│   │   │   │   │   ├── EditGalleryPage.jsx
+│   │   │   │   │   └── GalleriesListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── galleryRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── galleryService.js
+│   │   │   ├── pages
+│   │   │   │   ├── SchoolCreatePage.jsx
+│   │   │   │   ├── SchoolEditPage.jsx
+│   │   │   │   ├── SchoolViewPage.jsx
+│   │   │   │   └── SchoolsListPage.jsx
+│   │   │   ├── principals
+│   │   │   │   ├── components
+│   │   │   │   │   └── PrincipalForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddPrincipalPage.jsx
+│   │   │   │   │   ├── EditPrincipalPage.jsx
+│   │   │   │   │   └── PrincipalsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── principalRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── principalService.js
+│   │   │   ├── routes
+│   │   │   │   └── schoolsRoutes.jsx
+│   │   │   ├── school-settings
+│   │   │   │   ├── components
+│   │   │   │   │   └── SchoolSettingForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddSchoolSettingPage.jsx
+│   │   │   │   │   ├── EditSchoolSettingPage.jsx
+│   │   │   │   │   └── SchoolSettingsListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── schoolSettingRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── schoolSettingService.js
+│   │   │   ├── schools
+│   │   │   │   ├── components
+│   │   │   │   │   └── SchoolForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddSchoolPage.jsx
+│   │   │   │   │   ├── EditSchoolPage.jsx
+│   │   │   │   │   └── SchoolListPage.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── schoolRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── schoolService.js
+│   │   │   └── services
+│   │   │       └── schoolService.js
+│   │   ├── settings
+│   │   │   ├── BackupRestore.jsx
+│   │   │   ├── PaymentGateway.jsx
+│   │   │   ├── Permissions.jsx
+│   │   │   ├── SMSSettings.jsx
+│   │   │   ├── SchoolSettings.jsx
+│   │   │   ├── SessionSettings.jsx
+│   │   │   └── UserRoles.jsx
+│   │   ├── staff
+│   │   │   ├── LeaveManagement.jsx
+│   │   │   ├── SalaryManagement.jsx
+│   │   │   ├── StaffProfile.jsx
+│   │   │   ├── class-incharge
+│   │   │   │   ├── components
+│   │   │   │   │   └── ClassInchargeForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddClassIncharge.jsx
+│   │   │   │   │   ├── ClassInchargeList.jsx
+│   │   │   │   │   └── EditClassIncharge.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── classInchargeRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── classInchargeService.js
+│   │   │   ├── dashboard
+│   │   │   │   ├── RecentAttendance.jsx
+│   │   │   │   ├── StaffDashboard.jsx
+│   │   │   │   ├── StaffStats.jsx
+│   │   │   │   └── dashboardService.js
+│   │   │   ├── post-types
+│   │   │   │   ├── components
+│   │   │   │   │   └── PostTypeForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddPostType.jsx
+│   │   │   │   │   ├── EditPostType.jsx
+│   │   │   │   │   └── PostTypesList.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── postTypeRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── postTypeService.js
+│   │   │   ├── profiles
+│   │   │   │   ├── components
+│   │   │   │   │   └── StaffForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddStaff.jsx
+│   │   │   │   │   ├── EditStaff.jsx
+│   │   │   │   │   ├── StaffList.jsx
+│   │   │   │   │   └── StaffProfile.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── staffProfileRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── staffService.js
+│   │   │   ├── reports
+│   │   │   │   ├── AttendanceReport.jsx
+│   │   │   │   ├── StaffReport.jsx
+│   │   │   │   ├── VacancyReport.jsx
+│   │   │   │   ├── WorkloadReport.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AppointmentLetter.jsx
+│   │   │   │   │   ├── ExperienceCertificate.jsx
+│   │   │   │   │   ├── SalarySlip.jsx
+│   │   │   │   │   └── StaffIDCard.jsx
+│   │   │   │   ├── reportsService.js
+│   │   │   │   └── routes
+│   │   │   │       └── reportRoutes.jsx
+│   │   │   ├── routes
+│   │   │   │   └── staffRoutes.jsx
+│   │   │   ├── sanctioned-posts
+│   │   │   │   ├── components
+│   │   │   │   │   └── SanctionedPostForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddSanctionedPost.jsx
+│   │   │   │   │   ├── EditSanctionedPost.jsx
+│   │   │   │   │   └── SanctionedPostsList.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── sanctionedPostRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── sanctionedPostService.js
+│   │   │   ├── staffService.js
+│   │   │   ├── teacher-attendance
+│   │   │   │   ├── components
+│   │   │   │   │   └── TeacherAttendanceForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddTeacherAttendance.jsx
+│   │   │   │   │   ├── EditTeacherAttendance.jsx
+│   │   │   │   │   └── TeacherAttendanceList.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── teacherAttendanceRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── teacherAttendanceService.js
+│   │   │   └── teacher-timetable
+│   │   │       ├── TeacherFreePeriods.jsx
+│   │   │       ├── TeacherTimetable.jsx
+│   │   │       ├── TeacherWorkload.jsx
+│   │   │       ├── teacherTimetableRoutes.jsx
+│   │   │       └── teacherTimetableService.js
+│   │   ├── students
+│   │   │   ├── PromoteStudents.jsx
+│   │   │   ├── StudentAttendance.jsx
+│   │   │   ├── StudentCertificates.jsx
+│   │   │   ├── StudentIDCards.jsx
+│   │   │   ├── StudentReports.jsx
+│   │   │   ├── reports
+│   │   │   │   ├── AdmissionFormPrint.jsx
+│   │   │   │   ├── BonafideCertificate.jsx
+│   │   │   │   ├── CharacterCertificate.jsx
+│   │   │   │   ├── StudentIDCard.jsx
+│   │   │   │   ├── TransferCertificate.jsx
+│   │   │   │   ├── roll-call
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── RollCallActions.jsx
+│   │   │   │   │   │   ├── RollCallFilters.jsx
+│   │   │   │   │   │   ├── RollCallHeader.jsx
+│   │   │   │   │   │   ├── RollCallTable.jsx
+│   │   │   │   │   │   └── RollCallToolbar.jsx
+│   │   │   │   │   ├── exports
+│   │   │   │   │   │   ├── exportRollCallExcel.js
+│   │   │   │   │   │   ├── exportRollCallPdf.js
+│   │   │   │   │   │   └── printRollCall.js
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── RollCallPrintPage.jsx
+│   │   │   │   │   │   └── RollCallReportPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── rollCallRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── rollCallService.js
+│   │   │   │   ├── routes
+│   │   │   │   │   └── reportsRoutes.jsx
+│   │   │   │   └── student-strength
+│   │   │   │       ├── pages
+│   │   │   │       │   └── StudentStrengthReport.jsx
+│   │   │   │       ├── routes
+│   │   │   │       │   └── studentStrengthRoutes.jsx
+│   │   │   │       └── services
+│   │   │   │           └── studentStrengthService.js
+│   │   │   ├── routes
+│   │   │   │   └── studentsRoutes.jsx
+│   │   │   └── studentsList
+│   │   │       ├── components
+│   │   │       │   └── StudentForm.jsx
+│   │   │       ├── pages
+│   │   │       │   ├── AddStudent.jsx
+│   │   │       │   ├── EditStudent.jsx
+│   │   │       │   ├── StudentProfile.jsx
+│   │   │       │   └── StudentsList.jsx
+│   │   │       ├── routes
+│   │   │       │   └── studentListRoutes.jsx
+│   │   │       └── services
+│   │   │           └── studentService.js
+│   │   ├── timetable
+│   │   │   ├── ClassTimetable.jsx
+│   │   │   ├── ExamTimetable.jsx
+│   │   │   ├── TeacherTimetable.jsx
+│   │   │   ├── pages
+│   │   │   │   ├── CreateTimetable.jsx
+│   │   │   │   ├── EditTimetable.jsx
+│   │   │   │   └── TimetableList.jsx
+│   │   │   ├── routes
+│   │   │   │   └── timetableRoutes.jsx
+│   │   │   └── timetableService.js
+│   │   ├── timetables
+│   │   │   ├── class-subjects
+│   │   │   │   ├── components
+│   │   │   │   │   └── ClassSubjectForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddClassSubject.jsx
+│   │   │   │   │   ├── ClassSubjectsList.jsx
+│   │   │   │   │   └── EditClassSubject.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── classSubjectRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── classSubjectService.js
+│   │   │   ├── days
+│   │   │   │   ├── components
+│   │   │   │   │   └── DayForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddDay.jsx
+│   │   │   │   │   ├── DaysList.jsx
+│   │   │   │   │   └── EditDay.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── dayRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── dayService.js
+│   │   │   ├── timetable
+│   │   │   │   ├── components
+│   │   │   │   │   └── TimetableForm.jsx
+│   │   │   │   ├── pages
+│   │   │   │   │   ├── AddTimetable.jsx
+│   │   │   │   │   ├── EditTimetable.jsx
+│   │   │   │   │   ├── GenerateTimetable.jsx
+│   │   │   │   │   └── TimetableList.jsx
+│   │   │   │   ├── routes
+│   │   │   │   │   └── timetableRoutes.jsx
+│   │   │   │   └── services
+│   │   │   │       └── timetableService.js
+│   │   │   └── timetable-slots
+│   │   │       ├── components
+│   │   │       │   └── TimetableSlotForm.jsx
+│   │   │       ├── pages
+│   │   │       │   ├── AddTimetableSlot.jsx
+│   │   │       │   ├── EditTimetableSlot.jsx
+│   │   │       │   └── TimetableSlotsList.jsx
+│   │   │       ├── routes
+│   │   │       │   └── timetableSlotRoutes.jsx
+│   │   │       └── services
+│   │   │           └── timetableSlotService.js
+│   │   └── transport
+│   │       ├── AddVehicle.jsx
+│   │       ├── Drivers.jsx
+│   │       ├── EditVehicle.jsx
+│   │       ├── PickupPoints.jsx
+│   │       ├── Routes.jsx
+│   │       ├── TransportReports.jsx
+│   │       ├── VehiclesList.jsx
+│   │       ├── drivers
+│   │       │   ├── components
+│   │       │   │   └── DriverForm.jsx
+│   │       │   ├── pages
+│   │       │   │   ├── DriverCreatePage.jsx
+│   │       │   │   ├── DriverEditPage.jsx
+│   │       │   │   └── DriverListPage.jsx
+│   │       │   ├── routes
+│   │       │   │   └── driverRoutes.jsx
+│   │       │   └── services
+│   │       │       └── driverService.js
+│   │       ├── routes
+│   │       │   └── tansportRoutes.jsx
+│   │       ├── transportService.js
+│   │       ├── transport_assignments
+│   │       │   ├── components
+│   │       │   │   └── TransportAssignmentForm.jsx
+│   │       │   ├── pages
+│   │       │   │   ├── TransportAssignmentCreatePage.jsx
+│   │       │   │   ├── TransportAssignmentEditPage.jsx
+│   │       │   │   └── TransportAssignmentListPage.jsx
+│   │       │   ├── routes
+│   │       │   │   └── transportAssignmentRoutes.jsx
+│   │       │   └── services
+│   │       │       └── transportAssignmentService.js
+│   │       ├── transport_routes
+│   │       │   ├── components
+│   │       │   │   └── TransportRouteForm.jsx
+│   │       │   ├── pages
+│   │       │   │   ├── TransportRouteCreatePage.jsx
+│   │       │   │   ├── TransportRouteEditPage.jsx
+│   │       │   │   └── TransportRouteListPage.jsx
+│   │       │   ├── routes
+│   │       │   │   └── transportRouteRoutes.jsx
+│   │       │   └── services
+│   │       │       └── transportRouteService.js
+│   │       └── vehicles
+│   │           ├── components
+│   │           │   └── Form.jsx
+│   │           ├── pages
+│   │           │   ├── Create.jsx
+│   │           │   ├── Edit.jsx
+│   │           │   └── List.jsx
+│   │           ├── routes
+│   │           │   └── vehicleRoutes.jsx
+│   │           └── services
+│   │               └── Service.js
+│   ├── pages
+│   │   └── ComponentShowcasePage.jsx
+│   ├── routes
+│   │   ├── AppRoutes.jsx
+│   │   ├── ProtectedRoute.jsx
+│   │   └── RoleBasedRoute.jsx
+│   ├── services
+│   │   └── api
+│   │       ├── authService.js
+│   │       ├── axios.js
+│   │       └── index.js
+│   ├── shared
+│   │   └── components
+│   │       ├── cards
+│   │       │   ├── AchievementCard.jsx
+│   │       │   ├── GalleryCard.jsx
+│   │       │   ├── NewsCard.jsx
+│   │       │   └── StaffCard.jsx
+│   │       ├── common
+│   │       │   ├── CTAButton.jsx
+│   │       │   ├── HeroSection.jsx
+│   │       │   ├── SectionTitle.jsx
+│   │       │   └── crud
+│   │       │       ├── CrudCreatePage.jsx
+│   │       │       ├── CrudEditPage.jsx
+│   │       │       └── CrudListPage.jsx
+│   │       ├── forms
+│   │       │   ├── AdmissionForm.jsx
+│   │       │   ├── InquiryForm.jsx
+│   │       │   ├── LoginForm.jsx
+│   │       │   └── SearchForm.jsx
+│   │       └── tables
+│   │           ├── StaffSummaryTable.jsx
+│   │           ├── StudentStrengthTable.jsx
+│   │           ├── SubjectStrengthTable.jsx
+│   │           └── TimetableTable.jsx
+│   └── website
+│       ├── components
+│       │   ├── Footer.jsx
+│       │   └── Navbar.jsx
+│       ├── layouts
+│       │   └── WebsiteLayout.jsx
+│       ├── pages
+│       │   ├── Admissions.jsx
+│       │   ├── CampusLife.jsx
+│       │   ├── Contact.jsx
+│       │   ├── Home.jsx
+│       │   ├── about
+│       │   │   ├── Leadership.jsx
+│       │   │   ├── MandatoryDisclosure.jsx
+│       │   │   └── Overview.jsx
+│       │   ├── academics
+│       │   │   ├── AcademicStructure.jsx
+│       │   │   ├── Curriculum.jsx
+│       │   │   └── Timetable.jsx
+│       │   └── updates
+│       │       ├── Downloads.jsx
+│       │       └── NewsEvents.jsx
+│       └── routes
+│           └── WebsiteRoutes.jsx
+├── structure.txt
+└── vite.config.js

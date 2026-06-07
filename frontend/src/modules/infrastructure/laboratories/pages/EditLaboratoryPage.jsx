@@ -1,4 +1,4 @@
-import CrudEditPage from '../../../../shared/components/common/crud/CrudEditPage';
+import CrudEditPage from '../../../shared/components/crud/CrudEditPage';
 
 import LaboratoryForm from '../components/LaboratoryForm';
 

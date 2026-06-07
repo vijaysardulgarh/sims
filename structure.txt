@@ -155,72 +155,6 @@ sims
 │   │   │       ├── serializers.py
 │   │   │       ├── urls.py
 │   │   │       └── views.py
-│   │   ├── association
-│   │   │   ├── __init__.py
-│   │   │   ├── admin.py
-│   │   │   ├── apps.py
-│   │   │   ├── extracurricular_activities
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── admin.py
-│   │   │   │   ├── models.py
-│   │   │   │   ├── serializers.py
-│   │   │   │   ├── urls.py
-│   │   │   │   └── views.py
-│   │   │   ├── groups
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── admin.py
-│   │   │   │   ├── models.py
-│   │   │   │   ├── serializers.py
-│   │   │   │   ├── urls.py
-│   │   │   │   └── views.py
-│   │   │   ├── meetings
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── admin.py
-│   │   │   │   ├── models.py
-│   │   │   │   ├── serializers.py
-│   │   │   │   ├── urls.py
-│   │   │   │   └── views.py
-│   │   │   ├── members
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── admin.py
-│   │   │   │   ├── models.py
-│   │   │   │   ├── serializers.py
-│   │   │   │   ├── urls.py
-│   │   │   │   └── views.py
-│   │   │   ├── models.py
-│   │   │   ├── roles
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── admin.py
-│   │   │   │   ├── models.py
-│   │   │   │   ├── serializers.py
-│   │   │   │   ├── urls.py
-│   │   │   │   └── views.py
-│   │   │   ├── smc
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── admin.py
-│   │   │   │   ├── models.py
-│   │   │   │   ├── serializers.py
-│   │   │   │   ├── urls.py
-│   │   │   │   └── views.py
-│   │   │   ├── staff_association_role_assignments
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── admin.py
-│   │   │   │   ├── models.py
-│   │   │   │   ├── serializers.py
-│   │   │   │   ├── urls.py
-│   │   │   │   └── views.py
-│   │   │   ├── student_association_role_assignments
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── admin.py
-│   │   │   │   ├── models.py
-│   │   │   │   ├── serializers.py
-│   │   │   │   ├── urls.py
-│   │   │   │   └── views.py
-│   │   │   ├── temp admin.py
-│   │   │   ├── temp models.py
-│   │   │   ├── temp views.py
-│   │   │   ├── tests.py
-│   │   │   └── urls.py
 │   │   ├── associations
 │   │   │   ├── __init__.py
 │   │   │   ├── admin.py
@@ -653,13 +587,6 @@ sims
 │   │   │   │   ├── serializers.py
 │   │   │   │   ├── urls.py
 │   │   │   │   └── views.py
-│   │   │   ├── classrooms2
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── admin.py
-│   │   │   │   ├── models.py
-│   │   │   │   ├── serializers.py
-│   │   │   │   ├── urls.py
-│   │   │   │   └── views.py
 │   │   │   ├── facilities
 │   │   │   │   ├── __init__.py
 │   │   │   │   ├── admin.py
@@ -711,6 +638,7 @@ sims
 │   │   │   │   └── views.py
 │   │   │   ├── migrations
 │   │   │   │   ├── 0001_initial.py
+│   │   │   │   ├── 0002_alter_classroom_options_and_more.py
 │   │   │   │   └── __init__.py
 │   │   │   ├── models.py
 │   │   │   ├── playgrounds
@@ -1072,21 +1000,15 @@ sims
 │   │   │   │   └── views.py
 │   │   │   └── views.py
 │   │   └── website
-│   │       ├── __init__.py
-│   │       ├── admin
-│   │       ├── apps.py
-│   │       ├── migrations
-│   │       │   └── __init__.py
 │   │       ├── models
-│   │       ├── tests.py
-│   │       ├── urls.py
-│   │       ├── views
-│   │       └── views_extra.py
+│   │       └── views
 │   ├── config
 │   │   ├── settings.py
 │   │   └── urls.py
 │   ├── copy.bat
 │   ├── db.sqlite3
+│   ├── generate_tree.py
+│   ├── generate_tree_execute.text
 │   ├── manage.py
 │   ├── package-lock.json
 │   ├── package.json
@@ -1099,6 +1021,8 @@ sims
 │   ├── README.md
 │   ├── copy.bat
 │   ├── eslint.config.js
+│   ├── generate_tree.py
+│   ├── generate_tree_execute.text
 │   ├── index.html
 │   ├── package-lock.json
 │   ├── package.json
@@ -1409,6 +1333,17 @@ sims
 │   │   │   │   │   ├── sectionRoutes.jsx
 │   │   │   │   │   └── services
 │   │   │   │   │       └── sectionService.js
+│   │   │   │   ├── sessions
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── AcademicSessionForm.jsx
+│   │   │   │   │   ├── pages
+│   │   │   │   │   │   ├── AcademicSessionsListPage.jsx
+│   │   │   │   │   │   ├── AddAcademicSessionPage.jsx
+│   │   │   │   │   │   └── EditAcademicSessionPage.jsx
+│   │   │   │   │   ├── routes
+│   │   │   │   │   │   └── academicSessionRoutes.jsx
+│   │   │   │   │   └── services
+│   │   │   │   │       └── academicSessionService.js
 │   │   │   │   ├── streams
 │   │   │   │   │   ├── components
 │   │   │   │   │   │   └── StreamForm.jsx
@@ -2390,6 +2325,6 @@ sims
 │   │       └── routes
 │   │           └── WebsiteRoutes.jsx
 │   └── vite.config.js
-├── generate.text
 ├── generate_tree.py
+├── generate_tree_execute.text
 └── structure.txt

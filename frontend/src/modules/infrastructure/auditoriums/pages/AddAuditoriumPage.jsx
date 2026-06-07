@@ -1,4 +1,4 @@
-import CrudCreatePage from '../../../../shared/components/common/crud/CrudCreatePage';
+import CrudCreatePage from '../../../shared/components/crud/CrudCreatePage';
 
 import AuditoriumForm from '../components/AuditoriumForm';
 

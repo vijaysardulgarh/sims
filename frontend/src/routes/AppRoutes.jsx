@@ -32,7 +32,7 @@ import ProtectedRoute from "./ProtectedRoute";
 // COMPONENT SHOWCASE
 // =====================================
 
-import ComponentShowcasePage from "../pages/ComponentShowcasePage";
+
 
 // =====================================
 // APP ROUTES
@@ -51,14 +51,6 @@ const AppRoutes = () => {
                 element={<LoginPage />}
             />
 
-            {/* ============================= */}
-            {/* COMPONENT SHOWCASE */}
-            {/* ============================= */}
-
-            <Route
-                path="/component-showcase"
-                element={<ComponentShowcasePage />}
-            />
 
             {/* ============================= */}
             {/* DASHBOARD (PROTECTED) */}

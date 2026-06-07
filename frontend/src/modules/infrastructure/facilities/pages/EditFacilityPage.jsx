@@ -1,5 +1,4 @@
-import CrudEditPage from '../../../../shared/components/common/crud/CrudEditPage';
-
+import CrudEditPage from '../../../shared/components/crud/CrudEditPage';
 import FacilityForm from '../components/FacilityForm';
 
 const EditFacilityPage = () => {
