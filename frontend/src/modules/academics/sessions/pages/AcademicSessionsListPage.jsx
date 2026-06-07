@@ -11,11 +11,11 @@ import toast from "react-hot-toast";
 
 import api from "../../../../services/api/axios";
 
-import DataTable from "../../../../dashboard/shared/components/crud/DataTable";
-import ConfirmModal from "../../../../dashboard/shared/components/modals/ConfirmModal";
-import ActionButtons from "../../../../dashboard/shared/components/crud/ActionButtons";
-import CrudHeader from "../../../../dashboard/shared/components/crud/CrudHeader";
-import StatusToggle from "../../../../dashboard/shared/components/crud/StatusToggle";
+import DataTable from "@/modules/shared/components/crud/DataTable";
+import ConfirmModal from "@/modules/shared/components/dialogs/ConfirmModal";
+import ActionButtons from "@/modules/shared/components/crud/ActionButtons";
+import CrudHeader from "@/modules/shared/components/crud/CrudHeader";
+import StatusToggle from "@/modules/shared/components/crud/StatusToggle";
 
 const AcademicSessionsListPage = () => {
 

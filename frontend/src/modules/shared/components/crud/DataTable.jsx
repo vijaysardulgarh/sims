@@ -1,151 +1,157 @@
 import React from "react";
 
-import TableActionMenu
-from "./TableActionMenu";
-
 const DataTable = ({
-    columns,
-    data,
-    onView,
-    onEdit,
-    onDelete,
+  columns = [],
+  data = [],
+  currentPage = 1,
+  itemsPerPage = 40,
 }) => {
 
-    return (
+  return (
 
-        <div
-            className="
-                overflow-x-auto
-                border
-                rounded-lg
-                bg-white
-            "
-        >
+    <div className="overflow-x-auto bg-white rounded-2xl shadow">
 
-            <table className="w-full">
+      <table className="min-w-full">
 
-                <thead
-                    className="
-                        bg-gray-50
-                    "
+        {/* =========================
+            TABLE HEADER
+        ========================= */}
+
+        <thead className="bg-gray-100">
+
+          <tr>
+
+            <th
+              className="
+                px-6
+                py-4
+                text-left
+                text-sm
+                font-semibold
+                text-gray-700
+              "
+            >
+              Sr. No.
+            </th>
+
+            {
+              columns.map((column) => (
+
+                <th
+                  key={column.key}
+                  className="
+                    px-6
+                    py-4
+                    text-left
+                    text-sm
+                    font-semibold
+                    text-gray-700
+                  "
                 >
-                    <tr>
+                  {column.label}
+                </th>
 
-                        {columns.map(
-                            (column) => (
-                                <th
-                                    key={column.key}
-                                    className="
-                                        px-4
-                                        py-3
-                                        text-left
-                                        font-semibold
-                                        text-gray-700
-                                    "
-                                >
-                                    {column.label}
-                                </th>
-                            )
-                        )}
+              ))
+            }
 
-                        <th
-                            className="
-                                w-16
-                                text-center
-                            "
-                        >
-                        </th>
+          </tr>
 
-                    </tr>
-                </thead>
+        </thead>
 
-                <tbody>
+        {/* =========================
+            TABLE BODY
+        ========================= */}
 
-                    {data.length === 0 && (
+        <tbody>
 
-                        <tr>
+          {
+            data.length > 0 ? (
 
-                            <td
-                                colSpan={
-                                    columns.length + 1
-                                }
-                                className="
-                                    text-center
-                                    py-10
-                                    text-gray-500
-                                "
-                            >
-                                No records found
-                            </td>
+              data.map((row, index) => (
 
-                        </tr>
+                <tr
+                  key={row.id || index}
+                  className="
+                    border-b
+                    hover:bg-gray-50
+                  "
+                >
 
-                    )}
+                  {/* SR NO */}
 
-                    {data.map((row) => (
+                  <td
+                    className="
+                      px-6
+                      py-4
+                      text-sm
+                      font-medium
+                      text-gray-700
+                    "
+                  >
+                    {
+                      (
+                        (currentPage - 1)
+                        *
+                        itemsPerPage
+                      )
+                      +
+                      index
+                      +
+                      1
+                    }
+                  </td>
 
-                        <tr
-                            key={row.id}
-                            className="
-                                border-t
-                                hover:bg-gray-50
-                            "
-                        >
+                  {/* DYNAMIC COLUMNS */}
 
-                            {columns.map(
-                                (column) => (
+                  {
+                    columns.map((column) => (
 
-                                    <td
-                                        key={column.key}
-                                        className="
-                                            px-4
-                                            py-3
-                                        "
-                                    >
+                      <td
+                        key={`${index}-${column.key}`}
+                        className="
+                          px-6
+                          py-4
+                          text-sm
+                          text-gray-600
+                        "
+                      >
+                        {row[column.key]}
+                      </td>
 
-                                        {
-                                            column.render
-                                                ? column.render(
-                                                      row
-                                                  )
-                                                : row[
-                                                      column.key
-                                                  ]
-                                        }
+                    ))
+                  }
 
-                                    </td>
+                </tr>
 
-                                )
-                            )}
+              ))
 
-                            <td
-                                className="
-                                    px-4
-                                    py-3
-                                    text-center
-                                "
-                            >
+            ) : (
 
-                                <TableActionMenu
-                                    row={row}
-                                    onView={onView}
-                                    onEdit={onEdit}
-                                    onDelete={onDelete}
-                                />
+              <tr>
 
-                            </td>
+                <td
+                  colSpan={columns.length + 1}
+                  className="
+                    px-6
+                    py-10
+                    text-center
+                    text-gray-500
+                  "
+                >
+                  No records found
+                </td>
 
-                        </tr>
+              </tr>
 
-                    ))}
+            )
+          }
 
-                </tbody>
+        </tbody>
 
-            </table>
+      </table>
 
-        </div>
-
-    );
+    </div>
+  );
 };
 
 export default DataTable;

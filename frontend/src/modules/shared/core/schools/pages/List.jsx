@@ -5,11 +5,11 @@ import {
 
 import { useNavigate } from "react-router-dom";
 
-import CrudHeader from "@/dashboard/shared/components/crud/CrudHeader";
+import CrudHeader from "@/modules/shared/components/crud/CrudHeader";
 
-import DataTable from "@/dashboard/shared/components/crud/DataTable";
+import DataTable from "@/modules/shared/components/crud/DataTable";
 
-import SearchBox from "@/dashboard/shared/components/crud/SearchBox";
+import SearchBox from "@/modules/shared/components/crud/SearchBox";
 
 import schoolService from "../services/schoolService";
 

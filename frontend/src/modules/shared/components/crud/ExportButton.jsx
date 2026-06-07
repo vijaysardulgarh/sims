@@ -1,20 +1,36 @@
-import Button from "../ui/Button";
-
 const ExportButton = ({
-    onExport,
+
+  onClick,
+
+  label = "Export",
+
 }) => {
 
-    return (
+  return (
 
-        <Button
-            variant="secondary"
-            onClick={onExport}
-        >
-            Export
-        </Button>
+    <button
 
-    );
+      type="button"
 
+      onClick={onClick}
+
+      className="
+
+        bg-blue-600
+        hover:bg-blue-700
+        text-white
+        px-5
+        py-3
+        rounded-xl
+        font-medium
+        transition
+      "
+    >
+
+      {label}
+
+    </button>
+  );
 };
 
 export default ExportButton;

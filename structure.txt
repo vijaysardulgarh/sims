@@ -1036,60 +1036,6 @@ sims
 │   │   │   ├── hero.png
 │   │   │   ├── react.svg
 │   │   │   └── vite.svg
-│   │   ├── components
-│   │   │   ├── crud
-│   │   │   │   ├── BulkActions.jsx
-│   │   │   │   ├── CrudDrawer.jsx
-│   │   │   │   ├── CrudPage.jsx
-│   │   │   │   ├── DataTable.jsx
-│   │   │   │   ├── ExportButton.jsx
-│   │   │   │   ├── FilterBar.jsx
-│   │   │   │   ├── ImportButton.jsx
-│   │   │   │   ├── Pagination.jsx
-│   │   │   │   ├── SearchBar.jsx
-│   │   │   │   ├── StatusToggle.jsx
-│   │   │   │   └── TableActionMenu.jsx
-│   │   │   ├── dashboard
-│   │   │   │   └── StatsCard.jsx
-│   │   │   ├── dialogs
-│   │   │   │   ├── ConfirmDialog.jsx
-│   │   │   │   ├── DeleteDialog.jsx
-│   │   │   │   ├── ErrorDialog.jsx
-│   │   │   │   └── SuccessDialog.jsx
-│   │   │   ├── forms
-│   │   │   │   ├── CheckboxInput.jsx
-│   │   │   │   ├── DateInput.jsx
-│   │   │   │   ├── DateTimeInput.jsx
-│   │   │   │   ├── FileUpload.jsx
-│   │   │   │   ├── FormBuilder.jsx
-│   │   │   │   ├── ImageUpload.jsx
-│   │   │   │   ├── MultiSelectInput.jsx
-│   │   │   │   ├── NumberInput.jsx
-│   │   │   │   ├── RadioInput.jsx
-│   │   │   │   ├── SelectInput.jsx
-│   │   │   │   └── TextInput.jsx
-│   │   │   ├── layout
-│   │   │   │   ├── PageContainer.jsx
-│   │   │   │   └── PageSection.jsx
-│   │   │   └── ui
-│   │   │       ├── Avatar.jsx
-│   │   │       ├── AvatarGroup.jsx
-│   │   │       ├── Badge.jsx
-│   │   │       ├── Button.jsx
-│   │   │       ├── Card.jsx
-│   │   │       ├── Checkbox.jsx
-│   │   │       ├── EmptyState.jsx
-│   │   │       ├── InfoCard.jsx
-│   │   │       ├── Input.jsx
-│   │   │       ├── Loader.jsx
-│   │   │       ├── PageHeader.jsx
-│   │   │       ├── Select.jsx
-│   │   │       ├── SkeletonLoader.jsx
-│   │   │       ├── StatusBadge.jsx
-│   │   │       ├── Switch.jsx
-│   │   │       ├── Textarea.jsx
-│   │   │       ├── Toast.jsx
-│   │   │       └── tabs.jsx
 │   │   ├── dashboard
 │   │   │   ├── modules
 │   │   │   │   └── accounts
@@ -2012,6 +1958,64 @@ sims
 │   │   │   │   ├── SchoolSettings.jsx
 │   │   │   │   ├── SessionSettings.jsx
 │   │   │   │   └── UserRoles.jsx
+│   │   │   ├── shared
+│   │   │   │   └── components
+│   │   │   │       ├── crud
+│   │   │   │       │   ├── BulkActions.jsx
+│   │   │   │       │   ├── CrudCreatePage.jsx
+│   │   │   │       │   ├── CrudDrawer.jsx
+│   │   │   │       │   ├── CrudEditPage.jsx
+│   │   │   │       │   ├── CrudListPage.jsx
+│   │   │   │       │   ├── CrudPage.jsx
+│   │   │   │       │   ├── DataTable.jsx
+│   │   │   │       │   ├── ExportButton.jsx
+│   │   │   │       │   ├── FilterBar.jsx
+│   │   │   │       │   ├── ImportButton.jsx
+│   │   │   │       │   ├── Pagination.jsx
+│   │   │   │       │   ├── SearchBar.jsx
+│   │   │   │       │   ├── StatusToggle.jsx
+│   │   │   │       │   └── TableActionMenu.jsx
+│   │   │   │       ├── dashboard
+│   │   │   │       │   └── StatsCard.jsx
+│   │   │   │       ├── dialogs
+│   │   │   │       │   ├── ConfirmDialog.jsx
+│   │   │   │       │   ├── DeleteDialog.jsx
+│   │   │   │       │   ├── ErrorDialog.jsx
+│   │   │   │       │   └── SuccessDialog.jsx
+│   │   │   │       ├── forms
+│   │   │   │       │   ├── CheckboxInput.jsx
+│   │   │   │       │   ├── DateInput.jsx
+│   │   │   │       │   ├── DateTimeInput.jsx
+│   │   │   │       │   ├── FileUpload.jsx
+│   │   │   │       │   ├── FormBuilder.jsx
+│   │   │   │       │   ├── ImageUpload.jsx
+│   │   │   │       │   ├── MultiSelectInput.jsx
+│   │   │   │       │   ├── NumberInput.jsx
+│   │   │   │       │   ├── RadioInput.jsx
+│   │   │   │       │   ├── SelectInput.jsx
+│   │   │   │       │   └── TextInput.jsx
+│   │   │   │       ├── layout
+│   │   │   │       │   ├── PageContainer.jsx
+│   │   │   │       │   └── PageSection.jsx
+│   │   │   │       └── ui
+│   │   │   │           ├── Avatar.jsx
+│   │   │   │           ├── AvatarGroup.jsx
+│   │   │   │           ├── Badge.jsx
+│   │   │   │           ├── Button.jsx
+│   │   │   │           ├── Card.jsx
+│   │   │   │           ├── Checkbox.jsx
+│   │   │   │           ├── EmptyState.jsx
+│   │   │   │           ├── InfoCard.jsx
+│   │   │   │           ├── Input.jsx
+│   │   │   │           ├── Loader.jsx
+│   │   │   │           ├── PageHeader.jsx
+│   │   │   │           ├── Select.jsx
+│   │   │   │           ├── SkeletonLoader.jsx
+│   │   │   │           ├── StatusBadge.jsx
+│   │   │   │           ├── Switch.jsx
+│   │   │   │           ├── Textarea.jsx
+│   │   │   │           ├── Toast.jsx
+│   │   │   │           └── tabs.jsx
 │   │   │   ├── staff
 │   │   │   │   ├── LeaveManagement.jsx
 │   │   │   │   ├── SalaryManagement.jsx
@@ -2264,8 +2268,6 @@ sims
 │   │   │           │   └── vehicleRoutes.jsx
 │   │   │           └── services
 │   │   │               └── Service.js
-│   │   ├── pages
-│   │   │   └── ComponentShowcasePage.jsx
 │   │   ├── routes
 │   │   │   ├── AppRoutes.jsx
 │   │   │   ├── ProtectedRoute.jsx
@@ -2275,31 +2277,6 @@ sims
 │   │   │       ├── authService.js
 │   │   │       ├── axios.js
 │   │   │       └── index.js
-│   │   ├── shared
-│   │   │   └── components
-│   │   │       ├── cards
-│   │   │       │   ├── AchievementCard.jsx
-│   │   │       │   ├── GalleryCard.jsx
-│   │   │       │   ├── NewsCard.jsx
-│   │   │       │   └── StaffCard.jsx
-│   │   │       ├── common
-│   │   │       │   ├── CTAButton.jsx
-│   │   │       │   ├── HeroSection.jsx
-│   │   │       │   ├── SectionTitle.jsx
-│   │   │       │   └── crud
-│   │   │       │       ├── CrudCreatePage.jsx
-│   │   │       │       ├── CrudEditPage.jsx
-│   │   │       │       └── CrudListPage.jsx
-│   │   │       ├── forms
-│   │   │       │   ├── AdmissionForm.jsx
-│   │   │       │   ├── InquiryForm.jsx
-│   │   │       │   ├── LoginForm.jsx
-│   │   │       │   └── SearchForm.jsx
-│   │   │       └── tables
-│   │   │           ├── StaffSummaryTable.jsx
-│   │   │           ├── StudentStrengthTable.jsx
-│   │   │           ├── SubjectStrengthTable.jsx
-│   │   │           └── TimetableTable.jsx
 │   │   └── website
 │   │       ├── components
 │   │       │   ├── Footer.jsx
@@ -2324,6 +2301,7 @@ sims
 │   │       │       └── NewsEvents.jsx
 │   │       └── routes
 │   │           └── WebsiteRoutes.jsx
+│   ├── structure.txt
 │   └── vite.config.js
 ├── generate_tree.py
 ├── generate_tree_execute.text

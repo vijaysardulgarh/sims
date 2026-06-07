@@ -15,21 +15,21 @@ import {
 import toast from "react-hot-toast";
 
 import DataTable from
-"../../../../dashboard/shared/components/crud/DataTable";
+"../../../shared/components/crud/DataTable";
 
 import SearchBox from
-"../../../../dashboard/shared/components/crud/SearchBox";
+"../../../shared/components/crud/SearchBox";
 
 import Pagination from
-"../../../../dashboard/shared/components/crud/Pagination";
+"../../../shared/components/crud/Pagination";
 
 import CrudHeader from
-"../../../../dashboard/shared/components/crud/CrudHeader";
+"../../../shared/components/crud/CrudHeader";
 
 import ActionButtons from
-"../../../../dashboard/shared/components/crud/ActionButtons";
+"../../../shared/components/crud/ActionButtons";
 
-import ConfirmModal from "../../../../dashboard/shared/components/modals/ConfirmModal";
+import ConfirmModal from "@/modules/shared/components/dialogs/ConfirmModal";
 
 // import timetableService from
 // "../../../services/academics/timetableService";

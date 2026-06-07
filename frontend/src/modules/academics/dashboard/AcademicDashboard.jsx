@@ -25,7 +25,7 @@ import TimetablePreview from "./components/TimetablePreview";
 // SHARED COMPONENTS
 // ============================================
 
-import DashboardHeader from "../../../dashboard/shared/components/dashboard/DashboardHeader";
+import DashboardHeader from "@/modules/shared/components/dashboard/DashboardHeader";
 
 // ============================================
 // SERVICES

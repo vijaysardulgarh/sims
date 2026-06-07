@@ -1,52 +1,60 @@
-import React from "react";
-
 const Pagination = ({
-    currentPage,
-    totalPages,
-    onPageChange,
+  currentPage,
+  totalPages,
+  onPageChange,
 }) => {
 
-    return (
-        <div className="flex items-center gap-2">
+  return (
 
-            <button
-                disabled={currentPage === 1}
-                onClick={() =>
-                    onPageChange(currentPage - 1)
-                }
-                className="
-                    px-3
-                    py-1
-                    border
-                    rounded
-                "
-            >
-                Previous
-            </button>
+    <div className="flex flex-col md:flex-row items-center justify-between mt-6 gap-4">
 
-            <span>
-                Page {currentPage} of {totalPages}
-            </span>
+      {/* PAGE INFO */}
+      <p className="text-sm text-gray-500">
 
-            <button
-                disabled={
-                    currentPage === totalPages
-                }
-                onClick={() =>
-                    onPageChange(currentPage + 1)
-                }
-                className="
-                    px-3
-                    py-1
-                    border
-                    rounded
-                "
-            >
-                Next
-            </button>
+        Page {currentPage} of {totalPages}
 
-        </div>
-    );
+      </p>
+
+      {/* BUTTONS */}
+      <div className="flex gap-2">
+
+        {/* PREVIOUS */}
+        <button
+          onClick={() =>
+            onPageChange(currentPage - 1)
+          }
+          disabled={currentPage === 1}
+          className="px-4 py-2 border rounded-lg disabled:opacity-50"
+        >
+          Previous
+        </button>
+
+        {/* CURRENT PAGE */}
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+        >
+          {currentPage}
+        </button>
+
+        {/* NEXT */}
+        <button
+          onClick={() =>
+            onPageChange(currentPage + 1)
+          }
+          disabled={
+            currentPage === totalPages
+          }
+          className="px-4 py-2 border rounded-lg disabled:opacity-50"
+        >
+          Next
+        </button>
+
+      </div>
+
+    </div>
+
+  );
+
 };
 
 export default Pagination;

@@ -14,13 +14,13 @@ import {
 
 import toast from "react-hot-toast";
 
-import DataTable from "../../../../dashboard/shared/components/crud/DataTable";
-import SearchBox from "../../../../dashboard/shared/components/crud/SearchBox";
-import CrudHeader from "../../../../dashboard/shared/components/crud/CrudHeader";
+import DataTable from "@/modules/shared/components/crud/DataTable";
+import SearchBox from "@/modules/shared/components/crud/SearchBox";
+import CrudHeader from "@/modules/shared/components/crud/CrudHeader";
 
-import Pagination from "../../../../dashboard/shared/components/crud/Pagination";
-import ActionButtons from "../../../../dashboard/shared/components/crud/ActionButtons";
-import ConfirmModal from "../../../../dashboard/shared/components/modals/ConfirmModal";
+import Pagination from "@/modules/shared/components/crud/Pagination";
+import ActionButtons from "@/modules/shared/components/crud/ActionButtons";
+import ConfirmModal from "@/modules/shared/components/dialogs/ConfirmModal";
 
 import subjectService from "../services/subjectService";
 

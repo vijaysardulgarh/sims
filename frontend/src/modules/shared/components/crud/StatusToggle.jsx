@@ -1,44 +1,28 @@
 const StatusToggle = ({
-    checked,
-    onChange,
+  status,
+  onToggle,
 }) => {
-    return (
-        <button
-            type="button"
-            onClick={onChange}
-            className={`
-                relative
-                inline-flex
-                h-6
-                w-11
-                items-center
-                rounded-full
-                transition
-                ${
-                    checked
-                        ? "bg-green-600"
-                        : "bg-gray-300"
-                }
-            `}
-        >
-            <span
-                className={`
-                    inline-block
-                    h-4
-                    w-4
-                    transform
-                    rounded-full
-                    bg-white
-                    transition
-                    ${
-                        checked
-                            ? "translate-x-6"
-                            : "translate-x-1"
-                    }
-                `}
-            />
-        </button>
-    );
+
+  return (
+
+    <button
+      onClick={onToggle}
+      className={`px-3 py-1 rounded-full text-sm font-medium transition
+
+        ${
+          status === "Active"
+            ? "bg-green-100 text-green-700 hover:bg-green-200"
+            : "bg-red-100 text-red-700 hover:bg-red-200"
+        }
+      `}
+    >
+
+      {status}
+
+    </button>
+
+  );
+
 };
 
 export default StatusToggle;
