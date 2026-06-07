@@ -7,6 +7,7 @@ frontend
 ├── generate_tree.py
 ├── generate_tree_execute.text
 ├── index.html
+├── jsconfig.json
 ├── package-lock.json
 ├── package.json
 ├── public
@@ -19,60 +20,6 @@ frontend
 │   │   ├── hero.png
 │   │   ├── react.svg
 │   │   └── vite.svg
-│   ├── components
-│   │   ├── crud
-│   │   │   ├── BulkActions.jsx
-│   │   │   ├── CrudDrawer.jsx
-│   │   │   ├── CrudPage.jsx
-│   │   │   ├── DataTable.jsx
-│   │   │   ├── ExportButton.jsx
-│   │   │   ├── FilterBar.jsx
-│   │   │   ├── ImportButton.jsx
-│   │   │   ├── Pagination.jsx
-│   │   │   ├── SearchBar.jsx
-│   │   │   ├── StatusToggle.jsx
-│   │   │   └── TableActionMenu.jsx
-│   │   ├── dashboard
-│   │   │   └── StatsCard.jsx
-│   │   ├── dialogs
-│   │   │   ├── ConfirmDialog.jsx
-│   │   │   ├── DeleteDialog.jsx
-│   │   │   ├── ErrorDialog.jsx
-│   │   │   └── SuccessDialog.jsx
-│   │   ├── forms
-│   │   │   ├── CheckboxInput.jsx
-│   │   │   ├── DateInput.jsx
-│   │   │   ├── DateTimeInput.jsx
-│   │   │   ├── FileUpload.jsx
-│   │   │   ├── FormBuilder.jsx
-│   │   │   ├── ImageUpload.jsx
-│   │   │   ├── MultiSelectInput.jsx
-│   │   │   ├── NumberInput.jsx
-│   │   │   ├── RadioInput.jsx
-│   │   │   ├── SelectInput.jsx
-│   │   │   └── TextInput.jsx
-│   │   ├── layout
-│   │   │   ├── PageContainer.jsx
-│   │   │   └── PageSection.jsx
-│   │   └── ui
-│   │       ├── Avatar.jsx
-│   │       ├── AvatarGroup.jsx
-│   │       ├── Badge.jsx
-│   │       ├── Button.jsx
-│   │       ├── Card.jsx
-│   │       ├── Checkbox.jsx
-│   │       ├── EmptyState.jsx
-│   │       ├── InfoCard.jsx
-│   │       ├── Input.jsx
-│   │       ├── Loader.jsx
-│   │       ├── PageHeader.jsx
-│   │       ├── Select.jsx
-│   │       ├── SkeletonLoader.jsx
-│   │       ├── StatusBadge.jsx
-│   │       ├── Switch.jsx
-│   │       ├── Textarea.jsx
-│   │       ├── Toast.jsx
-│   │       └── tabs.jsx
 │   ├── dashboard
 │   │   ├── modules
 │   │   │   └── accounts
@@ -84,144 +31,6 @@ frontend
 │   │   │   ├── authService.js
 │   │   │   ├── communicationService.js
 │   │   │   └── settingsService.js
-│   │   ├── shared
-│   │   │   ├── components
-│   │   │   │   ├── StatCard.jsx
-│   │   │   │   ├── cards
-│   │   │   │   │   ├── AnalyticsCard.jsx
-│   │   │   │   │   ├── InfoCard.jsx
-│   │   │   │   │   ├── QuickActionCard.jsx
-│   │   │   │   │   ├── ReportCard.jsx
-│   │   │   │   │   └── StatsCard.jsx
-│   │   │   │   ├── crud
-│   │   │   │   │   ├── ActionButtons.jsx
-│   │   │   │   │   ├── BulkActions.jsx
-│   │   │   │   │   ├── CrudHeader.jsx
-│   │   │   │   │   ├── DataTable.jsx
-│   │   │   │   │   ├── DeleteModal.jsx
-│   │   │   │   │   ├── ExportButton.jsx
-│   │   │   │   │   ├── ImportButton.jsx
-│   │   │   │   │   ├── Pagination.jsx
-│   │   │   │   │   ├── SearchBox.jsx
-│   │   │   │   │   ├── StatusToggle.jsx
-│   │   │   │   │   └── TableFilters.jsx
-│   │   │   │   ├── dashboard
-│   │   │   │   │   ├── DashboardGrid.jsx
-│   │   │   │   │   ├── DashboardHeader.jsx
-│   │   │   │   │   └── DashboardSection.jsx
-│   │   │   │   ├── forms
-│   │   │   │   │   ├── CheckboxInput.jsx
-│   │   │   │   │   ├── DateInput.jsx
-│   │   │   │   │   ├── FormSection.jsx
-│   │   │   │   │   ├── SelectInput.jsx
-│   │   │   │   │   ├── SubmitButton.jsx
-│   │   │   │   │   ├── TextInput.jsx
-│   │   │   │   │   └── TextareaInput.jsx
-│   │   │   │   └── modals
-│   │   │   │       └── ConfirmModal.jsx
-│   │   │   └── core
-│   │   │       ├── audit_logs
-│   │   │       │   ├── components
-│   │   │       │   │   └── Form.jsx
-│   │   │       │   ├── pages
-│   │   │       │   │   ├── Details.jsx
-│   │   │       │   │   └── List.jsx
-│   │   │       │   ├── routes
-│   │   │       │   │   └── routes.jsx
-│   │   │       │   └── services
-│   │   │       │       └── service.js
-│   │   │       ├── branches
-│   │   │       │   ├── components
-│   │   │       │   │   └── Form.jsx
-│   │   │       │   ├── pages
-│   │   │       │   │   ├── Create.jsx
-│   │   │       │   │   ├── Edit.jsx
-│   │   │       │   │   └── List.jsx
-│   │   │       │   ├── routes
-│   │   │       │   │   └── routes.jsx
-│   │   │       │   └── services
-│   │   │       │       └── service.js
-│   │   │       ├── media
-│   │   │       │   ├── components
-│   │   │       │   │   └── Form.jsx
-│   │   │       │   ├── pages
-│   │   │       │   │   ├── Folders.jsx
-│   │   │       │   │   ├── Library.jsx
-│   │   │       │   │   └── Upload.jsx
-│   │   │       │   ├── routes
-│   │   │       │   │   └── routes.jsx
-│   │   │       │   └── services
-│   │   │       │       └── service.js
-│   │   │       ├── notifications
-│   │   │       │   ├── components
-│   │   │       │   │   └── Form.jsx
-│   │   │       │   ├── pages
-│   │   │       │   │   ├── Create.jsx
-│   │   │       │   │   ├── List.jsx
-│   │   │       │   │   └── Templates.jsx
-│   │   │       │   ├── routes
-│   │   │       │   │   └── routes.jsx
-│   │   │       │   └── services
-│   │   │       │       └── service.js
-│   │   │       ├── permissions
-│   │   │       │   ├── components
-│   │   │       │   │   └── Form.jsx
-│   │   │       │   ├── pages
-│   │   │       │   │   ├── Assign.jsx
-│   │   │       │   │   └── List.jsx
-│   │   │       │   ├── routes
-│   │   │       │   │   └── routes.jsx
-│   │   │       │   └── services
-│   │   │       │       └── service.js
-│   │   │       ├── roles
-│   │   │       │   ├── components
-│   │   │       │   │   └── Form.jsx
-│   │   │       │   ├── pages
-│   │   │       │   │   ├── Create.jsx
-│   │   │       │   │   ├── Edit.jsx
-│   │   │       │   │   ├── List.jsx
-│   │   │       │   │   └── RolePermissions.jsx
-│   │   │       │   ├── routes
-│   │   │       │   │   └── routes.jsx
-│   │   │       │   └── services
-│   │   │       │       └── service.js
-│   │   │       ├── schools
-│   │   │       │   ├── components
-│   │   │       │   │   └── Form.jsx
-│   │   │       │   ├── pages
-│   │   │       │   │   ├── Create.jsx
-│   │   │       │   │   ├── Edit.jsx
-│   │   │       │   │   ├── List.jsx
-│   │   │       │   │   └── Profile.jsx
-│   │   │       │   ├── routes
-│   │   │       │   │   └── routes.jsx
-│   │   │       │   └── services
-│   │   │       │       └── service.js
-│   │   │       ├── settings
-│   │   │       │   ├── components
-│   │   │       │   │   └── Form.jsx
-│   │   │       │   ├── pages
-│   │   │       │   │   ├── EmailSettings.jsx
-│   │   │       │   │   ├── GeneralSettings.jsx
-│   │   │       │   │   ├── SMSSettings.jsx
-│   │   │       │   │   └── ThemeSettings.jsx
-│   │   │       │   ├── routes
-│   │   │       │   │   └── routes.jsx
-│   │   │       │   └── services
-│   │   │       │       └── service.js
-│   │   │       └── users
-│   │   │           ├── components
-│   │   │           │   └── Form.jsx
-│   │   │           ├── pages
-│   │   │           │   ├── ChangePassword.jsx
-│   │   │           │   ├── Create.jsx
-│   │   │           │   ├── Edit.jsx
-│   │   │           │   ├── List.jsx
-│   │   │           │   └── Profile.jsx
-│   │   │           ├── routes
-│   │   │           │   └── routes.jsx
-│   │   │           └── services
-│   │   │               └── service.js
 │   │   └── temp roles
 │   │       ├── accountant
 │   │       │   └── Dashboard.jsx
@@ -737,20 +546,6 @@ frontend
 │   │   │   │   │   └── buildingRoutes.jsx
 │   │   │   │   └── services
 │   │   │   │       └── buildingService.js
-│   │   │   ├── buildings3
-│   │   │   │   ├── components
-│   │   │   │   │   └── BuildingForm.jsx
-│   │   │   │   ├── config
-│   │   │   │   │   ├── buildingColumns.js
-│   │   │   │   │   └── buildingFields.js
-│   │   │   │   ├── pages
-│   │   │   │   │   ├── AddBuildingPage.jsx
-│   │   │   │   │   ├── BuildingsListPage.jsx
-│   │   │   │   │   └── EditBuildingPage.jsx
-│   │   │   │   ├── routes
-│   │   │   │   │   └── buildingRoutes.jsx
-│   │   │   │   └── services
-│   │   │   │       └── buildingService.js
 │   │   │   ├── classrooms
 │   │   │   │   ├── components
 │   │   │   │   │   └── ClassroomForm.jsx
@@ -758,17 +553,6 @@ frontend
 │   │   │   │   │   ├── AddClassroom.jsx
 │   │   │   │   │   ├── ClassroomsList.jsx
 │   │   │   │   │   └── EditClassroom.jsx
-│   │   │   │   ├── routes
-│   │   │   │   │   └── classroomRoutes.jsx
-│   │   │   │   └── services
-│   │   │   │       └── classroomService.js
-│   │   │   ├── classrooms2
-│   │   │   │   ├── components
-│   │   │   │   │   └── ClassroomForm.jsx
-│   │   │   │   ├── pages
-│   │   │   │   │   ├── AddClassroomPage.jsx
-│   │   │   │   │   ├── ClassroomsListPage.jsx
-│   │   │   │   │   └── EditClassroomPage.jsx
 │   │   │   │   ├── routes
 │   │   │   │   │   └── classroomRoutes.jsx
 │   │   │   │   └── services
@@ -995,6 +779,176 @@ frontend
 │   │   │   ├── SchoolSettings.jsx
 │   │   │   ├── SessionSettings.jsx
 │   │   │   └── UserRoles.jsx
+│   │   ├── shared
+│   │   │   ├── components
+│   │   │   │   ├── StatCard.jsx
+│   │   │   │   ├── cards
+│   │   │   │   │   ├── AnalyticsCard.jsx
+│   │   │   │   │   ├── InfoCard.jsx
+│   │   │   │   │   ├── QuickActionCard.jsx
+│   │   │   │   │   ├── ReportCard.jsx
+│   │   │   │   │   └── StatsCard.jsx
+│   │   │   │   ├── crud
+│   │   │   │   │   ├── ActionButtons.jsx
+│   │   │   │   │   ├── BulkActions.jsx
+│   │   │   │   │   ├── CrudCreatePage.jsx
+│   │   │   │   │   ├── CrudDrawer.jsx
+│   │   │   │   │   ├── CrudEditPage.jsx
+│   │   │   │   │   ├── CrudHeader.jsx
+│   │   │   │   │   ├── CrudListPage.jsx
+│   │   │   │   │   ├── CrudPage.jsx
+│   │   │   │   │   ├── DataTable.jsx
+│   │   │   │   │   ├── ExportButton.jsx
+│   │   │   │   │   ├── FilterBar.jsx
+│   │   │   │   │   ├── ImportButton.jsx
+│   │   │   │   │   ├── Pagination.jsx
+│   │   │   │   │   ├── SearchBar.jsx
+│   │   │   │   │   ├── SearchBox.jsx
+│   │   │   │   │   ├── StatusToggle.jsx
+│   │   │   │   │   ├── TableActionMenu.jsx
+│   │   │   │   │   └── TableFilters.jsx
+│   │   │   │   ├── dashboard
+│   │   │   │   │   ├── DashboardGrid.jsx
+│   │   │   │   │   ├── DashboardHeader.jsx
+│   │   │   │   │   ├── DashboardSection.jsx
+│   │   │   │   │   └── StatsCard.jsx
+│   │   │   │   ├── dialogs
+│   │   │   │   │   ├── ConfirmDialog.jsx
+│   │   │   │   │   ├── ConfirmModal.jsx
+│   │   │   │   │   ├── DeleteDialog.jsx
+│   │   │   │   │   ├── ErrorDialog.jsx
+│   │   │   │   │   └── SuccessDialog.jsx
+│   │   │   │   ├── forms
+│   │   │   │   │   ├── DateInput.jsx
+│   │   │   │   │   ├── DateTimeInput.jsx
+│   │   │   │   │   ├── FileUpload.jsx
+│   │   │   │   │   ├── FormBuilder.jsx
+│   │   │   │   │   └── ImageUpload.jsx
+│   │   │   │   ├── layout
+│   │   │   │   │   ├── PageContainer.jsx
+│   │   │   │   │   └── PageSection.jsx
+│   │   │   │   └── ui
+│   │   │   │       ├── Avatar.jsx
+│   │   │   │       ├── AvatarGroup.jsx
+│   │   │   │       ├── Badge.jsx
+│   │   │   │       ├── Button.jsx
+│   │   │   │       ├── Card.jsx
+│   │   │   │       ├── Checkbox.jsx
+│   │   │   │       ├── EmptyState.jsx
+│   │   │   │       ├── InfoCard.jsx
+│   │   │   │       ├── Input.jsx
+│   │   │   │       ├── Loader.jsx
+│   │   │   │       ├── PageHeader.jsx
+│   │   │   │       ├── Select.jsx
+│   │   │   │       ├── SkeletonLoader.jsx
+│   │   │   │       ├── StatusBadge.jsx
+│   │   │   │       ├── Switch.jsx
+│   │   │   │       ├── Textarea.jsx
+│   │   │   │       ├── Toast.jsx
+│   │   │   │       └── tabs.jsx
+│   │   │   └── core
+│   │   │       ├── audit_logs
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Details.jsx
+│   │   │       │   │   └── List.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── branches
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Create.jsx
+│   │   │       │   │   ├── Edit.jsx
+│   │   │       │   │   └── List.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── media
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Folders.jsx
+│   │   │       │   │   ├── Library.jsx
+│   │   │       │   │   └── Upload.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── notifications
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Create.jsx
+│   │   │       │   │   ├── List.jsx
+│   │   │       │   │   └── Templates.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── permissions
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Assign.jsx
+│   │   │       │   │   └── List.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── roles
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Create.jsx
+│   │   │       │   │   ├── Edit.jsx
+│   │   │       │   │   ├── List.jsx
+│   │   │       │   │   └── RolePermissions.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── schools
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── Create.jsx
+│   │   │       │   │   ├── Edit.jsx
+│   │   │       │   │   ├── List.jsx
+│   │   │       │   │   └── Profile.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       ├── settings
+│   │   │       │   ├── components
+│   │   │       │   │   └── Form.jsx
+│   │   │       │   ├── pages
+│   │   │       │   │   ├── EmailSettings.jsx
+│   │   │       │   │   ├── GeneralSettings.jsx
+│   │   │       │   │   ├── SMSSettings.jsx
+│   │   │       │   │   └── ThemeSettings.jsx
+│   │   │       │   ├── routes
+│   │   │       │   │   └── routes.jsx
+│   │   │       │   └── services
+│   │   │       │       └── service.js
+│   │   │       └── users
+│   │   │           ├── components
+│   │   │           │   └── Form.jsx
+│   │   │           ├── pages
+│   │   │           │   ├── ChangePassword.jsx
+│   │   │           │   ├── Create.jsx
+│   │   │           │   ├── Edit.jsx
+│   │   │           │   ├── List.jsx
+│   │   │           │   └── Profile.jsx
+│   │   │           ├── routes
+│   │   │           │   └── routes.jsx
+│   │   │           └── services
+│   │   │               └── service.js
 │   │   ├── staff
 │   │   │   ├── LeaveManagement.jsx
 │   │   │   ├── SalaryManagement.jsx
@@ -1247,8 +1201,6 @@ frontend
 │   │           │   └── vehicleRoutes.jsx
 │   │           └── services
 │   │               └── Service.js
-│   ├── pages
-│   │   └── ComponentShowcasePage.jsx
 │   ├── routes
 │   │   ├── AppRoutes.jsx
 │   │   ├── ProtectedRoute.jsx
@@ -1258,31 +1210,6 @@ frontend
 │   │       ├── authService.js
 │   │       ├── axios.js
 │   │       └── index.js
-│   ├── shared
-│   │   └── components
-│   │       ├── cards
-│   │       │   ├── AchievementCard.jsx
-│   │       │   ├── GalleryCard.jsx
-│   │       │   ├── NewsCard.jsx
-│   │       │   └── StaffCard.jsx
-│   │       ├── common
-│   │       │   ├── CTAButton.jsx
-│   │       │   ├── HeroSection.jsx
-│   │       │   ├── SectionTitle.jsx
-│   │       │   └── crud
-│   │       │       ├── CrudCreatePage.jsx
-│   │       │       ├── CrudEditPage.jsx
-│   │       │       └── CrudListPage.jsx
-│   │       ├── forms
-│   │       │   ├── AdmissionForm.jsx
-│   │       │   ├── InquiryForm.jsx
-│   │       │   ├── LoginForm.jsx
-│   │       │   └── SearchForm.jsx
-│   │       └── tables
-│   │           ├── StaffSummaryTable.jsx
-│   │           ├── StudentStrengthTable.jsx
-│   │           ├── SubjectStrengthTable.jsx
-│   │           └── TimetableTable.jsx
 │   └── website
 │       ├── components
 │       │   ├── Footer.jsx
