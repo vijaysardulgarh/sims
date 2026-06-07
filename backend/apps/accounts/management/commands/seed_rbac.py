@@ -72,7 +72,7 @@ RBAC_CONFIG = {
              {
                 "name": "Sessions",
                 "slug": "sessions",
-                "path": "/dashboard/sessions",
+                "path": "/dashboard/academicssessions",
             },           
 
         ]
