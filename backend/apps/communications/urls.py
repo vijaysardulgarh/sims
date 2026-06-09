@@ -6,51 +6,51 @@ from django.urls import (
 urlpatterns = [
 
     path(
-        '',
+        "communication-categories/",
         include(
-            'apps.communications.communication_categories.urls'
+            "apps.communications.communication_categories.urls"
         )
     ),
 
     path(
-        '',
+        "communication-templates/",
         include(
-            'apps.communications.communication_templates.urls'
+            "apps.communications.communication_templates.urls"
         )
     ),
 
     path(
-        '',
+        "notifications/",
         include(
-            'apps.communications.notifications.urls'
+            "apps.communications.notifications.urls"
         )
     ),
 
     path(
-        '',
+        "circulars/",
         include(
-            'apps.communications.circulars.urls'
+            "apps.communications.circulars.urls"
         )
     ),
 
     path(
-        '',
+        "notices/",
         include(
-            'apps.communications.notices.urls'
+            "apps.communications.notices.urls"
         )
     ),
 
     path(
-        '',
+        "news/",
         include(
-            'apps.communications.news.urls'
+            "apps.communications.news.urls"
         )
     ),
 
     path(
-        '',
+        "events/",
         include(
-            'apps.communications.events.urls'
+            "apps.communications.events.urls"
         )
     ),
 

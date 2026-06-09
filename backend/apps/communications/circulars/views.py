@@ -1,16 +1,13 @@
-from rest_framework.viewsets import (
-    ModelViewSet
+from apps.core.common.views import (
+    SchoolFilteredViewSet
 )
 
 from .models import Circular
-
-from .serializers import (
-    CircularSerializer
-)
+from .serializers import CircularSerializer
 
 
 class CircularViewSet(
-    ModelViewSet
+    SchoolFilteredViewSet
 ):
 
     queryset = (

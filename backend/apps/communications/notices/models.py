@@ -69,6 +69,43 @@ class Notice(
             "-publish_date"
         ]
 
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "title"
+                ],
+                name="unique_notice_title_per_school"
+            ),
+
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "school",
+                    "publish_date"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school",
+                    "notice_type"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school",
+                    "is_published"
+                ]
+            ),
+
+        ]
+
     def __str__(self):
 
         return self.title

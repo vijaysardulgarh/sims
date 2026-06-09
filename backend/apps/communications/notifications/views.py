@@ -1,19 +1,20 @@
-from rest_framework import viewsets
+from apps.core.common.views import (
+    SchoolFilteredViewSet
+)
 
 from .models import Notification
-
-from .serializers import (
-    NotificationSerializer
-)
+from .serializers import NotificationSerializer
 
 
 class NotificationViewSet(
-    viewsets.ModelViewSet
+    SchoolFilteredViewSet
 ):
 
     queryset = (
-        Notification.objects.select_related(
-            'template'
+        Notification.objects
+        .select_related(
+            "template",
+            "school"
         )
     )
 

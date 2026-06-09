@@ -88,6 +88,43 @@ class Circular(
             "-issue_date"
         ]
 
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "title"
+                ],
+                name="unique_circular_title_per_school"
+            ),
+
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "school",
+                    "issue_date"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school",
+                    "circular_type"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school",
+                    "is_active"
+                ]
+            ),
+
+        ]
+
     def __str__(self):
 
         return self.title

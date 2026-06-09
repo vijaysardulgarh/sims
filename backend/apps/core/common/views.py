@@ -117,7 +117,8 @@ class SchoolFilteredViewSet(
         if user.is_superuser:
 
             serializer.save(
-                created_by=user
+                created_by=user,
+                updated_by=user,
             )
 
             return
@@ -126,7 +127,8 @@ class SchoolFilteredViewSet(
 
             school=self.get_school(),
 
-            created_by=user
+            created_by=user,
+            updated_by=user,
         )
 
     # =====================================

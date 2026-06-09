@@ -1,5 +1,5 @@
-from rest_framework.viewsets import (
-    ModelViewSet
+from apps.core.common.views import (
+    SchoolFilteredViewSet
 )
 
 from .models import Event
@@ -10,7 +10,7 @@ from .serializers import (
 
 
 class EventViewSet(
-    ModelViewSet
+    SchoolFilteredViewSet
 ):
 
     queryset = (

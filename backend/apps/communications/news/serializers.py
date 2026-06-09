@@ -17,3 +17,14 @@ class NewsSerializer(
         model = News
 
         fields = "__all__"
+
+        read_only_fields = [
+
+            "school",
+
+            "created_at",
+            "updated_at",
+
+            "created_by",
+            "updated_by",
+        ]

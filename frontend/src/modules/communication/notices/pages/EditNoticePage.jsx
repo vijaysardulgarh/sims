@@ -1,4 +1,4 @@
-import CrudEditPage from '../../../../shared/components/crud/CrudEditPage';
+import CrudEditPage from '../../../shared/components/crud/CrudEditPage';
 
 import NoticeForm from '../components/NoticeForm';
 

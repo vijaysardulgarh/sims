@@ -1,4 +1,4 @@
-import CrudCreatePage from '../../../../shared/components/crud/CrudCreatePage';
+import CrudCreatePage from '../../../shared/components/crud/CrudCreatePage';
 
 import CircularForm from '../components/CircularForm';
 

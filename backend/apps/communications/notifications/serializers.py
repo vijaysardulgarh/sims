@@ -7,15 +7,29 @@ class NotificationSerializer(
     serializers.ModelSerializer
 ):
 
-    template_name = (
-        serializers.CharField(
-            source='template.name',
-            read_only=True
-        )
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    template_name = serializers.CharField(
+        source="template.name",
+        read_only=True
     )
 
     class Meta:
 
         model = Notification
 
-        fields = '__all__'
+        fields = "__all__"
+
+        read_only_fields = [
+
+            "school",
+
+            "created_at",
+            "updated_at",
+
+            "created_by",
+            "updated_by",
+        ]

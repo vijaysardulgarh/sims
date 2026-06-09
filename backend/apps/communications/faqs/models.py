@@ -1,4 +1,9 @@
-class FAQ(models.Model):
+from django.db import models
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+class FAQ(SchoolBaseModel):
    
 
     CATEGORY_CHOICES = [
@@ -15,10 +20,6 @@ class FAQ(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="general")
 
     order = models.PositiveIntegerField(default=0)
-    is_active = models.BooleanField(default=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def clean(self):
         if self.question:

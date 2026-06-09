@@ -9,36 +9,29 @@ class CommunicationTemplateSerializer(
     serializers.ModelSerializer
 ):
 
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
     category_name = serializers.CharField(
-        source='category.name',
+        source="category.name",
         read_only=True
     )
 
     class Meta:
 
-        model = (
-            CommunicationTemplate
-        )
+        model = CommunicationTemplate
 
-        fields = [
-
-            'id',
-
-            'category',
-            'category_name',
-
-            'name',
-            'subject',
-            'content',
-
-            'is_active',
-
-            'created_at',
-            'updated_at',
-        ]
+        fields = "__all__"
 
         read_only_fields = [
 
-            'created_at',
-            'updated_at',
+            "school",
+
+            "created_at",
+            "updated_at",
+
+            "created_by",
+            "updated_by",
         ]

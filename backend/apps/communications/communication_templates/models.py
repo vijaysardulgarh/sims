@@ -4,15 +4,19 @@ from apps.communications.communication_categories.models import (
     CommunicationCategory
 )
 
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
 
 class CommunicationTemplate(
-    models.Model
+    SchoolBaseModel
 ):
 
     category = models.ForeignKey(
         CommunicationCategory,
         on_delete=models.CASCADE,
-        related_name='templates'
+        related_name="templates"
     )
 
     name = models.CharField(
@@ -25,25 +29,18 @@ class CommunicationTemplate(
 
     content = models.TextField()
 
-    is_active = models.BooleanField(
-        default=True
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    updated_at = models.DateTimeField(
-        auto_now=True
-    )
-
     class Meta:
 
-        db_table = (
-            'communication_templates'
-        )
+        db_table = "communication_templates"
 
-        ordering = ['name']
+        ordering = ["name"]
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["school", "name"],
+                name="unique_template_name_per_school"
+            )
+        ]
 
     def __str__(self):
 

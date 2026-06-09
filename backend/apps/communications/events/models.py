@@ -70,6 +70,31 @@ class Event(
             "-start_date"
         ]
 
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "title"
+                ],
+                name="unique_event_title_per_school"
+            )
+        ]
+
+        indexes = [
+            models.Index(
+                fields=[
+                    "school",
+                    "start_date"
+                ]
+            ),
+            models.Index(
+                fields=[
+                    "school",
+                    "is_published"
+                ]
+            ),
+        ]
+
     def __str__(self):
 
         return self.title

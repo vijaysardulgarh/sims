@@ -13,9 +13,7 @@ class News(
         max_length=255
     )
 
-    slug = models.SlugField(
-        unique=True
-    )
+    slug = models.SlugField()
 
     summary = models.TextField(
         blank=True
@@ -49,6 +47,51 @@ class News(
 
         ordering = [
             "-publish_date"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "title"
+                ],
+                name="unique_news_title_per_school"
+            ),
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "slug"
+                ],
+                name="unique_news_slug_per_school"
+            ),
+
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "school",
+                    "publish_date"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school",
+                    "is_published"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school",
+                    "slug"
+                ]
+            ),
+
         ]
 
     def __str__(self):

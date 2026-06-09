@@ -1,27 +1,28 @@
 from django.contrib import admin
 
-from .models import CommunicationTemplate
+from .models import Circular
 
 
-@admin.register(CommunicationTemplate)
-class CommunicationTemplateAdmin(
+@admin.register(Circular)
+class CircularAdmin(
     admin.ModelAdmin
 ):
 
     list_display = (
-        "name",
-        "category",
+        "title",
         "school",
+        "circular_type",
+        "issue_date",
         "is_active",
     )
 
     list_filter = (
         "school",
-        "category",
+        "circular_type",
         "is_active",
     )
 
     search_fields = (
-        "name",
-        "subject",
+        "title",
+        "reference_number",
     )

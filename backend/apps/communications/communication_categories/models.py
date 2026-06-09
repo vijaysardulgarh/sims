@@ -1,15 +1,20 @@
 from django.db import models
 
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
 
-class CommunicationCategory(models.Model):
+
+class CommunicationCategory(
+    SchoolBaseModel
+):
 
     name = models.CharField(
         max_length=100
     )
 
     code = models.CharField(
-        max_length=50,
-        unique=True
+        max_length=50
     )
 
     description = models.TextField(
@@ -17,25 +22,49 @@ class CommunicationCategory(models.Model):
         null=True
     )
 
-    is_active = models.BooleanField(
-        default=True
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    updated_at = models.DateTimeField(
-        auto_now=True
-    )
-
     class Meta:
 
-        db_table = (
-            'communication_categories'
-        )
+        db_table = "communication_categories"
 
-        ordering = ['name']
+        ordering = ["name"]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "name"
+                ],
+                name="unique_communication_category_name_per_school"
+            ),
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "code"
+                ],
+                name="unique_communication_category_code_per_school"
+            ),
+
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "school",
+                    "name"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school",
+                    "code"
+                ]
+            ),
+
+        ]
 
     def __str__(self):
 

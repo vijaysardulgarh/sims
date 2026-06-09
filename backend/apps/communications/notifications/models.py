@@ -3,10 +3,12 @@ from django.db import models
 from apps.communications.communication_templates.models import (
     CommunicationTemplate
 )
-
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
 
 class Notification(
-    models.Model
+    SchoolBaseModel
 ):
 
     EMAIL = 'EMAIL'
@@ -58,17 +60,6 @@ class Notification(
         default='PENDING'
     )
 
-    is_active = models.BooleanField(
-        default=True
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    updated_at = models.DateTimeField(
-        auto_now=True
-    )
 
     class Meta:
 

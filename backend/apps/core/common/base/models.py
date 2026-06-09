@@ -146,3 +146,31 @@ class SessionBaseModel(
     class Meta:
 
         abstract = True
+
+
+class PublishableBaseModel(
+    models.Model
+):
+
+    is_published = models.BooleanField(
+        default=False
+    )
+
+    published_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        abstract = True
+
+class OrderedBaseModel(
+    models.Model
+):
+
+    display_order = models.PositiveIntegerField(
+        default=0
+    )
+
+    class Meta:
+        abstract = True                

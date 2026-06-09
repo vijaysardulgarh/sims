@@ -1,17 +1,18 @@
 from django.contrib import admin
 
-from .models import CommunicationTemplate
+from .models import FAQ
 
 
-@admin.register(CommunicationTemplate)
-class CommunicationTemplateAdmin(
+@admin.register(FAQ)
+class FAQAdmin(
     admin.ModelAdmin
 ):
 
     list_display = (
-        "name",
-        "category",
+        "question",
         "school",
+        "category",
+        "order",
         "is_active",
     )
 
@@ -22,6 +23,10 @@ class CommunicationTemplateAdmin(
     )
 
     search_fields = (
-        "name",
-        "subject",
+        "question",
+        "answer",
+    )
+
+    ordering = (
+        "order",
     )

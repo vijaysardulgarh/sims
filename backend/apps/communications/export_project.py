@@ -6,28 +6,29 @@ import os
 
 PROJECT_ROOT = r"."
 
-STRUCTURE_FILE = "react_structure.txt"
-CODE_FILE = "react_code.txt"
+STRUCTURE_FILE = "django_structure.txt"
+CODE_FILE = "django_code.txt"
 
 INCLUDE_EXTENSIONS = {
-    ".js",
-    ".jsx",
-    ".ts",
-    ".tsx",
+    ".py",
     ".json",
-    ".css",
-    ".scss",
-    ".html",
+    ".yaml",
+    ".yml",
+    ".env",
+    ".txt",
 }
 
 EXCLUDE_DIRS = {
-    "node_modules",
+    "__pycache__",
     ".git",
     ".idea",
     ".vscode",
-    "dist",
-    "build",
-    ".vite",
+    "venv",
+    "env",
+    "staticfiles",
+    "media",
+    "node_modules",
+    "migrations",
 }
 
 # ============================================================
@@ -73,9 +74,9 @@ with open(CODE_FILE, "w", encoding="utf-8") as output:
                 with open(filepath, "r", encoding="utf-8") as source:
 
                     output.write("\n\n")
-                    output.write("// ============================================================\n")
-                    output.write(f"// FILE: {filepath}\n")
-                    output.write("// ============================================================\n\n")
+                    output.write("# ============================================================\n")
+                    output.write(f"# FILE: {filepath}\n")
+                    output.write("# ============================================================\n\n")
 
                     output.write(source.read())
                     output.write("\n")
@@ -83,9 +84,9 @@ with open(CODE_FILE, "w", encoding="utf-8") as output:
             except Exception as e:
 
                 output.write("\n\n")
-                output.write("// ============================================================\n")
-                output.write(f"// ERROR: {filepath}\n")
-                output.write("// ============================================================\n")
+                output.write("# ============================================================\n")
+                output.write(f"# ERROR: {filepath}\n")
+                output.write("# ============================================================\n")
                 output.write(str(e))
                 output.write("\n")
 

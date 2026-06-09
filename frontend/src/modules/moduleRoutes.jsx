@@ -16,7 +16,7 @@ import DashboardHomePage from "./home/pages/DashboardHomePage";
 import academicsRoutes from "./academics/routes/academicsRoutes";
 import accountsRoutes from "./accounts/routes/accountsRoutes";
 //import attendanceRoutes from "./accounts/routes/attendanceRoutes";
-//import communicationRoutes from "./communication/routes/communicationRoutes";
+import communicationRoutes from "./communication/routes/communicationRoutes";
 //import examinationRoutes from "./examinations/routes/examinationRoutes";
 // import feesRoutes from "./fees/routes/feesRoutes";
 // import hostelRoutes from "./hostel/routes/hostelRoutes";
@@ -54,8 +54,9 @@ const moduleRoutes = (
 
     {academicsRoutes}
     {accountsRoutes}
-{/*     {attendanceRoutes}
     {communicationRoutes}
+{/*     {attendanceRoutes}
+    
     {examinationRoutes}
     {feesRoutes}
     {hostelRoutes}

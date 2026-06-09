@@ -1,16 +1,13 @@
-from rest_framework.viewsets import (
-    ModelViewSet
+from apps.core.common.views import (
+    SchoolFilteredViewSet
 )
 
 from .models import Notice
-
-from .serializers import (
-    NoticeSerializer
-)
+from .serializers import NoticeSerializer
 
 
 class NoticeViewSet(
-    ModelViewSet
+    SchoolFilteredViewSet
 ):
 
     queryset = (
