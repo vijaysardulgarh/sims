@@ -11,11 +11,14 @@ from apps.associations.extracurricular_activities.views import (
 urlpatterns = [
 
     path(
-
         "",
-
         ExtracurricularActivityAPIView.as_view(),
-
         name="extracurricular-activity-list"
+    ),
+
+    path(
+        "<int:pk>/",
+        ExtracurricularActivityAPIView.as_view(),
+        name="extracurricular-activity-detail"
     ),
 ]

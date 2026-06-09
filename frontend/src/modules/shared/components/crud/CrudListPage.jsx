@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react';
+import {
+    useEffect,
+    useState
+} from "react";
 
-import { Link } from 'react-router-dom';
+import {
+    Link
+} from "react-router-dom";
 
-import api from '../../../../services/api/axios';
+import api from "../../../../services/api/axios";
 
 const CrudListPage = ({
     title,
@@ -29,191 +34,394 @@ const CrudListPage = ({
         try {
 
             const response =
-                await api.get(endpoint);
+                await api.get(
+                    endpoint
+                );
 
-            setRows(
-                response.data.results ||
-                response.data
-            );
+            const data =
 
-        } catch (error) {
+                response?.data?.results ||
+
+                response?.data?.data ||
+
+                response?.data ||
+
+                [];
+
+            setRows(data);
+
+        }
+
+        catch (error) {
 
             console.error(error);
 
-        } finally {
+        }
+
+        finally {
 
             setLoading(false);
+
         }
+
     };
 
-    const handleDelete =
-        async (id) => {
+    const handleDelete = async (
+        id
+    ) => {
 
-            const confirmed =
-                window.confirm(
-                    'Delete record?'
-                );
+        const confirmed =
+            window.confirm(
+                "Delete record?"
+            );
 
-            if (!confirmed) return;
+        if (!confirmed) return;
 
-            try {
+        try {
 
-                await api.delete(
-                    `${endpoint}${id}/`
-                );
+            await api.delete(
+                `${endpoint}${id}/`
+            );
 
-                loadData();
+            loadData();
 
-            } catch (error) {
+        }
 
-                console.error(error);
-            }
-        };
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+    };
 
     return (
-        <div className="container-fluid">
+
+        <div className="space-y-6">
+
+            {/* HEADER */}
 
             <div
                 className="
-                    d-flex
-                    justify-content-between
-                    align-items-center
-                    mb-3
+                    flex
+                    items-center
+                    justify-between
                 "
             >
 
-                <h3>
-                    {title}
-                </h3>
+                <div>
+
+                    <h1
+                        className="
+                            text-3xl
+                            font-bold
+                            text-gray-900
+                        "
+                    >
+                        {title}
+                    </h1>
+
+                    <p
+                        className="
+                            text-gray-500
+                            mt-1
+                        "
+                    >
+                        Manage {title.toLowerCase()}
+                    </p>
+
+                </div>
 
                 <Link
+
                     to={addPath}
+
                     className="
-                        btn
-                        btn-primary
+                        px-5
+                        py-3
+                        bg-blue-600
+                        text-white
+                        rounded-xl
+                        font-medium
+                        hover:bg-blue-700
+                        transition
                     "
                 >
+
                     Add
+
                 </Link>
 
             </div>
 
-            {loading ? (
+            {/* TABLE */}
 
-                <p>
-                    Loading...
-                </p>
+            <div
+                className="
+                    bg-white
+                    rounded-2xl
+                    shadow
+                    overflow-hidden
+                "
+            >
 
-            ) : (
+                {
 
-                <table
-                    className="
-                        table
-                        table-bordered
-                    "
-                >
+                    loading ? (
 
-                    <thead>
+                        <div
+                            className="
+                                p-10
+                                text-center
+                                text-gray-500
+                            "
+                        >
 
-                        <tr>
+                            Loading...
 
-                            {columns.map(
-                                (column) => (
+                        </div>
 
-                                    <th
-                                        key={
-                                            column.key
-                                        }
-                                    >
-                                        {
-                                            column.label
-                                        }
-                                    </th>
-                                )
-                            )}
+                    ) : (
 
-                            <th>
-                                Actions
-                            </th>
+                        <div
+                            className="
+                                overflow-x-auto
+                            "
+                        >
 
-                        </tr>
+                            <table
+                                className="
+                                    min-w-full
+                                "
+                            >
 
-                    </thead>
-
-                    <tbody>
-
-                        {rows.map(
-                            (row) => (
-
-                                <tr
-                                    key={
-                                        row.id
-                                    }
+                                <thead
+                                    className="
+                                        bg-gray-100
+                                    "
                                 >
 
-                                    {columns.map(
-                                        (
-                                            column
-                                        ) => (
+                                    <tr>
 
-                                            <td
-                                                key={
-                                                    column.key
-                                                }
-                                            >
-                                                {
-                                                    String(
-                                                        row[
+                                        {
+
+                                            columns.map(
+                                                (
+                                                    column
+                                                ) => (
+
+                                                    <th
+
+                                                        key={
                                                             column.key
-                                                        ]
-                                                    )
-                                                }
-                                            </td>
-                                        )
-                                    )}
+                                                        }
 
-                                    <td>
+                                                        className="
+                                                            px-6
+                                                            py-4
+                                                            text-left
+                                                            text-sm
+                                                            font-semibold
+                                                            text-gray-700
+                                                        "
+                                                    >
 
-                                        <Link
-                                            to={`${editPath}/${row.id}`}
-                                            className="
-                                                btn
-                                                btn-sm
-                                                btn-warning
-                                                me-2
-                                            "
-                                        >
-                                            Edit
-                                        </Link>
+                                                        {
+                                                            column.label
+                                                        }
 
-                                        <button
-                                            className="
-                                                btn
-                                                btn-sm
-                                                btn-danger
-                                            "
-                                            onClick={() =>
-                                                handleDelete(
-                                                    row.id
+                                                    </th>
+
                                                 )
-                                            }
+                                            )
+
+                                        }
+
+                                        <th
+                                            className="
+                                                px-6
+                                                py-4
+                                                text-left
+                                                text-sm
+                                                font-semibold
+                                                text-gray-700
+                                            "
                                         >
-                                            Delete
-                                        </button>
 
-                                    </td>
+                                            Actions
 
-                                </tr>
-                            )
-                        )}
+                                        </th>
 
-                    </tbody>
+                                    </tr>
 
-                </table>
-            )}
+                                </thead>
+
+                                <tbody>
+
+                                    {
+
+                                        rows.length >
+
+                                        0 ? (
+
+                                            rows.map(
+                                                (
+                                                    row
+                                                ) => (
+
+                                                    <tr
+
+                                                        key={
+                                                            row.id
+                                                        }
+
+                                                        className="
+                                                            border-b
+                                                            hover:bg-gray-50
+                                                        "
+                                                    >
+
+                                                        {
+
+                                                            columns.map(
+                                                                (
+                                                                    column
+                                                                ) => (
+
+                                                                    <td
+
+                                                                        key={
+                                                                            column.key
+                                                                        }
+
+                                                                        className="
+                                                                            px-6
+                                                                            py-4
+                                                                            text-sm
+                                                                            text-gray-700
+                                                                        "
+                                                                    >
+
+                                                                        {
+
+                                                                            String(
+                                                                                row[
+                                                                                    column.key
+                                                                                ] ??
+                                                                                ""
+                                                                            )
+
+                                                                        }
+
+                                                                    </td>
+
+                                                                )
+                                                            )
+
+                                                        }
+
+                                                        <td
+                                                            className="
+                                                                px-6
+                                                                py-4
+                                                                space-x-2
+                                                            "
+                                                        >
+
+                                                            <Link
+
+                                                                to={`${editPath}/${row.id}`}
+
+                                                                className="
+                                                                    inline-flex
+                                                                    px-3
+                                                                    py-2
+                                                                    text-sm
+                                                                    rounded-lg
+                                                                    bg-yellow-500
+                                                                    text-white
+                                                                    hover:bg-yellow-600
+                                                                "
+                                                            >
+
+                                                                Edit
+
+                                                            </Link>
+
+                                                            <button
+
+                                                                className="
+                                                                    inline-flex
+                                                                    px-3
+                                                                    py-2
+                                                                    text-sm
+                                                                    rounded-lg
+                                                                    bg-red-600
+                                                                    text-white
+                                                                    hover:bg-red-700
+                                                                "
+
+                                                                onClick={() =>
+                                                                    handleDelete(
+                                                                        row.id
+                                                                    )
+                                                                }
+                                                            >
+
+                                                                Delete
+
+                                                            </button>
+
+                                                        </td>
+
+                                                    </tr>
+
+                                                )
+                                            )
+
+                                        ) : (
+
+                                            <tr>
+
+                                                <td
+
+                                                    colSpan={
+                                                        columns.length + 1
+                                                    }
+
+                                                    className="
+                                                        py-10
+                                                        text-center
+                                                        text-gray-500
+                                                    "
+                                                >
+
+                                                    No records found
+
+                                                </td>
+
+                                            </tr>
+
+                                        )
+
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    )
+
+                }
+
+            </div>
 
         </div>
+
     );
+
 };
 
 export default CrudListPage;

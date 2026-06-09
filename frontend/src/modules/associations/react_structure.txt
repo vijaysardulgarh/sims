@@ -4,12 +4,10 @@
 │   ├── association-meetings
 │   │   ├── components
 │   │   │   ├── AssociationMeetingForm.jsx
-│   │   │   ├── AssociationMeetingTable.jsx
 │   │   ├── pages
-│   │   │   ├── AssociationMeetingCreatePage.jsx
-│   │   │   ├── AssociationMeetingDetailPage.jsx
-│   │   │   ├── AssociationMeetingEditPage.jsx
+│   │   │   ├── AddAssociationMeeting.jsx
 │   │   │   ├── AssociationMeetingListPage.jsx
+│   │   │   ├── EditAssociationMeeting.jsx
 │   │   ├── routes
 │   │   │   ├── associationMeetingRoutes.jsx
 │   │   ├── services
@@ -17,23 +15,30 @@
 │   ├── association-members
 │   │   ├── components
 │   │   │   ├── AssociationMemberForm.jsx
-│   │   │   ├── AssociationMemberTable.jsx
 │   │   ├── pages
-│   │   │   ├── AssociationMemberCreatePage.jsx
-│   │   │   ├── AssociationMemberDetailPage.jsx
+│   │   │   ├── AssociationMemberAddPage.jsx
 │   │   │   ├── AssociationMemberEditPage.jsx
 │   │   │   ├── AssociationMemberListPage.jsx
 │   │   ├── routes
 │   │   │   ├── associationMemberRoutes.jsx
 │   │   ├── services
 │   │   │   ├── associationMemberService.js
+│   ├── association-role-assignments
+│   │   ├── components
+│   │   │   ├── AssociationRoleAssignmentForm.jsx
+│   │   ├── pages
+│   │   │   ├── AssociationRoleAssignmentAddPage.jsx
+│   │   │   ├── AssociationRoleAssignmentEditPage.jsx
+│   │   │   ├── AssociationRoleAssignmentListPage.jsx
+│   │   ├── routes
+│   │   │   ├── associationRoleAssignmentRoutes.jsx
+│   │   ├── services
+│   │   │   ├── associationRoleAssignmentService.js
 │   ├── association-roles
 │   │   ├── components
 │   │   │   ├── AssociationRoleForm.jsx
-│   │   │   ├── AssociationRoleTable.jsx
 │   │   ├── pages
-│   │   │   ├── AssociationRoleCreatePage.jsx
-│   │   │   ├── AssociationRoleDetailPage.jsx
+│   │   │   ├── AssociationRoleAddPage.jsx
 │   │   │   ├── AssociationRoleEditPage.jsx
 │   │   │   ├── AssociationRoleListPage.jsx
 │   │   ├── routes
@@ -43,10 +48,8 @@
 │   ├── associations
 │   │   ├── components
 │   │   │   ├── AssociationForm.jsx
-│   │   │   ├── AssociationTable.jsx
 │   │   ├── pages
-│   │   │   ├── AssociationCreatePage.jsx
-│   │   │   ├── AssociationDetailPage.jsx
+│   │   │   ├── AssociationAddPage.jsx
 │   │   │   ├── AssociationEditPage.jsx
 │   │   │   ├── AssociationListPage.jsx
 │   │   ├── routes
@@ -73,13 +76,3 @@
 │   │   │   ├── smcMemberRoutes.jsx
 │   │   ├── services
 │   │   │   ├── smcMemberService.js
-│   ├── staff-association-role-assignments
-│   │   ├── components
-│   │   ├── pages
-│   │   ├── routes
-│   │   ├── services
-│   ├── student-association-role-assignments
-│   │   ├── components
-│   │   ├── pages
-│   │   ├── routes
-│   │   ├── services

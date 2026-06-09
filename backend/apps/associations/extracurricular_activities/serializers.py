@@ -30,6 +30,29 @@ class ExtracurricularActivitySerializer(
 
     participants_count = serializers.SerializerMethodField()
 
+    location = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        allow_null=True
+    )
+
+    coordinator = serializers.IntegerField(
+        required=False,
+        allow_null=True
+    )
+
+    cost = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        required=False,
+        allow_null=True
+    )
+
+    capacity = serializers.IntegerField(
+        required=False,
+        allow_null=True
+    )
+
     class Meta:
 
         model = ExtracurricularActivity
@@ -72,6 +95,27 @@ class ExtracurricularActivitySerializer(
             "created_at",
             "updated_at",
         ]
+
+        read_only_fields = [
+
+            "school",
+            "school_name",
+
+            "academic_session",
+            "academic_session_name",
+
+            "participants_count",
+
+            "created_at",
+            "updated_at",
+        ]
+
+    def validate(self, attrs):
+
+        if attrs.get("location") is None:
+            attrs["location"] = ""
+
+        return attrs
 
     def get_participants_count(
         self,

@@ -56,7 +56,8 @@ class ExtracurricularActivity(SessionBaseModel):
 
     location = models.CharField(
         max_length=255,
-        blank=True
+        blank=True,
+        null=True
     )
 
     coordinator = models.ForeignKey(

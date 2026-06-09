@@ -27,10 +27,6 @@ const CrudCreatePage = ({
     const [saving, setSaving] =
         useState(false);
 
-    // ==========================================
-    // ERROR HANDLER
-    // ==========================================
-
     const handleApiErrors = (
         error
     ) => {
@@ -53,24 +49,23 @@ const CrudCreatePage = ({
             ([field, messages]) => {
 
                 const value =
+
                     Array.isArray(
                         messages
                     )
-                        ? messages.join(
-                              ", "
-                          )
+
+                        ? messages.join(", ")
+
                         : messages;
 
                 toast.error(
                     `${field}: ${value}`
                 );
+
             }
         );
-    };
 
-    // ==========================================
-    // CREATE
-    // ==========================================
+    };
 
     const handleSubmit =
         async (e) => {
@@ -79,9 +74,7 @@ const CrudCreatePage = ({
 
             try {
 
-                setSaving(
-                    true
-                );
+                setSaving(true);
 
                 await api.post(
                     endpoint,
@@ -96,7 +89,9 @@ const CrudCreatePage = ({
                     redirectPath
                 );
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 console.error(
                     error
@@ -106,159 +101,195 @@ const CrudCreatePage = ({
                     error
                 );
 
-            } finally {
-
-                setSaving(
-                    false
-                );
             }
-        };
 
-    // ==========================================
-    // PAGE
-    // ==========================================
+            finally {
+
+                setSaving(false);
+
+            }
+
+        };
 
     return (
 
         <div
             className="
-                container-fluid
+                max-w-7xl
+                mx-auto
+                space-y-6
             "
         >
 
+            {/* HEADER */}
+
             <div
                 className="
-                    d-flex
-                    justify-content-between
-                    align-items-center
-                    mb-4
+                    flex
+                    items-center
+                    justify-between
                 "
             >
 
-                <h3
-                    className="
-                        mb-0
-                    "
-                >
-                    {title}
-                </h3>
+                <div>
+
+                    <h1
+                        className="
+                            text-3xl
+                            font-bold
+                            text-gray-900
+                        "
+                    >
+                        {title}
+                    </h1>
+
+                    <p
+                        className="
+                            text-gray-500
+                            mt-1
+                        "
+                    >
+                        Create a new record
+                    </p>
+
+                </div>
 
                 <button
+
                     type="button"
-                    className="
-                        btn
-                        btn-outline-secondary
-                    "
+
                     onClick={() =>
                         navigate(
                             redirectPath
                         )
                     }
+
+                    className="
+                        px-4
+                        py-2
+                        border
+                        border-gray-300
+                        rounded-xl
+                        hover:bg-gray-100
+                    "
                 >
+
                     Back
+
                 </button>
 
             </div>
 
+            {/* FORM CARD */}
+
             <div
                 className="
-                    card
-                    shadow-sm
-                    border-0
+                    bg-white
+                    rounded-2xl
+                    shadow
+                    p-8
                 "
             >
 
-                <div
-                    className="
-                        card-body
-                    "
+                <form
+                    onSubmit={
+                        handleSubmit
+                    }
                 >
 
-                    <form
-                        onSubmit={
-                            handleSubmit
+                    <FormComponent
+
+                        formData={
+                            formData
                         }
+
+                        setFormData={
+                            setFormData
+                        }
+
+                        loading={
+                            saving
+                        }
+
+                    />
+
+                    <div
+                        className="
+                            flex
+                            gap-3
+                            mt-8
+                        "
                     >
 
-                        <FormComponent
+                        <button
 
-                            formData={
-                                formData
-                            }
+                            type="submit"
 
-                            setFormData={
-                                setFormData
-                            }
-
-                            loading={
+                            disabled={
                                 saving
                             }
 
-                        />
-
-                        <div
                             className="
-                                d-flex
-                                gap-2
-                                mt-4
+                                px-6
+                                py-3
+                                bg-blue-600
+                                text-white
+                                rounded-xl
+                                hover:bg-blue-700
+                                disabled:opacity-50
                             "
                         >
 
-                            <button
+                            {
 
-                                type="submit"
+                                saving
 
-                                disabled={
-                                    saving
-                                }
-
-                                className="
-                                    btn
-                                    btn-primary
-                                "
-                            >
-
-                                {saving
                                     ? "Saving..."
-                                    : "Save"}
 
-                            </button>
+                                    : "Save"
 
-                            <button
+                            }
 
-                                type="button"
+                        </button>
 
-                                disabled={
-                                    saving
-                                }
+                        <button
 
-                                className="
-                                    btn
-                                    btn-light
-                                "
+                            type="button"
 
-                                onClick={() =>
-                                    navigate(
-                                        redirectPath
-                                    )
-                                }
+                            disabled={
+                                saving
+                            }
 
-                            >
+                            onClick={() =>
+                                navigate(
+                                    redirectPath
+                                )
+                            }
 
-                                Cancel
+                            className="
+                                px-6
+                                py-3
+                                border
+                                border-gray-300
+                                rounded-xl
+                                hover:bg-gray-100
+                            "
+                        >
 
-                            </button>
+                            Cancel
 
-                        </div>
+                        </button>
 
-                    </form>
+                    </div>
 
-                </div>
+                </form>
 
             </div>
 
         </div>
+
     );
+
 };
 
 export default CrudCreatePage;

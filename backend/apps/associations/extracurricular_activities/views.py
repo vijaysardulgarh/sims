@@ -2,24 +2,46 @@
 # associations/views/extracurricular_activity_views.py
 # =============================================================================
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import (
+    IsAuthenticated
+)
 
 from apps.associations.extracurricular_activities.models import (
     ExtracurricularActivity
 )
 
-from apps.core.common.views import BaseAPIView
+from apps.associations.extracurricular_activities.serializers import (
+    ExtracurricularActivitySerializer
+)
+
+from apps.core.common.views import (
+    BaseAPIView
+)
 
 
 class ExtracurricularActivityAPIView(
     BaseAPIView
 ):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated
+    ]
 
-    def get(self, request):
+    # =========================================================
+    # LIST / DETAIL
+    # =========================================================
 
-        school = getattr(request, "school", None)
+    def get(
+        self,
+        request,
+        pk=None
+    ):
+
+        school = getattr(
+            request,
+            "school",
+            None
+        )
 
         academic_session = getattr(
             request,
@@ -29,10 +51,11 @@ class ExtracurricularActivityAPIView(
 
         queryset = (
 
-            ExtracurricularActivity.objects.filter(
+            ExtracurricularActivity.objects
+
+            .filter(
                 school=school,
                 academic_session=academic_session,
-                is_active=True,
                 is_deleted=False,
             )
 
@@ -44,49 +67,195 @@ class ExtracurricularActivityAPIView(
             .prefetch_related(
                 "participants"
             )
+        )
 
-            .order_by(
-                "priority",
-                "name"
+        if pk:
+
+            activity = queryset.filter(
+                pk=pk
+            ).first()
+
+            if not activity:
+
+                return self.error_response(
+                    message="Activity not found",
+                    status_code=404
+                )
+
+            serializer = (
+                ExtracurricularActivitySerializer(
+                    activity
+                )
+            )
+
+            return self.success_response(
+                data=serializer.data
+            )
+
+        queryset = queryset.order_by(
+            "priority",
+            "name"
+        )
+
+        serializer = (
+            ExtracurricularActivitySerializer(
+                queryset,
+                many=True
             )
         )
 
-        data = []
+        return self.success_response(
+            data=serializer.data
+        )
 
-        for activity in queryset:
+    # =========================================================
+    # CREATE
+    # =========================================================
 
-            data.append({
+    def post(
+        self,
+        request
+    ):
 
-                "id":
-                    activity.id,
+        school = getattr(
+            request,
+            "school",
+            None
+        )
 
-                "name":
-                    activity.name,
+        academic_session = getattr(
+            request,
+            "academic_session",
+            None
+        )
 
-                "category":
-                    activity.category,
+        serializer = (
+            ExtracurricularActivitySerializer(
+                data=request.data
+            )
+        )
 
-                "status":
-                    activity.status,
+        if serializer.is_valid():
 
-                "start_date":
-                    activity.start_date,
+            activity = serializer.save(
 
-                "end_date":
-                    activity.end_date,
+                school=school,
 
-                "location":
-                    activity.location,
+                academic_session=
+                academic_session
+            )
 
-                "coordinator":
+            return self.success_response(
 
-                    activity.coordinator.name
-                    if activity.coordinator
-                    else None,
+                data=
+                ExtracurricularActivitySerializer(
+                    activity
+                ).data,
 
-                "participants_count":
+                message=
+                "Activity created successfully"
+            )
 
-                    activity.participants.count(),
-            })
+        return self.error_response(
 
-        return self.success_response(data=data)
+            errors=
+            serializer.errors,
+
+            status_code=400
+        )
+
+    # =========================================================
+    # UPDATE
+    # =========================================================
+
+    def put(
+        self,
+        request,
+        pk
+    ):
+
+        activity = (
+
+            ExtracurricularActivity.objects
+
+            .filter(
+                pk=pk,
+                is_deleted=False
+            )
+
+            .first()
+        )
+
+        if not activity:
+
+            return self.error_response(
+                message="Activity not found",
+                status_code=404
+            )
+
+        serializer = (
+            ExtracurricularActivitySerializer(
+                activity,
+                data=request.data,
+                partial=True
+            )
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return self.success_response(
+
+                data=serializer.data,
+
+                message=
+                "Activity updated successfully"
+            )
+
+        return self.error_response(
+
+            errors=
+            serializer.errors,
+
+            status_code=400
+        )
+
+    # =========================================================
+    # DELETE
+    # =========================================================
+
+    def delete(
+        self,
+        request,
+        pk
+    ):
+
+        activity = (
+
+            ExtracurricularActivity.objects
+
+            .filter(
+                pk=pk,
+                is_deleted=False
+            )
+
+            .first()
+        )
+
+        if not activity:
+
+            return self.error_response(
+                message="Activity not found",
+                status_code=404
+            )
+
+        activity.is_deleted = True
+        activity.is_active = False
+
+        activity.save()
+
+        return self.success_response(
+            message=
+            "Activity deleted successfully"
+        )

@@ -1,28 +1,30 @@
-// ============================================
-// EXTRACURRICULAR ACTIVITIES
-// ============================================
+import { Route } from "react-router-dom";
 
-const extracurricularActivityRoutes = [
+import ExtracurricularActivityListPage from "../pages/ExtracurricularActivityListPage";
+import ExtracurricularActivityAddPage from "../pages/ExtracurricularActivityAddPage";
+import ExtracurricularActivityEditPage from "../pages/ExtracurricularActivityEditPage";
 
-    {
-        path: 'associations/extracurricular-activities',
-        element: <ExtracurricularActivityListPage />,
-    },
+const extracurricularActivityRoutes = (
 
-    {
-        path: 'associations/extracurricular-activities/create',
-        element: <ExtracurricularActivityCreatePage />,
-    },
+    <>
 
-    {
-        path: 'associations/extracurricular-activities/edit/:id',
-        element: <ExtracurricularActivityEditPage />,
-    },
+        <Route
+            path="associations/extracurricular-activities"
+            element={<ExtracurricularActivityListPage />}
+        />
 
-    {
-        path: 'associations/extracurricular-activities/:id',
-        element: <ExtracurricularActivityDetailPage />,
-    },
-];
+        <Route
+            path="associations/extracurricular-activities/add"
+            element={<ExtracurricularActivityAddPage />}
+        />
+
+        <Route
+            path="associations/extracurricular-activities/edit/:id"
+            element={<ExtracurricularActivityEditPage />}
+        />
+
+    </>
+
+);
 
 export default extracurricularActivityRoutes;
