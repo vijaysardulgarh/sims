@@ -1,42 +1,69 @@
-# =============================================================================
-# associations/models/association_role.py
-# =============================================================================
-
 from django.db import models
 
-from apps.core.common.base.models import SchoolBaseModel
-from apps.associations.associations.models import Association
+from apps.core.common.base.models import (
+    SessionBaseModel
+)
+
+from apps.associations.associations.models import (
+    Association
+)
 
 
-class AssociationRole(SchoolBaseModel):
+class AssociationRole(
+    SessionBaseModel
+):
 
     association = models.ForeignKey(
+
         Association,
+
         on_delete=models.CASCADE,
-        related_name="roles",
-        db_index=True
+
+        related_name="roles"
     )
 
-    title = models.CharField(max_length=255)
+    title = models.CharField(
+        max_length=255
+    )
 
     responsibilities = models.TextField(
-        blank=True,
-        null=True
+        blank=True
     )
 
     class Meta:
+
         verbose_name = "Association Role"
-        verbose_name_plural = "Association Roles"
+
+        verbose_name_plural = (
+            "Association Roles"
+        )
 
         constraints = [
+
             models.UniqueConstraint(
-                fields=["association", "title"],
-                name="unique_role_per_association"
+
+                fields=[
+                    "association",
+                    "title"
+                ],
+
+                name=
+                "unique_role_per_association"
             )
+
         ]
 
-        ordering = ["title"]
+        ordering = [
+            "title"
+        ]
 
     def __str__(self):
 
-        return f"{self.title} - {self.association.name}"
+        return (
+
+            f"{self.title}"
+
+            f" - "
+
+            f"{self.association.name}"
+        )

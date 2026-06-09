@@ -2,9 +2,7 @@
 # association_roles/views.py
 # =============================================================================
 
-from django.shortcuts import (
-    get_object_or_404
-)
+from django.shortcuts import get_object_or_404
 
 from rest_framework.permissions import (
     IsAuthenticated
@@ -35,42 +33,42 @@ class AssociationRoleListAPIView(
         IsAuthenticated
     ]
 
-    # =========================================================================
-    # LIST
-    # =========================================================================
+    def get_queryset(
+        self,
+        request
+    ):
 
-    def get(self, request):
-
-        school = getattr(
-            request,
-            "school",
-            None
-        )
-
-        academic_session = getattr(
-            request,
-            "academic_session",
-            None
-        )
-
-        queryset = (
+        return (
 
             AssociationRole.objects
 
             .filter(
-
-                association__school=school,
-
-                association__academic_session=
-                academic_session,
-
-                is_active=True,
-
-                is_deleted=False,
+                is_deleted=False
             )
 
             .select_related(
-                "association"
+                "association",
+                "academic_session",
+            )
+        )
+
+    # =========================================================================
+    # LIST
+    # =========================================================================
+
+    def get(
+        self,
+        request
+    ):
+
+        queryset = (
+
+            self.get_queryset(
+                request
+            )
+
+            .filter(
+                is_active=True
             )
 
             .order_by(
@@ -78,6 +76,17 @@ class AssociationRoleListAPIView(
                 "title"
             )
         )
+
+        association_id = request.GET.get(
+            "association"
+        )
+
+        if association_id:
+
+            queryset = queryset.filter(
+                association_id=
+                association_id
+            )
 
         serializer = (
             AssociationRoleSerializer(
@@ -94,7 +103,15 @@ class AssociationRoleListAPIView(
     # CREATE
     # =========================================================================
 
-    def post(self, request):
+    def post(
+        self,
+        request
+    ):
+
+        print("\n" + "=" * 80)
+        print("ASSOCIATION ROLE CREATE")
+        print("=" * 80)
+        print("REQUEST DATA:", request.data)
 
         serializer = (
             AssociationRoleSerializer(
@@ -102,21 +119,39 @@ class AssociationRoleListAPIView(
             )
         )
 
-        if serializer.is_valid():
+        is_valid = serializer.is_valid()
 
-            serializer.save()
+        print(
+            "IS VALID:",
+            is_valid
+        )
 
-            return self.success_response(
+        print(
+            "ERRORS:",
+            serializer.errors
+        )
 
-                data=serializer.data,
+        if not is_valid:
 
-                message=(
-                    "Association Role created successfully"
-                )
+            return self.error_response(
+                errors=serializer.errors
             )
 
-        return self.error_response(
-            errors=serializer.errors
+        role = serializer.save()
+
+        print(
+            "CREATED ROLE ID:",
+            role.id
+        )
+
+        return self.success_response(
+
+            data=serializer.data,
+
+            message=(
+                "Association Role "
+                "created successfully"
+            )
         )
 
 
@@ -132,9 +167,27 @@ class AssociationRoleDetailAPIView(
         IsAuthenticated
     ]
 
-    # =========================================================================
-    # DETAIL
-    # =========================================================================
+    def get_object(
+        self,
+        request,
+        pk
+    ):
+
+        return get_object_or_404(
+
+            AssociationRole.objects
+
+            .filter(
+                is_deleted=False
+            )
+
+            .select_related(
+                "association",
+                "academic_session",
+            ),
+
+            pk=pk
+        )
 
     def get(
         self,
@@ -142,39 +195,11 @@ class AssociationRoleDetailAPIView(
         pk
     ):
 
-        school = getattr(
-            request,
-            "school",
-            None
-        )
-
-        academic_session = getattr(
-            request,
-            "academic_session",
-            None
-        )
-
-        association_role = get_object_or_404(
-
-            AssociationRole.objects
-
-            .filter(
-
-                association__school=school,
-
-                association__academic_session=
-                academic_session,
-
-                is_active=True,
-
-                is_deleted=False,
+        association_role = (
+            self.get_object(
+                request,
+                pk
             )
-
-            .select_related(
-                "association"
-            ),
-
-            pk=pk
         )
 
         serializer = (
@@ -187,23 +212,17 @@ class AssociationRoleDetailAPIView(
             data=serializer.data
         )
 
-    # =========================================================================
-    # UPDATE
-    # =========================================================================
-
     def put(
         self,
         request,
         pk
     ):
 
-        association_role = get_object_or_404(
-
-            AssociationRole,
-
-            pk=pk,
-
-            is_deleted=False
+        association_role = (
+            self.get_object(
+                request,
+                pk
+            )
         )
 
         serializer = (
@@ -217,26 +236,23 @@ class AssociationRoleDetailAPIView(
             )
         )
 
-        if serializer.is_valid():
+        if not serializer.is_valid():
 
-            serializer.save()
-
-            return self.success_response(
-
-                data=serializer.data,
-
-                message=(
-                    "Association Role updated successfully"
-                )
+            return self.error_response(
+                errors=serializer.errors
             )
 
-        return self.error_response(
-            errors=serializer.errors
-        )
+        serializer.save()
 
-    # =========================================================================
-    # DELETE
-    # =========================================================================
+        return self.success_response(
+
+            data=serializer.data,
+
+            message=(
+                "Association Role "
+                "updated successfully"
+            )
+        )
 
     def delete(
         self,
@@ -244,22 +260,31 @@ class AssociationRoleDetailAPIView(
         pk
     ):
 
-        association_role = get_object_or_404(
-
-            AssociationRole,
-
-            pk=pk,
-
-            is_deleted=False
+        association_role = (
+            self.get_object(
+                request,
+                pk
+            )
         )
 
         association_role.is_deleted = True
 
-        association_role.save()
+        association_role.is_active = False
+
+        association_role.save(
+
+            update_fields=[
+
+                "is_deleted",
+
+                "is_active",
+            ]
+        )
 
         return self.success_response(
 
             message=(
-                "Association Role deleted successfully"
+                "Association Role "
+                "deleted successfully"
             )
         )

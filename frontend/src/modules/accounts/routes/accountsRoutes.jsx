@@ -10,16 +10,16 @@ import permissionRoutes from
 "../permissions/routes/permissionRoutes";
 
 import rolePermissionRoutes from
-"../role_permissions/routes/rolePermissionRoutes";
+"../role-permissions/routes/rolePermissionRoutes";
 
 import systemModulesRoutes from
 "../system-modules/routes/systemModulesRoutes";
 
 import userRoleRoutes from
-"../user_roles/routes/userRoleRoutes";
+"../user-roles/routes/userRoleRoutes";
 
 import userPermissionRoutes from
-"../user_permissions/routes/userPermissionRoutes";
+"../user-permissions/routes/userPermissionRoutes";
 
 
 const accountsRoutes = (

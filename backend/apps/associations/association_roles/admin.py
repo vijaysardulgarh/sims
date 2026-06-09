@@ -4,27 +4,34 @@
 
 from django.contrib import admin
 
-from apps.associations.models import AssociationRole
+from apps.associations.models import (
+    AssociationRole
+)
 
 
 @admin.register(AssociationRole)
-class AssociationRoleAdmin(admin.ModelAdmin):
+class AssociationRoleAdmin(
+    admin.ModelAdmin
+):
 
     list_display = (
         "id",
         "association",
+        "academic_session",
         "title",
         "is_active",
     )
 
     search_fields = (
         "title",
+        "responsibilities",
         "association__name",
     )
 
     list_filter = (
+        "school",
+        "academic_session",
         "association__association_type",
-        "association__academic_session",
         "is_active",
     )
 
@@ -41,4 +48,11 @@ class AssociationRoleAdmin(admin.ModelAdmin):
 
     list_select_related = (
         "association",
+        "academic_session",
+        "school",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
     )

@@ -180,15 +180,9 @@ RBAC_CONFIG = {
             },
 
             {
-                "name": "Staff Association Role Assignments",
-                "slug": "staff-association-role-assignments",
-                "path": "/dashboard/associations/staff-association-role-assignments",
-            },
-
-            {
-                "name": "Student Association Role Assignments",
-                "slug": "student-association-role-assignments",
-                "path": "/dashboard/associations/student-association-role-assignments",
+                "name": "Association Role Assignments",
+                "slug": "association-role-assignments",
+                "path": "/dashboard/associations/association-role-assignments",
             },
 
         ]

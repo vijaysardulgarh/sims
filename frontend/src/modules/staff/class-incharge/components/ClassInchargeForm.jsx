@@ -10,7 +10,7 @@ import {
 
 import classService from "../../../academics/classes/services/classService";
 import sectionService from "../../../academics/sections/services/sectionService";
-import staffService from "../../profiles/services/staffService";
+import staffService from "../../staff/services/staffService";
 
 const ClassInchargeForm = ({
 

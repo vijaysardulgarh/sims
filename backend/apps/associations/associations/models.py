@@ -2,7 +2,7 @@
 # associations/models/association.py
 # =============================================================================
 
-from django.db import models, transaction
+from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 
@@ -65,11 +65,10 @@ class Association(SessionBaseModel):
     )
 
     description = models.TextField(
-        blank=True,
-        null=True
+        blank=True
     )
 
-    tasks = models.TextField(
+    objectives = models.TextField(
         blank=True
     )
 
@@ -98,6 +97,55 @@ class Association(SessionBaseModel):
             "-priority",
             "name"
         ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "academic_session",
+                    "school",
+                    "name"
+                ],
+                name="unique_association_session"
+            )
+
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "academic_session",
+                    "association_type"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "academic_session",
+                    "status"
+                ]
+            )
+
+        ]
+
+    def clean(self):
+
+        if self.priority < 0:
+
+            raise ValidationError(
+                "Priority cannot be negative."
+            )
+
+    def save(self, *args, **kwargs):
+
+        if not self.slug:
+
+            self.slug = slugify(
+                f"{self.name}-{self.academic_session}"
+            )
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
 

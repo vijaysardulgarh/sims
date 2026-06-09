@@ -21,10 +21,6 @@ from apps.core.common.views import (
 )
 
 
-# =============================================================================
-# LIST + CREATE
-# =============================================================================
-
 class AssociationMemberAPIView(
     BaseAPIView
 ):
@@ -35,32 +31,47 @@ class AssociationMemberAPIView(
 
     def get(self, request):
 
-        school = getattr(
-            request,
-            "school",
-            None
-        )
-
         queryset = (
 
             AssociationMember.objects
 
             .filter(
-                school=school,
                 is_active=True,
                 is_deleted=False,
             )
 
             .select_related(
                 "association",
+                "academic_session",
                 "staff",
+                "student",
             )
 
             .order_by(
-                "designation",
-                "staff__name"
+                "association__name",
+                "member_type",
             )
         )
+
+        association_id = request.GET.get(
+            "association"
+        )
+
+        member_type = request.GET.get(
+            "member_type"
+        )
+
+        if association_id:
+
+            queryset = queryset.filter(
+                association_id=association_id
+            )
+
+        if member_type:
+
+            queryset = queryset.filter(
+                member_type=member_type
+            )
 
         serializer = (
             AssociationMemberSerializer(
@@ -87,17 +98,15 @@ class AssociationMemberAPIView(
 
             return self.success_response(
                 data=serializer.data,
-                message="Member created successfully"
+                message=(
+                    "Member created successfully"
+                )
             )
 
         return self.error_response(
             errors=serializer.errors
         )
 
-
-# =============================================================================
-# DETAIL + UPDATE + DELETE
-# =============================================================================
 
 class AssociationMemberDetailAPIView(
     BaseAPIView
@@ -107,12 +116,30 @@ class AssociationMemberDetailAPIView(
         IsAuthenticated
     ]
 
-    def get(self, request, pk):
+    def get_object(
+        self,
+        request,
+        pk
+    ):
 
-        member = get_object_or_404(
-            AssociationMember,
-            pk=pk,
-            is_deleted=False,
+        return get_object_or_404(
+
+            AssociationMember.objects.filter(
+                is_deleted=False
+            ),
+
+            pk=pk
+        )
+
+    def get(
+        self,
+        request,
+        pk
+    ):
+
+        member = self.get_object(
+            request,
+            pk
         )
 
         serializer = (
@@ -125,12 +152,15 @@ class AssociationMemberDetailAPIView(
             data=serializer.data
         )
 
-    def put(self, request, pk):
+    def put(
+        self,
+        request,
+        pk
+    ):
 
-        member = get_object_or_404(
-            AssociationMember,
-            pk=pk,
-            is_deleted=False,
+        member = self.get_object(
+            request,
+            pk
         )
 
         serializer = (
@@ -147,24 +177,39 @@ class AssociationMemberDetailAPIView(
 
             return self.success_response(
                 data=serializer.data,
-                message="Member updated successfully"
+                message=(
+                    "Member updated successfully"
+                )
             )
 
         return self.error_response(
             errors=serializer.errors
         )
 
-    def delete(self, request, pk):
+    def delete(
+        self,
+        request,
+        pk
+    ):
 
-        member = get_object_or_404(
-            AssociationMember,
-            pk=pk,
-            is_deleted=False,
+        member = self.get_object(
+            request,
+            pk
         )
 
         member.is_deleted = True
-        member.save()
+
+        member.is_active = False
+
+        member.save(
+            update_fields=[
+                "is_deleted",
+                "is_active",
+            ]
+        )
 
         return self.success_response(
-            message="Member deleted successfully"
+            message=(
+                "Member deleted successfully"
+            )
         )

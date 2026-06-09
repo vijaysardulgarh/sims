@@ -1,0 +1,85 @@
+├── .
+│   ├── export_project.py
+│   ├── react_structure.txt
+│   ├── association-meetings
+│   │   ├── components
+│   │   │   ├── AssociationMeetingForm.jsx
+│   │   │   ├── AssociationMeetingTable.jsx
+│   │   ├── pages
+│   │   │   ├── AssociationMeetingCreatePage.jsx
+│   │   │   ├── AssociationMeetingDetailPage.jsx
+│   │   │   ├── AssociationMeetingEditPage.jsx
+│   │   │   ├── AssociationMeetingListPage.jsx
+│   │   ├── routes
+│   │   │   ├── associationMeetingRoutes.jsx
+│   │   ├── services
+│   │   │   ├── associationMeetingService.js
+│   ├── association-members
+│   │   ├── components
+│   │   │   ├── AssociationMemberForm.jsx
+│   │   │   ├── AssociationMemberTable.jsx
+│   │   ├── pages
+│   │   │   ├── AssociationMemberCreatePage.jsx
+│   │   │   ├── AssociationMemberDetailPage.jsx
+│   │   │   ├── AssociationMemberEditPage.jsx
+│   │   │   ├── AssociationMemberListPage.jsx
+│   │   ├── routes
+│   │   │   ├── associationMemberRoutes.jsx
+│   │   ├── services
+│   │   │   ├── associationMemberService.js
+│   ├── association-roles
+│   │   ├── components
+│   │   │   ├── AssociationRoleForm.jsx
+│   │   │   ├── AssociationRoleTable.jsx
+│   │   ├── pages
+│   │   │   ├── AssociationRoleCreatePage.jsx
+│   │   │   ├── AssociationRoleDetailPage.jsx
+│   │   │   ├── AssociationRoleEditPage.jsx
+│   │   │   ├── AssociationRoleListPage.jsx
+│   │   ├── routes
+│   │   │   ├── associationRoleRoutes.jsx
+│   │   ├── services
+│   │   │   ├── associationRoleService.js
+│   ├── associations
+│   │   ├── components
+│   │   │   ├── AssociationForm.jsx
+│   │   │   ├── AssociationTable.jsx
+│   │   ├── pages
+│   │   │   ├── AssociationCreatePage.jsx
+│   │   │   ├── AssociationDetailPage.jsx
+│   │   │   ├── AssociationEditPage.jsx
+│   │   │   ├── AssociationListPage.jsx
+│   │   ├── routes
+│   │   │   ├── associationRoutes.jsx
+│   │   ├── services
+│   │   │   ├── associationService.js
+│   ├── extracurricular-activities
+│   │   ├── components
+│   │   ├── pages
+│   │   ├── routes
+│   │   │   ├── extracurricularActivityRoutes.jsx
+│   │   ├── services
+│   ├── routes
+│   │   ├── associationModuleRoutes.jsx
+│   ├── smc-members
+│   │   ├── components
+│   │   │   ├── SMCMemberForm.jsx
+│   │   ├── pages
+│   │   │   ├── SMCMemberCreate.jsx
+│   │   │   ├── SMCMemberEdit.jsx
+│   │   │   ├── SMCMemberView.jsx
+│   │   │   ├── SMCMembersList.jsx
+│   │   ├── routes
+│   │   │   ├── smcMemberRoutes.jsx
+│   │   ├── services
+│   │   │   ├── smcMemberService.js
+│   ├── staff-association-role-assignments
+│   │   ├── components
+│   │   ├── pages
+│   │   ├── routes
+│   │   ├── services
+│   ├── student-association-role-assignments
+│   │   ├── components
+│   │   ├── pages
+│   │   ├── routes
+│   │   ├── services

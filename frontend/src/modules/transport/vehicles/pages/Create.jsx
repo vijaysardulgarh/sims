@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 import Form from "../components/Form";
 
-import vehicleService from "../services/Service";
+import vehicleService from "../services/vehicleService";
 
 
 const Create = () => {

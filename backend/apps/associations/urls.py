@@ -35,29 +35,11 @@ urlpatterns = [
         )
     ),
 
-    # =========================================================================
-    # STAFF ASSOCIATION ROLE ASSIGNMENTS
-    # =========================================================================
 
     path(
-
-        "staff-role-assignments/",
-
+        "association-role-assignments/",
         include(
-            "apps.associations.staff_association_role_assignments.urls"
-        )
-    ),
-
-    # =========================================================================
-    # STUDENT ASSOCIATION ROLE ASSIGNMENTS
-    # =========================================================================
-
-    path(
-
-        "student-role-assignments/",
-
-        include(
-            "apps.associations.student_association_role_assignments.urls"
+            "apps.associations.association_role_assignments.urls"
         )
     ),
 

@@ -5,7 +5,6 @@
 from django.urls import path
 
 from apps.associations.associations.views import (
-
     AssociationListAPIView,
     AssociationDetailAPIView,
 )
@@ -22,29 +21,24 @@ app_name = "associations"
 
 urlpatterns = [
 
-    # ============================================
-    # ASSOCIATION LIST & CREATE
-    # ============================================
+    # =========================================================
+    # LIST + CREATE
+    # =========================================================
 
     path(
-
         "",
-
         AssociationListAPIView.as_view(),
-
         name="association-list"
     ),
 
-    # ============================================
-    # ASSOCIATION DETAIL
-    # ============================================
+    # =========================================================
+    # DETAIL + UPDATE + DELETE
+    # =========================================================
 
     path(
-
         "<int:pk>/",
-
         AssociationDetailAPIView.as_view(),
-
         name="association-detail"
     ),
+
 ]

@@ -22,7 +22,7 @@ from apps.core.common.views import (
 
 
 # =============================================================================
-# ASSOCIATION LIST
+# ASSOCIATION LIST + CREATE
 # =============================================================================
 
 class AssociationListAPIView(
@@ -51,17 +51,29 @@ class AssociationListAPIView(
             None
         )
 
-        return (
+        queryset = (
 
             Association.objects.filter(
-
-                school=school,
-
-                academic_session=academic_session,
-
                 is_active=True,
                 is_deleted=False,
             )
+        )
+
+        if school:
+
+            queryset = queryset.filter(
+                school=school
+            )
+
+        if academic_session:
+
+            queryset = queryset.filter(
+                academic_session=academic_session
+            )
+
+        return (
+
+            queryset
 
             .select_related(
                 "school",
@@ -108,6 +120,8 @@ class AssociationListAPIView(
         request
     ):
 
+        data = request.data.copy()
+
         school = getattr(
             request,
             "school",
@@ -120,13 +134,9 @@ class AssociationListAPIView(
             None
         )
 
-        data = request.data.copy()
-
         if school:
 
-            data["school"] = (
-                school.id
-            )
+            data["school"] = school.id
 
         if academic_session:
 
@@ -159,7 +169,7 @@ class AssociationListAPIView(
 
 
 # =============================================================================
-# ASSOCIATION DETAIL
+# ASSOCIATION DETAIL + UPDATE + DELETE
 # =============================================================================
 
 class AssociationDetailAPIView(
@@ -171,34 +181,49 @@ class AssociationDetailAPIView(
     ]
 
     # =========================================================================
-    # QUERYSET
+    # OBJECT
     # =========================================================================
 
-    def get_queryset(self):
+    def get_object(
+        self,
+        request,
+        pk
+    ):
+
+        queryset = (
+
+            Association.objects.filter(
+                is_deleted=False
+            )
+        )
 
         school = getattr(
-            self.request,
+            request,
             "school",
             None
         )
 
         academic_session = getattr(
-            self.request,
+            request,
             "academic_session",
             None
         )
 
-        return (
+        if school:
 
-            Association.objects.filter(
-
-                school=school,
-
-                academic_session=academic_session,
-
-                is_active=True,
-                is_deleted=False,
+            queryset = queryset.filter(
+                school=school
             )
+
+        if academic_session:
+
+            queryset = queryset.filter(
+                academic_session=academic_session
+            )
+
+        return get_object_or_404(
+
+            queryset
 
             .select_related(
                 "school",
@@ -208,7 +233,9 @@ class AssociationDetailAPIView(
 
             .prefetch_related(
                 "documents"
-            )
+            ),
+
+            pk=pk
         )
 
     # =========================================================================
@@ -221,13 +248,9 @@ class AssociationDetailAPIView(
         pk
     ):
 
-        association = (
-            get_object_or_404(
-
-                self.get_queryset(),
-
-                pk=pk
-            )
+        association = self.get_object(
+            request,
+            pk
         )
 
         serializer = (
@@ -250,60 +273,9 @@ class AssociationDetailAPIView(
         pk
     ):
 
-        association = (
-            get_object_or_404(
-
-                self.get_queryset(),
-
-                pk=pk
-            )
-        )
-
-        data = request.data.copy()
-
-        serializer = (
-            AssociationSerializer(
-
-                association,
-
-                data=data
-            )
-        )
-
-        if serializer.is_valid():
-
-            serializer.save()
-
-            return self.success_response(
-
-                data=serializer.data,
-
-                message=(
-                    "Association updated successfully"
-                )
-            )
-
-        return self.error_response(
-            errors=serializer.errors
-        )
-
-    # =========================================================================
-    # PARTIAL UPDATE
-    # =========================================================================
-
-    def patch(
-        self,
-        request,
-        pk
-    ):
-
-        association = (
-            get_object_or_404(
-
-                self.get_queryset(),
-
-                pk=pk
-            )
+        association = self.get_object(
+            request,
+            pk
         )
 
         serializer = (
@@ -344,18 +316,22 @@ class AssociationDetailAPIView(
         pk
     ):
 
-        association = (
-            get_object_or_404(
-
-                self.get_queryset(),
-
-                pk=pk
-            )
+        association = self.get_object(
+            request,
+            pk
         )
 
         association.is_deleted = True
 
-        association.save()
+        association.is_active = False
+
+        association.save(
+
+            update_fields=[
+                "is_deleted",
+                "is_active",
+            ]
+        )
 
         return self.success_response(
 

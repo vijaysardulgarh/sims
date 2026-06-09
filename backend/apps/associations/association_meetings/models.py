@@ -1,34 +1,104 @@
-# =============================================================================
-# associations/models/association_meeting.py
-# =============================================================================
-
 from django.db import models
 
-from apps.documents.models import Document
+from apps.core.common.base.models import (
+    SessionBaseModel
+)
+
 from apps.associations.associations.models import (
     Association
 )
-from apps.core.common.base.models import SessionBaseModel
+
+from apps.documents.models import (
+    Document
+)
 
 
-class AssociationMeeting(SessionBaseModel):
+# =============================================================================
+# MEETING TYPES
+# =============================================================================
+
+TYPE_PHYSICAL = "PHYSICAL"
+TYPE_ONLINE = "ONLINE"
+TYPE_HYBRID = "HYBRID"
+
+TYPE_CHOICES = [
+
+    (TYPE_PHYSICAL, "Physical"),
+
+    (TYPE_ONLINE, "Online"),
+
+    (TYPE_HYBRID, "Hybrid"),
+
+]
+
+
+# =============================================================================
+# MEETING STATUS
+# =============================================================================
+
+STATUS_SCHEDULED = "SCHEDULED"
+STATUS_COMPLETED = "COMPLETED"
+STATUS_CANCELLED = "CANCELLED"
+STATUS_POSTPONED = "POSTPONED"
+
+STATUS_CHOICES = [
+
+    (STATUS_SCHEDULED, "Scheduled"),
+
+    (STATUS_COMPLETED, "Completed"),
+
+    (STATUS_CANCELLED, "Cancelled"),
+
+    (STATUS_POSTPONED, "Postponed"),
+
+]
+
+
+class AssociationMeeting(
+    SessionBaseModel
+):
 
     association = models.ForeignKey(
         Association,
         on_delete=models.CASCADE,
-        related_name="meetings",
-        db_index=True
+        related_name="meetings"
+    )
+
+    title = models.CharField(
+        max_length=255
     )
 
     meeting_date = models.DateTimeField(
-        null=True,
-        blank=True,
         db_index=True
     )
 
-    agenda = models.TextField(blank=True)
+    meeting_type = models.CharField(
+        max_length=20,
+        choices=TYPE_CHOICES,
+        default=TYPE_PHYSICAL
+    )
 
-    location = models.CharField(max_length=100)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_SCHEDULED
+    )
+
+    location = models.CharField(
+        max_length=255,
+        blank=True
+    )
+
+    agenda = models.TextField(
+        blank=True
+    )
+
+    conducted_by = models.ForeignKey(
+        "staff.Staff",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
 
     minutes_document = models.ForeignKey(
         Document,
@@ -36,27 +106,3 @@ class AssociationMeeting(SessionBaseModel):
         null=True,
         blank=True
     )
-
-    class Meta:
-        verbose_name = "Association Meeting"
-        verbose_name_plural = "Association Meetings"
-
-        ordering = ["-meeting_date"]
-
-        indexes = [
-
-            models.Index(
-                fields=[
-                    "school",
-                    "academic_session",
-                    "meeting_date"
-                ]
-            ),
-        ]
-
-    def __str__(self):
-
-        return (
-            f"{self.association.name} "
-            f"Meeting on {self.meeting_date}"
-        )

@@ -1,0 +1,6307 @@
+
+
+// ============================================================
+// FILE: .\association-meetings\components\AssociationMeetingForm.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { useState } from 'react';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationMeetingForm = ({
+    initialData = {},
+    onSubmit,
+}) => {
+
+    const [formData, setFormData] =
+        useState({
+
+            association:
+                initialData.association || '',
+
+            meeting_date:
+                initialData.meeting_date || '',
+
+            location:
+                initialData.location || '',
+
+            agenda:
+                initialData.agenda || '',
+        });
+
+    const handleChange = (e) => {
+
+        setFormData({
+
+            ...formData,
+
+            [e.target.name]:
+                e.target.value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+        onSubmit(formData);
+    };
+
+    return (
+
+        <form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+        >
+
+            <input
+                type="number"
+                name="association"
+                value={formData.association}
+                onChange={handleChange}
+                placeholder="Association ID"
+                className="w-full border p-3 rounded"
+            />
+
+            <input
+                type="datetime-local"
+                name="meeting_date"
+                value={formData.meeting_date}
+                onChange={handleChange}
+                className="w-full border p-3 rounded"
+            />
+
+            <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                placeholder="Location"
+                className="w-full border p-3 rounded"
+            />
+
+            <textarea
+                name="agenda"
+                value={formData.agenda}
+                onChange={handleChange}
+                placeholder="Agenda"
+                rows={5}
+                className="w-full border p-3 rounded"
+            />
+
+            <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+            >
+                Save
+            </button>
+
+        </form>
+    );
+};
+
+export default AssociationMeetingForm;
+
+
+// ============================================================
+// FILE: .\association-meetings\components\AssociationMeetingTable.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { Link } from 'react-router-dom';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationMeetingTable = ({
+    meetings,
+    onDelete,
+}) => {
+
+    return (
+
+        <div className="overflow-x-auto bg-white rounded-2xl shadow">
+
+            <table className="min-w-full divide-y divide-gray-200">
+
+                {/* ================================= */}
+                {/* HEADER */}
+                {/* ================================= */}
+
+                <thead className="bg-gray-50">
+
+                    <tr>
+
+                        <th className="px-4 py-3 text-left">
+                            ID
+                        </th>
+
+                        <th className="px-4 py-3 text-left">
+                            Association
+                        </th>
+
+                        <th className="px-4 py-3 text-left">
+                            Meeting Date
+                        </th>
+
+                        <th className="px-4 py-3 text-left">
+                            Location
+                        </th>
+
+                        <th className="px-4 py-3 text-left">
+                            Agenda
+                        </th>
+
+                        <th className="px-4 py-3 text-center">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                {/* ================================= */}
+                {/* BODY */}
+                {/* ================================= */}
+
+                <tbody className="divide-y divide-gray-200">
+
+                    {
+                        meetings?.length > 0 ? (
+
+                            meetings.map((meeting) => (
+
+                                <tr
+                                    key={meeting.id}
+                                    className="hover:bg-gray-50"
+                                >
+
+                                    <td className="px-4 py-3">
+                                        {meeting.id}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {meeting.association}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {
+                                            meeting.meeting_date
+                                                ? new Date(
+                                                    meeting.meeting_date
+                                                ).toLocaleString()
+                                                : '-'
+                                        }
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {meeting.location}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+
+                                        {
+                                            meeting.agenda
+                                                ?.length > 50
+
+                                                ? `${meeting.agenda.substring(
+                                                    0,
+                                                    50
+                                                )}...`
+
+                                                : meeting.agenda
+                                        }
+
+                                    </td>
+
+                                    <td className="px-4 py-3">
+
+                                        <div className="flex justify-center gap-2">
+
+                                            <Link
+                                                to={`/dashboard/associations/association-meetings/${meeting.id}`}
+                                                className="px-3 py-1 text-sm bg-blue-500 text-white rounded"
+                                            >
+                                                View
+                                            </Link>
+
+                                            <Link
+                                                to={`/dashboard/associations/association-meetings/edit/${meeting.id}`}
+                                                className="px-3 py-1 text-sm bg-yellow-500 text-white rounded"
+                                            >
+                                                Edit
+                                            </Link>
+
+                                            <button
+                                                onClick={() =>
+                                                    onDelete(
+                                                        meeting.id
+                                                    )
+                                                }
+                                                className="px-3 py-1 text-sm bg-red-500 text-white rounded"
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            ))
+
+                        ) : (
+
+                            <tr>
+
+                                <td
+                                    colSpan="6"
+                                    className="px-4 py-6 text-center text-gray-500"
+                                >
+                                    No meetings found.
+                                </td>
+
+                            </tr>
+
+                        )
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    );
+};
+
+export default AssociationMeetingTable;
+
+
+// ============================================================
+// FILE: .\association-meetings\pages\AssociationMeetingCreatePage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { useNavigate } from 'react-router-dom';
+
+import AssociationMeetingForm from '../components/AssociationMeetingForm';
+
+import associationMeetingService from '../services/associationMeetingService';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationMeetingCreatePage = () => {
+
+    const navigate = useNavigate();
+
+    const handleSubmit = async (
+        data
+    ) => {
+
+        try {
+
+            await associationMeetingService.create(
+                data
+            );
+
+            navigate(
+                '/dashboard/associations/association-meetings'
+            );
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    };
+
+    return (
+
+        <div className="p-6">
+
+            <h1 className="text-2xl font-bold mb-6">
+                Create Association Meeting
+            </h1>
+
+            <AssociationMeetingForm
+                onSubmit={handleSubmit}
+            />
+
+        </div>
+    );
+};
+
+export default AssociationMeetingCreatePage;
+
+
+// ============================================================
+// FILE: .\association-meetings\pages\AssociationMeetingDetailPage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useEffect,
+    useState,
+} from 'react';
+
+import {
+    Link,
+    useParams,
+} from 'react-router-dom';
+
+import associationMeetingService from '../services/associationMeetingService';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationMeetingDetailPage = () => {
+
+    const { id } = useParams();
+
+    const [meeting, setMeeting] =
+        useState(null);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    // ========================================
+    // LOAD DATA
+    // ========================================
+
+    useEffect(() => {
+
+        fetchMeeting();
+
+    }, [id]);
+
+    // ========================================
+    // FETCH MEETING
+    // ========================================
+
+    const fetchMeeting = async () => {
+
+        try {
+
+            const response =
+                await associationMeetingService.getById(
+                    id
+                );
+
+            console.log(
+                'Meeting Detail:',
+                response
+            );
+
+            setMeeting(
+
+                response?.data?.data ||
+
+                response?.data ||
+
+                null
+            );
+
+        } catch (error) {
+
+            console.error(error);
+        }
+
+        finally {
+
+            setLoading(false);
+        }
+    };
+
+    // ========================================
+    // LOADING
+    // ========================================
+
+    if (loading) {
+
+        return (
+
+            <div className="p-6">
+
+                Loading...
+
+            </div>
+        );
+    }
+
+    // ========================================
+    // NOT FOUND
+    // ========================================
+
+    if (!meeting) {
+
+        return (
+
+            <div className="p-6">
+
+                Meeting not found
+
+            </div>
+        );
+    }
+
+    // ========================================
+    // PAGE
+    // ========================================
+
+    return (
+
+        <div className="p-6 max-w-4xl mx-auto">
+
+            <div className="flex justify-between items-center mb-6">
+
+                <h1 className="text-3xl font-bold">
+
+                    Association Meeting Details
+
+                </h1>
+
+                <Link
+                    to="/dashboard/associations/association-meetings"
+                    className="px-4 py-2 bg-gray-600 text-white rounded"
+                >
+                    Back
+                </Link>
+
+            </div>
+
+            <div className="bg-white shadow rounded-xl p-6">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div>
+
+                        <label className="font-semibold">
+
+                            ID
+
+                        </label>
+
+                        <p className="mt-1">
+
+                            {meeting.id}
+
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <label className="font-semibold">
+
+                            Association
+
+                        </label>
+
+                        <p className="mt-1">
+
+                            {
+                                meeting.association_name ||
+
+                                meeting.association ||
+
+                                '-'
+                            }
+
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <label className="font-semibold">
+
+                            Meeting Date
+
+                        </label>
+
+                        <p className="mt-1">
+
+                            {
+                                meeting.meeting_date ||
+
+                                '-'
+                            }
+
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <label className="font-semibold">
+
+                            Location
+
+                        </label>
+
+                        <p className="mt-1">
+
+                            {
+                                meeting.location ||
+
+                                '-'
+                            }
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div className="mt-6">
+
+                    <label className="font-semibold">
+
+                        Agenda
+
+                    </label>
+
+                    <p className="mt-2 whitespace-pre-wrap">
+
+                        {
+                            meeting.agenda ||
+
+                            'No agenda available'
+                        }
+
+                    </p>
+
+                </div>
+
+                <div className="mt-6">
+
+                    <label className="font-semibold">
+
+                        Academic Session
+
+                    </label>
+
+                    <p className="mt-2">
+
+                        {
+                            meeting.academic_session_name ||
+
+                            '-'
+                        }
+
+                    </p>
+
+                </div>
+
+                <div className="mt-8 flex gap-3">
+
+                    <Link
+                        to={`/dashboard/associations/association-meetings/edit/${meeting.id}`}
+                        className="px-4 py-2 bg-yellow-500 text-white rounded"
+                    >
+                        Edit
+                    </Link>
+
+                    <Link
+                        to="/dashboard/associations/association-meetings"
+                        className="px-4 py-2 bg-gray-500 text-white rounded"
+                    >
+                        Back to List
+                    </Link>
+
+                </div>
+
+            </div>
+
+        </div>
+    );
+};
+
+export default AssociationMeetingDetailPage;
+
+
+// ============================================================
+// FILE: .\association-meetings\pages\AssociationMeetingEditPage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useEffect,
+    useState,
+} from 'react';
+
+import {
+    useNavigate,
+    useParams,
+} from 'react-router-dom';
+
+import AssociationMeetingForm from '../components/AssociationMeetingForm';
+
+import associationMeetingService from '../services/associationMeetingService';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationMeetingEditPage = () => {
+
+    const { id } = useParams();
+
+    const navigate = useNavigate();
+
+    const [meeting, setMeeting] =
+        useState(null);
+
+    useEffect(() => {
+
+        fetchMeeting();
+
+    }, [id]);
+
+    const fetchMeeting = async () => {
+
+        const response =
+            await associationMeetingService.getById(
+                id
+            );
+
+        setMeeting(
+            response.data
+        );
+    };
+
+    const handleSubmit = async (
+        data
+    ) => {
+
+        await associationMeetingService.update(
+            id,
+            data
+        );
+
+        navigate(
+            '/dashboard/associations/association-meetings'
+        );
+    };
+
+    if (!meeting)
+        return <div>Loading...</div>;
+
+    return (
+
+        <div className="p-6">
+
+            <h1 className="text-2xl font-bold mb-6">
+                Edit Association Meeting
+            </h1>
+
+            <AssociationMeetingForm
+                initialData={meeting}
+                onSubmit={handleSubmit}
+            />
+
+        </div>
+    );
+};
+
+export default AssociationMeetingEditPage;
+
+
+// ============================================================
+// FILE: .\association-meetings\pages\AssociationMeetingListPage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useEffect,
+    useState,
+} from 'react';
+
+import {
+    Link,
+} from 'react-router-dom';
+
+import associationMeetingService from '../services/associationMeetingService';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationMeetingListPage = () => {
+
+    const [meetings, setMeetings] =
+        useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    useEffect(() => {
+
+        fetchMeetings();
+
+    }, []);
+
+    // ========================================
+    // FETCH MEETINGS
+    // ========================================
+
+    const fetchMeetings = async () => {
+
+        try {
+
+            const response =
+                await associationMeetingService.getAll();
+
+            console.log(
+                'Association Meetings Response:',
+                response
+            );
+
+            setMeetings(
+
+                response?.data?.data ||
+
+                response?.data ||
+
+                []
+            );
+
+        } catch (error) {
+
+            console.error(
+                'Error fetching meetings:',
+                error
+            );
+
+            setMeetings([]);
+        }
+
+        finally {
+
+            setLoading(false);
+        }
+    };
+
+    // ========================================
+    // DELETE
+    // ========================================
+
+    const handleDelete = async (id) => {
+
+        const confirmed =
+            window.confirm(
+                'Delete this meeting?'
+            );
+
+        if (!confirmed) {
+
+            return;
+        }
+
+        try {
+
+            await associationMeetingService.delete(
+                id
+            );
+
+            fetchMeetings();
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    };
+
+    // ========================================
+    // LOADING
+    // ========================================
+
+    if (loading) {
+
+        return (
+
+            <div className="p-6">
+                Loading...
+            </div>
+        );
+    }
+
+    // ========================================
+    // PAGE
+    // ========================================
+
+    return (
+
+        <div className="p-6">
+
+            <div className="flex justify-between items-center mb-6">
+
+                <h1 className="text-2xl font-bold">
+
+                    Association Meetings
+
+                </h1>
+
+                <Link
+                    to="/dashboard/associations/association-meetings/create"
+                    className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                    Add Meeting
+                </Link>
+
+            </div>
+
+            <div className="overflow-x-auto bg-white rounded-xl shadow">
+
+                <table className="w-full">
+
+                    <thead>
+
+                        <tr className="border-b">
+
+                            <th className="p-3 text-left">
+                                ID
+                            </th>
+
+                            <th className="p-3 text-left">
+                                Association
+                            </th>
+
+                            <th className="p-3 text-left">
+                                Meeting Date
+                            </th>
+
+                            <th className="p-3 text-left">
+                                Location
+                            </th>
+
+                            <th className="p-3 text-center">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {
+                            meetings.length > 0 ? (
+
+                                meetings.map((meeting) => (
+
+                                    <tr
+                                        key={meeting.id}
+                                        className="border-b"
+                                    >
+
+                                        <td className="p-3">
+                                            {meeting.id}
+                                        </td>
+
+                                        <td className="p-3">
+                                            {meeting.association}
+                                        </td>
+
+                                        <td className="p-3">
+                                            {meeting.meeting_date}
+                                        </td>
+
+                                        <td className="p-3">
+                                            {meeting.location}
+                                        </td>
+
+                                        <td className="p-3">
+
+                                            <div className="flex justify-center gap-2">
+
+                                                <Link
+                                                    to={`/dashboard/associations/association-meetings/${meeting.id}`}
+                                                    className="px-3 py-1 bg-blue-500 text-white rounded"
+                                                >
+                                                    View
+                                                </Link>
+
+                                                <Link
+                                                    to={`/dashboard/associations/association-meetings/edit/${meeting.id}`}
+                                                    className="px-3 py-1 bg-yellow-500 text-white rounded"
+                                                >
+                                                    Edit
+                                                </Link>
+
+                                                <button
+                                                    onClick={() =>
+                                                        handleDelete(
+                                                            meeting.id
+                                                        )
+                                                    }
+                                                    className="px-3 py-1 bg-red-500 text-white rounded"
+                                                >
+                                                    Delete
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                ))
+
+                            ) : (
+
+                                <tr>
+
+                                    <td
+                                        colSpan="5"
+                                        className="p-6 text-center text-gray-500"
+                                    >
+                                        No meetings found
+                                    </td>
+
+                                </tr>
+
+                            )
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    );
+};
+
+export default AssociationMeetingListPage;
+
+
+// ============================================================
+// FILE: .\association-meetings\routes\associationMeetingRoutes.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { Route } from 'react-router-dom';
+
+import AssociationMeetingListPage from '../pages/AssociationMeetingListPage';
+
+import AssociationMeetingCreatePage from '../pages/AssociationMeetingCreatePage';
+
+import AssociationMeetingEditPage from '../pages/AssociationMeetingEditPage';
+
+import AssociationMeetingDetailPage from '../pages/AssociationMeetingDetailPage';
+
+// ============================================
+// ROUTES
+// ============================================
+
+const associationMeetingRoutes = (
+
+    <>
+
+        <Route
+            path="associations/association-meetings"
+            element={<AssociationMeetingListPage />}
+        />
+
+        <Route
+            path="associations/association-meetings/create"
+            element={<AssociationMeetingCreatePage />}
+        />
+
+        <Route
+            path="associations/association-meetings/edit/:id"
+            element={<AssociationMeetingEditPage />}
+        />
+
+        <Route
+            path="associations/association-meetings/:id"
+            element={<AssociationMeetingDetailPage />}
+        />
+
+    </>
+);
+
+export default associationMeetingRoutes;
+
+
+// ============================================================
+// FILE: .\association-meetings\services\associationMeetingService.js
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import api from '../../../../services/api/axios';
+
+// ============================================
+// API ENDPOINT
+// ============================================
+
+const BASE_URL =
+    '/associations/association-meetings/';
+
+// ============================================
+// SERVICE
+// ============================================
+
+const associationMeetingService = {
+
+    getAll: async () => {
+
+        const response = await api.get(
+            BASE_URL
+        );
+
+        return response.data;
+    },
+
+    getById: async (id) => {
+
+        const response = await api.get(
+            `${BASE_URL}${id}/`
+        );
+
+        return response.data;
+    },
+
+    create: async (data) => {
+
+        const response = await api.post(
+            BASE_URL,
+            data
+        );
+
+        return response.data;
+    },
+
+    update: async (id, data) => {
+
+        const response = await api.put(
+            `${BASE_URL}${id}/`,
+            data
+        );
+
+        return response.data;
+    },
+
+    delete: async (id) => {
+
+        const response = await api.delete(
+            `${BASE_URL}${id}/`
+        );
+
+        return response.data;
+    },
+};
+
+export default associationMeetingService;
+
+
+// ============================================================
+// FILE: .\association-members\components\AssociationMemberForm.jsx
+// ============================================================
+
+import { useState } from 'react';
+
+const AssociationMemberForm = ({
+    initialData = {},
+    onSubmit,
+}) => {
+
+    const [formData, setFormData] =
+        useState({
+
+            association:
+                initialData.association || '',
+
+            staff:
+                initialData.staff || '',
+
+            designation:
+                initialData.designation || '',
+
+            email:
+                initialData.email || '',
+
+            phone_number:
+                initialData.phone_number || '',
+        });
+
+    const handleChange = (e) => {
+
+        setFormData({
+
+            ...formData,
+
+            [e.target.name]:
+                e.target.value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+        onSubmit(formData);
+    };
+
+    return (
+
+        <form
+            onSubmit={handleSubmit}
+            className="space-y-4 bg-white p-6 rounded shadow"
+        >
+
+            <input
+                type="number"
+                name="association"
+                placeholder="Association ID"
+                value={formData.association}
+                onChange={handleChange}
+                className="w-full border p-2"
+                required
+            />
+
+            <input
+                type="number"
+                name="staff"
+                placeholder="Staff ID"
+                value={formData.staff}
+                onChange={handleChange}
+                className="w-full border p-2"
+                required
+            />
+
+            <input
+                type="text"
+                name="designation"
+                placeholder="Designation"
+                value={formData.designation}
+                onChange={handleChange}
+                className="w-full border p-2"
+                required
+            />
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full border p-2"
+            />
+
+            <input
+                type="text"
+                name="phone_number"
+                placeholder="Phone Number"
+                value={formData.phone_number}
+                onChange={handleChange}
+                className="w-full border p-2"
+            />
+
+            <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+            >
+                Save
+            </button>
+
+        </form>
+    );
+};
+
+export default AssociationMemberForm;
+
+
+// ============================================================
+// FILE: .\association-members\components\AssociationMemberTable.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { Link } from 'react-router-dom';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationMemberTable = ({
+    members,
+    onDelete,
+}) => {
+
+    return (
+
+        <div className="overflow-x-auto bg-white rounded-xl shadow">
+
+            <table className="min-w-full">
+
+                <thead className="bg-gray-100">
+
+                    <tr>
+
+                        <th className="px-4 py-3">
+                            ID
+                        </th>
+
+                        <th className="px-4 py-3">
+                            Association
+                        </th>
+
+                        <th className="px-4 py-3">
+                            Staff
+                        </th>
+
+                        <th className="px-4 py-3">
+                            Designation
+                        </th>
+
+                        <th className="px-4 py-3">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {
+                        members?.map((member) => (
+
+                            <tr
+                                key={member.id}
+                                className="border-t"
+                            >
+
+                                <td className="px-4 py-3">
+                                    {member.id}
+                                </td>
+
+                                <td className="px-4 py-3">
+                                    {member.association_name}
+                                </td>
+
+                                <td className="px-4 py-3">
+                                    {member.staff_name}
+                                </td>
+
+                                <td className="px-4 py-3">
+                                    {member.designation}
+                                </td>
+
+                                <td className="px-4 py-3">
+
+                                    <div className="flex gap-2">
+
+                                        <Link
+                                            to={`/dashboard/associations/association_members/${member.id}`}
+                                            className="px-3 py-1 bg-green-600 text-white rounded"
+                                        >
+                                            View
+                                        </Link>
+
+                                        <Link
+                                            to={`/dashboard/associations/association_members/edit/${member.id}`}
+                                            className="px-3 py-1 bg-yellow-500 text-white rounded"
+                                        >
+                                            Edit
+                                        </Link>
+
+                                        <button
+                                            onClick={() =>
+                                                onDelete(
+                                                    member.id
+                                                )
+                                            }
+                                            className="px-3 py-1 bg-red-600 text-white rounded"
+                                        >
+                                            Delete
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        ))
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    );
+};
+
+export default AssociationMemberTable;
+
+
+// ============================================================
+// FILE: .\association-members\pages\AssociationMemberCreatePage.jsx
+// ============================================================
+
+import { useNavigate } from 'react-router-dom';
+
+import AssociationMemberForm from '../components/AssociationMemberForm';
+import associationMemberService from '../services/associationMemberService';
+
+const AssociationMemberCreatePage = () => {
+
+    const navigate =
+        useNavigate();
+
+    const handleSubmit = async (
+        data
+    ) => {
+
+        await associationMemberService.create(
+            data
+        );
+
+        navigate(
+            '/dashboard/associations/association_members'
+        );
+    };
+
+    return (
+
+        <div className="p-6">
+
+            <h1 className="text-2xl font-bold mb-6">
+                Create Member
+            </h1>
+
+            <AssociationMemberForm
+                onSubmit={handleSubmit}
+            />
+
+        </div>
+    );
+};
+
+export default AssociationMemberCreatePage;
+
+
+// ============================================================
+// FILE: .\association-members\pages\AssociationMemberDetailPage.jsx
+// ============================================================
+
+import { useEffect, useState } from 'react';
+import {
+    Link,
+    useParams,
+} from 'react-router-dom';
+
+import associationMemberService from '../services/associationMemberService';
+
+const AssociationMemberDetailPage = () => {
+
+    const { id } =
+        useParams();
+
+    const [member, setMember] =
+        useState(null);
+
+    useEffect(() => {
+
+        loadMember();
+
+    }, []);
+
+    const loadMember = async () => {
+
+        const response =
+            await associationMemberService.getById(
+                id
+            );
+
+        setMember(
+            response.data.data
+        );
+    };
+
+    if (!member)
+        return <div>Loading...</div>;
+
+    return (
+
+        <div className="p-6">
+
+            <h1 className="text-2xl font-bold mb-4">
+                Member Detail
+            </h1>
+
+            <p>
+                Association:
+                {member.association_name}
+            </p>
+
+            <p>
+                Staff:
+                {member.staff_name}
+            </p>
+
+            <p>
+                Designation:
+                {member.designation}
+            </p>
+
+            <p>
+                Email:
+                {member.email}
+            </p>
+
+            <p>
+                Phone:
+                {member.phone_number}
+            </p>
+
+            <Link
+                to="/dashboard/associations/association_members"
+                className="inline-block mt-4 px-4 py-2 bg-gray-600 text-white rounded"
+            >
+                Back
+            </Link>
+
+        </div>
+    );
+};
+
+export default AssociationMemberDetailPage;
+
+
+// ============================================================
+// FILE: .\association-members\pages\AssociationMemberEditPage.jsx
+// ============================================================
+
+import { useEffect, useState } from 'react';
+import {
+    useNavigate,
+    useParams,
+} from 'react-router-dom';
+
+import AssociationMemberForm from '../components/AssociationMemberForm';
+import associationMemberService from '../services/associationMemberService';
+
+const AssociationMemberEditPage = () => {
+
+    const { id } = useParams();
+
+    const navigate =
+        useNavigate();
+
+    const [member, setMember] =
+        useState(null);
+
+    useEffect(() => {
+
+        loadMember();
+
+    }, []);
+
+    const loadMember = async () => {
+
+        const response =
+            await associationMemberService.getById(
+                id
+            );
+
+        setMember(
+            response.data.data
+        );
+    };
+
+    const handleSubmit = async (
+        data
+    ) => {
+
+        await associationMemberService.update(
+            id,
+            data
+        );
+
+        navigate(
+            '/dashboard/associations/association_members'
+        );
+    };
+
+    if (!member)
+        return <div>Loading...</div>;
+
+    return (
+        <div className="p-6">
+
+            <h1 className="text-2xl font-bold mb-6">
+                Edit Member
+            </h1>
+
+            <AssociationMemberForm
+                initialData={member}
+                onSubmit={handleSubmit}
+            />
+
+        </div>
+    );
+};
+
+export default AssociationMemberEditPage;
+
+
+// ============================================================
+// FILE: .\association-members\pages\AssociationMemberListPage.jsx
+// ============================================================
+
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import associationMemberService from '../services/associationMemberService';
+import AssociationMemberTable from '../components/AssociationMemberTable';
+
+const AssociationMemberListPage = () => {
+
+    const [members, setMembers] =
+        useState([]);
+
+    useEffect(() => {
+
+        fetchMembers();
+
+    }, []);
+
+    const fetchMembers = async () => {
+
+        const response =
+            await associationMemberService.getAll();
+
+        setMembers(
+            response.data.data || []
+        );
+    };
+
+    const handleDelete = async (id) => {
+
+        await associationMemberService.delete(
+            id
+        );
+
+        fetchMembers();
+    };
+
+    return (
+
+        <div className="p-6">
+
+            <div className="flex justify-between mb-6">
+
+                <h1 className="text-2xl font-bold">
+                    Association Members
+                </h1>
+
+                <Link
+                    to="/dashboard/associations/association_members/create"
+                    className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                    Add Member
+                </Link>
+
+            </div>
+
+            <AssociationMemberTable
+                members={members}
+                onDelete={handleDelete}
+            />
+
+        </div>
+    );
+};
+
+export default AssociationMemberListPage;
+
+
+// ============================================================
+// FILE: .\association-members\routes\associationMemberRoutes.jsx
+// ============================================================
+
+import { Route } from 'react-router-dom';
+
+import AssociationMemberListPage from '../pages/AssociationMemberListPage';
+import AssociationMemberCreatePage from '../pages/AssociationMemberCreatePage';
+import AssociationMemberEditPage from '../pages/AssociationMemberEditPage';
+import AssociationMemberDetailPage from '../pages/AssociationMemberDetailPage';
+
+const associationMemberRoutes = (
+
+    <>
+
+        <Route
+            path="associations/association_members"
+            element={<AssociationMemberListPage />}
+        />
+
+        <Route
+            path="associations/association_members/create"
+            element={<AssociationMemberCreatePage />}
+        />
+
+        <Route
+            path="associations/association_members/:id"
+            element={<AssociationMemberDetailPage />}
+        />
+
+        <Route
+            path="associations/association_members/edit/:id"
+            element={<AssociationMemberEditPage />}
+        />
+
+    </>
+);
+
+export default associationMemberRoutes;
+
+
+// ============================================================
+// FILE: .\association-members\services\associationMemberService.js
+// ============================================================
+
+import api from '../../../../services/api/axios';
+
+const BASE_URL =
+    '/associations/association-members/';
+
+const associationMemberService = {
+
+    getAll: async () =>
+        await api.get(BASE_URL),
+
+    getById: async (id) =>
+        await api.get(
+            `${BASE_URL}${id}/`
+        ),
+
+    create: async (data) =>
+        await api.post(
+            BASE_URL,
+            data
+        ),
+
+    update: async (id, data) =>
+        await api.put(
+            `${BASE_URL}${id}/`,
+            data
+        ),
+
+    delete: async (id) =>
+        await api.delete(
+            `${BASE_URL}${id}/`
+        ),
+};
+
+export default associationMemberService;
+
+
+// ============================================================
+// FILE: .\association-roles\components\AssociationRoleForm.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useState,
+} from 'react';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationRoleForm = ({
+    initialData = {},
+    onSubmit,
+}) => {
+
+    const [formData, setFormData] =
+        useState({
+
+            association:
+                initialData.association || '',
+
+            title:
+                initialData.title || '',
+
+            responsibilities:
+                initialData.responsibilities || '',
+        });
+
+    // ========================================
+    // HANDLE CHANGE
+    // ========================================
+
+    const handleChange = (e) => {
+
+        setFormData({
+
+            ...formData,
+
+            [e.target.name]:
+                e.target.value,
+        });
+    };
+
+    // ========================================
+    // HANDLE SUBMIT
+    // ========================================
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+        onSubmit(
+            formData
+        );
+    };
+
+    // ========================================
+    // RENDER
+    // ========================================
+
+    return (
+
+        <form
+            onSubmit={handleSubmit}
+            className="space-y-4 bg-white p-6 rounded-xl shadow"
+        >
+
+            {/* ================================= */}
+            {/* ASSOCIATION */}
+            {/* ================================= */}
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+
+                    Association ID
+
+                </label>
+
+                <input
+                    type="number"
+                    name="association"
+                    value={formData.association}
+                    onChange={handleChange}
+                    placeholder="Enter Association ID"
+                    className="w-full border rounded-lg px-3 py-2"
+                    required
+                />
+
+            </div>
+
+            {/* ================================= */}
+            {/* TITLE */}
+            {/* ================================= */}
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+
+                    Role Title
+
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    placeholder="Enter Role Title"
+                    className="w-full border rounded-lg px-3 py-2"
+                    required
+                />
+
+            </div>
+
+            {/* ================================= */}
+            {/* RESPONSIBILITIES */}
+            {/* ================================= */}
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+
+                    Responsibilities
+
+                </label>
+
+                <textarea
+                    name="responsibilities"
+                    value={
+                        formData.responsibilities
+                    }
+                    onChange={handleChange}
+                    rows="5"
+                    placeholder="Enter Responsibilities"
+                    className="w-full border rounded-lg px-3 py-2"
+                />
+
+            </div>
+
+            {/* ================================= */}
+            {/* BUTTONS */}
+            {/* ================================= */}
+
+            <div className="flex gap-3">
+
+                <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+                >
+                    Save
+                </button>
+
+            </div>
+
+        </form>
+    );
+};
+
+export default AssociationRoleForm;
+
+
+// ============================================================
+// FILE: .\association-roles\components\AssociationRoleTable.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    Link,
+} from 'react-router-dom';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationRoleTable = ({
+    roles,
+    onDelete,
+}) => {
+
+    return (
+
+        <div className="overflow-x-auto bg-white rounded-xl shadow">
+
+            <table className="min-w-full">
+
+                {/* ================================= */}
+                {/* HEADER */}
+                {/* ================================= */}
+
+                <thead className="bg-gray-100">
+
+                    <tr>
+
+                        <th className="px-4 py-3 text-left">
+                            ID
+                        </th>
+
+                        <th className="px-4 py-3 text-left">
+                            Association
+                        </th>
+
+                        <th className="px-4 py-3 text-left">
+                            Role Title
+                        </th>
+
+                        <th className="px-4 py-3 text-left">
+                            Responsibilities
+                        </th>
+
+                        <th className="px-4 py-3 text-center">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                {/* ================================= */}
+                {/* BODY */}
+                {/* ================================= */}
+
+                <tbody>
+
+                    {
+                        roles?.length > 0
+                            ? roles.map((role) => (
+
+                                <tr
+                                    key={role.id}
+                                    className="border-t"
+                                >
+
+                                    <td className="px-4 py-3">
+                                        {role.id}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {
+                                            role.association_name
+                                        }
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {role.title}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+
+                                        {
+                                            role.responsibilities
+                                                ?.length > 50
+                                                ? `${role.responsibilities.substring(0, 50)}...`
+                                                : role.responsibilities
+                                        }
+
+                                    </td>
+
+                                    <td className="px-4 py-3">
+
+                                        <div className="flex justify-center gap-2">
+
+                                            {/* VIEW */}
+
+                                            <Link
+                                                to={`/dashboard/associations/association-roles/${role.id}`}
+                                                className="px-3 py-1 bg-green-600 text-white rounded"
+                                            >
+                                                View
+                                            </Link>
+
+                                            {/* EDIT */}
+
+                                            <Link
+                                                to={`/dashboard/associations/association-roles/edit/${role.id}`}
+                                                className="px-3 py-1 bg-yellow-500 text-white rounded"
+                                            >
+                                                Edit
+                                            </Link>
+
+                                            {/* DELETE */}
+
+                                            <button
+                                                onClick={() =>
+                                                    onDelete(
+                                                        role.id
+                                                    )
+                                                }
+                                                className="px-3 py-1 bg-red-600 text-white rounded"
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            ))
+                            : (
+
+                                <tr>
+
+                                    <td
+                                        colSpan="5"
+                                        className="text-center py-6 text-gray-500"
+                                    >
+                                        No Association Roles Found
+                                    </td>
+
+                                </tr>
+
+                            )
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    );
+};
+
+export default AssociationRoleTable;
+
+
+// ============================================================
+// FILE: .\association-roles\pages\AssociationRoleCreatePage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useNavigate,
+} from 'react-router-dom';
+
+import AssociationRoleForm from '../components/AssociationRoleForm';
+
+import associationRoleService from '../services/associationRoleService';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationRoleCreatePage = () => {
+
+    const navigate =
+        useNavigate();
+
+    const handleSubmit = async (
+        data
+    ) => {
+
+        await associationRoleService.create(
+            data
+        );
+
+        navigate(
+            '/dashboard/associations/association-roles'
+        );
+    };
+
+    return (
+
+        <div className="p-6">
+
+            <h1 className="text-2xl font-bold mb-6">
+                Create Association Role
+            </h1>
+
+            <AssociationRoleForm
+                onSubmit={handleSubmit}
+            />
+
+        </div>
+    );
+};
+
+export default AssociationRoleCreatePage;
+
+
+// ============================================================
+// FILE: .\association-roles\pages\AssociationRoleDetailPage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useEffect,
+    useState,
+} from 'react';
+
+import {
+    Link,
+    useParams,
+} from 'react-router-dom';
+
+import associationRoleService from '../services/associationRoleService';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationRoleDetailPage = () => {
+
+    const { id } =
+        useParams();
+
+    const [role, setRole] =
+        useState(null);
+
+    useEffect(() => {
+
+        loadRole();
+
+    }, []);
+
+    const loadRole = async () => {
+
+        const response =
+            await associationRoleService.getById(
+                id
+            );
+
+        setRole(
+            response.data.data
+        );
+    };
+
+    if (!role)
+        return <div>Loading...</div>;
+
+    return (
+
+        <div className="p-6">
+
+            <h1 className="text-2xl font-bold mb-4">
+                {role.title}
+            </h1>
+
+            <p>
+                <strong>
+                    Association:
+                </strong>
+
+                {' '}
+
+                {role.association_name}
+            </p>
+
+            <p className="mt-4">
+
+                <strong>
+                    Responsibilities:
+                </strong>
+
+            </p>
+
+            <p>
+                {role.responsibilities}
+            </p>
+
+            <Link
+                to="/dashboard/associations/association-roles"
+                className="inline-block mt-6 bg-gray-600 text-white px-4 py-2 rounded"
+            >
+                Back
+            </Link>
+
+        </div>
+    );
+};
+
+export default AssociationRoleDetailPage;
+
+
+// ============================================================
+// FILE: .\association-roles\pages\AssociationRoleEditPage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useEffect,
+    useState,
+} from 'react';
+
+import {
+    useNavigate,
+    useParams,
+} from 'react-router-dom';
+
+import AssociationRoleForm from '../components/AssociationRoleForm';
+
+import associationRoleService from '../services/associationRoleService';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationRoleEditPage = () => {
+
+    const { id } =
+        useParams();
+
+    const navigate =
+        useNavigate();
+
+    const [role, setRole] =
+        useState(null);
+
+    useEffect(() => {
+
+        loadRole();
+
+    }, []);
+
+    const loadRole = async () => {
+
+        const response =
+            await associationRoleService.getById(
+                id
+            );
+
+        setRole(
+            response.data.data
+        );
+    };
+
+    const handleSubmit = async (
+        data
+    ) => {
+
+        await associationRoleService.update(
+            id,
+            data
+        );
+
+        navigate(
+            '/dashboard/associations/association-roles'
+        );
+    };
+
+    if (!role)
+        return <div>Loading...</div>;
+
+    return (
+
+        <div className="p-6">
+
+            <h1 className="text-2xl font-bold mb-6">
+                Edit Association Role
+            </h1>
+
+            <AssociationRoleForm
+                initialData={role}
+                onSubmit={handleSubmit}
+            />
+
+        </div>
+    );
+};
+
+export default AssociationRoleEditPage;
+
+
+// ============================================================
+// FILE: .\association-roles\pages\AssociationRoleListPage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useEffect,
+    useState,
+} from 'react';
+
+import {
+    Link,
+} from 'react-router-dom';
+
+import associationRoleService from '../services/associationRoleService';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationRoleListPage = () => {
+
+    const [roles, setRoles] =
+        useState([]);
+
+    useEffect(() => {
+
+        fetchRoles();
+
+    }, []);
+
+    const fetchRoles = async () => {
+
+        try {
+
+            const response =
+                await associationRoleService.getAll();
+
+            setRoles(
+                response?.data?.data || []
+            );
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    };
+
+    const handleDelete = async (id) => {
+
+        if (
+            !window.confirm(
+                'Delete this role?'
+            )
+        ) {
+            return;
+        }
+
+        await associationRoleService.delete(
+            id
+        );
+
+        fetchRoles();
+    };
+
+    return (
+
+        <div className="p-6">
+
+            <div className="flex justify-between mb-6">
+
+                <h1 className="text-2xl font-bold">
+                    Association Roles
+                </h1>
+
+                <Link
+                    to="/dashboard/associations/association-roles/create"
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                    Add Role
+                </Link>
+
+            </div>
+
+            <table className="w-full border">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Association</th>
+                        <th>Title</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {
+                        roles.map((role) => (
+
+                            <tr key={role.id}>
+
+                                <td>{role.id}</td>
+
+                                <td>
+                                    {role.association_name}
+                                </td>
+
+                                <td>
+                                    {role.title}
+                                </td>
+
+                                <td>
+
+                                    <Link
+                                        to={`/dashboard/associations/association-roles/${role.id}`}
+                                    >
+                                        View
+                                    </Link>
+
+                                    {' | '}
+
+                                    <Link
+                                        to={`/dashboard/associations/association-roles/edit/${role.id}`}
+                                    >
+                                        Edit
+                                    </Link>
+
+                                    {' | '}
+
+                                    <button
+                                        onClick={() =>
+                                            handleDelete(
+                                                role.id
+                                            )
+                                        }
+                                    >
+                                        Delete
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        ))
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    );
+};
+
+export default AssociationRoleListPage;
+
+
+// ============================================================
+// FILE: .\association-roles\routes\associationRoleRoutes.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { Route } from 'react-router-dom';
+
+import AssociationRoleListPage from '../pages/AssociationRoleListPage';
+import AssociationRoleCreatePage from '../pages/AssociationRoleCreatePage';
+import AssociationRoleEditPage from '../pages/AssociationRoleEditPage';
+import AssociationRoleDetailPage from '../pages/AssociationRoleDetailPage';
+
+// ============================================
+// ROUTES
+// ============================================
+
+const associationRoleRoutes = (
+
+    <>
+
+        <Route
+            path="associations/association-roles"
+            element={<AssociationRoleListPage />}
+        />
+
+        <Route
+            path="associations/association-roles/create"
+            element={<AssociationRoleCreatePage />}
+        />
+
+        <Route
+            path="associations/association-roles/:id"
+            element={<AssociationRoleDetailPage />}
+        />
+
+        <Route
+            path="associations/association-roles/edit/:id"
+            element={<AssociationRoleEditPage />}
+        />
+
+    </>
+);
+
+export default associationRoleRoutes;
+
+
+// ============================================================
+// FILE: .\association-roles\services\associationRoleService.js
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import api from '../../../../services/api/axios';
+
+// ============================================
+// BASE URL
+// ============================================
+
+const BASE_URL =
+    '/associations/association-roles/';
+
+// ============================================
+// SERVICE
+// ============================================
+
+const associationRoleService = {
+
+    // ========================================
+    // GET ALL
+    // ========================================
+
+    getAll: async () => {
+
+        const response =
+            await api.get(
+                BASE_URL
+            );
+
+        return response;
+    },
+
+    // ========================================
+    // GET BY ID
+    // ========================================
+
+    getById: async (id) => {
+
+        const response =
+            await api.get(
+                `${BASE_URL}${id}/`
+            );
+
+        return response;
+    },
+
+    // ========================================
+    // CREATE
+    // ========================================
+
+    create: async (data) => {
+
+        const response =
+            await api.post(
+                BASE_URL,
+                data
+            );
+
+        return response;
+    },
+
+    // ========================================
+    // UPDATE
+    // ========================================
+
+    update: async (
+        id,
+        data
+    ) => {
+
+        const response =
+            await api.put(
+                `${BASE_URL}${id}/`,
+                data
+            );
+
+        return response;
+    },
+
+    // ========================================
+    // DELETE
+    // ========================================
+
+    delete: async (id) => {
+
+        const response =
+            await api.delete(
+                `${BASE_URL}${id}/`
+            );
+
+        return response;
+    },
+};
+
+export default associationRoleService;
+
+
+// ============================================================
+// FILE: .\associations\components\AssociationForm.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useState,
+    useEffect
+} from 'react';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationForm = ({
+    initialData = {},
+    onSubmit,
+    loading,
+}) => {
+
+    const [formData, setFormData] =
+        useState({
+
+            name: '',
+
+            association_type: 'Club',
+
+            status: 'Active',
+
+            description: '',
+
+            tasks: '',
+
+            priority: 0,
+
+            show_on_website: true,
+        });
+
+    // ========================================
+    // LOAD INITIAL DATA
+    // ========================================
+
+    useEffect(() => {
+
+        if (
+            initialData &&
+            Object.keys(initialData).length > 0
+        ) {
+
+            setFormData({
+
+                name:
+                    initialData.name || '',
+
+                association_type:
+                    initialData.association_type || 'Club',
+
+                status:
+                    initialData.status || 'Active',
+
+                description:
+                    initialData.description || '',
+
+                tasks:
+                    initialData.tasks || '',
+
+                priority:
+                    initialData.priority || 0,
+
+                show_on_website:
+                    initialData.show_on_website ?? true,
+            });
+
+        }
+
+    }, [initialData]);
+
+    // ========================================
+    // HANDLE CHANGE
+    // ========================================
+
+    const handleChange = (e) => {
+
+        const {
+            name,
+            value,
+            type,
+            checked,
+        } = e.target;
+
+        setFormData((prev) => ({
+
+            ...prev,
+
+            [name]:
+                type === 'checkbox'
+                    ? checked
+                    : value,
+
+        }));
+
+    };
+
+    // ========================================
+    // HANDLE SUBMIT
+    // ========================================
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+        onSubmit(formData);
+
+    };
+
+    // ========================================
+    // UI
+    // ========================================
+
+    return (
+
+        <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
+        >
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full border rounded-xl p-3"
+                    required
+                />
+
+            </div>
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+                    Association Type
+                </label>
+
+                <select
+                    name="association_type"
+                    value={formData.association_type}
+                    onChange={handleChange}
+                    className="w-full border rounded-xl p-3"
+                >
+
+                    <option value="Club">
+                        Club
+                    </option>
+
+                    <option value="Committee">
+                        Committee
+                    </option>
+
+                    <option value="Nodal">
+                        Nodal
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+                    Status
+                </label>
+
+                <select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                    className="w-full border rounded-xl p-3"
+                >
+
+                    <option value="Active">
+                        Active
+                    </option>
+
+                    <option value="Inactive">
+                        Inactive
+                    </option>
+
+                    <option value="Archived">
+                        Archived
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+                    Description
+                </label>
+
+                <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full border rounded-xl p-3"
+                />
+
+            </div>
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+                    Tasks
+                </label>
+
+                <textarea
+                    name="tasks"
+                    value={formData.tasks}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full border rounded-xl p-3"
+                />
+
+            </div>
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+                    Priority
+                </label>
+
+                <input
+                    type="number"
+                    name="priority"
+                    value={formData.priority}
+                    onChange={handleChange}
+                    className="w-full border rounded-xl p-3"
+                />
+
+            </div>
+
+            <div className="flex items-center gap-3">
+
+                <input
+                    type="checkbox"
+                    name="show_on_website"
+                    checked={formData.show_on_website}
+                    onChange={handleChange}
+                />
+
+                <label>
+                    Show on Website
+                </label>
+
+            </div>
+
+            <button
+                type="submit"
+                disabled={loading}
+                className="
+                    bg-black
+                    text-white
+                    px-6
+                    py-3
+                    rounded-xl
+                "
+            >
+
+                {
+                    loading
+                        ? 'Saving...'
+                        : 'Save Association'
+                }
+
+            </button>
+
+        </form>
+
+    );
+
+};
+
+export default AssociationForm;
+
+
+// ============================================================
+// FILE: .\associations\components\AssociationTable.jsx
+// ============================================================
+
+import { Link } from 'react-router-dom';
+
+const AssociationTable = ({
+    associations = [],
+    onDelete,
+}) => {
+
+    if (!Array.isArray(associations)) {
+
+        return (
+            <div>
+                Invalid association data
+            </div>
+        );
+    }
+
+    return (
+
+        <div className="overflow-x-auto bg-white rounded-2xl shadow">
+
+            <table className="w-full">
+
+                <thead className="bg-gray-100">
+
+                    <tr>
+
+                        <th className="text-left p-4">
+                            Name
+                        </th>
+
+                        <th className="text-left p-4">
+                            Type
+                        </th>
+
+                        <th className="text-left p-4">
+                            Status
+                        </th>
+
+                        <th className="text-left p-4">
+                            Chairperson
+                        </th>
+
+                        <th className="text-left p-4">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {
+                        associations.map((item) => (
+
+                            <tr
+                                key={item.id}
+                                className="border-t"
+                            >
+
+                                <td className="p-4">
+                                    {item.name}
+                                </td>
+
+                                <td className="p-4">
+                                    {item.association_type}
+                                </td>
+
+                                <td className="p-4">
+                                    {item.status}
+                                </td>
+
+                                <td className="p-4">
+                                    {item.chairperson_name || '-'}
+                                </td>
+
+                                <td className="p-4 flex gap-3">
+
+                                    <Link
+                                        to={`/dashboard/associations/associations/${item.id}`}
+                                        className="text-blue-600"
+                                    >
+                                        View
+                                    </Link>
+
+                                    <Link
+                                        to={`/dashboard/associations/associations/edit/${item.id}`}
+                                        className="text-green-600"
+                                    >
+                                        Edit
+                                    </Link>
+
+                                    <button
+                                        onClick={() =>
+                                            onDelete(item.id)
+                                        }
+                                        className="text-red-600"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        ))
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    );
+};
+
+export default AssociationTable;
+
+
+// ============================================================
+// FILE: .\associations\pages\AssociationCreatePage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { useNavigate } from 'react-router-dom';
+
+import { useState } from 'react';
+
+import associationService from '../services/associationService';
+
+import AssociationForm from '../components/AssociationForm';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationCreatePage = () => {
+
+    const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
+
+    // ========================================
+    // HANDLE SUBMIT
+    // ========================================
+
+    const handleSubmit = async (data) => {
+
+        try {
+
+            setLoading(true);
+
+            await associationService.create(data);
+
+            navigate(
+                '/dashboard/associations/associations'
+            );
+        }
+
+        catch (error) {
+
+            console.error(error);
+        }
+
+        finally {
+
+            setLoading(false);
+        }
+    };
+
+    return (
+
+        <div className="p-6">
+
+            <div className="bg-white p-6 rounded-2xl shadow max-w-3xl">
+
+                <h1 className="text-3xl font-bold mb-6">
+                    Create Association
+                </h1>
+
+                <AssociationForm
+                    onSubmit={handleSubmit}
+                    loading={loading}
+                />
+
+            </div>
+
+        </div>
+
+    );
+};
+
+export default AssociationCreatePage;
+
+
+// ============================================================
+// FILE: .\associations\pages\AssociationDetailPage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useEffect,
+    useState
+} from 'react';
+
+import {
+    useParams,
+    useNavigate
+} from 'react-router-dom';
+
+import associationService from '../services/associationService';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationDetailPage = () => {
+
+    const { id } = useParams();
+
+    const navigate = useNavigate();
+
+    const [association, setAssociation] =
+        useState(null);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    // ========================================
+    // FETCH DETAIL
+    // ========================================
+
+    useEffect(() => {
+
+        const fetchDetail = async () => {
+
+            try {
+
+                const response =
+                    await associationService.getById(
+                        id
+                    );
+
+                console.log(
+                    'Association Detail:',
+                    response
+                );
+
+                setAssociation(
+                    response?.data || response
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    'Association Detail Error:',
+                    error
+                );
+
+            }
+
+            finally {
+
+                setLoading(
+                    false
+                );
+
+            }
+
+        };
+
+        fetchDetail();
+
+    }, [id]);
+
+    // ========================================
+    // LOADING
+    // ========================================
+
+    if (loading) {
+
+        return (
+
+            <div className="p-6">
+
+                Loading...
+
+            </div>
+
+        );
+
+    }
+
+    // ========================================
+    // NOT FOUND
+    // ========================================
+
+    if (!association) {
+
+        return (
+
+            <div className="p-6">
+
+                Association not found
+
+            </div>
+
+        );
+
+    }
+
+    // ========================================
+    // DEBUG
+    // ========================================
+
+    console.log(
+        'DETAIL ASSOCIATION:',
+        association
+    );
+
+    // ========================================
+    // UI
+    // ========================================
+
+    return (
+
+        <div className="p-6">
+
+            <div className="bg-white rounded-2xl shadow p-6 space-y-4">
+
+                <h1 className="text-3xl font-bold">
+
+                    {association.name || '-'}
+
+                </h1>
+
+                <p>
+
+                    <strong>
+                        Type:
+                    </strong>
+
+                    {' '}
+
+                    {
+                        association.association_type_display ||
+                        association.association_type ||
+                        '-'
+                    }
+
+                </p>
+
+                <p>
+
+                    <strong>
+                        Status:
+                    </strong>
+
+                    {' '}
+
+                    {
+                        association.status_display ||
+                        association.status ||
+                        '-'
+                    }
+
+                </p>
+
+                <p>
+
+                    <strong>
+                        Description:
+                    </strong>
+
+                    {' '}
+
+                    {
+                        association.description ||
+                        '-'
+                    }
+
+                </p>
+
+                <p>
+
+                    <strong>
+                        Tasks:
+                    </strong>
+
+                    {' '}
+
+                    {
+                        association.tasks ||
+                        '-'
+                    }
+
+                </p>
+
+                <p>
+
+                    <strong>
+                        Chairperson:
+                    </strong>
+
+                    {' '}
+
+                    {
+                        association.chairperson_name ||
+                        '-'
+                    }
+
+                </p>
+
+                <div className="flex gap-3 pt-4">
+
+                    <button
+
+                        onClick={() =>
+                            navigate(
+                                '/dashboard/associations/associations'
+                            )
+                        }
+
+                        className="
+                            bg-gray-600
+                            text-white
+                            px-5
+                            py-2
+                            rounded-xl
+                        "
+                    >
+                        Back
+                    </button>
+
+                    <button
+
+                        onClick={() => {
+
+                            console.log(
+                                'Association:',
+                                association
+                            );
+
+                            if (
+                                !association?.id
+                            ) {
+
+                                alert(
+                                    'Association ID not found'
+                                );
+
+                                return;
+
+                            }
+
+                            navigate(
+                                `/dashboard/associations/associations/edit/${association.id}`
+                            );
+
+                        }}
+
+                        className="
+                            bg-blue-600
+                            text-white
+                            px-5
+                            py-2
+                            rounded-xl
+                        "
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    );
+
+};
+
+export default AssociationDetailPage;
+
+
+// ============================================================
+// FILE: .\associations\pages\AssociationEditPage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useEffect,
+    useState,
+} from 'react';
+
+import {
+    useNavigate,
+    useParams,
+} from 'react-router-dom';
+
+import associationService from '../services/associationService';
+
+import AssociationForm from '../components/AssociationForm';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationEditPage = () => {
+
+    const { id } = useParams();
+
+    const navigate = useNavigate();
+
+    const [association, setAssociation] =
+        useState({});
+
+    const [loading, setLoading] =
+        useState(false);
+
+    const [pageLoading, setPageLoading] =
+        useState(true);
+
+    // ========================================
+    // FETCH DETAIL
+    // ========================================
+
+    useEffect(() => {
+
+        const fetchDetail = async () => {
+
+            try {
+
+                const response =
+                    await associationService.getById(
+                        id
+                    );
+
+                console.log(
+                    'EDIT RESPONSE:',
+                    response
+                );
+
+                setAssociation(
+                    response?.data || response
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+            finally {
+
+                setPageLoading(
+                    false
+                );
+
+            }
+
+        };
+
+        fetchDetail();
+
+    }, [id]);
+
+    // ========================================
+    // SUBMIT
+    // ========================================
+
+    const handleSubmit = async (
+        data
+    ) => {
+
+        try {
+
+            setLoading(
+                true
+            );
+
+            await associationService.update(
+                id,
+                data
+            );
+
+            navigate(
+                '/dashboard/associations/associations'
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+        finally {
+
+            setLoading(
+                false
+            );
+
+        }
+
+    };
+
+    // ========================================
+    // LOADING
+    // ========================================
+
+    if (pageLoading) {
+
+        return (
+
+            <div className="p-6">
+
+                Loading...
+
+            </div>
+
+        );
+
+    }
+
+    // ========================================
+    // UI
+    // ========================================
+
+    return (
+
+        <div className="p-6">
+
+            <div className="bg-white p-6 rounded-2xl shadow max-w-3xl">
+
+                <h1 className="text-3xl font-bold mb-6">
+
+                    Edit Association
+
+                </h1>
+
+                <AssociationForm
+                    initialData={association}
+                    onSubmit={handleSubmit}
+                    loading={loading}
+                />
+
+            </div>
+
+        </div>
+
+    );
+
+};
+
+export default AssociationEditPage;
+
+
+// ============================================================
+// FILE: .\associations\pages\AssociationListPage.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { useEffect, useState } from 'react';
+
+import { Link } from 'react-router-dom';
+
+import associationService from '../services/associationService';
+
+import AssociationTable from '../components/AssociationTable';
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const AssociationListPage = () => {
+
+    const [associations, setAssociations] = useState([]);
+
+    const [loading, setLoading] = useState(true);
+
+    // ========================================
+    // FETCH ASSOCIATIONS
+    // ========================================
+
+    const fetchAssociations = async () => {
+
+        try {
+
+            const response = await (
+                associationService.getAll()
+            );
+
+            console.log(
+                'Association API Response:',
+                response
+            );
+
+            setAssociations(
+
+                Array.isArray(
+                    response?.data
+                )
+
+                    ? response.data
+
+                    : []
+            );
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            setAssociations([]);
+        }
+
+        finally {
+
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+
+        fetchAssociations();
+
+    }, []);
+
+    // ========================================
+    // DELETE
+    // ========================================
+
+    const handleDelete = async (id) => {
+
+        const confirmed = window.confirm(
+            'Delete association?'
+        );
+
+        if (!confirmed) return;
+
+        try {
+
+            await associationService.delete(id);
+
+            fetchAssociations();
+        }
+
+        catch (error) {
+
+            console.error(error);
+        }
+    };
+
+    if (loading) {
+
+        return (
+            <div>
+                Loading...
+            </div>
+        );
+    }
+
+    return (
+
+        <div className="p-6 space-y-6">
+
+            <div className="flex items-center justify-between">
+
+                <h1 className="text-3xl font-bold">
+                    Associations
+                </h1>
+
+                <Link
+                    to="create"
+                    className="bg-black text-white px-5 py-3 rounded-xl"
+                >
+                    Create Association
+                </Link>
+
+            </div>
+
+            <AssociationTable
+
+                associations={
+                    Array.isArray(
+                        associations
+                    )
+                        ? associations
+                        : []
+                }
+
+                onDelete={handleDelete}
+            />
+
+        </div>
+    );
+};
+
+export default AssociationListPage;
+
+
+// ============================================================
+// FILE: .\associations\routes\associationRoutes.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { Route } from 'react-router-dom';
+
+import AssociationListPage from '../pages/AssociationListPage';
+import AssociationCreatePage from '../pages/AssociationCreatePage';
+import AssociationEditPage from '../pages/AssociationEditPage';
+import AssociationDetailPage from '../pages/AssociationDetailPage';
+
+// ============================================
+// ROUTES
+// ============================================
+
+const associationRoutes = (
+
+    <>
+
+        <Route
+            path="associations/associations"
+            element={<AssociationListPage />}
+        />
+
+        <Route
+            path="associations/associations/create"
+            element={<AssociationCreatePage />}
+        />
+
+        <Route
+            path="associations/associations/edit/:id"
+            element={<AssociationEditPage />}
+        />
+
+        <Route
+            path="associations/associations/:id"
+            element={<AssociationDetailPage />}
+        />
+
+    </>
+
+);
+
+export default associationRoutes;
+
+
+// ============================================================
+// FILE: .\associations\services\associationService.js
+// ============================================================
+
+import api from '../../../../services/api/axios';
+
+const BASE_URL = '/associations/associations/';
+
+const associationService = {
+
+    getAll: async () => {
+
+        const response = await api.get(
+            BASE_URL
+        );
+
+        return response.data;
+    },
+
+    getById: async (id) => {
+
+        const response = await api.get(
+            `${BASE_URL}${id}/`
+        );
+
+        return response.data;
+    },
+
+    create: async (data) => {
+
+        const response = await api.post(
+            BASE_URL,
+            data
+        );
+
+        return response.data;
+    },
+
+    update: async (id, data) => {
+
+        const response = await api.put(
+            `${BASE_URL}${id}/`,
+            data
+        );
+
+        return response.data;
+    },
+
+    delete: async (id) => {
+
+        const response = await api.delete(
+            `${BASE_URL}${id}/`
+        );
+
+        return response.data;
+    },
+};
+
+export default associationService;
+
+
+// ============================================================
+// FILE: .\extracurricular-activities\routes\extracurricularActivityRoutes.jsx
+// ============================================================
+
+// ============================================
+// EXTRACURRICULAR ACTIVITIES
+// ============================================
+
+const extracurricularActivityRoutes = [
+
+    {
+        path: 'associations/extracurricular-activities',
+        element: <ExtracurricularActivityListPage />,
+    },
+
+    {
+        path: 'associations/extracurricular-activities/create',
+        element: <ExtracurricularActivityCreatePage />,
+    },
+
+    {
+        path: 'associations/extracurricular-activities/edit/:id',
+        element: <ExtracurricularActivityEditPage />,
+    },
+
+    {
+        path: 'associations/extracurricular-activities/:id',
+        element: <ExtracurricularActivityDetailPage />,
+    },
+];
+
+export default extracurricularActivityRoutes;
+
+
+// ============================================================
+// FILE: .\routes\associationModuleRoutes.jsx
+// ============================================================
+
+// ============================================
+// ASSOCIATIONS
+// ============================================
+
+import associationRoutes from '../associations/routes/associationRoutes';
+
+// ============================================
+// ASSOCIATION ROLES
+// ============================================
+
+import associationRoleRoutes from '../association-roles/routes/associationRoleRoutes';
+
+// ============================================
+// ASSOCIATION MEETINGS
+// ============================================
+
+import associationMeetingRoutes from '../association-meetings/routes/associationMeetingRoutes';
+
+// ============================================
+// SMC MEMBERS
+// ============================================
+
+import smcMemberRoutes from '../smc-members/routes/smcMemberRoutes';
+import associationMemberRoutes from '../association-members/routes/associationMemberRoutes';
+
+// ============================================
+// ASSOCIATIONS MODULE ROUTES
+// ============================================
+
+const associationModuleRoutes = (
+
+    <>
+
+        {/* ================================= */}
+        {/* ASSOCIATIONS */}
+        {/* ================================= */}
+
+        {associationRoutes}
+
+        {/* ================================= */}
+        {/* ASSOCIATION ROLES */}
+        {/* ================================= */}
+
+        {associationRoleRoutes}
+
+        {/* ================================= */}
+        {/* ASSOCIATION MEETINGS */}
+        {/* ================================= */}
+
+        {associationMeetingRoutes}
+
+        {/* ================================= */}
+        {/* SMC MEMBERS */}
+        {/* ================================= */}
+
+        {smcMemberRoutes}
+
+        {associationMemberRoutes}
+
+    </>
+);
+
+// ============================================
+// EXPORT
+// ============================================
+
+export default associationModuleRoutes;
+
+
+// ============================================================
+// FILE: .\smc-members\components\SMCMemberForm.jsx
+// ============================================================
+
+import {
+    useState,
+    useEffect
+} from "react";
+
+const SMCMemberForm = ({
+    initialData = {},
+    onSubmit,
+    loading = false,
+}) => {
+
+    // =====================================
+    // STATE
+    // =====================================
+
+    const [formData, setFormData] =
+        useState({
+
+            name: "",
+
+            position: "President",
+
+            gender: "",
+
+            category: "",
+
+            contact_number: "",
+
+            email: "",
+
+            address: "",
+
+            nomination_date: "",
+
+            tenure_end_date: "",
+
+            photo: null,
+
+            priority: 0,
+
+            show_on_website: true,
+
+            remarks: "",
+
+        });
+
+    const [errors, setErrors] =
+        useState({});
+
+    // =====================================
+    // LOAD INITIAL DATA
+    // =====================================
+
+    useEffect(() => {
+
+        if (
+            initialData &&
+            Object.keys(initialData).length > 0
+        ) {
+
+            setFormData((prev) => ({
+
+                ...prev,
+
+                ...initialData,
+
+                photo: null,
+
+            }));
+
+        }
+
+    }, [initialData]);
+
+    // =====================================
+    // HANDLE CHANGE
+    // =====================================
+
+    const handleChange = (e) => {
+
+        const {
+            name,
+            value,
+            type,
+            checked,
+            files,
+        } = e.target;
+
+        setFormData((prev) => ({
+
+            ...prev,
+
+            [name]:
+                type === "checkbox"
+                    ? checked
+                    : type === "file"
+                        ? files[0]
+                        : value,
+
+        }));
+
+    };
+
+    // =====================================
+    // VALIDATION
+    // =====================================
+
+    const validate = () => {
+
+        const newErrors = {};
+
+        if (!formData.name?.trim()) {
+
+            newErrors.name =
+                "Name is required";
+
+        }
+
+        if (!formData.position) {
+
+            newErrors.position =
+                "Position is required";
+
+        }
+
+        if (
+            formData.email &&
+            !/\S+@\S+\.\S+/.test(
+                formData.email
+            )
+        ) {
+
+            newErrors.email =
+                "Enter a valid email";
+
+        }
+
+        setErrors(newErrors);
+
+        return (
+            Object.keys(newErrors)
+                .length === 0
+        );
+
+    };
+
+    // =====================================
+    // SUBMIT
+    // =====================================
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+        if (!validate()) {
+
+            return;
+
+        }
+
+        onSubmit(formData);
+
+    };
+
+    // =====================================
+    // UI
+    // =====================================
+
+    return (
+
+        <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
+        >
+
+            <div className="
+                bg-white
+                rounded-2xl
+                shadow
+                p-6
+            ">
+
+                <h2 className="
+                    text-2xl
+                    font-bold
+                    mb-6
+                ">
+                    SMC Member Information
+                </h2>
+
+                <div className="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-6
+                ">
+
+                    {/* NAME */}
+
+                    <div>
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        />
+
+                        {
+                            errors.name && (
+
+                                <p className="
+                                    text-red-500
+                                    text-sm
+                                    mt-1
+                                ">
+                                    {errors.name}
+                                </p>
+
+                            )
+                        }
+
+                    </div>
+
+                    {/* POSITION */}
+
+                    <div>
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Position *
+                        </label>
+
+                        <select
+                            name="position"
+                            value={formData.position}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        >
+
+                            <option value="President">
+                                President
+                            </option>
+
+                            <option value="Vice President">
+                                Vice President
+                            </option>
+
+                            <option value="Member (Secretary)">
+                                Member (Secretary)
+                            </option>
+
+                            <option value="Member (Trained Education Scholar)">
+                                Member (Trained Education Scholar)
+                            </option>
+
+                            <option value="Member (Teacher/Student)">
+                                Member (Teacher/Student)
+                            </option>
+
+                            <option value="Member (Parent/Guardian)">
+                                Member (Parent/Guardian)
+                            </option>
+
+                            <option value="Member (General)">
+                                Member (General)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    {/* GENDER */}
+
+                    <div>
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Gender
+                        </label>
+
+                        <select
+                            name="gender"
+                            value={formData.gender || ""}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        >
+
+                            <option value="">
+                                Select Gender
+                            </option>
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    {/* CATEGORY */}
+
+                    <div>
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Category
+                        </label>
+
+                        <select
+                            name="category"
+                            value={formData.category || ""}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        >
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+                            <option value="GEN">
+                                General
+                            </option>
+
+                            <option value="SC">
+                                Scheduled Caste
+                            </option>
+
+                            <option value="BC-A">
+                                Backward Class - A
+                            </option>
+
+                            <option value="BC-B">
+                                Backward Class - B
+                            </option>
+
+                            <option value="EWS">
+                                Economically Weaker Section
+                            </option>
+
+                            <option value="OTHER">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    {/* CONTACT */}
+
+                    <div>
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Contact Number
+                        </label>
+
+                        <input
+                            type="text"
+                            name="contact_number"
+                            value={formData.contact_number || ""}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        />
+
+                    </div>
+
+                    {/* EMAIL */}
+
+                    <div>
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email || ""}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        />
+
+                    </div>
+
+                    {/* ADDRESS */}
+
+                    <div className="md:col-span-2">
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Address
+                        </label>
+
+                        <textarea
+                            name="address"
+                            rows="3"
+                            value={formData.address || ""}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        />
+
+                    </div>
+
+                    {/* NOMINATION DATE */}
+
+                    <div>
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Nomination Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="nomination_date"
+                            value={formData.nomination_date || ""}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        />
+
+                    </div>
+
+                    {/* TENURE END DATE */}
+
+                    <div>
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Tenure End Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="tenure_end_date"
+                            value={formData.tenure_end_date || ""}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        />
+
+                    </div>
+
+                    {/* PHOTO */}
+
+                    <div className="md:col-span-2">
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Photo
+                        </label>
+
+                        <input
+                            type="file"
+                            name="photo"
+                            accept="image/*"
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        />
+
+                    </div>
+
+                    {/* PRIORITY */}
+
+                    <div>
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Priority
+                        </label>
+
+                        <input
+                            type="number"
+                            min="0"
+                            name="priority"
+                            value={formData.priority}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        />
+
+                    </div>
+
+                    {/* SHOW ON WEBSITE */}
+
+                    <div className="
+                        flex
+                        items-center
+                        gap-3
+                        pt-8
+                    ">
+
+                        <input
+                            type="checkbox"
+                            name="show_on_website"
+                            checked={
+                                formData.show_on_website
+                            }
+                            onChange={handleChange}
+                        />
+
+                        <label>
+                            Show On Website
+                        </label>
+
+                    </div>
+
+                    {/* REMARKS */}
+
+                    <div className="md:col-span-2">
+
+                        <label className="
+                            block
+                            mb-2
+                            font-medium
+                        ">
+                            Remarks
+                        </label>
+
+                        <textarea
+                            name="remarks"
+                            rows="4"
+                            value={formData.remarks || ""}
+                            onChange={handleChange}
+                            className="
+                                w-full
+                                border
+                                rounded-xl
+                                px-4
+                                py-3
+                            "
+                        />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                disabled={loading}
+                className="
+                    bg-blue-600
+                    hover:bg-blue-700
+                    text-white
+                    px-8
+                    py-3
+                    rounded-xl
+                    font-semibold
+                    disabled:opacity-50
+                "
+            >
+
+                {
+                    loading
+                        ? "Saving..."
+                        : "Save SMC Member"
+                }
+
+            </button>
+
+        </form>
+
+    );
+
+};
+
+export default SMCMemberForm;
+
+
+// ============================================================
+// FILE: .\smc-members\pages\SMCMemberCreate.jsx
+// ============================================================
+
+import { useState } from "react";
+
+import { useNavigate }
+from "react-router-dom";
+
+import toast
+from "react-hot-toast";
+
+import SMCMemberForm
+from "../components/SMCMemberForm";
+
+import smcMemberService
+from "../services/smcMemberService";
+
+const SMCMemberCreate = () => {
+
+  // =====================================
+  // NAVIGATION
+  // =====================================
+
+  const navigate =
+    useNavigate();
+
+  // =====================================
+  // LOADING
+  // =====================================
+
+  const [loading, setLoading] =
+    useState(false);
+
+  // =====================================
+  // SUBMIT
+  // =====================================
+
+  const handleSubmit = async (
+    formData
+  ) => {
+
+    try {
+
+      setLoading(true);
+
+      await smcMemberService
+        .createSMCMember(
+          formData
+        );
+
+      toast.success(
+        "SMC Member Added Successfully"
+      );
+
+      navigate(
+        "/dashboard/associations/smc-members"
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error(
+        "Failed to add member"
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  // =====================================
+  // UI
+  // =====================================
+
+  return (
+
+    <div className="space-y-6">
+
+      <div>
+
+        <h1 className="
+          text-3xl
+          font-bold
+          text-gray-800
+        ">
+          Add SMC Member
+        </h1>
+
+        <p className="
+          text-gray-500
+          mt-1
+        ">
+          Create a new School Management Committee Member
+        </p>
+
+      </div>
+
+      <SMCMemberForm
+        onSubmit={handleSubmit}
+        loading={loading}
+      />
+
+    </div>
+
+  );
+
+};
+
+export default SMCMemberCreate;
+
+
+// ============================================================
+// FILE: .\smc-members\pages\SMCMemberEdit.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useState,
+    useEffect
+} from "react";
+
+import {
+    useNavigate,
+    useParams
+} from "react-router-dom";
+
+import toast from "react-hot-toast";
+
+import SMCMemberForm from "../components/SMCMemberForm";
+
+import smcMemberService from "../services/smcMemberService";
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const SMCMemberEdit = () => {
+
+    // ============================================
+    // NAVIGATION
+    // ============================================
+
+    const navigate =
+        useNavigate();
+
+    const { id } =
+        useParams();
+
+    // ============================================
+    // STATE
+    // ============================================
+
+    const [loading, setLoading] =
+        useState(false);
+
+    const [initialData,
+        setInitialData] =
+        useState({});
+
+    const [pageLoading,
+        setPageLoading] =
+        useState(true);
+
+    // ============================================
+    // LOAD MEMBER
+    // ============================================
+
+    useEffect(() => {
+
+        const fetchMember =
+            async () => {
+
+                try {
+
+                    const response =
+                        await smcMemberService
+                            .getSMCMember(id);
+
+                    console.log(
+                        "MEMBER DATA:",
+                        response
+                    );
+
+                    setInitialData(
+                        response
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "LOAD ERROR:",
+                        error.response?.data
+                    );
+
+                    console.error(error);
+
+                    toast.error(
+                        "Failed to load member"
+                    );
+
+                } finally {
+
+                    setPageLoading(false);
+
+                }
+
+            };
+
+        fetchMember();
+
+    }, [id]);
+
+    // ============================================
+    // UPDATE MEMBER
+    // ============================================
+
+    const handleSubmit =
+        async (formData) => {
+
+            try {
+
+                setLoading(true);
+
+                console.log(
+                    "UPDATE ID:",
+                    id
+                );
+
+                console.log(
+                    "FORM DATA:",
+                    formData
+                );
+
+                Object.keys(formData)
+                    .forEach((key) => {
+
+                        console.log(
+                            `${key}:`,
+                            formData[key]
+                        );
+
+                    });
+
+                const response =
+                    await smcMemberService
+                        .updateSMCMember(
+                            id,
+                            formData
+                        );
+
+                console.log(
+                    "UPDATE RESPONSE:",
+                    response
+                );
+
+                toast.success(
+                    "SMC Member Updated Successfully"
+                );
+
+                navigate(
+                    "/dashboard/associations/smc-members"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "================================="
+                );
+
+                console.error(
+                    "UPDATE ERROR:"
+                );
+
+                console.error(
+                    error.response?.data
+                );
+
+                console.error(
+                    "STATUS:"
+                );
+
+                console.error(
+                    error.response?.status
+                );
+
+                console.error(
+                    "HEADERS:"
+                );
+
+                console.error(
+                    error.response?.headers
+                );
+
+                console.error(
+                    "FULL ERROR:"
+                );
+
+                console.error(
+                    error
+                );
+
+                console.error(
+                    "================================="
+                );
+
+                toast.error(
+                    "Update Failed"
+                );
+
+            } finally {
+
+                setLoading(false);
+
+            }
+
+        };
+
+    // ============================================
+    // LOADING
+    // ============================================
+
+    if (pageLoading) {
+
+        return (
+
+            <div
+                className="
+                    p-6
+                "
+            >
+                Loading...
+            </div>
+
+        );
+
+    }
+
+    // ============================================
+    // UI
+    // ============================================
+
+    return (
+
+        <div className="space-y-6">
+
+            {/* ==================================== */}
+            {/* PAGE HEADER */}
+            {/* ==================================== */}
+
+            <div>
+
+                <h1
+                    className="
+                        text-3xl
+                        font-bold
+                        text-gray-800
+                    "
+                >
+                    Edit SMC Member
+                </h1>
+
+                <p
+                    className="
+                        text-gray-500
+                        mt-1
+                    "
+                >
+                    Update School Management Committee
+                    Member Information
+                </p>
+
+            </div>
+
+            {/* ==================================== */}
+            {/* FORM */}
+            {/* ==================================== */}
+
+            <SMCMemberForm
+
+                initialData={
+                    initialData
+                }
+
+                onSubmit={
+                    handleSubmit
+                }
+
+                loading={
+                    loading
+                }
+
+            />
+
+        </div>
+
+    );
+
+};
+
+export default SMCMemberEdit;
+
+
+// ============================================================
+// FILE: .\smc-members\pages\SMCMemberView.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useState,
+    useEffect
+} from "react";
+
+import {
+    useParams,
+    useNavigate
+} from "react-router-dom";
+
+import toast from "react-hot-toast";
+
+import smcMemberService from "../services/smcMemberService";
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const SMCMemberView = () => {
+
+    // ============================================
+    // ROUTER
+    // ============================================
+
+    const { id } =
+        useParams();
+
+    const navigate =
+        useNavigate();
+
+    // ============================================
+    // STATE
+    // ============================================
+
+    const [member, setMember] =
+        useState(null);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    // ============================================
+    // FETCH MEMBER
+    // ============================================
+
+    useEffect(() => {
+
+        const fetchMember =
+            async () => {
+
+                try {
+
+                    const response =
+                        await smcMemberService
+                            .getSMCMember(id);
+
+                    setMember(
+                        response
+                    );
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    toast.error(
+                        "Failed to load member"
+                    );
+
+                } finally {
+
+                    setLoading(false);
+
+                }
+
+            };
+
+        fetchMember();
+
+    }, [id]);
+
+    // ============================================
+    // LOADING
+    // ============================================
+
+    if (loading) {
+
+        return (
+
+            <div className="p-6">
+
+                Loading...
+
+            </div>
+
+        );
+
+    }
+
+    // ============================================
+    // NOT FOUND
+    // ============================================
+
+    if (!member) {
+
+        return (
+
+            <div className="p-6">
+
+                Member not found
+
+            </div>
+
+        );
+
+    }
+
+    // ============================================
+    // UI
+    // ============================================
+
+    return (
+
+        <div className="space-y-6">
+
+            <div
+                className="
+                    bg-white
+                    rounded-2xl
+                    shadow
+                    p-6
+                "
+            >
+
+                {/* ======================================== */}
+                {/* TITLE */}
+                {/* ======================================== */}
+
+                <h1
+                    className="
+                        text-3xl
+                        font-bold
+                        mb-6
+                    "
+                >
+                    SMC Member Details
+                </h1>
+
+                {/* ======================================== */}
+                {/* PHOTO */}
+                {/* ======================================== */}
+
+                {
+
+                    member.photo && (
+
+                        <div className="mb-6">
+
+                            <img
+                                src={member.photo}
+                                alt={member.name}
+                                className="
+                                    w-32
+                                    h-32
+                                    rounded-xl
+                                    object-cover
+                                    border
+                                "
+                            />
+
+                        </div>
+
+                    )
+
+                }
+
+                {/* ======================================== */}
+                {/* DETAILS */}
+                {/* ======================================== */}
+
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        md:grid-cols-2
+                        gap-6
+                    "
+                >
+
+                    <div>
+
+                        <strong>
+                            Name:
+                        </strong>
+
+                        <p>
+                            {member.name || "-"}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Position:
+                        </strong>
+
+                        <p>
+                            {member.position || "-"}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Gender:
+                        </strong>
+
+                        <p>
+                            {member.gender || "-"}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Category:
+                        </strong>
+
+                        <p>
+                            {member.category || "-"}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Contact Number:
+                        </strong>
+
+                        <p>
+                            {
+                                member.contact_number ||
+                                "-"
+                            }
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Email:
+                        </strong>
+
+                        <p>
+                            {
+                                member.email ||
+                                "-"
+                            }
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Nomination Date:
+                        </strong>
+
+                        <p>
+                            {
+                                member.nomination_date ||
+                                "-"
+                            }
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Tenure End Date:
+                        </strong>
+
+                        <p>
+                            {
+                                member.tenure_end_date ||
+                                "-"
+                            }
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Priority:
+                        </strong>
+
+                        <p>
+                            {
+                                member.priority ??
+                                "-"
+                            }
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Show On Website:
+                        </strong>
+
+                        <p>
+
+                            {
+
+                                member.show_on_website
+
+                                    ? "Yes"
+
+                                    : "No"
+
+                            }
+
+                        </p>
+
+                    </div>
+
+                    <div className="md:col-span-2">
+
+                        <strong>
+                            Address:
+                        </strong>
+
+                        <p>
+                            {
+                                member.address ||
+                                "-"
+                            }
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {/* ======================================== */}
+                {/* REMARKS */}
+                {/* ======================================== */}
+
+                <div className="mt-6">
+
+                    <strong>
+                        Remarks:
+                    </strong>
+
+                    <p
+                        className="
+                            mt-2
+                            text-gray-700
+                            whitespace-pre-wrap
+                        "
+                    >
+                        {
+                            member.remarks ||
+                            "-"
+                        }
+                    </p>
+
+                </div>
+
+                {/* ======================================== */}
+                {/* ACTIONS */}
+                {/* ======================================== */}
+
+                <div
+                    className="
+                        mt-8
+                        flex
+                        gap-3
+                    "
+                >
+
+                    <button
+
+                        onClick={() =>
+                            navigate(
+                                "/dashboard/associations/smc-members"
+                            )
+                        }
+
+                        className="
+                            bg-gray-600
+                            hover:bg-gray-700
+                            text-white
+                            px-6
+                            py-3
+                            rounded-xl
+                        "
+                    >
+                        Back
+                    </button>
+
+                    <button
+
+                        onClick={() =>
+                            navigate(
+                                `/dashboard/associations/smc-members/edit/${id}`
+                            )
+                        }
+
+                        className="
+                            bg-blue-600
+                            hover:bg-blue-700
+                            text-white
+                            px-6
+                            py-3
+                            rounded-xl
+                        "
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    );
+
+};
+
+export default SMCMemberView;
+
+
+// ============================================================
+// FILE: .\smc-members\pages\SMCMembersList.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import {
+    useEffect,
+    useState
+} from "react";
+
+import {
+    Link
+} from "react-router-dom";
+
+import toast from "react-hot-toast";
+
+import smcMemberService from "../services/smcMemberService";
+
+// ============================================
+// COMPONENT
+// ============================================
+
+const SMCMembersList = () => {
+
+    // ============================================
+    // STATE
+    // ============================================
+
+    const [members, setMembers] =
+        useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    // ============================================
+    // FETCH MEMBERS
+    // ============================================
+
+    const fetchMembers = async () => {
+
+        try {
+
+            setLoading(true);
+
+            const response =
+                await smcMemberService
+                    .getSMCMembers();
+            console.log("SMC Members:", response);
+            setMembers(response);
+
+        } catch (error) {
+
+            console.error(error);
+
+            toast.error(
+                "Failed to load SMC Members"
+            );
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    // ============================================
+    // LOAD DATA
+    // ============================================
+
+    useEffect(() => {
+
+        fetchMembers();
+
+    }, []);
+
+    // ============================================
+    // DELETE MEMBER
+    // ============================================
+
+    const handleDelete = async (
+        id
+    ) => {
+
+        const confirmDelete =
+            window.confirm(
+                "Delete this SMC Member?"
+            );
+
+        if (!confirmDelete) {
+
+            return;
+
+        }
+
+        try {
+
+            await smcMemberService
+                .deleteSMCMember(id);
+
+            toast.success(
+                "SMC Member Deleted"
+            );
+
+            fetchMembers();
+
+
+        } catch (error) {
+
+            console.error(
+                "DELETE ERROR:",
+                error.response?.data
+            );
+
+            console.error(
+                "DELETE STATUS:",
+                error.response?.status
+            );
+
+            console.error(
+                "FULL ERROR:",
+                error
+            );
+
+            toast.error(
+                "Failed to delete member"
+            );
+
+        }
+
+
+    };
+
+    // ============================================
+    // LOADING
+    // ============================================
+
+    if (loading) {
+
+        return (
+
+            <div className="p-6">
+
+                Loading...
+
+            </div>
+
+        );
+
+    }
+
+    // ============================================
+    // UI
+    // ============================================
+
+    return (
+
+        <div className="space-y-6">
+
+            {/* ======================================== */}
+            {/* HEADER */}
+            {/* ======================================== */}
+
+            <div
+                className="
+                    flex
+                    items-center
+                    justify-between
+                "
+            >
+
+                <div>
+
+                    <h1
+                        className="
+                            text-3xl
+                            font-bold
+                            text-gray-800
+                        "
+                    >
+                        SMC Members
+                    </h1>
+
+                    <p
+                        className="
+                            text-gray-500
+                            mt-1
+                        "
+                    >
+                        School Management Committee Members
+                    </p>
+
+                </div>
+
+                <Link
+                    to="/dashboard/associations/smc-members/create"
+                    className="
+                        px-4
+                        py-2
+                        bg-blue-600
+                        text-white
+                        rounded-lg
+                        hover:bg-blue-700
+                    "
+                >
+                    Add Member
+                </Link>
+
+            </div>
+
+            {/* ======================================== */}
+            {/* TABLE */}
+            {/* ======================================== */}
+
+            <div
+                className="
+                    bg-white
+                    rounded-xl
+                    shadow
+                    overflow-x-auto
+                "
+            >
+
+                <table
+                    className="
+                        min-w-full
+                        border-collapse
+                    "
+                >
+
+                    <thead>
+
+                        <tr
+                            className="
+                                bg-gray-100
+                                text-left
+                            "
+                        >
+
+                            <th className="p-3">
+                                Photo
+                            </th>
+
+                            <th className="p-3">
+                                Name
+                            </th>
+
+                            <th className="p-3">
+                                Position
+                            </th>
+
+                            <th className="p-3">
+                                Gender
+                            </th>
+
+                            <th className="p-3">
+                                Category
+                            </th>
+
+                            <th className="p-3">
+                                Contact
+                            </th>
+
+                            <th className="p-3">
+                                Email
+                            </th>
+
+                            <th className="p-3">
+                                Nomination Date
+                            </th>
+
+                            <th className="p-3">
+                                Tenure End
+                            </th>
+
+                            <th className="p-3">
+                                Website
+                            </th>
+
+                            <th className="p-3">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {
+
+                            members.length === 0
+
+                                ? (
+
+                                    <tr>
+
+                                        <td
+                                            colSpan="11"
+                                            className="
+                                                p-6
+                                                text-center
+                                                text-gray-500
+                                            "
+                                        >
+
+                                            No SMC Members Found
+
+                                        </td>
+
+                                    </tr>
+
+                                )
+
+                                : (
+
+                                    members.map(
+
+                                        (member) => (
+
+                                            <tr
+                                                key={member.id}
+                                                className="
+                                                    border-t
+                                                    hover:bg-gray-50
+                                                "
+                                            >
+
+                                                <td className="p-3">
+
+                                                    {
+
+                                                        member.photo
+
+                                                            ? (
+
+                                                                <img
+                                                                    src={
+                                                                        member.photo
+                                                                    }
+                                                                    alt={
+                                                                        member.name
+                                                                    }
+                                                                    className="
+                                                                        w-12
+                                                                        h-12
+                                                                        rounded-full
+                                                                        object-cover
+                                                                    "
+                                                                />
+
+                                                            )
+
+                                                            : (
+
+                                                                <div
+                                                                    className="
+                                                                        w-12
+                                                                        h-12
+                                                                        rounded-full
+                                                                        bg-gray-200
+                                                                        flex
+                                                                        items-center
+                                                                        justify-center
+                                                                        text-gray-500
+                                                                    "
+                                                                >
+                                                                    N/A
+                                                                </div>
+
+                                                            )
+
+                                                    }
+
+                                                </td>
+
+                                                <td className="p-3">
+                                                    {member.name}
+                                                </td>
+
+                                                <td className="p-3">
+                                                    {member.position}
+                                                </td>
+
+                                                <td className="p-3">
+                                                    {
+                                                        member.gender ||
+                                                        "-"
+                                                    }
+                                                </td>
+
+                                                <td className="p-3">
+                                                    {
+                                                        member.category ||
+                                                        "-"
+                                                    }
+                                                </td>
+
+                                                <td className="p-3">
+                                                    {
+                                                        member.contact_number ||
+                                                        "-"
+                                                    }
+                                                </td>
+
+                                                <td className="p-3">
+                                                    {
+                                                        member.email ||
+                                                        "-"
+                                                    }
+                                                </td>
+
+                                                <td className="p-3">
+                                                    {
+                                                        member.nomination_date ||
+                                                        "-"
+                                                    }
+                                                </td>
+
+                                                <td className="p-3">
+                                                    {
+                                                        member.tenure_end_date ||
+                                                        "-"
+                                                    }
+                                                </td>
+
+                                                <td className="p-3">
+
+                                                    {
+
+                                                        member.show_on_website
+
+                                                            ? (
+                                                                <span className="text-green-600 font-medium">
+                                                                    Yes
+                                                                </span>
+                                                            )
+
+                                                            : (
+                                                                <span className="text-red-600 font-medium">
+                                                                    No
+                                                                </span>
+                                                            )
+
+                                                    }
+
+                                                </td>
+
+                                                <td className="p-3">
+
+                                                    <div
+                                                        className="
+                                                            flex
+                                                            gap-3
+                                                        "
+                                                    >
+
+                                                        <Link
+                                                            to={`/dashboard/associations/smc-members/${member.id}`}
+                                                            className="
+                                                                text-blue-600
+                                                                hover:underline
+                                                            "
+                                                        >
+                                                            View
+                                                        </Link>
+
+                                                        <Link
+                                                            to={`/dashboard/associations/smc-members/edit/${member.id}`}
+                                                            className="
+                                                                text-green-600
+                                                                hover:underline
+                                                            "
+                                                        >
+                                                            Edit
+                                                        </Link>
+
+                                                        <button
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    member.id
+                                                                )
+                                                            }
+                                                            className="
+                                                                text-red-600
+                                                                hover:underline
+                                                            "
+                                                        >
+                                                            Delete
+                                                        </button>
+
+                                                    </div>
+
+                                                </td>
+
+                                            </tr>
+
+                                        )
+
+                                    )
+
+                                )
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    );
+
+};
+
+export default SMCMembersList;
+
+
+// ============================================================
+// FILE: .\smc-members\routes\smcMemberRoutes.jsx
+// ============================================================
+
+// ============================================
+// IMPORTS
+// ============================================
+
+import { Route } from "react-router-dom";
+
+import SMCMembersList from "../pages/SMCMembersList";
+import SMCMemberCreate from "../pages/SMCMemberCreate";
+import SMCMemberEdit from "../pages/SMCMemberEdit";
+import SMCMemberView from "../pages/SMCMemberView";
+
+// ============================================
+// ROUTES
+// ============================================
+
+const smcMemberRoutes = (
+
+    <>
+
+        {/* ================================= */}
+        {/* LIST */}
+        {/* ================================= */}
+
+        <Route
+            path="associations/smc-members"
+            element={<SMCMembersList />}
+        />
+
+        {/* ================================= */}
+        {/* CREATE */}
+        {/* ================================= */}
+
+        <Route
+            path="associations/smc-members/create"
+            element={<SMCMemberCreate />}
+        />
+
+        {/* ================================= */}
+        {/* EDIT */}
+        {/* ================================= */}
+
+        <Route
+            path="associations/smc-members/edit/:id"
+            element={<SMCMemberEdit />}
+        />
+
+        {/* ================================= */}
+        {/* DETAIL */}
+        {/* ================================= */}
+
+        <Route
+            path="associations/smc-members/:id"
+            element={<SMCMemberView />}
+        />
+
+    </>
+
+);
+
+// ============================================
+// EXPORT
+// ============================================
+
+export default smcMemberRoutes;
+
+
+// ============================================================
+// FILE: .\smc-members\services\smcMemberService.js
+// ============================================================
+
+import api from "../../../../services/api/axios";
+
+const BASE_URL =
+    "/associations/smc-members/";
+
+const smcMemberService = {
+
+    // ============================================
+    // GET ALL MEMBERS
+    // ============================================
+
+    getSMCMembers: async () => {
+
+        const response =
+            await api.get(
+                BASE_URL
+            );
+
+        return (
+            response.data?.results ||
+            response.data?.data ||
+            response.data ||
+            []
+        );
+
+    },
+
+    // ============================================
+    // GET SINGLE MEMBER
+    // ============================================
+
+    getSMCMember: async (
+        id
+    ) => {
+
+        const response =
+            await api.get(
+                `${BASE_URL}${id}/`
+            );
+
+        return (
+            response.data?.data ||
+            response.data
+        );
+
+    },
+
+    // ============================================
+    // CREATE MEMBER
+    // ============================================
+
+    createSMCMember: async (
+        data
+    ) => {
+
+        const formData =
+            new FormData();
+
+        Object.keys(data).forEach(
+            (key) => {
+
+                const value =
+                    data[key];
+
+                if (
+                    value === null ||
+                    value === undefined ||
+                    value === ""
+                ) {
+
+                    return;
+
+                }
+
+                if (
+                    key === "photo" &&
+                    typeof value === "string"
+                ) {
+
+                    return;
+
+                }
+
+                formData.append(
+                    key,
+                    value
+                );
+
+            }
+        );
+
+        const response =
+            await api.post(
+                BASE_URL,
+                formData,
+                {
+                    headers: {
+                        "Content-Type":
+                            "multipart/form-data",
+                    },
+                }
+            );
+
+        return response.data;
+
+    },
+
+    // ============================================
+    // UPDATE MEMBER
+    // ============================================
+
+    updateSMCMember: async (
+        id,
+        data
+    ) => {
+
+        const formData =
+            new FormData();
+
+        Object.keys(data).forEach(
+            (key) => {
+
+                const value =
+                    data[key];
+
+                if (
+                    value === null ||
+                    value === undefined ||
+                    value === ""
+                ) {
+
+                    return;
+
+                }
+
+                if (
+                    key === "photo" &&
+                    typeof value === "string"
+                ) {
+
+                    return;
+
+                }
+
+                formData.append(
+                    key,
+                    value
+                );
+
+            }
+        );
+
+        const response =
+            await api.put(
+                `${BASE_URL}${id}/`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type":
+                            "multipart/form-data",
+                    },
+                }
+            );
+
+        return response.data;
+
+    },
+
+    // ============================================
+    // DELETE MEMBER
+    // ============================================
+
+    deleteSMCMember: async (
+        id
+    ) => {
+
+        const response =
+            await api.delete(
+                `${BASE_URL}${id}/`
+            );
+
+        return response.data;
+
+    },
+
+};
+
+export default smcMemberService;

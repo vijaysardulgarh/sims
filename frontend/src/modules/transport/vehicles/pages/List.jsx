@@ -19,7 +19,7 @@ import ActionButtons from "@/modules/shared/components/crud/ActionButtons";
 
 import DeleteModal from "@/dashboard/shared/components/crud/DeleteModal";
 
-import vehicleService from "../services/Service";
+import vehicleService from "../services/vehicleService";
 
 
 const List = () => {

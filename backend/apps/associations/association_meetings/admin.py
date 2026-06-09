@@ -1,17 +1,18 @@
-# =============================================================================
-# associations/admin/association_meeting_admin.py
-# =============================================================================
-
 from django.contrib import admin
 
-from apps.associations.models import AssociationMeeting
+from apps.associations.models import (
+    AssociationMeeting
+)
 
 
 @admin.register(AssociationMeeting)
-class AssociationMeetingAdmin(admin.ModelAdmin):
+class AssociationMeetingAdmin(
+    admin.ModelAdmin
+):
 
     list_display = (
         "id",
+        "school",
         "association",
         "academic_session",
         "meeting_date",
@@ -24,9 +25,13 @@ class AssociationMeetingAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
+        "school",
         "academic_session",
         "association",
-        "meeting_date",
+    )
+
+    date_hierarchy = (
+        "meeting_date"
     )
 
     ordering = (
@@ -42,6 +47,12 @@ class AssociationMeetingAdmin(admin.ModelAdmin):
     )
 
     list_select_related = (
+        "school",
         "association",
         "academic_session",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
     )

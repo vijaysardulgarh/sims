@@ -3,7 +3,7 @@ import { Route } from "react-router-dom";
 // import dashboardRoutes from
 // "../dashboard/routes/dashboardRoutes";
 
-import staffProfileRoutes from "../profiles/routes/staffProfileRoutes";
+import staffProfileRoutes from "../staff/routes/staffProfileRoutes";
 
 import postTypeRoutes from
 "../post-types/routes/postTypeRoutes";

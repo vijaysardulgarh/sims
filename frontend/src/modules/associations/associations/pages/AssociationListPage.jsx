@@ -2,13 +2,26 @@
 // IMPORTS
 // ============================================
 
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useState
+} from "react";
 
-import { Link } from 'react-router-dom';
+import {
+  useNavigate
+} from "react-router-dom";
 
-import associationService from '../services/associationService';
+import toast from "react-hot-toast";
 
-import AssociationTable from '../components/AssociationTable';
+import DataTable from "@/modules/shared/components/crud/DataTable";
+import Pagination from "@/modules/shared/components/crud/Pagination";
+import CrudHeader from "@/modules/shared/components/crud/CrudHeader";
+import ActionButtons from "@/modules/shared/components/crud/ActionButtons";
+
+import ConfirmModal from "@/modules/shared/components/dialogs/ConfirmModal";
+
+import associationService from "../services/associationService";
+
 
 // ============================================
 // COMPONENT
@@ -16,126 +29,312 @@ import AssociationTable from '../components/AssociationTable';
 
 const AssociationListPage = () => {
 
-    const [associations, setAssociations] = useState([]);
+  const navigate = useNavigate();
 
-    const [loading, setLoading] = useState(true);
+  // ==========================================
+  // STATE
+  // ==========================================
 
-    // ========================================
-    // FETCH ASSOCIATIONS
-    // ========================================
+  const [associations,
+    setAssociations] =
+    useState([]);
 
-    const fetchAssociations = async () => {
+  const [loading,
+    setLoading] =
+    useState(true);
 
-        try {
+  const [currentPage,
+    setCurrentPage] =
+    useState(1);
 
-            const response = await (
-                associationService.getAll()
-            );
+  const [isModalOpen,
+    setIsModalOpen] =
+    useState(false);
 
-            console.log(
-                'Association API Response:',
-                response
-            );
+  const [selectedId,
+    setSelectedId] =
+    useState(null);
 
-            setAssociations(
+  const itemsPerPage = 20;
 
-                Array.isArray(
-                    response?.data
-                )
+  // ==========================================
+  // FETCH ASSOCIATIONS
+  // ==========================================
 
-                    ? response.data
+  const fetchAssociations = async () => {
 
-                    : []
-            );
-        }
+    try {
 
-        catch (error) {
+      setLoading(true);
 
-            console.error(error);
+      const response =
+        await associationService.getAssociations();
 
-            setAssociations([]);
-        }
+      console.log(
+        "Association Response:",
+        response
+      );
 
-        finally {
+      let associationsData = [];
 
-            setLoading(false);
-        }
-    };
+      if (
+        Array.isArray(response)
+      ) {
 
-    useEffect(() => {
+        associationsData =
+          response;
 
-        fetchAssociations();
+      } else if (
+        Array.isArray(
+          response?.data
+        )
+      ) {
 
-    }, []);
+        associationsData =
+          response.data;
 
-    // ========================================
-    // DELETE
-    // ========================================
+      }
 
-    const handleDelete = async (id) => {
+      setAssociations(
+        associationsData
+      );
 
-        const confirmed = window.confirm(
-            'Delete association?'
-        );
+    } catch (error) {
 
-        if (!confirmed) return;
+      console.error(error);
 
-        try {
+      toast.error(
+        "Failed to load associations"
+      );
 
-            await associationService.delete(id);
+      setAssociations([]);
 
-            fetchAssociations();
-        }
+    } finally {
 
-        catch (error) {
-
-            console.error(error);
-        }
-    };
-
-    if (loading) {
-
-        return (
-            <div>
-                Loading...
-            </div>
-        );
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+
+    fetchAssociations();
+
+  }, []);
+
+  // ==========================================
+  // DELETE
+  // ==========================================
+
+  const handleDelete = async (id) => {
+
+    try {
+
+      await associationService.deleteAssociation(
+        id
+      );
+
+      toast.success(
+        "Association deleted successfully"
+      );
+
+      fetchAssociations();
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error(
+        "Delete failed"
+      );
+    }
+  };
+
+  // ==========================================
+  // PAGINATION
+  // ==========================================
+
+  const totalPages = Math.ceil(
+
+    associations.length /
+
+    itemsPerPage
+  );
+
+  const startIndex =
+
+    (currentPage - 1) *
+
+    itemsPerPage;
+
+  const paginatedAssociations =
+
+    associations.slice(
+
+      startIndex,
+
+      startIndex + itemsPerPage
+    );
+
+  // ==========================================
+  // TABLE COLUMNS
+  // ==========================================
+
+  const columns = [
+
+    {
+      key: "name",
+      label: "Association Name",
+    },
+
+    {
+      key: "association_type_display",
+      label: "Type",
+    },
+
+    {
+      key: "status_display",
+      label: "Status",
+    },
+
+    {
+      key: "priority",
+      label: "Priority",
+    },
+
+    {
+      key: "actions",
+      label: "Actions",
+    },
+  ];
+
+  // ==========================================
+  // TABLE DATA
+  // ==========================================
+
+  const tableData =
+
+    paginatedAssociations.map(
+      (association) => ({
+
+        ...association,
+
+        actions: (
+
+          <ActionButtons
+
+            onEdit={() =>
+              navigate(
+                `/dashboard/associations/associations/edit/${association.id}`
+              )
+            }
+
+            onDelete={() => {
+
+              setSelectedId(
+                association.id
+              );
+
+              setIsModalOpen(
+                true
+              );
+            }}
+
+          />
+        ),
+      })
+    );
+
+  // ==========================================
+  // LOADING
+  // ==========================================
+
+  if (loading) {
 
     return (
 
-        <div className="p-6 space-y-6">
+      <div className="p-6">
 
-            <div className="flex items-center justify-between">
+        Loading associations...
 
-                <h1 className="text-3xl font-bold">
-                    Associations
-                </h1>
-
-                <Link
-                    to="create"
-                    className="bg-black text-white px-5 py-3 rounded-xl"
-                >
-                    Create Association
-                </Link>
-
-            </div>
-
-            <AssociationTable
-
-                associations={
-                    Array.isArray(
-                        associations
-                    )
-                        ? associations
-                        : []
-                }
-
-                onDelete={handleDelete}
-            />
-
-        </div>
+      </div>
     );
+  }
+
+  // ==========================================
+  // UI
+  // ==========================================
+
+  return (
+
+    <div className="space-y-6">
+
+      <CrudHeader
+
+        title="Associations"
+
+        description="Manage school associations"
+
+        addLabel="Add Association"
+
+        onAdd={() =>
+          navigate(
+            "/dashboard/associations/associations/add"
+          )
+        }
+      />
+
+      <DataTable
+
+        columns={columns}
+
+        data={tableData}
+
+        currentPage={currentPage}
+
+        itemsPerPage={itemsPerPage}
+      />
+
+      <Pagination
+
+        currentPage={currentPage}
+
+        totalPages={totalPages}
+
+        onPageChange={
+          setCurrentPage
+        }
+      />
+
+      <ConfirmModal
+
+        isOpen={
+          isModalOpen
+        }
+
+        title="Delete Association"
+
+        message="Are you sure you want to delete this association?"
+
+        onCancel={() =>
+          setIsModalOpen(
+            false
+          )
+        }
+
+        onConfirm={() => {
+
+          handleDelete(
+            selectedId
+          );
+
+          setIsModalOpen(
+            false
+          );
+        }}
+      />
+
+    </div>
+  );
 };
 
 export default AssociationListPage;

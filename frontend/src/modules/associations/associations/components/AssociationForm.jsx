@@ -1,290 +1,496 @@
-// ============================================
-// IMPORTS
-// ============================================
-
 import {
-    useState,
-    useEffect
-} from 'react';
-
-// ============================================
-// COMPONENT
-// ============================================
+  useState,
+  useEffect
+} from "react";
 
 const AssociationForm = ({
-    initialData = {},
-    onSubmit,
-    loading,
+
+  initialData = {},
+
+  onSubmit,
+
+  loading = false,
+
 }) => {
 
-    const [formData, setFormData] =
-        useState({
+  // =========================
+  // EDIT MODE
+  // =========================
 
-            name: '',
+  const isEdit =
+    Boolean(initialData?.id);
 
-            association_type: 'Club',
+  // =========================
+  // FORM STATE
+  // =========================
 
-            status: 'Active',
+  const [formData, setFormData] =
+    useState({
 
-            description: '',
+      name: "",
 
-            tasks: '',
+      association_type: "Club",
 
-            priority: 0,
+      status: "Active",
 
-            show_on_website: true,
-        });
+      description: "",
 
-    // ========================================
-    // LOAD INITIAL DATA
-    // ========================================
+      tasks: "",
 
-    useEffect(() => {
+      priority: 0,
 
-        if (
-            initialData &&
-            Object.keys(initialData).length > 0
-        ) {
+      show_on_website: true,
+    });
 
-            setFormData({
+  // =========================
+  // PREFILL FORM
+  // =========================
 
-                name:
-                    initialData.name || '',
+  useEffect(() => {
 
-                association_type:
-                    initialData.association_type || 'Club',
+    if (
+      initialData &&
+      Object.keys(initialData).length > 0
+    ) {
 
-                status:
-                    initialData.status || 'Active',
+      setFormData({
 
-                description:
-                    initialData.description || '',
+        name:
+          initialData.name || "",
 
-                tasks:
-                    initialData.tasks || '',
+        association_type:
+          initialData.association_type || "Club",
 
-                priority:
-                    initialData.priority || 0,
+        status:
+          initialData.status || "Active",
 
-                show_on_website:
-                    initialData.show_on_website ?? true,
-            });
+        description:
+          initialData.description || "",
 
-        }
+        tasks:
+          initialData.tasks || "",
 
-    }, [initialData]);
+        priority:
+          initialData.priority ?? 0,
 
-    // ========================================
-    // HANDLE CHANGE
-    // ========================================
+        show_on_website:
+          initialData.show_on_website ?? true,
+      });
+    }
 
-    const handleChange = (e) => {
+  }, [initialData]);
 
-        const {
-            name,
-            value,
-            type,
-            checked,
-        } = e.target;
+  // =========================
+  // HANDLE CHANGE
+  // =========================
 
-        setFormData((prev) => ({
+  const handleChange = (e) => {
 
-            ...prev,
+    const {
+      name,
+      value,
+      checked,
+      type,
+    } = e.target;
 
-            [name]:
-                type === 'checkbox'
-                    ? checked
-                    : value,
+    setFormData((prev) => ({
 
-        }));
+      ...prev,
 
-    };
+      [name]:
 
-    // ========================================
-    // HANDLE SUBMIT
-    // ========================================
+        type === "checkbox"
 
-    const handleSubmit = (e) => {
+          ? checked
 
-        e.preventDefault();
+          : name === "priority"
 
-        onSubmit(formData);
+            ? Number(value)
 
-    };
+            : value,
+    }));
+  };
 
-    // ========================================
-    // UI
-    // ========================================
+  // =========================
+  // SUBMIT
+  // =========================
 
-    return (
+  const handleSubmit = (e) => {
 
-        <form
-            onSubmit={handleSubmit}
-            className="space-y-6"
+    e.preventDefault();
+
+    onSubmit(formData);
+  };
+
+  return (
+
+    <form
+
+      onSubmit={handleSubmit}
+
+      className="
+        rounded-2xl
+        bg-white
+        p-6
+        shadow
+        space-y-6
+      "
+    >
+
+      {/* ===================== */}
+      {/* NAME */}
+      {/* ===================== */}
+
+      <div>
+
+        <label
+          className="
+            mb-2
+            block
+            text-sm
+            font-medium
+          "
         >
 
-            <div>
+          Association Name
 
-                <label className="block mb-2 font-medium">
-                    Name
-                </label>
+        </label>
 
-                <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full border rounded-xl p-3"
-                    required
-                />
+        <input
 
-            </div>
+          type="text"
 
-            <div>
+          name="name"
 
-                <label className="block mb-2 font-medium">
-                    Association Type
-                </label>
+          value={formData.name}
 
-                <select
-                    name="association_type"
-                    value={formData.association_type}
-                    onChange={handleChange}
-                    className="w-full border rounded-xl p-3"
-                >
+          onChange={handleChange}
 
-                    <option value="Club">
-                        Club
-                    </option>
+          placeholder="Enter association name"
 
-                    <option value="Committee">
-                        Committee
-                    </option>
+          className="
+            w-full
+            rounded-lg
+            border
+            p-3
+            focus:outline-none
+            focus:ring-2
+            focus:ring-blue-500
+          "
 
-                    <option value="Nodal">
-                        Nodal
-                    </option>
+          required
+        />
 
-                </select>
+      </div>
 
-            </div>
+      {/* ===================== */}
+      {/* TYPE */}
+      {/* ===================== */}
 
-            <div>
+      <div>
 
-                <label className="block mb-2 font-medium">
-                    Status
-                </label>
+        <label
+          className="
+            mb-2
+            block
+            text-sm
+            font-medium
+          "
+        >
 
-                <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                    className="w-full border rounded-xl p-3"
-                >
+          Association Type
 
-                    <option value="Active">
-                        Active
-                    </option>
+        </label>
 
-                    <option value="Inactive">
-                        Inactive
-                    </option>
+        <select
 
-                    <option value="Archived">
-                        Archived
-                    </option>
+          name="association_type"
 
-                </select>
+          value={formData.association_type}
 
-            </div>
+          onChange={handleChange}
 
-            <div>
+          className="
+            w-full
+            rounded-lg
+            border
+            p-3
+            focus:outline-none
+            focus:ring-2
+            focus:ring-blue-500
+          "
+        >
 
-                <label className="block mb-2 font-medium">
-                    Description
-                </label>
+          <option value="Club">
+            Club
+          </option>
 
-                <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    rows={4}
-                    className="w-full border rounded-xl p-3"
-                />
+          <option value="Committee">
+            Committee
+          </option>
 
-            </div>
+          <option value="Nodal">
+            Nodal
+          </option>
 
-            <div>
+        </select>
 
-                <label className="block mb-2 font-medium">
-                    Tasks
-                </label>
+      </div>
 
-                <textarea
-                    name="tasks"
-                    value={formData.tasks}
-                    onChange={handleChange}
-                    rows={4}
-                    className="w-full border rounded-xl p-3"
-                />
+      {/* ===================== */}
+      {/* STATUS */}
+      {/* ===================== */}
 
-            </div>
+      <div>
 
-            <div>
+        <label
+          className="
+            mb-2
+            block
+            text-sm
+            font-medium
+          "
+        >
 
-                <label className="block mb-2 font-medium">
-                    Priority
-                </label>
+          Status
 
-                <input
-                    type="number"
-                    name="priority"
-                    value={formData.priority}
-                    onChange={handleChange}
-                    className="w-full border rounded-xl p-3"
-                />
+        </label>
 
-            </div>
+        <select
 
-            <div className="flex items-center gap-3">
+          name="status"
 
-                <input
-                    type="checkbox"
-                    name="show_on_website"
-                    checked={formData.show_on_website}
-                    onChange={handleChange}
-                />
+          value={formData.status}
 
-                <label>
-                    Show on Website
-                </label>
+          onChange={handleChange}
 
-            </div>
+          className="
+            w-full
+            rounded-lg
+            border
+            p-3
+            focus:outline-none
+            focus:ring-2
+            focus:ring-blue-500
+          "
+        >
 
-            <button
-                type="submit"
-                disabled={loading}
-                className="
-                    bg-black
-                    text-white
-                    px-6
-                    py-3
-                    rounded-xl
-                "
-            >
+          <option value="Active">
+            Active
+          </option>
 
-                {
-                    loading
-                        ? 'Saving...'
-                        : 'Save Association'
-                }
+          <option value="Inactive">
+            Inactive
+          </option>
 
-            </button>
+          <option value="Archived">
+            Archived
+          </option>
 
-        </form>
+        </select>
 
-    );
+      </div>
 
+      {/* ===================== */}
+      {/* DESCRIPTION */}
+      {/* ===================== */}
+
+      <div>
+
+        <label
+          className="
+            mb-2
+            block
+            text-sm
+            font-medium
+          "
+        >
+
+          Description
+
+        </label>
+
+        <textarea
+
+          name="description"
+
+          value={formData.description}
+
+          onChange={handleChange}
+
+          rows={4}
+
+          placeholder="Enter description"
+
+          className="
+            w-full
+            rounded-lg
+            border
+            p-3
+            focus:outline-none
+            focus:ring-2
+            focus:ring-blue-500
+          "
+        />
+
+      </div>
+
+      {/* ===================== */}
+      {/* TASKS */}
+      {/* ===================== */}
+
+      <div>
+
+        <label
+          className="
+            mb-2
+            block
+            text-sm
+            font-medium
+          "
+        >
+
+          Tasks
+
+        </label>
+
+        <textarea
+
+          name="tasks"
+
+          value={formData.tasks}
+
+          onChange={handleChange}
+
+          rows={4}
+
+          placeholder="Enter tasks"
+
+          className="
+            w-full
+            rounded-lg
+            border
+            p-3
+            focus:outline-none
+            focus:ring-2
+            focus:ring-blue-500
+          "
+        />
+
+      </div>
+
+      {/* ===================== */}
+      {/* PRIORITY */}
+      {/* ===================== */}
+
+      <div>
+
+        <label
+          className="
+            mb-2
+            block
+            text-sm
+            font-medium
+          "
+        >
+
+          Priority
+
+        </label>
+
+        <input
+
+          type="number"
+
+          name="priority"
+
+          value={formData.priority}
+
+          onChange={handleChange}
+
+          min="0"
+
+          className="
+            w-full
+            rounded-lg
+            border
+            p-3
+            focus:outline-none
+            focus:ring-2
+            focus:ring-blue-500
+          "
+        />
+
+      </div>
+
+      {/* ===================== */}
+      {/* SHOW ON WEBSITE */}
+      {/* ===================== */}
+
+      <div
+        className="
+          flex
+          items-center
+          gap-3
+        "
+      >
+
+        <input
+
+          type="checkbox"
+
+          name="show_on_website"
+
+          checked={formData.show_on_website}
+
+          onChange={handleChange}
+        />
+
+        <label>
+
+          Show On Website
+
+        </label>
+
+      </div>
+
+      {/* ===================== */}
+      {/* BUTTON */}
+      {/* ===================== */}
+
+      <button
+
+        type="submit"
+
+        disabled={loading}
+
+        className="
+          rounded-xl
+          bg-blue-600
+          px-6
+          py-3
+          text-white
+          hover:bg-blue-700
+          disabled:opacity-50
+        "
+      >
+
+        {
+          loading
+
+            ? "Saving..."
+
+            : isEdit
+
+              ? "Update Association"
+
+              : "Save Association"
+        }
+
+      </button>
+
+    </form>
+  );
 };
 
 export default AssociationForm;

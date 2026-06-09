@@ -5,6 +5,7 @@
 from rest_framework import serializers
 
 from apps.documents.models import Document
+
 from apps.associations.associations.models import (
     Association
 )
@@ -67,12 +68,15 @@ class AssociationSerializer(
 
             "id",
 
+            # School
             "school",
             "school_name",
 
+            # Academic Session
             "academic_session",
             "academic_session_name",
 
+            # Association
             "name",
 
             "association_type",
@@ -81,20 +85,25 @@ class AssociationSerializer(
             "status",
             "status_display",
 
+            # Chairperson
             "chairperson",
             "chairperson_name",
 
-            "tasks",
+            # Content
             "description",
+            "objectives",
 
+            # Documents
             "documents",
             "document_ids",
 
+            # Display
             "show_on_website",
 
             "slug",
             "priority",
 
+            # System
             "is_active",
             "is_deleted",
 
@@ -106,26 +115,40 @@ class AssociationSerializer(
 
             "slug",
 
+            "documents",
+
+            "school_name",
+
+            "academic_session_name",
+
+            "chairperson_name",
+
+            "association_type_display",
+
+            "status_display",
+
             "created_at",
+
             "updated_at",
 
             "is_deleted",
-
-            "documents",
         ]
 
     # ============================================
     # FIELD VALIDATION
     # ============================================
 
-    def validate_name(self, value):
+    def validate_name(
+        self,
+        value
+    ):
 
         value = value.strip()
 
         if not value:
 
             raise serializers.ValidationError(
-                "Association name cannot be empty"
+                "Association name cannot be empty."
             )
 
         return value
@@ -134,11 +157,18 @@ class AssociationSerializer(
     # OBJECT VALIDATION
     # ============================================
 
-    def validate(self, attrs):
+    def validate(
+        self,
+        attrs
+    ):
 
         school = attrs.get(
             "school",
-            getattr(self.instance, "school", None)
+            getattr(
+                self.instance,
+                "school",
+                None
+            )
         )
 
         chairperson = attrs.get(
@@ -151,15 +181,82 @@ class AssociationSerializer(
         )
 
         if (
+
             chairperson and
+
+            school and
+
             chairperson.school != school
+
         ):
 
             raise serializers.ValidationError({
 
                 "chairperson":
+
                     "Chairperson must belong "
-                    "to same school"
+                    "to the same school."
             })
 
         return attrs
+
+    # ============================================
+    # CREATE
+    # ============================================
+
+    def create(
+        self,
+        validated_data
+    ):
+
+        documents = validated_data.pop(
+            "documents",
+            []
+        )
+
+        association = (
+            Association.objects.create(
+                **validated_data
+            )
+        )
+
+        if documents:
+
+            association.documents.set(
+                documents
+            )
+
+        return association
+
+    # ============================================
+    # UPDATE
+    # ============================================
+
+    def update(
+        self,
+        instance,
+        validated_data
+    ):
+
+        documents = validated_data.pop(
+            "documents",
+            None
+        )
+
+        for attr, value in validated_data.items():
+
+            setattr(
+                instance,
+                attr,
+                value
+            )
+
+        instance.save()
+
+        if documents is not None:
+
+            instance.documents.set(
+                documents
+            )
+
+        return instance
