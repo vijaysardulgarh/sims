@@ -1,0 +1,1 @@
+export default function ExamsListPage() { return <div>Exams List</div>; }

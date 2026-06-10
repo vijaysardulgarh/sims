@@ -1,0 +1,1 @@
+export default function CompartmentExamsEditPage() { return <div>CompartmentExams Edit</div>; }

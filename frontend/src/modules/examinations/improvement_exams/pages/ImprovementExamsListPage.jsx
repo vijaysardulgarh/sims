@@ -1,0 +1,1 @@
+export default function ImprovementExamsListPage() { return <div>ImprovementExams List</div>; }

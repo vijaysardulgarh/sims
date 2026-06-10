@@ -1,0 +1,1680 @@
+
+
+# ============================================================
+# FILE: .\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+# Register your models here.
+
+
+
+# ============================================================
+# FILE: .\apps.py
+# ============================================================
+
+from django.apps import AppConfig
+
+
+class ComplianceConfig(AppConfig):
+    name = 'apps.compliance'
+
+
+
+# ============================================================
+# FILE: .\django_code.txt
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\django_structure.txt
+# ============================================================
+
+├── .
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── django_structure.txt
+│   ├── export_project.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── affiliations
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── certificates
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── compliance_documents
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── inspections
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── mandatory_public_disclosures
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── policies
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── recognitions
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+
+
+
+# ============================================================
+# FILE: .\export_project.py
+# ============================================================
+
+import os
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+PROJECT_ROOT = r"."
+
+STRUCTURE_FILE = "django_structure.txt"
+CODE_FILE = "django_code.txt"
+
+INCLUDE_EXTENSIONS = {
+    ".py",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".env",
+    ".txt",
+}
+
+EXCLUDE_DIRS = {
+    "__pycache__",
+    ".git",
+    ".idea",
+    ".vscode",
+    "venv",
+    "env",
+    "staticfiles",
+    "media",
+    "node_modules",
+    "migrations",
+}
+
+# ============================================================
+# EXPORT STRUCTURE
+# ============================================================
+
+with open(STRUCTURE_FILE, "w", encoding="utf-8") as f:
+
+    for root, dirs, files in os.walk(PROJECT_ROOT):
+
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+
+        level = root.replace(PROJECT_ROOT, "").count(os.sep)
+
+        indent = "│   " * level
+
+        f.write(f"{indent}├── {os.path.basename(root)}\n")
+
+        for file in sorted(files):
+            f.write(f"{indent}│   ├── {file}\n")
+
+# ============================================================
+# EXPORT CODE
+# ============================================================
+
+with open(CODE_FILE, "w", encoding="utf-8") as output:
+
+    for root, dirs, files in os.walk(PROJECT_ROOT):
+
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+
+        for file in sorted(files):
+
+            ext = os.path.splitext(file)[1]
+
+            if ext not in INCLUDE_EXTENSIONS:
+                continue
+
+            filepath = os.path.join(root, file)
+
+            try:
+
+                with open(filepath, "r", encoding="utf-8") as source:
+
+                    output.write("\n\n")
+                    output.write("# ============================================================\n")
+                    output.write(f"# FILE: {filepath}\n")
+                    output.write("# ============================================================\n\n")
+
+                    output.write(source.read())
+                    output.write("\n")
+
+            except Exception as e:
+
+                output.write("\n\n")
+                output.write("# ============================================================\n")
+                output.write(f"# ERROR: {filepath}\n")
+                output.write("# ============================================================\n")
+                output.write(str(e))
+                output.write("\n")
+
+print("Done!")
+print("Generated:")
+print("-", STRUCTURE_FILE)
+print("-", CODE_FILE)
+
+
+# ============================================================
+# FILE: .\models.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\tests.py
+# ============================================================
+
+from django.test import TestCase
+
+# Create your tests here.
+
+
+
+# ============================================================
+# FILE: .\urls.py
+# ============================================================
+
+from django.urls import (
+    include,
+    path
+)
+
+urlpatterns = [
+
+    path(
+        "mandatory-public-disclosures/",
+        include(
+            "apps.compliance.mandatory_public_disclosures.urls"
+        )
+    ),
+
+    path(
+        "compliance-documents/",
+        include(
+            "apps.compliance.compliance_documents.urls"
+        )
+    ),
+
+    path(
+        "affiliations/",
+        include(
+            "apps.compliance.affiliations.urls"
+        )
+    ),
+
+    path(
+        "recognitions/",
+        include(
+            "apps.compliance.recognitions.urls"
+        )
+    ),
+
+
+    path(
+        "certificates/",
+        include(
+            "apps.compliance.certificates.urls"
+        )
+    ),
+
+
+    path(
+        "inspections/",
+        include(
+            "apps.compliance.inspections.urls"
+        )
+    ),
+
+]
+
+
+# ============================================================
+# FILE: .\views.py
+# ============================================================
+
+from django.shortcuts import render
+
+# Create your views here.
+
+
+
+# ============================================================
+# FILE: .\affiliations\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\affiliations\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\affiliations\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class Affiliation(
+    SchoolBaseModel
+):
+
+    BOARD_CHOICES = [
+
+        ("CBSE", "CBSE"),
+
+        ("STATE", "State Board"),
+
+        ("ICSE", "ICSE"),
+
+        ("IB", "IB"),
+
+        ("CAMBRIDGE", "Cambridge"),
+    ]
+
+    STATUS_CHOICES = [
+
+        ("ACTIVE", "Active"),
+
+        ("EXPIRED", "Expired"),
+
+        ("PENDING", "Pending"),
+
+        ("SUSPENDED", "Suspended"),
+    ]
+
+    board = models.CharField(
+
+        max_length=50,
+
+        choices=BOARD_CHOICES
+    )
+
+    affiliation_number = models.CharField(
+
+        max_length=100
+    )
+
+    affiliation_letter = models.FileField(
+
+        upload_to="affiliations/",
+
+        blank=True,
+
+        null=True
+    )
+
+    issue_date = models.DateField(
+
+        blank=True,
+
+        null=True
+    )
+
+    valid_upto = models.DateField(
+
+        blank=True,
+
+        null=True
+    )
+
+    status = models.CharField(
+
+        max_length=20,
+
+        choices=STATUS_CHOICES,
+
+        default="ACTIVE"
+    )
+
+    remarks = models.TextField(
+
+        blank=True
+    )
+
+    class Meta:
+
+        db_table = "affiliations"
+
+        verbose_name = "Affiliation"
+
+        verbose_name_plural = "Affiliations"
+
+        ordering = [
+            "board"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "board",
+                    "affiliation_number"
+                ],
+                name="unique_affiliation_per_school"
+            )
+
+        ]
+
+
+# ============================================================
+# FILE: .\affiliations\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Affiliation
+
+
+class AffiliationSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+
+        source="school.name",
+
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Affiliation
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\affiliations\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    AffiliationViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    AffiliationViewSet,
+    basename="affiliations"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\affiliations\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Affiliation
+
+from .serializers import (
+    AffiliationSerializer
+)
+
+
+class AffiliationViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        Affiliation.objects
+        .select_related("school")
+    )
+
+    serializer_class = (
+        AffiliationSerializer
+    )
+
+
+# ============================================================
+# FILE: .\certificates\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\certificates\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\certificates\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class Certificate(
+    SchoolBaseModel
+):
+
+    CERTIFICATE_TYPE_CHOICES = [
+
+        (
+            "FIRE_SAFETY",
+            "Fire Safety Certificate"
+        ),
+
+        (
+            "BUILDING_SAFETY",
+            "Building Safety Certificate"
+        ),
+
+        (
+            "WATER_SANITATION",
+            "Water & Sanitation Certificate"
+        ),
+
+        (
+            "HEALTH",
+            "Health Certificate"
+        ),
+
+        (
+            "ELECTRICAL",
+            "Electrical Safety Certificate"
+        ),
+
+        (
+            "STRUCTURAL",
+            "Structural Stability Certificate"
+        ),
+
+        (
+            "LIFT_SAFETY",
+            "Lift Safety Certificate"
+        ),
+
+        (
+            "OTHER",
+            "Other"
+        ),
+    ]
+
+    STATUS_CHOICES = [
+
+        ("ACTIVE", "Active"),
+
+        ("EXPIRED", "Expired"),
+
+        ("PENDING", "Pending"),
+    ]
+
+    certificate_type = models.CharField(
+        max_length=50,
+        choices=CERTIFICATE_TYPE_CHOICES
+    )
+
+    certificate_number = models.CharField(
+        max_length=100
+    )
+
+    issuing_authority = models.CharField(
+        max_length=255
+    )
+
+    document = models.FileField(
+        upload_to="certificates/",
+        blank=True,
+        null=True
+    )
+
+    issue_date = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    valid_upto = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="ACTIVE"
+    )
+
+    remarks = models.TextField(
+        blank=True
+    )
+
+    class Meta:
+
+        db_table = "certificates"
+
+        verbose_name = "Certificate"
+
+        verbose_name_plural = (
+            "Certificates"
+        )
+
+        ordering = [
+            "certificate_type"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "certificate_number"
+                ],
+                name="unique_certificate_per_school"
+            )
+
+        ]
+
+
+# ============================================================
+# FILE: .\certificates\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Certificate
+
+
+class CertificateSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Certificate
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\certificates\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    CertificateViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    CertificateViewSet,
+    basename="certificates"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\certificates\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Certificate
+
+from .serializers import (
+    CertificateSerializer
+)
+
+
+class CertificateViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+        Certificate.objects
+        .select_related("school")
+    )
+
+    serializer_class = (
+        CertificateSerializer
+    )
+
+
+# ============================================================
+# FILE: .\compliance_documents\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\compliance_documents\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\compliance_documents\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class ComplianceDocument(
+    SchoolBaseModel
+):
+
+    DOCUMENT_TYPE_CHOICES = [
+
+        (
+            "AFFILIATION_LETTER",
+            "Affiliation Letter"
+        ),
+
+        (
+            "NOC",
+            "No Objection Certificate"
+        ),
+
+        (
+            "RECOGNITION_CERTIFICATE",
+            "Recognition Certificate"
+        ),
+
+        (
+            "BUILDING_SAFETY",
+            "Building Safety Certificate"
+        ),
+
+        (
+            "FIRE_SAFETY",
+            "Fire Safety Certificate"
+        ),
+
+        (
+            "WATER_SANITATION",
+            "Water & Sanitation Certificate"
+        ),
+
+        (
+            "DEO_CERTIFICATE",
+            "DEO Certificate"
+        ),
+
+        (
+            "FEE_STRUCTURE",
+            "Fee Structure"
+        ),
+
+        (
+            "ACADEMIC_CALENDAR",
+            "Academic Calendar"
+        ),
+
+        (
+            "SMC_LIST",
+            "School Management Committee"
+        ),
+
+        (
+            "PTA_LIST",
+            "Parent Teacher Association"
+        ),
+
+        (
+            "BOARD_RESULTS",
+            "Board Results"
+        ),
+    ]
+
+    document_type = models.CharField(
+        max_length=50,
+        choices=DOCUMENT_TYPE_CHOICES
+    )
+
+    title = models.CharField(
+        max_length=255
+    )
+
+    document = models.FileField(
+        upload_to="compliance/"
+    )
+
+    issue_date = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    expiry_date = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    issuing_authority = (
+        models.CharField(
+            max_length=255,
+            blank=True
+        )
+    )
+
+    remarks = models.TextField(
+        blank=True
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+
+        db_table = (
+            "compliance_documents"
+        )
+
+        verbose_name = (
+            "Compliance Document"
+        )
+
+        verbose_name_plural = (
+            "Compliance Documents"
+        )
+
+        ordering = [
+            "document_type",
+            "title"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "document_type",
+                    "title"
+                ],
+                name="unique_compliance_document_per_school"
+            )
+
+        ]
+
+
+# ============================================================
+# FILE: .\compliance_documents\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    ComplianceDocument
+)
+
+
+class ComplianceDocumentSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = ComplianceDocument
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\compliance_documents\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    ComplianceDocumentViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    ComplianceDocumentViewSet,
+    basename=(
+        "compliance-documents"
+    )
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\compliance_documents\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import (
+    ComplianceDocument
+)
+
+from .serializers import (
+    ComplianceDocumentSerializer
+)
+
+
+class ComplianceDocumentViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        ComplianceDocument.objects
+        .select_related("school")
+    )
+
+    serializer_class = (
+        ComplianceDocumentSerializer
+    )
+
+
+# ============================================================
+# FILE: .\inspections\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\inspections\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\inspections\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class Inspection(
+    SchoolBaseModel
+):
+
+    INSPECTION_TYPE_CHOICES = [
+
+        (
+            "CBSE",
+            "CBSE Inspection"
+        ),
+
+        (
+            "EDUCATION_DEPARTMENT",
+            "Education Department Inspection"
+        ),
+
+        (
+            "FIRE",
+            "Fire Safety Inspection"
+        ),
+
+        (
+            "HEALTH",
+            "Health Inspection"
+        ),
+
+        (
+            "BUILDING",
+            "Building Safety Inspection"
+        ),
+
+        (
+            "WATER_SANITATION",
+            "Water & Sanitation Inspection"
+        ),
+
+        (
+            "OTHER",
+            "Other"
+        ),
+    ]
+
+    STATUS_CHOICES = [
+
+        (
+            "PASSED",
+            "Passed"
+        ),
+
+        (
+            "FAILED",
+            "Failed"
+        ),
+
+        (
+            "PENDING",
+            "Pending"
+        ),
+
+        (
+            "CONDITIONAL",
+            "Conditional Approval"
+        ),
+    ]
+
+    inspection_type = models.CharField(
+        max_length=50,
+        choices=INSPECTION_TYPE_CHOICES
+    )
+
+    inspection_date = models.DateField()
+
+    authority = models.CharField(
+        max_length=255
+    )
+
+    officer_name = models.CharField(
+        max_length=255,
+        blank=True
+    )
+
+    report_number = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    document = models.FileField(
+        upload_to="inspections/",
+        blank=True,
+        null=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="PASSED"
+    )
+
+    remarks = models.TextField(
+        blank=True
+    )
+
+    class Meta:
+
+        db_table = "inspections"
+
+        verbose_name = "Inspection"
+
+        verbose_name_plural = (
+            "Inspections"
+        )
+
+        ordering = [
+            "-inspection_date"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "report_number"
+                ],
+                name="unique_inspection_report_per_school"
+            )
+
+        ]
+
+
+# ============================================================
+# FILE: .\inspections\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Inspection
+
+
+class InspectionSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Inspection
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\inspections\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    InspectionViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    InspectionViewSet,
+    basename="inspections"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\inspections\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Inspection
+
+from .serializers import (
+    InspectionSerializer
+)
+
+
+class InspectionViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+        Inspection.objects
+        .select_related("school")
+    )
+
+    serializer_class = (
+        InspectionSerializer
+    )
+
+
+# ============================================================
+# FILE: .\mandatory_public_disclosures\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\mandatory_public_disclosures\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\mandatory_public_disclosures\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class MandatoryPublicDisclosure(
+    SchoolBaseModel
+):
+
+    # =====================================
+    # GENERAL INFORMATION
+    # =====================================
+
+    affiliation_number = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    school_code = models.CharField(
+        max_length=50,
+        blank=True
+    )
+
+    principal_name = models.CharField(
+        max_length=255,
+        blank=True
+    )
+
+    principal_qualification = models.CharField(
+        max_length=255,
+        blank=True
+    )
+
+    school_email = models.EmailField(
+        blank=True
+    )
+
+    contact_number = models.CharField(
+        max_length=20,
+        blank=True
+    )
+
+    # =====================================
+    # STAFF DETAILS
+    # =====================================
+
+    total_teachers = models.PositiveIntegerField(
+        default=0
+    )
+
+    pgt_count = models.PositiveIntegerField(
+        default=0
+    )
+
+    tgt_count = models.PositiveIntegerField(
+        default=0
+    )
+
+    prt_count = models.PositiveIntegerField(
+        default=0
+    )
+
+    dpe_count = models.PositiveIntegerField(
+        default=0
+    )
+
+    clerk_count = models.PositiveIntegerField(
+        default=0
+    )
+
+    librarian_count = models.PositiveIntegerField(
+        default=0
+    )
+
+    student_teacher_ratio = models.CharField(
+        max_length=20,
+        blank=True
+    )
+
+    special_educator_count = (
+        models.PositiveIntegerField(
+            default=0
+        )
+    )
+
+    counsellor_count = (
+        models.PositiveIntegerField(
+            default=0
+        )
+    )
+
+    class Meta:
+
+        db_table = (
+            "mandatory_public_disclosures"
+        )
+
+        verbose_name = (
+            "Mandatory Public Disclosure"
+        )
+
+        verbose_name_plural = (
+            "Mandatory Public Disclosures"
+        )
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=["school"],
+                name=(
+                    "unique_mpd_per_school"
+                )
+            )
+        ]
+
+    def __str__(self):
+
+        return (
+            f"{self.school.name}"
+        )
+
+
+# ============================================================
+# FILE: .\mandatory_public_disclosures\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    MandatoryPublicDisclosure
+)
+
+
+class MandatoryPublicDisclosureSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = (
+            MandatoryPublicDisclosure
+        )
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\mandatory_public_disclosures\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    MandatoryPublicDisclosureViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    MandatoryPublicDisclosureViewSet,
+    basename=(
+        "mandatory-public-disclosures"
+    )
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\mandatory_public_disclosures\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import (
+    MandatoryPublicDisclosure
+)
+
+from .serializers import (
+    MandatoryPublicDisclosureSerializer
+)
+
+
+class MandatoryPublicDisclosureViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        MandatoryPublicDisclosure
+        .objects
+        .select_related(
+            "school"
+        )
+    )
+
+    serializer_class = (
+        MandatoryPublicDisclosureSerializer
+    )
+
+
+# ============================================================
+# FILE: .\policies\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\policies\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\policies\models.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\policies\serializers.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\policies\urls.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\policies\views.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\recognitions\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\recognitions\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\recognitions\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class Recognition(SchoolBaseModel):
+
+    RECOGNITION_TYPE_CHOICES = [
+
+        (
+            "SCHOOL_RECOGNITION",
+            "School Recognition"
+        ),
+
+        (
+            "RTE_RECOGNITION",
+            "RTE Recognition"
+        ),
+
+        (
+            "GOVERNMENT_APPROVAL",
+            "Government Approval"
+        ),
+
+        (
+            "MINORITY_STATUS",
+            "Minority Status"
+        ),
+
+        (
+            "OTHER",
+            "Other"
+        ),
+    ]
+
+    STATUS_CHOICES = [
+
+        ("ACTIVE", "Active"),
+
+        ("EXPIRED", "Expired"),
+
+        ("PENDING", "Pending"),
+    ]
+
+    recognition_type = models.CharField(
+        max_length=50,
+        choices=RECOGNITION_TYPE_CHOICES
+    )
+
+    recognition_number = models.CharField(
+        max_length=100
+    )
+
+    issuing_authority = models.CharField(
+        max_length=255
+    )
+
+    recognition_document = models.FileField(
+        upload_to="recognitions/",
+        blank=True,
+        null=True
+    )
+
+    issue_date = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    valid_upto = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="ACTIVE"
+    )
+
+    remarks = models.TextField(
+        blank=True
+    )
+
+    class Meta:
+
+        db_table = "recognitions"
+
+        verbose_name = "Recognition"
+
+        verbose_name_plural = "Recognitions"
+
+        ordering = [
+            "recognition_type"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "recognition_number"
+                ],
+                name="unique_recognition_per_school"
+            )
+
+        ]
+
+
+# ============================================================
+# FILE: .\recognitions\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Recognition
+
+
+class RecognitionSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Recognition
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\recognitions\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    RecognitionViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    RecognitionViewSet,
+    basename="recognitions"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\recognitions\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Recognition
+
+from .serializers import (
+    RecognitionSerializer
+)
+
+
+class RecognitionViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        Recognition.objects
+        .select_related(
+            "school"
+        )
+    )
+
+    serializer_class = (
+        RecognitionSerializer
+    )

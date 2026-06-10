@@ -1,0 +1,1 @@
+export default function ExamTypesForm() { return <div>ExamTypes Form</div>; }

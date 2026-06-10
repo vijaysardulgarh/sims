@@ -1,0 +1,1 @@
+export default function ExamTypesEditPage() { return <div>ExamTypes Edit</div>; }

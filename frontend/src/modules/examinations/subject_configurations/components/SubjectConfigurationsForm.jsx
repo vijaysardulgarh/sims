@@ -1,0 +1,1 @@
+export default function SubjectConfigurationsForm() { return <div>SubjectConfigurations Form</div>; }

@@ -1,0 +1,1 @@
+export default function GradeScalesForm() { return <div>GradeScales Form</div>; }

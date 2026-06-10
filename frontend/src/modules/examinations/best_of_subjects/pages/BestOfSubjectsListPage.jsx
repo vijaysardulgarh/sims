@@ -1,0 +1,1 @@
+export default function BestOfSubjectsListPage() { return <div>BestOfSubjects List</div>; }

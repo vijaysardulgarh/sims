@@ -1,0 +1,1 @@
+export default function ResultGenerationsForm() { return <div>ResultGenerations Form</div>; }

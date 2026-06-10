@@ -1,0 +1,1 @@
+export default function ResultApprovalsForm() { return <div>ResultApprovals Form</div>; }

@@ -1,0 +1,1 @@
+export default function BestOfSubjectsAddPage() { return <div>BestOfSubjects Add</div>; }

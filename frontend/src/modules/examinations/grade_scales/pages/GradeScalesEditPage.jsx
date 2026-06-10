@@ -1,0 +1,1 @@
+export default function GradeScalesEditPage() { return <div>GradeScales Edit</div>; }

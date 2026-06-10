@@ -1,76 +1,81 @@
 from django.db import models
-from apps.core.common.base.models import SchoolBaseModel
 
-class Exam(SchoolBaseModel):
+from apps.core.models.base_models import (
+    SessionBaseModel,
+)
 
-    EXAM_MODES = (
-        ("offline", "Offline"),
-        ("online", "Online"),
-        ("hybrid", "Hybrid"),
-    )
+from apps.exams.exam_types.models import (
+    ExamType,
+)
 
-    GRADING_SYSTEMS = (
-        ("marks", "Marks"),
-        ("percentage", "Percentage"),
-        ("grade", "Grade"),
-        ("gpa", "GPA"),
-        ("cgpa", "CGPA"),
-    )
 
-    STATUS_CHOICES = (
-        ("draft", "Draft"),
-        ("scheduled", "Scheduled"),
-        ("ongoing", "Ongoing"),
-        ("completed", "Completed"),
-        ("published", "Published"),
+class Exam(
+    SessionBaseModel
+):
+
+    exam_type = models.ForeignKey(
+
+        ExamType,
+
+        on_delete=models.PROTECT,
+
+        related_name="exams",
     )
 
     name = models.CharField(
-        max_length=255
-    )
-
-    exam_type = models.CharField(
-        max_length=100
-    )
-
-    exam_mode = models.CharField(
-        max_length=20,
-        choices=EXAM_MODES,
-        default="offline"
-    )
-
-    grading_system = models.CharField(
-        max_length=20,
-        choices=GRADING_SYSTEMS,
-        default="marks"
-    )
-
-    academic_year = models.CharField(
-        max_length=20
+        max_length=255,
     )
 
     start_date = models.DateField()
 
     end_date = models.DateField()
 
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default="draft"
-    )
+    result_publish_date = models.DateField(
 
-    description = models.TextField(
+        null=True,
+
         blank=True,
-        null=True
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
+    is_marks_locked = models.BooleanField(
+        default=False,
     )
 
-    updated_at = models.DateTimeField(
-        auto_now=True
+    is_result_published = models.BooleanField(
+        default=False,
     )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = "exams"
+
+        ordering = [
+            "-start_date",
+            "name",
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "academic_session",
+                    "name",
+                ],
+
+                condition=models.Q(
+                    is_deleted=False
+                ),
+
+                name="unique_exam_name",
+            ),
+        ]
 
     def __str__(self):
+
         return self.name

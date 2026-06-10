@@ -1,83 +1,89 @@
 from django.db import models
 
-from apps.core.common.base.models import SchoolBaseModel
-class ExamType(SchoolBaseModel):
+from apps.core.models.base_models import (
+    SessionBaseModel,
+    OrderedBaseModel,
+)
 
-    CATEGORY_CHOICES = (
-        ("school", "School"),
-        ("college", "College"),
-        ("competitive", "Competitive"),
-        ("online", "Online"),
-    )
+
+class ExamType(
+    SessionBaseModel,
+    OrderedBaseModel
+):
 
     name = models.CharField(
         max_length=100,
-        unique=True
     )
 
-    code = models.SlugField(
-        max_length=50,
-        unique=True
-    )
-
-    category = models.CharField(
-        max_length=50,
-        choices=CATEGORY_CHOICES,
-        default="school"
+    code = models.CharField(
+        max_length=20,
     )
 
     description = models.TextField(
         blank=True,
-        null=True
     )
 
-    is_internal = models.BooleanField(
-        default=False
+    color = models.CharField(
+        max_length=20,
+        blank=True,
     )
 
-    is_practical = models.BooleanField(
-        default=False
+    weightage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=0,
     )
 
-    is_online = models.BooleanField(
-        default=False
+    allow_practical = models.BooleanField(
+        default=False,
     )
 
-    has_viva = models.BooleanField(
-        default=False
-    )
-
-    has_assignment = models.BooleanField(
-        default=False
-    )
-
-    default_max_marks = models.PositiveIntegerField(
-        default=100
-    )
-
-    default_passing_marks = models.PositiveIntegerField(
-        default=33
-    )
-
-    is_active = models.BooleanField(
-        default=True
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    updated_at = models.DateTimeField(
-        auto_now=True
+    allow_internal_assessment = models.BooleanField(
+        default=False,
     )
 
     class Meta:
 
-        ordering = ["name"]
+        db_table = "exam_types"
 
-        verbose_name = "Exam Type"
+        ordering = [
+            "display_order",
+            "name",
+        ]
 
-        verbose_name_plural = "Exam Types"
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "academic_session",
+                    "name",
+                ],
+
+                condition=models.Q(
+                    is_deleted=False
+                ),
+
+                name="unique_exam_type_name",
+            ),
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "academic_session",
+                    "code",
+                ],
+
+                condition=models.Q(
+                    is_deleted=False
+                ),
+
+                name="unique_exam_type_code",
+            ),
+        ]
 
     def __str__(self):
+
         return self.name

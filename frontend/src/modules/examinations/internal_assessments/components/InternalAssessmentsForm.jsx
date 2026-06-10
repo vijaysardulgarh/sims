@@ -1,0 +1,1 @@
+export default function InternalAssessmentsForm() { return <div>InternalAssessments Form</div>; }

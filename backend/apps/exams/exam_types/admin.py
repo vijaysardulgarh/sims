@@ -1,55 +1,42 @@
 from django.contrib import admin
 
-from apps.exams.models import ExamType
+from .models import (
+    ExamType
+)
 
 
-@admin.register(ExamType)
+@admin.register(
+    ExamType
+)
 class ExamTypeAdmin(
     admin.ModelAdmin
 ):
 
-    list_display = (
-        "id",
+    list_display = [
+
         "name",
+
         "code",
-        "category",
-        "default_max_marks",
-        "default_passing_marks",
-        "is_internal",
-        "is_practical",
-        "is_online",
-        "has_viva",
-        "has_assignment",
-        "is_active",
-        "school",
-    )
 
-    list_filter = (
-        "category",
-        "is_internal",
-        "is_practical",
-        "is_online",
-        "has_viva",
-        "has_assignment",
-        "is_active",
-        "school",
-    )
+        "weightage",
 
-    search_fields = (
+        "is_active",
+
+        "display_order",
+    ]
+
+    search_fields = [
+
         "name",
+
         "code",
-        "description",
-    )
+    ]
 
-    ordering = (
-        "name",
-    )
+    list_filter = [
 
-    readonly_fields = (
-        "created_at",
-        "updated_at",
-    )
+        "is_active",
 
-    prepopulated_fields = {
-        "code": ("name",)
-    }
+        "allow_practical",
+
+        "allow_internal_assessment",
+    ]

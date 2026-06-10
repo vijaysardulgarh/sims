@@ -1,0 +1,1 @@
+export default function AdmitCardsAddPage() { return <div>AdmitCards Add</div>; }

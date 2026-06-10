@@ -1,0 +1,1 @@
+export default function RankSystemsAddPage() { return <div>RankSystems Add</div>; }

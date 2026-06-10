@@ -1,0 +1,1 @@
+export default function InternalAssessmentsEditPage() { return <div>InternalAssessments Edit</div>; }

@@ -1,0 +1,1 @@
+export default function MarkVerificationsListPage() { return <div>MarkVerifications List</div>; }

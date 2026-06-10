@@ -1,0 +1,1 @@
+export default function CompetencyAssessmentsEditPage() { return <div>CompetencyAssessments Edit</div>; }

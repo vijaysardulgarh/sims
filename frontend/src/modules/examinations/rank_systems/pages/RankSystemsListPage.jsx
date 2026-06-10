@@ -1,0 +1,1 @@
+export default function RankSystemsListPage() { return <div>RankSystems List</div>; }

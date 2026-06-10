@@ -1,0 +1,1 @@
+export default function SeatingPlansListPage() { return <div>SeatingPlans List</div>; }

@@ -1,0 +1,1 @@
+export default function ReportCardsAddPage() { return <div>ReportCards Add</div>; }

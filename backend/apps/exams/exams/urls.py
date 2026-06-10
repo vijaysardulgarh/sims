@@ -1,39 +1,17 @@
-from django.urls import path
-
-from apps.exams.views import (
-
-    ExamListCreateAPIView,
-
-    ExamDetailAPIView,
+from rest_framework.routers import (
+    DefaultRouter
 )
 
+from .views import (
+    ExamViewSet
+)
 
-urlpatterns = [
+router = DefaultRouter()
 
-    # =====================================
-    # EXAM LIST / CREATE
-    # =====================================
+router.register(
+    "",
+    ExamViewSet,
+    basename="exam"
+)
 
-    path(
-
-        "",
-
-        ExamListCreateAPIView.as_view(),
-
-        name="exam-list-create"
-    ),
-
-
-    # =====================================
-    # EXAM DETAIL
-    # =====================================
-
-    path(
-
-        "<int:pk>/",
-
-        ExamDetailAPIView.as_view(),
-
-        name="exam-detail"
-    ),
-]
+urlpatterns = router.urls

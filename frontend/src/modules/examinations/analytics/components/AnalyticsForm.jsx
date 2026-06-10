@@ -1,0 +1,1 @@
+export default function AnalyticsForm() { return <div>Analytics Form</div>; }

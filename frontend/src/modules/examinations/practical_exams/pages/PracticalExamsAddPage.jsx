@@ -1,0 +1,1 @@
+export default function PracticalExamsAddPage() { return <div>PracticalExams Add</div>; }

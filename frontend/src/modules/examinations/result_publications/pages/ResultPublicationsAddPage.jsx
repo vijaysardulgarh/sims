@@ -1,0 +1,1 @@
+export default function ResultPublicationsAddPage() { return <div>ResultPublications Add</div>; }

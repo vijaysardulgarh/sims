@@ -1,0 +1,1 @@
+export default function RevaluationsAddPage() { return <div>Revaluations Add</div>; }

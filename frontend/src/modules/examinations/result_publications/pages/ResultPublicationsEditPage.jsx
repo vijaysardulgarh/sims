@@ -1,0 +1,1 @@
+export default function ResultPublicationsEditPage() { return <div>ResultPublications Edit</div>; }

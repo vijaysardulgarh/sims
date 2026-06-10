@@ -1,0 +1,1 @@
+export default function CompartmentExamsAddPage() { return <div>CompartmentExams Add</div>; }

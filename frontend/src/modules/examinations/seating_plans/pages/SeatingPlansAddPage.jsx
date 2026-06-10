@@ -1,0 +1,1 @@
+export default function SeatingPlansAddPage() { return <div>SeatingPlans Add</div>; }

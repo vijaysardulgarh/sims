@@ -1,0 +1,1 @@
+export default function DashboardsListPage() { return <div>Dashboards List</div>; }

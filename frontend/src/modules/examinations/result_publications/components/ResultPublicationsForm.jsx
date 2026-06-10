@@ -1,0 +1,1 @@
+export default function ResultPublicationsForm() { return <div>ResultPublications Form</div>; }

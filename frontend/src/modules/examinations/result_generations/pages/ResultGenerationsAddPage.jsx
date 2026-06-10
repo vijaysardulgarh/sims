@@ -1,0 +1,1 @@
+export default function ResultGenerationsAddPage() { return <div>ResultGenerations Add</div>; }

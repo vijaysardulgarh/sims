@@ -1,0 +1,1 @@
+export default function BestOfSubjectsForm() { return <div>BestOfSubjects Form</div>; }

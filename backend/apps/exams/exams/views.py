@@ -1,41 +1,48 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from apps.core.views.base_views import (
+    SchoolFilteredViewSet
+)
 
-from apps.exams.models import Exam
-from apps.exams.serializers import ExamSerializer
+from .models import (
+    Exam
+)
+
+from .serializers import (
+    ExamSerializer
+)
 
 
-# =====================================
-# EXAM LIST / CREATE
-# =====================================
-
-class ExamListCreateAPIView(
-    generics.ListCreateAPIView
+class ExamViewSet(
+    SchoolFilteredViewSet
 ):
 
-    queryset = Exam.objects.all().order_by(
-        "-created_at"
+    queryset = (
+        Exam.objects.select_related(
+            "exam_type"
+        )
     )
 
-    serializer_class = ExamSerializer
+    serializer_class = (
+        ExamSerializer
+    )
 
-    permission_classes = [
-        IsAuthenticated
+    search_fields = [
+
+        "name",
+
+        "exam_type__name",
     ]
 
+    ordering_fields = [
 
-# =====================================
-# EXAM DETAIL
-# =====================================
+        "name",
 
-class ExamDetailAPIView(
-    generics.RetrieveUpdateDestroyAPIView
-):
+        "start_date",
 
-    queryset = Exam.objects.all()
+        "end_date",
 
-    serializer_class = ExamSerializer
+        "created_at",
+    ]
 
-    permission_classes = [
-        IsAuthenticated
+    ordering = [
+        "-start_date",
     ]

@@ -1,0 +1,1 @@
+export default function DashboardsAddPage() { return <div>Dashboards Add</div>; }

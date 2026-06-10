@@ -1,0 +1,1 @@
+export default function ResultApprovalsEditPage() { return <div>ResultApprovals Edit</div>; }

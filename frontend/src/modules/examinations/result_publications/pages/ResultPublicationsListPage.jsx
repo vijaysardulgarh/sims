@@ -1,0 +1,1 @@
+export default function ResultPublicationsListPage() { return <div>ResultPublications List</div>; }

@@ -1,0 +1,1 @@
+export default function ResultGenerationsEditPage() { return <div>ResultGenerations Edit</div>; }

@@ -1,0 +1,1 @@
+export default function AdmitCardsListPage() { return <div>AdmitCards List</div>; }

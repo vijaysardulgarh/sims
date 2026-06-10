@@ -1,0 +1,1 @@
+export default function AnalyticsListPage() { return <div>Analytics List</div>; }

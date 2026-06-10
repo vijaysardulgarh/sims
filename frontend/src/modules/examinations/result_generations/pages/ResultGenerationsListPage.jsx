@@ -1,0 +1,1 @@
+export default function ResultGenerationsListPage() { return <div>ResultGenerations List</div>; }

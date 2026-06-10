@@ -1,0 +1,1 @@
+export default function PracticalExamsForm() { return <div>PracticalExams Form</div>; }

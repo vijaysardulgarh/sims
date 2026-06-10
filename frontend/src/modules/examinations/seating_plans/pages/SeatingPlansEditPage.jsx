@@ -1,0 +1,1 @@
+export default function SeatingPlansEditPage() { return <div>SeatingPlans Edit</div>; }

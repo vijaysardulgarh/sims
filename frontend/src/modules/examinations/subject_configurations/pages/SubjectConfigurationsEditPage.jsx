@@ -1,0 +1,1 @@
+export default function SubjectConfigurationsEditPage() { return <div>SubjectConfigurations Edit</div>; }

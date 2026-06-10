@@ -1,0 +1,1 @@
+export default function CompetencyAssessmentsForm() { return <div>CompetencyAssessments Form</div>; }

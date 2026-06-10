@@ -1,0 +1,1 @@
+export default function CompetencyAssessmentsListPage() { return <div>CompetencyAssessments List</div>; }

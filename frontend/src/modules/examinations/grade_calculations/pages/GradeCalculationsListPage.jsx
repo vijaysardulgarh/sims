@@ -1,0 +1,1 @@
+export default function GradeCalculationsListPage() { return <div>GradeCalculations List</div>; }

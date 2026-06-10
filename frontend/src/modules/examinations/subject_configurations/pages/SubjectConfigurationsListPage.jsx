@@ -1,0 +1,1 @@
+export default function SubjectConfigurationsListPage() { return <div>SubjectConfigurations List</div>; }

@@ -1,0 +1,1 @@
+export default function RevaluationsListPage() { return <div>Revaluations List</div>; }

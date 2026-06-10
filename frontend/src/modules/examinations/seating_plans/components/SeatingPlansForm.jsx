@@ -1,0 +1,1 @@
+export default function SeatingPlansForm() { return <div>SeatingPlans Form</div>; }

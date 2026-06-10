@@ -1,0 +1,1 @@
+export default function GradeScalesListPage() { return <div>GradeScales List</div>; }
