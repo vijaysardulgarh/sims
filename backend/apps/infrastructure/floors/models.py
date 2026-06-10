@@ -57,14 +57,49 @@ class Floor(
                 name=(
                     "unique_floor_per_building"
                 )
-            )
+            ),
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "building",
+                    "name"
+                ],
+
+                name=(
+                    "unique_floor_name_per_building"
+                )
+            ),
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "building"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "floor_number"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school"
+                ]
+            ),
         ]
 
     def __str__(self):
 
         return (
 
-            f"{self.building.name} - "
+            f"{self.building.code}"
 
-            f"{self.name}"
+            f" - Floor "
+
+            f"{self.floor_number}"
         )

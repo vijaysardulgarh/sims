@@ -121,9 +121,14 @@ class Inspection(
             "-inspection_date"
         ]
 
-    def __str__(self):
+        constraints = [
 
-        return (
-            f"{self.school.name} - "
-            f"{self.inspection_type}"
-        )
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "report_number"
+                ],
+                name="unique_inspection_report_per_school"
+            )
+
+        ]

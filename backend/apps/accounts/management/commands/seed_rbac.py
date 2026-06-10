@@ -784,34 +784,51 @@ RBAC_CONFIG = {
     # WEBSITE
     # ======================================
 
-    "website": {
+    "compliance": {
 
         "path": None,
 
         "children": [
 
             {
-                "name": "Pages",
-                "slug": "pages",
-                "path": "/dashboard/website/pages",
+                "name": "affiliations",
+                "slug": "affiliations",
+                "path": "/dashboard/compliance/affiliations",
             },
 
             {
-                "name": "Banners",
-                "slug": "banners",
-                "path": "/dashboard/website/banners",
+                "name": "certificates",
+                "slug": "certificates",
+                "path": "/dashboard/compliance/certificates",
             },
 
             {
-                "name": "News",
-                "slug": "news",
-                "path": "/dashboard/website/news",
+                "name": "compliance-documents",
+                "slug": "compliance-documents",
+                "path": "/dashboard/compliance/compliance-documents",
             },
 
             {
-                "name": "Gallery",
-                "slug": "gallery",
-                "path": "/dashboard/website/gallery",
+                "name": "inspections",
+                "slug": "inspections",
+                "path": "/dashboard/compliance/inspections",
+            },
+            {
+                "name": "mandatory-public-disclosures",
+                "slug": "mandatory-public-disclosures",
+                "path": "/dashboard/compliance/mandatory-public-disclosures",
+            },
+
+            {
+                "name": "policies",
+                "slug": "policies",
+                "path": "/dashboard/compliance/policies",
+            },
+
+            {
+                "name": "recognitions",
+                "slug": "recognitions",
+                "path": "/dashboard/compliance/recognitions",
             },
         ]
     },

@@ -94,11 +94,15 @@ class Affiliation(
             "board"
         ]
 
-    def __str__(self):
+        constraints = [
 
-        return (
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "board",
+                    "affiliation_number"
+                ],
+                name="unique_affiliation_per_school"
+            )
 
-            f"{self.school.name} - "
-
-            f"{self.board}"
-        )
+        ]

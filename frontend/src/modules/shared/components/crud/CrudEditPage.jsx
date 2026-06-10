@@ -37,10 +37,6 @@ const CrudEditPage = ({
     const [saving, setSaving] =
         useState(false);
 
-    // ==========================================
-    // LOAD RECORD
-    // ==========================================
-
     const loadRecord =
         useCallback(
             async () => {
@@ -60,7 +56,9 @@ const CrudEditPage = ({
                         response.data
                     );
 
-                } catch (error) {
+                }
+
+                catch (error) {
 
                     console.error(
                         error
@@ -74,12 +72,16 @@ const CrudEditPage = ({
                         redirectPath
                     );
 
-                } finally {
+                }
+
+                finally {
 
                     setLoading(
                         false
                     );
+
                 }
+
             },
             [
                 endpoint,
@@ -95,10 +97,6 @@ const CrudEditPage = ({
 
     }, [loadRecord]);
 
-    // ==========================================
-    // ERROR HANDLER
-    // ==========================================
-
     const handleApiErrors = (
         error
     ) => {
@@ -113,6 +111,7 @@ const CrudEditPage = ({
             );
 
             return;
+
         }
 
         Object.entries(
@@ -132,13 +131,11 @@ const CrudEditPage = ({
                 toast.error(
                     `${field}: ${value}`
                 );
+
             }
         );
-    };
 
-    // ==========================================
-    // SUBMIT
-    // ==========================================
+    };
 
     const handleSubmit =
         async (e) => {
@@ -151,21 +148,136 @@ const CrudEditPage = ({
                     true
                 );
 
-                if (
-                    method === "patch"
-                ) {
+                const hasFile =
 
-                    await api.patch(
-                        `${endpoint}${id}/`,
+                    Object.values(
+                        formData
+                    ).some(
+                        value =>
+                            value instanceof File
+                    );
+
+                if (hasFile) {
+
+                    const payload =
+                        new FormData();
+
+                    Object.entries(
+                        formData
+                    ).forEach(
+                        ([key, value]) => {
+
+                            if (
+
+                                value === null ||
+
+                                value === undefined ||
+
+                                value === ""
+
+                            ) {
+
+                                return;
+
+                            }
+
+                            if (
+
+                                typeof value === "string" &&
+
+                                (
+                                    value.startsWith(
+                                        "http://"
+                                    ) ||
+
+                                    value.startsWith(
+                                        "https://"
+                                    )
+                                )
+
+                            ) {
+
+                                return;
+
+                            }
+
+                            payload.append(
+                                key,
+                                value
+                            );
+
+                        }
+                    );
+
+                    console.log(
                         formData
                     );
 
-                } else {
 
-                    await api.put(
-                        `${endpoint}${id}/`,
-                        formData
-                    );
+                    if (
+                        method === "patch"
+                    ) {
+
+                        await api.patch(
+
+                            `${endpoint}${id}/`,
+
+                            payload,
+
+                            {
+                                headers: {
+                                    "Content-Type":
+                                        "multipart/form-data",
+                                },
+                            }
+
+                        );
+
+                    }
+
+                    else {
+
+                        await api.put(
+
+                            `${endpoint}${id}/`,
+
+                            payload,
+
+                            {
+                                headers: {
+                                    "Content-Type":
+                                        "multipart/form-data",
+                                },
+                            }
+
+                        );
+
+                    }
+
+                }
+
+                else {
+
+                    if (
+                        method === "patch"
+                    ) {
+
+                        await api.patch(
+                            `${endpoint}${id}/`,
+                            formData
+                        );
+
+                    }
+
+                    else {
+
+                        await api.put(
+                            `${endpoint}${id}/`,
+                            formData
+                        );
+
+                    }
+
                 }
 
                 toast.success(
@@ -176,7 +288,9 @@ const CrudEditPage = ({
                     redirectPath
                 );
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 console.error(
                     error
@@ -186,17 +300,17 @@ const CrudEditPage = ({
                     error
                 );
 
-            } finally {
+            }
+
+            finally {
 
                 setSaving(
                     false
                 );
-            }
-        };
 
-    // ==========================================
-    // LOADING
-    // ==========================================
+            }
+
+        };
 
     if (loading) {
 
@@ -204,181 +318,204 @@ const CrudEditPage = ({
 
             <div
                 className="
-                    container-fluid
-                    py-4
+                    max-w-5xl
+                    mx-auto
+                    py-10
                 "
             >
 
                 <div
                     className="
-                        card
-                        shadow-sm
+                        bg-white
+                        rounded-2xl
+                        shadow
+                        p-10
+                        text-center
                     "
                 >
 
-                    <div
-                        className="
-                            card-body
-                            text-center
-                        "
-                    >
-
-                        Loading...
-
-                    </div>
+                    Loading...
 
                 </div>
 
             </div>
-        );
-    }
 
-    // ==========================================
-    // PAGE
-    // ==========================================
+        );
+
+    }
 
     return (
 
         <div
             className="
-                container-fluid
+                max-w-5xl
+                mx-auto
+                space-y-6
             "
         >
 
             <div
                 className="
-                    d-flex
-                    justify-content-between
-                    align-items-center
-                    mb-4
+                    flex
+                    items-center
+                    justify-between
                 "
             >
 
-                <h3
-                    className="
-                        mb-0
-                    "
-                >
-                    {title}
-                </h3>
+                <div>
+
+                    <h1
+                        className="
+                            text-3xl
+                            font-bold
+                            text-gray-900
+                        "
+                    >
+                        {title}
+                    </h1>
+
+                    <p
+                        className="
+                            text-gray-500
+                            mt-1
+                        "
+                    >
+                        Update existing record
+                    </p>
+
+                </div>
 
                 <button
+
                     type="button"
-                    className="
-                        btn
-                        btn-outline-secondary
-                    "
+
                     onClick={() =>
                         navigate(
                             redirectPath
                         )
                     }
+
+                    className="
+                        px-4
+                        py-2
+                        border
+                        border-gray-300
+                        rounded-xl
+                        hover:bg-gray-100
+                        transition
+                    "
                 >
+
                     Back
+
                 </button>
 
             </div>
 
             <div
                 className="
-                    card
-                    shadow-sm
-                    border-0
+                    bg-white
+                    rounded-2xl
+                    shadow
+                    p-8
                 "
             >
 
-                <div
-                    className="
-                        card-body
-                    "
+                <form
+                    onSubmit={
+                        handleSubmit
+                    }
                 >
 
-                    <form
-                        onSubmit={
-                            handleSubmit
+                    <FormComponent
+
+                        formData={
+                            formData
                         }
+
+                        setFormData={
+                            setFormData
+                        }
+
+                        loading={
+                            saving
+                        }
+
+                    />
+
+                    <div
+                        className="
+                            flex
+                            gap-3
+                            mt-8
+                        "
                     >
 
-                        <FormComponent
+                        <button
 
-                            formData={
-                                formData
-                            }
+                            type="submit"
 
-                            setFormData={
-                                setFormData
-                            }
-
-                            loading={
+                            disabled={
                                 saving
                             }
 
-                        />
-
-                        <div
                             className="
-                                d-flex
-                                gap-2
-                                mt-4
+                                px-6
+                                py-3
+                                bg-blue-600
+                                text-white
+                                rounded-xl
+                                hover:bg-blue-700
+                                disabled:opacity-50
                             "
                         >
 
-                            <button
-
-                                type="submit"
-
-                                disabled={
-                                    saving
-                                }
-
-                                className="
-                                    btn
-                                    btn-primary
-                                "
-                            >
-
-                                {saving
+                            {
+                                saving
                                     ? "Updating..."
-                                    : "Update"}
+                                    : "Update"
+                            }
 
-                            </button>
+                        </button>
 
-                            <button
+                        <button
 
-                                type="button"
+                            type="button"
 
-                                disabled={
-                                    saving
-                                }
+                            disabled={
+                                saving
+                            }
 
-                                className="
-                                    btn
-                                    btn-light
-                                "
+                            onClick={() =>
+                                navigate(
+                                    redirectPath
+                                )
+                            }
 
-                                onClick={() =>
-                                    navigate(
-                                        redirectPath
-                                    )
-                                }
+                            className="
+                                px-6
+                                py-3
+                                border
+                                border-gray-300
+                                rounded-xl
+                                hover:bg-gray-100
+                            "
+                        >
 
-                            >
+                            Cancel
 
-                                Cancel
+                        </button>
 
-                            </button>
+                    </div>
 
-                        </div>
-
-                    </form>
-
-                </div>
+                </form>
 
             </div>
 
         </div>
 
     );
+
 };
 
 export default CrudEditPage;

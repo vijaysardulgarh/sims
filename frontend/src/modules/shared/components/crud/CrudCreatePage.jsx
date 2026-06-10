@@ -41,6 +41,7 @@ const CrudCreatePage = ({
             );
 
             return;
+
         }
 
         Object.entries(
@@ -54,7 +55,9 @@ const CrudCreatePage = ({
                         messages
                     )
 
-                        ? messages.join(", ")
+                        ? messages.join(
+                              ", "
+                          )
 
                         : messages;
 
@@ -74,12 +77,79 @@ const CrudCreatePage = ({
 
             try {
 
-                setSaving(true);
-
-                await api.post(
-                    endpoint,
-                    formData
+                setSaving(
+                    true
                 );
+
+                const hasFile =
+
+                    Object.values(
+                        formData
+                    ).some(
+                        value =>
+                            value instanceof File
+                    );
+
+                if (hasFile) {
+
+                    const payload =
+                        new FormData();
+
+                    Object.entries(
+                        formData
+                    ).forEach(
+                        ([key, value]) => {
+
+                            if (
+
+                                value !== null &&
+
+                                value !== undefined &&
+
+                                value !== ""
+
+                            ) {
+
+                                payload.append(
+                                    key,
+                                    value
+                                );
+
+                            }
+
+                        }
+                    );
+
+                    await api.post(
+
+                        endpoint,
+
+                        payload,
+
+                        {
+                            headers: {
+
+                                "Content-Type":
+                                    "multipart/form-data",
+
+                            },
+                        }
+
+                    );
+
+                }
+
+                else {
+
+                    await api.post(
+
+                        endpoint,
+
+                        formData
+
+                    );
+
+                }
 
                 toast.success(
                     successMessage
@@ -105,7 +175,9 @@ const CrudCreatePage = ({
 
             finally {
 
-                setSaving(false);
+                setSaving(
+                    false
+                );
 
             }
 
@@ -120,8 +192,6 @@ const CrudCreatePage = ({
                 space-y-6
             "
         >
-
-            {/* HEADER */}
 
             <div
                 className="
@@ -179,8 +249,6 @@ const CrudCreatePage = ({
                 </button>
 
             </div>
-
-            {/* FORM CARD */}
 
             <div
                 className="

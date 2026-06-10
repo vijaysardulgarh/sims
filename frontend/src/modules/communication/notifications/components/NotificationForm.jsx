@@ -1,9 +1,9 @@
 import {
     useEffect,
     useState,
-} from 'react';
+} from "react";
 
-import api from '../../../../services/api/axios';
+import api from "../../../../services/api/axios";
 
 const NotificationForm = ({
     formData,
@@ -12,7 +12,7 @@ const NotificationForm = ({
 
     const [
         templates,
-        setTemplates
+        setTemplates,
     ] = useState([]);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const NotificationForm = ({
 
             const response =
                 await api.get(
-                    '/communications/communication-templates/'
+                    "/communications/communication-templates/"
                 );
 
             setTemplates(
@@ -35,192 +35,303 @@ const NotificationForm = ({
                 response.data
             );
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(error);
+
         }
+
+    };
+
+    const handleChange = (
+        field,
+        value
+    ) => {
+
+        setFormData({
+            ...formData,
+            [field]: value,
+        });
+
     };
 
     return (
-        <>
-            <div className="mb-3">
 
-                <label>
-                    Template
-                </label>
+        <div className="space-y-6">
 
-                <select
-                    className="form-control"
-                    value={
-                        formData.template || ''
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            template:
-                                e.target.value,
-                        })
-                    }
-                >
-                    <option value="">
-                        Select Template
-                    </option>
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-6
+                "
+            >
 
-                    {templates.map(
-                        (template) => (
+                {/* Template */}
 
-                            <option
-                                key={template.id}
-                                value={template.id}
-                            >
-                                {template.name}
-                            </option>
+                <div>
 
-                        )
-                    )}
+                    <label
+                        className="
+                            block
+                            text-sm
+                            font-medium
+                            text-gray-700
+                            mb-2
+                        "
+                    >
+                        Template
+                    </label>
 
-                </select>
+                    <select
+                        value={
+                            formData.template || ""
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                "template",
+                                e.target.value
+                            )
+                        }
+                        className="
+                            w-full
+                            px-4
+                            py-3
+                            border
+                            border-gray-300
+                            rounded-xl
+                            shadow-sm
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-blue-500
+                        "
+                    >
+
+                        <option value="">
+                            Select Template
+                        </option>
+
+                        {templates.map(
+                            (template) => (
+
+                                <option
+                                    key={template.id}
+                                    value={template.id}
+                                >
+                                    {template.name}
+                                </option>
+
+                            )
+                        )}
+
+                    </select>
+
+                </div>
+
+                {/* Notification Type */}
+
+                <div>
+
+                    <label
+                        className="
+                            block
+                            text-sm
+                            font-medium
+                            text-gray-700
+                            mb-2
+                        "
+                    >
+                        Notification Type
+                    </label>
+
+                    <select
+                        value={
+                            formData.notification_type || ""
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                "notification_type",
+                                e.target.value
+                            )
+                        }
+                        className="
+                            w-full
+                            px-4
+                            py-3
+                            border
+                            border-gray-300
+                            rounded-xl
+                            shadow-sm
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-blue-500
+                        "
+                    >
+
+                        <option value="">
+                            Select Type
+                        </option>
+
+                        <option value="EMAIL">
+                            Email
+                        </option>
+
+                        <option value="SMS">
+                            SMS
+                        </option>
+
+                        <option value="APP">
+                            App Notification
+                        </option>
+
+                        <option value="WHATSAPP">
+                            WhatsApp
+                        </option>
+
+                    </select>
+
+                </div>
 
             </div>
 
-            <div className="mb-3">
+            {/* Subject */}
 
-                <label>
+            <div>
+
+                <label
+                    className="
+                        block
+                        text-sm
+                        font-medium
+                        text-gray-700
+                        mb-2
+                    "
+                >
                     Subject
                 </label>
 
                 <input
                     type="text"
-                    className="form-control"
                     value={
-                        formData.subject || ''
+                        formData.subject || ""
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            subject:
-                                e.target.value,
-                        })
+                        handleChange(
+                            "subject",
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        px-4
+                        py-3
+                        border
+                        border-gray-300
+                        rounded-xl
+                        shadow-sm
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
+                    placeholder="Enter notification subject"
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* Message */}
 
-                <label>
+            <div>
+
+                <label
+                    className="
+                        block
+                        text-sm
+                        font-medium
+                        text-gray-700
+                        mb-2
+                    "
+                >
                     Message
                 </label>
 
                 <textarea
-                    rows="8"
-                    className="form-control"
+                    rows={8}
                     value={
-                        formData.message || ''
+                        formData.message || ""
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            message:
-                                e.target.value,
-                        })
+                        handleChange(
+                            "message",
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        px-4
+                        py-3
+                        border
+                        border-gray-300
+                        rounded-xl
+                        shadow-sm
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
+                    placeholder="Enter notification message"
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* Scheduled At */}
 
-                <label>
-                    Notification Type
-                </label>
+            <div>
 
-                <select
-                    className="form-control"
-                    value={
-                        formData.notification_type || ''
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            notification_type:
-                                e.target.value,
-                        })
-                    }
+                <label
+                    className="
+                        block
+                        text-sm
+                        font-medium
+                        text-gray-700
+                        mb-2
+                    "
                 >
-                    <option value="">
-                        Select Type
-                    </option>
-
-                    <option value="EMAIL">
-                        Email
-                    </option>
-
-                    <option value="SMS">
-                        SMS
-                    </option>
-
-                    <option value="APP">
-                        App Notification
-                    </option>
-
-                    <option value="WHATSAPP">
-                        WhatsApp
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div className="mb-3">
-
-                <label>
                     Scheduled At
                 </label>
 
                 <input
                     type="datetime-local"
-                    className="form-control"
                     value={
-                        formData.scheduled_at || ''
+                        formData.scheduled_at || ""
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            scheduled_at:
-                                e.target.value,
-                        })
+                        handleChange(
+                            "scheduled_at",
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        px-4
+                        py-3
+                        border
+                        border-gray-300
+                        rounded-xl
+                        shadow-sm
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
                 />
 
             </div>
 
-            <div className="form-check">
+        </div>
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.is_active ??
-                        true
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            is_active:
-                                e.target.checked,
-                        })
-                    }
-                />
-
-                <label className="form-check-label">
-                    Active
-                </label>
-
-            </div>
-
-        </>
     );
+
 };
 
 export default NotificationForm;

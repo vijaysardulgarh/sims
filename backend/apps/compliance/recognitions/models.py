@@ -95,9 +95,14 @@ class Recognition(SchoolBaseModel):
             "recognition_type"
         ]
 
-    def __str__(self):
+        constraints = [
 
-        return (
-            f"{self.school.name} - "
-            f"{self.recognition_type}"
-        )
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "recognition_number"
+                ],
+                name="unique_recognition_per_school"
+            )
+
+        ]

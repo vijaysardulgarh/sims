@@ -3,125 +3,376 @@ const CircularForm = ({
     setFormData,
 }) => {
 
+    const handleChange = (
+        field,
+        value
+    ) => {
+
+        setFormData({
+            ...formData,
+            [field]: value,
+        });
+
+    };
+
     return (
-        <>
-            <div className="mb-3">
 
-                <label className="form-label">
-                    Circular Number
-                </label>
+        <div className="space-y-6">
 
-                <input
-                    type="text"
-                    className="form-control"
-                    value={
-                        formData.circular_number || ''
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            circular_number:
-                                e.target.value,
-                        })
-                    }
-                />
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-6
+                "
+            >
+
+                {/* Reference Number */}
+
+                <div>
+
+                    <label
+                        className="
+                            block
+                            text-sm
+                            font-medium
+                            text-gray-700
+                            mb-2
+                        "
+                    >
+                        Reference Number
+                    </label>
+
+                    <input
+                        type="text"
+                        value={
+                            formData.reference_number || ""
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                "reference_number",
+                                e.target.value
+                            )
+                        }
+                        className="
+                            w-full
+                            px-4
+                            py-3
+                            border
+                            border-gray-300
+                            rounded-xl
+                            shadow-sm
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-blue-500
+                            focus:border-blue-500
+                        "
+                    />
+
+                </div>
+
+                {/* Circular Type */}
+
+                <div>
+
+                    <label
+                        className="
+                            block
+                            text-sm
+                            font-medium
+                            text-gray-700
+                            mb-2
+                        "
+                    >
+                        Circular Type
+                    </label>
+
+                    <select
+                        value={
+                            formData.circular_type || "OTHER"
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                "circular_type",
+                                e.target.value
+                            )
+                        }
+                        className="
+                            w-full
+                            px-4
+                            py-3
+                            border
+                            border-gray-300
+                            rounded-xl
+                            shadow-sm
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-blue-500
+                        "
+                    >
+
+                        <option value="GOVERNMENT">
+                            Government
+                        </option>
+
+                        <option value="CBSE">
+                            CBSE
+                        </option>
+
+                        <option value="ADMINISTRATIVE">
+                            Administrative
+                        </option>
+
+                        <option value="POLICY">
+                            Policy
+                        </option>
+
+                        <option value="DEPARTMENT">
+                            Department
+                        </option>
+
+                        <option value="OTHER">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
 
             </div>
 
-            <div className="mb-3">
+            {/* Title */}
 
-                <label className="form-label">
+            <div>
+
+                <label
+                    className="
+                        block
+                        text-sm
+                        font-medium
+                        text-gray-700
+                        mb-2
+                    "
+                >
                     Title
                 </label>
 
                 <input
                     type="text"
-                    className="form-control"
                     value={
-                        formData.title || ''
+                        formData.title || ""
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            title:
-                                e.target.value,
-                        })
+                        handleChange(
+                            "title",
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        px-4
+                        py-3
+                        border
+                        border-gray-300
+                        rounded-xl
+                        shadow-sm
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* Description */}
 
-                <label className="form-label">
+            <div>
+
+                <label
+                    className="
+                        block
+                        text-sm
+                        font-medium
+                        text-gray-700
+                        mb-2
+                    "
+                >
                     Description
                 </label>
 
                 <textarea
-                    rows="6"
-                    className="form-control"
+                    rows={6}
                     value={
-                        formData.description || ''
+                        formData.description || ""
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            description:
-                                e.target.value,
-                        })
+                        handleChange(
+                            "description",
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        px-4
+                        py-3
+                        border
+                        border-gray-300
+                        rounded-xl
+                        shadow-sm
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
                 />
 
             </div>
 
-            <div className="mb-3">
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-6
+                "
+            >
 
-                <label className="form-label">
-                    Circular Date
-                </label>
+                {/* Issue Date */}
 
-                <input
-                    type="date"
-                    className="form-control"
-                    value={
-                        formData.circular_date || ''
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            circular_date:
-                                e.target.value,
-                        })
-                    }
-                />
+                <div>
+
+                    <label
+                        className="
+                            block
+                            text-sm
+                            font-medium
+                            text-gray-700
+                            mb-2
+                        "
+                    >
+                        Issue Date
+                    </label>
+
+                    <input
+                        type="date"
+                        value={
+                            formData.issue_date || ""
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                "issue_date",
+                                e.target.value
+                            )
+                        }
+                        className="
+                            w-full
+                            px-4
+                            py-3
+                            border
+                            border-gray-300
+                            rounded-xl
+                            shadow-sm
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-blue-500
+                        "
+                    />
+
+                </div>
+
+                {/* Effective Date */}
+
+                <div>
+
+                    <label
+                        className="
+                            block
+                            text-sm
+                            font-medium
+                            text-gray-700
+                            mb-2
+                        "
+                    >
+                        Effective Date
+                    </label>
+
+                    <input
+                        type="date"
+                        value={
+                            formData.effective_date || ""
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                "effective_date",
+                                e.target.value
+                            )
+                        }
+                        className="
+                            w-full
+                            px-4
+                            py-3
+                            border
+                            border-gray-300
+                            rounded-xl
+                            shadow-sm
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-blue-500
+                        "
+                    />
+
+                </div>
 
             </div>
 
-            <div className="form-check">
+            {/* Active */}
+
+            <div
+                className="
+                    flex
+                    items-center
+                    gap-3
+                    pt-2
+                "
+            >
 
                 <input
                     type="checkbox"
-                    className="form-check-input"
                     checked={
-                        formData.is_active ??
-                        true
+                        formData.is_active ?? true
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            is_active:
-                                e.target.checked,
-                        })
+                        handleChange(
+                            "is_active",
+                            e.target.checked
+                        )
                     }
+                    className="
+                        h-4
+                        w-4
+                        rounded
+                        border-gray-300
+                        text-blue-600
+                        focus:ring-blue-500
+                    "
                 />
 
-                <label className="form-check-label">
+                <label
+                    className="
+                        text-sm
+                        font-medium
+                        text-gray-700
+                    "
+                >
                     Active
                 </label>
 
             </div>
-        </>
+
+        </div>
+
     );
+
 };
 
 export default CircularForm;

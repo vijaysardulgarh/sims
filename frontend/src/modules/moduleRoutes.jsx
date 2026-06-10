@@ -12,7 +12,7 @@ import DashboardHomePage from "./home/pages/DashboardHomePage";
 // =====================================
 // MODULE ROUTES
 // =====================================
-
+import complianceRoutes from "./compliance/routes/complianceRoutes";
 import academicsRoutes from "./academics/routes/academicsRoutes";
 import accountsRoutes from "./accounts/routes/accountsRoutes";
 //import attendanceRoutes from "./accounts/routes/attendanceRoutes";
@@ -69,6 +69,7 @@ const moduleRoutes = (
     {infrastructureRoutes}
     {clusterRoutes}
     {associationModuleRoutes}
+    {complianceRoutes}
 
   </>
 );

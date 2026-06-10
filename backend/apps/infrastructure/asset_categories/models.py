@@ -14,16 +14,11 @@ class AssetCategory(
     )
 
     code = models.CharField(
-        max_length=50,
-        unique=True
+        max_length=50
     )
 
     description = models.TextField(
         blank=True
-    )
-
-    is_active = models.BooleanField(
-        default=True
     )
 
     class Meta:
@@ -40,6 +35,23 @@ class AssetCategory(
             "name"
         ]
 
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "code"
+                ],
+
+                name=(
+                    "unique_school_asset_category_code"
+                )
+            )
+        ]
+
     def __str__(self):
 
-        return self.name
+        return (
+            f"{self.code} - {self.name}"
+        )

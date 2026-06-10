@@ -13,6 +13,22 @@ const AuditoriumForm = ({
     const [rooms, setRooms] =
         useState([]);
 
+    const [loadingRooms, setLoadingRooms] =
+        useState(false);
+
+    const handleChange = (
+        field,
+        value
+    ) => {
+
+        setFormData(
+            (prev) => ({
+                ...prev,
+                [field]: value,
+            })
+        );
+    };
+
     useEffect(() => {
 
         loadRooms();
@@ -23,253 +39,507 @@ const AuditoriumForm = ({
 
         try {
 
+            setLoadingRooms(
+                true
+            );
+
             const response =
                 await api.get(
-                    '/infrastructure/rooms/'
+                    '/infrastructure/rooms/?room_type=AUDITORIUM'
                 );
 
             setRooms(
+
                 response.data.results ||
-                response.data
+
+                response.data ||
+
+                []
             );
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                'Failed to load rooms:',
+                error
+            );
+
+        } finally {
+
+            setLoadingRooms(
+                false
+            );
         }
     };
 
     return (
-        <>
-            <div className="mb-3">
 
-                <label className="form-label">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+
+            {/* ROOM */}
+
+            <div className="md:col-span-6">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Room
+                    <span className="ml-1 text-red-500">
+                        *
+                    </span>
+
                 </label>
 
                 <select
-                    className="form-control"
+                    required
                     value={
                         formData.room || ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            room:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'room',
+                            Number(
+                                e.target.value
+                            ) || ''
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 >
+
                     <option value="">
-                        Select Room
+
+                        {
+                            loadingRooms
+                                ? 'Loading Rooms...'
+                                : 'Select Room'
+                        }
+
                     </option>
 
-                    {rooms.map((room) => (
+                    {rooms.map(
+                        (
+                            room
+                        ) => (
 
-                        <option
-                            key={room.id}
-                            value={room.id}
-                        >
-                            {room.room_number}
-                            {' - '}
-                            {room.room_name}
-                        </option>
+                            <option
+                                key={
+                                    room.id
+                                }
+                                value={
+                                    room.id
+                                }
+                            >
 
-                    ))}
+                                {
+                                    room.room_number
+                                }
+
+                                {' - '}
+
+                                {
+                                    room.room_name
+                                }
+
+                            </option>
+                        )
+                    )}
+
                 </select>
 
             </div>
 
-            <div className="mb-3">
+            {/* AUDITORIUM CODE */}
 
-                <label className="form-label">
+            <div className="md:col-span-6">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Auditorium Code
+                    <span className="ml-1 text-red-500">
+                        *
+                    </span>
+
                 </label>
 
                 <input
                     type="text"
-                    className="form-control"
+                    required
+                    placeholder="AUD-001"
                     value={
-                        formData.auditorium_code || ''
+                        formData.auditorium_code ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            auditorium_code:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'auditorium_code',
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* SEATING CAPACITY */}
 
-                <label className="form-label">
+            <div className="md:col-span-4">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Seating Capacity
+
                 </label>
 
                 <input
                     type="number"
-                    className="form-control"
+                    min="0"
+                    placeholder="500"
                     value={
-                        formData.seating_capacity || ''
+                        formData.seating_capacity ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            seating_capacity:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'seating_capacity',
+                            Number(
+                                e.target.value
+                            ) || ''
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 />
 
             </div>
 
-            <div className="form-check mb-2">
+            {/* STAGE AVAILABLE */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.stage_available ??
-                        true
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            stage_available:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-4">
 
-                <label className="form-check-label">
-                    Stage Available
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.stage_available ??
+                            true
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'stage_available',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <span className="text-sm font-medium text-gray-700">
+
+                        Stage Available
+
+                    </span>
+
                 </label>
 
             </div>
 
-            <div className="form-check mb-2">
+            {/* SOUND SYSTEM */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.sound_system_available ??
-                        true
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            sound_system_available:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-4">
 
-                <label className="form-check-label">
-                    Sound System Available
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.sound_system_available ??
+                            true
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'sound_system_available',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <span className="text-sm font-medium text-gray-700">
+
+                        Sound System
+
+                    </span>
+
                 </label>
 
             </div>
 
-            <div className="form-check mb-2">
+            {/* PROJECTOR */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.projector_available ||
-                        false
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            projector_available:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-4">
 
-                <label className="form-check-label">
-                    Projector Available
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.projector_available ||
+                            false
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'projector_available',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <span className="text-sm font-medium text-gray-700">
+
+                        Projector Available
+
+                    </span>
+
                 </label>
 
             </div>
 
-            <div className="form-check mb-2">
+            {/* AC */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.air_conditioned ||
-                        false
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            air_conditioned:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-4">
 
-                <label className="form-check-label">
-                    Air Conditioned
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.air_conditioned ||
+                            false
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'air_conditioned',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <span className="text-sm font-medium text-gray-700">
+
+                        Air Conditioned
+
+                    </span>
+
                 </label>
 
             </div>
 
-            <div className="form-check mb-2">
+            {/* GREEN ROOM */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.green_room_available ||
-                        false
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            green_room_available:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-4">
 
-                <label className="form-check-label">
-                    Green Room Available
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.green_room_available ||
+                            false
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'green_room_available',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <span className="text-sm font-medium text-gray-700">
+
+                        Green Room Available
+
+                    </span>
+
                 </label>
 
             </div>
 
-            <div className="form-check">
+            {/* ACTIVE */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.is_active ??
-                        true
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            is_active:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-12">
 
-                <label className="form-check-label">
-                    Active
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.is_active ??
+                            true
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'is_active',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <div>
+
+                        <p className="font-medium text-gray-700">
+
+                            Active
+
+                        </p>
+
+                        <p className="text-sm text-gray-500">
+
+                            Mark this auditorium as
+                            available for use.
+
+                        </p>
+
+                    </div>
+
                 </label>
 
             </div>
-        </>
+
+        </div>
     );
 };
 

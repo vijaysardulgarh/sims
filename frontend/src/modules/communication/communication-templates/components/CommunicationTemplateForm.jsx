@@ -1,9 +1,9 @@
 import {
     useEffect,
     useState,
-} from 'react';
+} from "react";
 
-import api from '../../../../services/api/axios';
+import api from "../../../../services/api/axios";
 
 const CommunicationTemplateForm = ({
     formData,
@@ -12,7 +12,7 @@ const CommunicationTemplateForm = ({
 
     const [
         categories,
-        setCategories
+        setCategories,
     ] = useState([]);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const CommunicationTemplateForm = ({
 
             const response =
                 await api.get(
-                    '/communications/communication-categories/'
+                    "/communications/communication-categories/"
                 );
 
             setCategories(
@@ -35,148 +35,283 @@ const CommunicationTemplateForm = ({
                 response.data
             );
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(error);
+
         }
+
+    };
+
+    const handleChange = (
+        field,
+        value
+    ) => {
+
+        setFormData({
+            ...formData,
+            [field]: value,
+        });
+
     };
 
     return (
-        <>
-            <div className="mb-3">
 
-                <label>
-                    Category
-                </label>
+        <div className="space-y-6">
 
-                <select
-                    className="form-control"
-                    value={
-                        formData.category || ''
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            category:
-                                e.target.value,
-                        })
-                    }
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-6
+                "
+            >
+
+                {/* Category */}
+
+                <div>
+
+                    <label
+                        className="
+                            block
+                            text-sm
+                            font-medium
+                            text-gray-700
+                            mb-2
+                        "
+                    >
+                        Category
+                    </label>
+
+                    <select
+                        value={
+                            formData.category || ""
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                "category",
+                                e.target.value
+                            )
+                        }
+                        className="
+                            w-full
+                            px-4
+                            py-3
+                            border
+                            border-gray-300
+                            rounded-xl
+                            shadow-sm
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-blue-500
+                        "
+                    >
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        {categories.map(
+                            (category) => (
+
+                                <option
+                                    key={category.id}
+                                    value={category.id}
+                                >
+                                    {category.name}
+                                </option>
+
+                            )
+                        )}
+
+                    </select>
+
+                </div>
+
+                {/* Template Name */}
+
+                <div>
+
+                    <label
+                        className="
+                            block
+                            text-sm
+                            font-medium
+                            text-gray-700
+                            mb-2
+                        "
+                    >
+                        Template Name
+                    </label>
+
+                    <input
+                        type="text"
+                        value={
+                            formData.name || ""
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                "name",
+                                e.target.value
+                            )
+                        }
+                        className="
+                            w-full
+                            px-4
+                            py-3
+                            border
+                            border-gray-300
+                            rounded-xl
+                            shadow-sm
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-blue-500
+                        "
+                        placeholder="Enter template name"
+                    />
+
+                </div>
+
+            </div>
+
+            {/* Subject */}
+
+            <div>
+
+                <label
+                    className="
+                        block
+                        text-sm
+                        font-medium
+                        text-gray-700
+                        mb-2
+                    "
                 >
-                    <option value="">
-                        Select Category
-                    </option>
-
-                    {categories.map(
-                        (category) => (
-
-                            <option
-                                key={category.id}
-                                value={category.id}
-                            >
-                                {category.name}
-                            </option>
-
-                        )
-                    )}
-
-                </select>
-
-            </div>
-
-            <div className="mb-3">
-
-                <label>
-                    Template Name
-                </label>
-
-                <input
-                    type="text"
-                    className="form-control"
-                    value={
-                        formData.name || ''
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            name:
-                                e.target.value,
-                        })
-                    }
-                />
-
-            </div>
-
-            <div className="mb-3">
-
-                <label>
                     Subject
                 </label>
 
                 <input
                     type="text"
-                    className="form-control"
                     value={
-                        formData.subject || ''
+                        formData.subject || ""
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            subject:
-                                e.target.value,
-                        })
+                        handleChange(
+                            "subject",
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        px-4
+                        py-3
+                        border
+                        border-gray-300
+                        rounded-xl
+                        shadow-sm
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
+                    placeholder="Enter subject"
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* Template Body */}
 
-                <label>
-                    Template Body
+            <div>
+
+                <label
+                    className="
+                        block
+                        text-sm
+                        font-medium
+                        text-gray-700
+                        mb-2
+                    "
+                >
+                    Template Content
                 </label>
 
                 <textarea
-                    rows="8"
-                    className="form-control"
+                    rows={10}
                     value={
-                        formData.content || ''
+                        formData.content || ""
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            content:
-                                e.target.value,
-                        })
+                        handleChange(
+                            "content",
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        px-4
+                        py-3
+                        border
+                        border-gray-300
+                        rounded-xl
+                        shadow-sm
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-500
+                    "
+                    placeholder="Enter template content"
                 />
 
             </div>
 
-            <div className="form-check">
+            {/* Active */}
+
+            <div
+                className="
+                    flex
+                    items-center
+                    gap-3
+                "
+            >
 
                 <input
                     type="checkbox"
-                    className="form-check-input"
                     checked={
-                        formData.is_active ??
-                        true
+                        formData.is_active ?? true
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            is_active:
-                                e.target.checked,
-                        })
+                        handleChange(
+                            "is_active",
+                            e.target.checked
+                        )
                     }
+                    className="
+                        h-4
+                        w-4
+                        rounded
+                        border-gray-300
+                        text-blue-600
+                        focus:ring-blue-500
+                    "
                 />
 
-                <label className="form-check-label">
+                <label
+                    className="
+                        text-sm
+                        font-medium
+                        text-gray-700
+                    "
+                >
                     Active
                 </label>
 
             </div>
-        </>
+
+        </div>
+
     );
+
 };
 
 export default CommunicationTemplateForm;

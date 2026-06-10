@@ -7,7 +7,7 @@ from .views import (
 router = DefaultRouter()
 
 router.register(
-    r'communication-templates',
+    r'',
     CommunicationTemplateViewSet,
     basename='communication-template'
 )

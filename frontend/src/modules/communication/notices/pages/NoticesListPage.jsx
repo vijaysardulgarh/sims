@@ -5,8 +5,8 @@ const NoticesListPage = () => {
     const columns = [
 
         {
-            key: 'notice_number',
-            label: 'Notice No.',
+            key: 'notice_type',
+            label: 'Type',
         },
 
         {
@@ -15,8 +15,8 @@ const NoticesListPage = () => {
         },
 
         {
-            key: 'notice_date',
-            label: 'Notice Date',
+            key: 'publish_date',
+            label: 'Publish Date',
         },
 
         {
@@ -25,12 +25,14 @@ const NoticesListPage = () => {
         },
 
         {
-            key: 'is_active',
-            label: 'Active',
+            key: 'is_published',
+            label: 'Published',
         },
+
     ];
 
     return (
+
         <CrudListPage
             title="Notices"
             endpoint="/communications/notices/"
@@ -38,7 +40,9 @@ const NoticesListPage = () => {
             addPath="/dashboard/communications/notices/add"
             editPath="/dashboard/communications/notices/edit"
         />
+
     );
+
 };
 
 export default NoticesListPage;

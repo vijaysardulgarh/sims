@@ -26,6 +26,17 @@ class Asset(
         ("DISPOSED", "Disposed"),
     ]
 
+    CONDITION_CHOICES = [
+
+        ("NEW", "New"),
+
+        ("GOOD", "Good"),
+
+        ("FAIR", "Fair"),
+
+        ("POOR", "Poor"),
+    ]
+
     category = models.ForeignKey(
 
         AssetCategory,
@@ -36,14 +47,10 @@ class Asset(
     )
 
     asset_code = models.CharField(
-
-        max_length=100,
-
-        unique=True
+        max_length=100
     )
 
     name = models.CharField(
-
         max_length=255
     )
 
@@ -106,6 +113,15 @@ class Asset(
         default="AVAILABLE"
     )
 
+    condition = models.CharField(
+
+        max_length=20,
+
+        choices=CONDITION_CHOICES,
+
+        default="GOOD"
+    )
+
     warranty_expiry = models.DateField(
 
         blank=True,
@@ -126,7 +142,59 @@ class Asset(
         verbose_name_plural = "Assets"
 
         ordering = [
-            "name"
+            "asset_code"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "asset_code"
+                ],
+
+                name=(
+                    "unique_school_asset_code"
+                )
+            ),
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "serial_number"
+                ],
+
+                condition=~models.Q(
+                    serial_number=""
+                ),
+
+                name=(
+                    "unique_school_asset_serial_number"
+                )
+            ),
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "asset_code"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "status"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "category"
+                ]
+            ),
         ]
 
     def __str__(self):

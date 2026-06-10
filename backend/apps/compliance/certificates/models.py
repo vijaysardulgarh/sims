@@ -114,9 +114,14 @@ class Certificate(
             "certificate_type"
         ]
 
-    def __str__(self):
+        constraints = [
 
-        return (
-            f"{self.school.name} - "
-            f"{self.certificate_type}"
-        )
+            models.UniqueConstraint(
+                fields=[
+                    "school",
+                    "certificate_number"
+                ],
+                name="unique_certificate_per_school"
+            )
+
+        ]

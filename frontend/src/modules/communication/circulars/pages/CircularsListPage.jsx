@@ -5,8 +5,8 @@ const CircularsListPage = () => {
     const columns = [
 
         {
-            key: 'circular_number',
-            label: 'Circular No.',
+            key: 'reference_number',
+            label: 'Reference No.',
         },
 
         {
@@ -15,17 +15,24 @@ const CircularsListPage = () => {
         },
 
         {
-            key: 'circular_date',
-            label: 'Date',
+            key: 'issue_date',
+            label: 'Issue Date',
+        },
+
+        {
+            key: 'circular_type',
+            label: 'Type',
         },
 
         {
             key: 'is_active',
             label: 'Active',
         },
+
     ];
 
     return (
+
         <CrudListPage
             title="Circulars"
             endpoint="/communications/circulars/"
@@ -33,7 +40,9 @@ const CircularsListPage = () => {
             addPath="/dashboard/communications/circulars/add"
             editPath="/dashboard/communications/circulars/edit"
         />
+
     );
+
 };
 
 export default CircularsListPage;

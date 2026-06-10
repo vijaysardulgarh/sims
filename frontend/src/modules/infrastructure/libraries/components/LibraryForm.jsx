@@ -1,4 +1,3 @@
-
 import {
     useEffect,
     useState,
@@ -14,9 +13,33 @@ const LibraryForm = ({
     const [rooms, setRooms] =
         useState([]);
 
+    const [staff, setStaff] =
+        useState([]);
+
+    const [loadingRooms, setLoadingRooms] =
+        useState(false);
+
+    const [loadingStaff, setLoadingStaff] =
+        useState(false);
+
+    const handleChange = (
+        field,
+        value
+    ) => {
+
+        setFormData(
+            (prev) => ({
+                ...prev,
+                [field]: value,
+            })
+        );
+    };
+
     useEffect(() => {
 
         loadRooms();
+
+        loadStaff();
 
     }, []);
 
@@ -24,225 +47,543 @@ const LibraryForm = ({
 
         try {
 
+            setLoadingRooms(
+                true
+            );
+
             const response =
                 await api.get(
-                    '/infrastructure/rooms/'
+                    '/infrastructure/rooms/?room_type=LIBRARY'
                 );
 
             setRooms(
+
                 response.data.results ||
-                response.data
+
+                response.data ||
+
+                []
             );
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                'Failed to load rooms:',
+                error
+            );
+
+        } finally {
+
+            setLoadingRooms(
+                false
+            );
+        }
+    };
+
+    const loadStaff = async () => {
+
+        try {
+
+            setLoadingStaff(
+                true
+            );
+
+            const response =
+                await api.get(
+                    '/staff/profiles/'
+                );
+
+            setStaff(
+
+                response.data.results ||
+
+                response.data ||
+
+                []
+            );
+
+        } catch (error) {
+
+            console.error(
+                'Failed to load staff:',
+                error
+            );
+
+        } finally {
+
+            setLoadingStaff(
+                false
+            );
         }
     };
 
     return (
-        <>
-            <div className="mb-3">
 
-                <label className="form-label">
-                    Room
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+
+            {/* ROOM */}
+
+            <div className="md:col-span-6">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
+                    Library Room
+                    <span className="ml-1 text-red-500">
+                        *
+                    </span>
+
                 </label>
 
                 <select
-                    className="form-control"
+                    required
                     value={
                         formData.room || ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            room:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'room',
+                            Number(
+                                e.target.value
+                            ) || ''
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 >
+
                     <option value="">
-                        Select Room
+
+                        {
+                            loadingRooms
+                                ? 'Loading Rooms...'
+                                : 'Select Library Room'
+                        }
+
                     </option>
 
-                    {rooms.map((room) => (
-                        <option
-                            key={room.id}
-                            value={room.id}
-                        >
-                            {room.room_number}
-                            {' - '}
-                            {room.room_name}
-                        </option>
-                    ))}
+                    {rooms.map(
+                        (
+                            room
+                        ) => (
+
+                            <option
+                                key={
+                                    room.id
+                                }
+                                value={
+                                    room.id
+                                }
+                            >
+
+                                {
+                                    room.room_number
+                                }
+
+                                {' - '}
+
+                                {
+                                    room.room_name
+                                }
+
+                            </option>
+                        )
+                    )}
+
                 </select>
 
             </div>
 
-            <div className="mb-3">
+            {/* LIBRARY CODE */}
 
-                <label className="form-label">
+            <div className="md:col-span-6">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Library Code
+                    <span className="ml-1 text-red-500">
+                        *
+                    </span>
+
                 </label>
 
                 <input
                     type="text"
-                    className="form-control"
+                    required
+                    placeholder="LIB-001"
                     value={
-                        formData.library_code || ''
+                        formData.library_code ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            library_code:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'library_code',
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* LIBRARIAN */}
 
-                <label className="form-label">
-                    Librarian ID
+            <div className="md:col-span-6">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
+                    Librarian
+
                 </label>
 
-                <input
-                    type="number"
-                    className="form-control"
+                <select
                     value={
-                        formData.librarian || ''
+                        formData.librarian ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            librarian:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'librarian',
+                            Number(
+                                e.target.value
+                            ) || ''
+                        )
                     }
-                />
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
+                >
+
+                    <option value="">
+
+                        {
+                            loadingStaff
+                                ? 'Loading Staff...'
+                                : 'Select Librarian'
+                        }
+
+                    </option>
+
+                    {staff.map(
+                        (
+                            member
+                        ) => (
+
+                            <option
+                                key={
+                                    member.id
+                                }
+                                value={
+                                    member.id
+                                }
+                            >
+
+                                {
+                                    member.full_name
+                                }
+
+                            </option>
+                        )
+                    )}
+
+                </select>
 
             </div>
 
-            <div className="mb-3">
+            {/* SEATING CAPACITY */}
 
-                <label className="form-label">
+            <div className="md:col-span-3">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Seating Capacity
+
                 </label>
 
                 <input
                     type="number"
-                    className="form-control"
+                    min="0"
+                    placeholder="100"
                     value={
-                        formData.seating_capacity || ''
+                        formData.seating_capacity ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            seating_capacity:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'seating_capacity',
+                            Number(
+                                e.target.value
+                            ) || 0
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* TOTAL BOOKS */}
 
-                <label className="form-label">
+            <div className="md:col-span-3">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Total Books
+
                 </label>
 
                 <input
                     type="number"
-                    className="form-control"
+                    min="0"
+                    placeholder="5000"
                     value={
-                        formData.total_books || ''
+                        formData.total_books ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            total_books:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'total_books',
+                            Number(
+                                e.target.value
+                            ) || 0
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 />
 
             </div>
 
-            <div className="form-check mb-2">
+            {/* DIGITAL LIBRARY */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.digital_library ||
-                        false
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            digital_library:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-6">
 
-                <label className="form-check-label">
-                    Digital Library
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.digital_library ||
+                            false
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'digital_library',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <div>
+
+                        <p className="font-medium text-gray-700">
+
+                            Digital Library
+
+                        </p>
+
+                        <p className="text-sm text-gray-500">
+
+                            Library provides
+                            digital resources and
+                            online access.
+
+                        </p>
+
+                    </div>
+
                 </label>
 
             </div>
 
-            <div className="form-check mb-2">
+            {/* INTERNET */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.internet_enabled ||
-                        false
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            internet_enabled:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-6">
 
-                <label className="form-check-label">
-                    Internet Enabled
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.internet_enabled ||
+                            false
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'internet_enabled',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <div>
+
+                        <p className="font-medium text-gray-700">
+
+                            Internet Enabled
+
+                        </p>
+
+                        <p className="text-sm text-gray-500">
+
+                            Internet access is
+                            available in the library.
+
+                        </p>
+
+                    </div>
+
                 </label>
 
             </div>
 
-            <div className="form-check">
+            {/* ACTIVE */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.is_active ??
-                        true
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            is_active:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-12">
 
-                <label className="form-check-label">
-                    Active
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.is_active ??
+                            true
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'is_active',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <div>
+
+                        <p className="font-medium text-gray-700">
+
+                            Active
+
+                        </p>
+
+                        <p className="text-sm text-gray-500">
+
+                            Library is currently
+                            operational and available.
+
+                        </p>
+
+                    </div>
+
                 </label>
 
             </div>
-        </>
+
+        </div>
     );
 };
 

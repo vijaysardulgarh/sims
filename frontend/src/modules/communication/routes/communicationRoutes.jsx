@@ -21,6 +21,9 @@ import newsRoutes
 import eventRoutes
     from '../events/routes/eventRoutes';
 
+import faqRoutes
+    from "../faqs/routes/faqRoutes";    
+
 const communicationRoutes = (
 
     <Route path="communications">
@@ -38,7 +41,8 @@ const communicationRoutes = (
         {newsRoutes}
 
         {eventRoutes}
-
+        
+        {faqRoutes}
     </Route>
 
 );

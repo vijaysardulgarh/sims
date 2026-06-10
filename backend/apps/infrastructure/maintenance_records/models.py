@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from apps.core.common.base.models import (
     SchoolBaseModel
@@ -88,6 +89,31 @@ class MaintenanceRecord(
         blank=True
     )
 
+    def clean(self):
+
+        if (
+            self.asset
+            and self.school
+            and self.asset.school_id
+            != self.school_id
+        ):
+
+            raise ValidationError(
+                "Asset must belong to the same school."
+            )
+
+        if (
+            self.next_due_date
+            and
+            self.next_due_date
+            <
+            self.maintenance_date
+        ):
+
+            raise ValidationError(
+                "Next due date cannot be before maintenance date."
+            )
+
     class Meta:
 
         db_table = (
@@ -106,11 +132,46 @@ class MaintenanceRecord(
             "-maintenance_date"
         ]
 
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "asset"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "maintenance_date"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "next_due_date"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "service_type"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school"
+                ]
+            ),
+        ]
+
     def __str__(self):
 
         return (
 
-            f"{self.asset.name} - "
+            f"{self.asset.asset_code}"
+
+            f" - "
 
             f"{self.maintenance_date}"
         )

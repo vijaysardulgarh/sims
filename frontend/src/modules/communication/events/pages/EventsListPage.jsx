@@ -10,8 +10,13 @@ const EventsListPage = () => {
         },
 
         {
-            key: 'event_date',
-            label: 'Date',
+            key: 'start_date',
+            label: 'Start Date',
+        },
+
+        {
+            key: 'end_date',
+            label: 'End Date',
         },
 
         {
@@ -25,12 +30,14 @@ const EventsListPage = () => {
         },
 
         {
-            key: 'is_active',
-            label: 'Active',
+            key: 'is_published',
+            label: 'Published',
         },
+
     ];
 
     return (
+
         <CrudListPage
             title="Events"
             endpoint="/communications/events/"
@@ -38,7 +45,9 @@ const EventsListPage = () => {
             addPath="/dashboard/communications/events/add"
             editPath="/dashboard/communications/events/edit"
         />
+
     );
+
 };
 
 export default EventsListPage;

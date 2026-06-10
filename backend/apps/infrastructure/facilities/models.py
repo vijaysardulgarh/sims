@@ -70,6 +70,44 @@ class Facility(
             "name"
         ]
 
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "name"
+                ],
+
+                name=(
+                    "unique_school_facility_name"
+                )
+            )
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "facility_type"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "available"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "school"
+                ]
+            ),
+        ]
+
     def __str__(self):
 
-        return self.name
+        return (
+            f"{self.name}"
+        )

@@ -8,14 +8,14 @@ urlpatterns = [
     path(
         "mandatory-public-disclosures/",
         include(
-            "apps.compliance.mandatory-public-disclosures.urls"
+            "apps.compliance.mandatory_public_disclosures.urls"
         )
     ),
 
     path(
         "compliance-documents/",
         include(
-            "apps.compliance.compliance-documents.urls"
+            "apps.compliance.compliance_documents.urls"
         )
     ),
 
@@ -43,10 +43,10 @@ urlpatterns = [
 
 
     path(
-    "inspections/",
-    include(
-        "apps.compliance.inspections.urls"
-    )
-),
+        "inspections/",
+        include(
+            "apps.compliance.inspections.urls"
+        )
+    ),
 
 ]

@@ -53,5 +53,11 @@ urlpatterns = [
             "apps.communications.events.urls"
         )
     ),
+    path(
+        "faqs/",
+        include(
+            "apps.communications.faqs.urls"
+        )
+    ),
 
 ]

@@ -3,52 +3,109 @@ const FacilityForm = ({
     setFormData,
 }) => {
 
-    return (
-        <>
-            <div className="mb-3">
+    const handleChange = (
+        field,
+        value
+    ) => {
 
-                <label className="form-label">
+        setFormData(
+            (prev) => ({
+                ...prev,
+                [field]: value,
+            })
+        );
+    };
+
+    return (
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+
+            {/* FACILITY NAME */}
+
+            <div className="md:col-span-6">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Facility Name
+                    <span className="ml-1 text-red-500">
+                        *
+                    </span>
+
                 </label>
 
                 <input
                     type="text"
-                    className="form-control"
+                    required
+                    placeholder="Campus WiFi"
                     value={
-                        formData.name || ''
+                        formData.name ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            name:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'name',
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* FACILITY TYPE */}
 
-                <label className="form-label">
+            <div className="md:col-span-6">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Facility Type
+                    <span className="ml-1 text-red-500">
+                        *
+                    </span>
+
                 </label>
 
                 <select
-                    className="form-control"
+                    required
                     value={
-                        formData.facility_type || ''
+                        formData.facility_type ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            facility_type:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'facility_type',
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 >
+
                     <option value="">
-                        Select Type
+                        Select Facility Type
                     </option>
 
                     <option value="CCTV">
@@ -95,99 +152,184 @@ const FacilityForm = ({
 
             </div>
 
-            <div className="mb-3">
+            {/* INSTALLATION DATE */}
 
-                <label className="form-label">
-                    Description
-                </label>
+            <div className="md:col-span-6">
 
-                <textarea
-                    rows="4"
-                    className="form-control"
-                    value={
-                        formData.description || ''
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            description:
-                                e.target.value,
-                        })
-                    }
-                />
+                <label className="mb-2 block text-sm font-medium text-gray-700">
 
-            </div>
-
-            <div className="mb-3">
-
-                <label className="form-label">
                     Installation Date
+
                 </label>
 
                 <input
                     type="date"
-                    className="form-control"
                     value={
-                        formData.installation_date || ''
+                        formData.installation_date ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            installation_date:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'installation_date',
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* AVAILABLE */}
 
-                <label className="form-label">
-                    Remarks
+            <div className="md:col-span-6">
+
+                <label
+                    className="
+                        flex
+                        cursor-pointer
+                        items-center
+                        gap-3
+                        rounded-lg
+                        border
+                        border-gray-200
+                        p-4
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        checked={
+                            formData.available ??
+                            true
+                        }
+                        onChange={(e) =>
+                            handleChange(
+                                'available',
+                                e.target.checked
+                            )
+                        }
+                        className="
+                            h-4
+                            w-4
+                            rounded
+                            border-gray-300
+                        "
+                    />
+
+                    <div>
+
+                        <p className="font-medium text-gray-700">
+
+                            Available
+
+                        </p>
+
+                        <p className="text-sm text-gray-500">
+
+                            Facility is currently
+                            available for use.
+
+                        </p>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+            {/* DESCRIPTION */}
+
+            <div className="md:col-span-12">
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
+                    Description
+
                 </label>
 
                 <textarea
-                    rows="3"
-                    className="form-control"
+                    rows={4}
+                    placeholder="Enter facility description..."
                     value={
-                        formData.remarks || ''
+                        formData.description ||
+                        ''
                     }
                     onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            remarks:
-                                e.target.value,
-                        })
+                        handleChange(
+                            'description',
+                            e.target.value
+                        )
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 />
 
             </div>
 
-            <div className="form-check mb-3">
+            {/* REMARKS */}
 
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                        formData.available ??
-                        true
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            available:
-                                e.target.checked,
-                        })
-                    }
-                />
+            <div className="md:col-span-12">
 
-                <label className="form-check-label">
-                    Available
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
+                    Remarks
+
                 </label>
 
+                <textarea
+                    rows={3}
+                    placeholder="Additional remarks..."
+                    value={
+                        formData.remarks ||
+                        ''
+                    }
+                    onChange={(e) =>
+                        handleChange(
+                            'remarks',
+                            e.target.value
+                        )
+                    }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
+                />
+
             </div>
-        </>
+
+        </div>
     );
 };
 

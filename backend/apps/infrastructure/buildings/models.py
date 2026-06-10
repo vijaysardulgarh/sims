@@ -14,8 +14,7 @@ class Building(
     )
 
     code = models.CharField(
-        max_length=50,
-        unique=True
+        max_length=50
     )
 
     description = models.TextField(
@@ -26,10 +25,6 @@ class Building(
         models.PositiveIntegerField(
             default=1
         )
-    )
-
-    is_active = models.BooleanField(
-        default=True
     )
 
     class Meta:
@@ -46,8 +41,39 @@ class Building(
             "name"
         ]
 
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "code"
+                ],
+
+                name=(
+                    "unique_school_building_code"
+                )
+            )
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "code"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "name"
+                ]
+            ),
+        ]
+
     def __str__(self):
 
         return (
+            f"{self.code} - "
             f"{self.name}"
         )

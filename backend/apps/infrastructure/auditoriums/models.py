@@ -23,10 +23,7 @@ class Auditorium(
     )
 
     auditorium_code = models.CharField(
-
-        max_length=50,
-
-        unique=True
+        max_length=50
     )
 
     seating_capacity = (
@@ -65,10 +62,6 @@ class Auditorium(
         )
     )
 
-    is_active = models.BooleanField(
-        default=True
-    )
-
     class Meta:
 
         db_table = "auditoriums"
@@ -83,6 +76,38 @@ class Auditorium(
             "auditorium_code"
         ]
 
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "auditorium_code"
+                ],
+
+                name=(
+                    "unique_school_auditorium_code"
+                )
+            )
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "auditorium_code"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "room"
+                ]
+            ),
+        ]
+
     def __str__(self):
 
-        return self.auditorium_code
+        return (
+            f"{self.auditorium_code}"
+        )

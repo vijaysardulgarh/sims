@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from apps.core.common.base.models import (
     SchoolBaseModel
@@ -58,9 +59,25 @@ class Playground(
         blank=True
     )
 
-    is_active = models.BooleanField(
-        default=True
-    )
+    def clean(self):
+
+        if (
+            self.area is not None
+            and self.area <= 0
+        ):
+
+            raise ValidationError(
+                "Area must be greater than zero."
+            )
+
+        if (
+            self.capacity is not None
+            and self.capacity <= 0
+        ):
+
+            raise ValidationError(
+                "Capacity must be greater than zero."
+            )
 
     class Meta:
 
@@ -74,6 +91,38 @@ class Playground(
             "name"
         ]
 
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "name"
+                ],
+
+                name=(
+                    "unique_school_playground_name"
+                )
+            )
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "school"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "playground_type"
+                ]
+            ),
+        ]
+
     def __str__(self):
 
-        return self.name
+        return (
+            f"{self.name}"
+        )

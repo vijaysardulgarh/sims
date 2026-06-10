@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from apps.core.common.base.models import (
     SchoolBaseModel
@@ -53,10 +54,7 @@ class Laboratory(
     )
 
     lab_code = models.CharField(
-
-        max_length=50,
-
-        unique=True
+        max_length=50
     )
 
     incharge = models.ForeignKey(
@@ -72,27 +70,55 @@ class Laboratory(
         related_name="laboratories"
     )
 
-    equipment_count = (
-        models.PositiveIntegerField(
-            default=0
-        )
+    equipment_count = models.PositiveIntegerField(
+        default=0
     )
 
-    safety_equipment_available = (
-        models.BooleanField(
-            default=True
-        )
-    )
-
-    internet_enabled = (
-        models.BooleanField(
-            default=False
-        )
-    )
-
-    is_active = models.BooleanField(
+    safety_equipment_available = models.BooleanField(
         default=True
     )
+
+    internet_enabled = models.BooleanField(
+        default=False
+    )
+
+    def clean(self):
+
+        if (
+            self.room
+            and hasattr(
+                self.room,
+                "room_type"
+            )
+            and self.room.room_type
+            != "LABORATORY"
+        ):
+
+            raise ValidationError(
+                "Selected room is not a laboratory room."
+            )
+
+        if (
+            self.room
+            and self.school
+            and self.room.school_id
+            != self.school_id
+        ):
+
+            raise ValidationError(
+                "Room must belong to the same school."
+            )
+
+        if (
+            self.incharge
+            and self.school
+            and self.incharge.school_id
+            != self.school_id
+        ):
+
+            raise ValidationError(
+                "Laboratory incharge must belong to the same school."
+            )
 
     class Meta:
 
@@ -106,6 +132,48 @@ class Laboratory(
 
         ordering = [
             "lab_code"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "school",
+                    "lab_code"
+                ],
+
+                name=(
+                    "unique_school_lab_code"
+                )
+            )
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "school"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "lab_code"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "lab_type"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "room"
+                ]
+            ),
         ]
 
     def __str__(self):

@@ -1,0 +1,3242 @@
+
+
+# ============================================================
+# FILE: .\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+# Register your models here.
+
+
+
+# ============================================================
+# FILE: .\apps.py
+# ============================================================
+
+from django.apps import AppConfig
+
+
+class InfrastructureConfig(AppConfig):
+    name = 'apps.infrastructure'
+
+
+
+# ============================================================
+# FILE: .\django_code.txt
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\django_structure.txt
+# ============================================================
+
+├── .
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── django_structure.txt
+│   ├── export_project.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── assets
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── asset_categories
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── auditoriums
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── buildings
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── classrooms
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── facilities
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── floors
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── hostel-facilities
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── inventories
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── laboratories
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── libraries
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── maintenance_records
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── playgrounds
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── rooms
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── sports-facilities
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── transport-facilities
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+
+
+
+# ============================================================
+# FILE: .\export_project.py
+# ============================================================
+
+import os
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+PROJECT_ROOT = r"."
+
+STRUCTURE_FILE = "django_structure.txt"
+CODE_FILE = "django_code.txt"
+
+INCLUDE_EXTENSIONS = {
+    ".py",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".env",
+    ".txt",
+}
+
+EXCLUDE_DIRS = {
+    "__pycache__",
+    ".git",
+    ".idea",
+    ".vscode",
+    "venv",
+    "env",
+    "staticfiles",
+    "media",
+    "node_modules",
+    "migrations",
+}
+
+# ============================================================
+# EXPORT STRUCTURE
+# ============================================================
+
+with open(STRUCTURE_FILE, "w", encoding="utf-8") as f:
+
+    for root, dirs, files in os.walk(PROJECT_ROOT):
+
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+
+        level = root.replace(PROJECT_ROOT, "").count(os.sep)
+
+        indent = "│   " * level
+
+        f.write(f"{indent}├── {os.path.basename(root)}\n")
+
+        for file in sorted(files):
+            f.write(f"{indent}│   ├── {file}\n")
+
+# ============================================================
+# EXPORT CODE
+# ============================================================
+
+with open(CODE_FILE, "w", encoding="utf-8") as output:
+
+    for root, dirs, files in os.walk(PROJECT_ROOT):
+
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+
+        for file in sorted(files):
+
+            ext = os.path.splitext(file)[1]
+
+            if ext not in INCLUDE_EXTENSIONS:
+                continue
+
+            filepath = os.path.join(root, file)
+
+            try:
+
+                with open(filepath, "r", encoding="utf-8") as source:
+
+                    output.write("\n\n")
+                    output.write("# ============================================================\n")
+                    output.write(f"# FILE: {filepath}\n")
+                    output.write("# ============================================================\n\n")
+
+                    output.write(source.read())
+                    output.write("\n")
+
+            except Exception as e:
+
+                output.write("\n\n")
+                output.write("# ============================================================\n")
+                output.write(f"# ERROR: {filepath}\n")
+                output.write("# ============================================================\n")
+                output.write(str(e))
+                output.write("\n")
+
+print("Done!")
+print("Generated:")
+print("-", STRUCTURE_FILE)
+print("-", CODE_FILE)
+
+
+# ============================================================
+# FILE: .\models.py
+# ============================================================
+
+from django.db import models
+
+# Create your models here.
+
+
+
+# ============================================================
+# FILE: .\tests.py
+# ============================================================
+
+from django.test import TestCase
+
+# Create your tests here.
+
+
+
+# ============================================================
+# FILE: .\urls.py
+# ============================================================
+
+from django.urls import (
+    include,
+    path
+)
+
+urlpatterns = [
+
+
+    path(
+        "buildings/",
+        include(
+            "apps.infrastructure.buildings.urls"
+        )
+    ),
+
+    path(
+        "floors/",
+        include(
+            "apps.infrastructure.floors.urls"
+        )
+    ),
+
+    path(
+        "rooms/",
+        include(
+            "apps.infrastructure.rooms.urls"
+        )
+    ),
+
+
+    path(
+        "classrooms/",
+        include(
+            "apps.infrastructure.classrooms.urls"
+        )
+    ),    
+
+    path(
+        "laboratories/",
+        include(
+            "apps.infrastructure.laboratories.urls"
+        )
+    ),
+
+    path(
+        "libraries/",
+        include(
+            "apps.infrastructure.libraries.urls"
+        )
+    ),
+
+    path(
+        "auditoriums/",
+        include(
+            "apps.infrastructure.auditoriums.urls"
+        )
+    ),
+
+    path(
+        "playgrounds/",
+        include(
+            "apps.infrastructure.playgrounds.urls"
+        )
+    ),
+
+    path(
+        "asset-categories/",
+        include(
+            "apps.infrastructure.asset_categories.urls"
+        )
+    ),
+
+    path(
+        "assets/",
+        include(
+            "apps.infrastructure.assets.urls"
+        )
+    ),
+
+    path(
+        "maintenance-records/",
+        include(
+            "apps.infrastructure.maintenance_records.urls"
+        )
+    ),
+
+    path(
+        "facilities/",
+        include(
+            "apps.infrastructure.facilities.urls"
+        )
+    ),
+
+]
+
+
+# ============================================================
+# FILE: .\views.py
+# ============================================================
+
+from django.shortcuts import render
+
+# Create your views here.
+
+
+
+# ============================================================
+# FILE: .\assets\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\assets\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\assets\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+from apps.infrastructure.asset_categories.models import (
+    AssetCategory
+)
+
+
+class Asset(
+    SchoolBaseModel
+):
+
+    STATUS_CHOICES = [
+
+        ("AVAILABLE", "Available"),
+
+        ("IN_USE", "In Use"),
+
+        ("UNDER_MAINTENANCE", "Under Maintenance"),
+
+        ("DAMAGED", "Damaged"),
+
+        ("DISPOSED", "Disposed"),
+    ]
+
+    category = models.ForeignKey(
+
+        AssetCategory,
+
+        on_delete=models.PROTECT,
+
+        related_name="assets"
+    )
+
+    asset_code = models.CharField(
+
+        max_length=100,
+
+        unique=True
+    )
+
+    name = models.CharField(
+
+        max_length=255
+    )
+
+    brand = models.CharField(
+
+        max_length=255,
+
+        blank=True
+    )
+
+    model_number = models.CharField(
+
+        max_length=255,
+
+        blank=True
+    )
+
+    serial_number = models.CharField(
+
+        max_length=255,
+
+        blank=True
+    )
+
+    purchase_date = models.DateField(
+
+        blank=True,
+
+        null=True
+    )
+
+    purchase_cost = models.DecimalField(
+
+        max_digits=12,
+
+        decimal_places=2,
+
+        blank=True,
+
+        null=True
+    )
+
+    quantity = models.PositiveIntegerField(
+        default=1
+    )
+
+    location = models.CharField(
+
+        max_length=255,
+
+        blank=True
+    )
+
+    status = models.CharField(
+
+        max_length=30,
+
+        choices=STATUS_CHOICES,
+
+        default="AVAILABLE"
+    )
+
+    warranty_expiry = models.DateField(
+
+        blank=True,
+
+        null=True
+    )
+
+    remarks = models.TextField(
+        blank=True
+    )
+
+    class Meta:
+
+        db_table = "assets"
+
+        verbose_name = "Asset"
+
+        verbose_name_plural = "Assets"
+
+        ordering = [
+            "name"
+        ]
+
+    def __str__(self):
+
+        return (
+            f"{self.asset_code} - "
+            f"{self.name}"
+        )
+
+
+# ============================================================
+# FILE: .\assets\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Asset
+
+
+class AssetSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+
+        source="school.name",
+
+        read_only=True
+    )
+
+    category_name = serializers.CharField(
+
+        source="category.name",
+
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Asset
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\assets\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    AssetViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    AssetViewSet,
+    basename="assets"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\assets\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Asset
+
+from .serializers import (
+    AssetSerializer
+)
+
+
+class AssetViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        Asset.objects
+        .select_related(
+            "school",
+            "category"
+        )
+    )
+
+    serializer_class = (
+        AssetSerializer
+    )
+
+
+# ============================================================
+# FILE: .\asset_categories\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\asset_categories\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\asset_categories\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class AssetCategory(
+    SchoolBaseModel
+):
+
+    name = models.CharField(
+        max_length=255
+    )
+
+    code = models.CharField(
+        max_length=50,
+        unique=True
+    )
+
+    description = models.TextField(
+        blank=True
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+
+        db_table = "asset_categories"
+
+        verbose_name = "Asset Category"
+
+        verbose_name_plural = (
+            "Asset Categories"
+        )
+
+        ordering = [
+            "name"
+        ]
+
+    def __str__(self):
+
+        return self.name
+
+
+# ============================================================
+# FILE: .\asset_categories\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import AssetCategory
+
+
+class AssetCategorySerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = AssetCategory
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\asset_categories\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    AssetCategoryViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    AssetCategoryViewSet,
+    basename="asset-categories"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\asset_categories\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import AssetCategory
+
+from .serializers import (
+    AssetCategorySerializer
+)
+
+
+class AssetCategoryViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+        AssetCategory.objects
+        .select_related("school")
+    )
+
+    serializer_class = (
+        AssetCategorySerializer
+    )
+
+
+# ============================================================
+# FILE: .\auditoriums\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\auditoriums\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\auditoriums\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+from apps.infrastructure.rooms.models import (
+    Room
+)
+
+
+class Auditorium(
+    SchoolBaseModel
+):
+
+    room = models.OneToOneField(
+
+        Room,
+
+        on_delete=models.CASCADE,
+
+        related_name="auditorium"
+    )
+
+    auditorium_code = models.CharField(
+
+        max_length=50,
+
+        unique=True
+    )
+
+    seating_capacity = (
+        models.PositiveIntegerField(
+            default=0
+        )
+    )
+
+    stage_available = (
+        models.BooleanField(
+            default=True
+        )
+    )
+
+    sound_system_available = (
+        models.BooleanField(
+            default=True
+        )
+    )
+
+    projector_available = (
+        models.BooleanField(
+            default=False
+        )
+    )
+
+    air_conditioned = (
+        models.BooleanField(
+            default=False
+        )
+    )
+
+    green_room_available = (
+        models.BooleanField(
+            default=False
+        )
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+
+        db_table = "auditoriums"
+
+        verbose_name = "Auditorium"
+
+        verbose_name_plural = (
+            "Auditoriums"
+        )
+
+        ordering = [
+            "auditorium_code"
+        ]
+
+    def __str__(self):
+
+        return self.auditorium_code
+
+
+# ============================================================
+# FILE: .\auditoriums\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Auditorium
+
+
+class AuditoriumSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+
+        source="school.name",
+
+        read_only=True
+    )
+
+    room_name = serializers.CharField(
+
+        source="room.room_name",
+
+        read_only=True
+    )
+
+    room_number = serializers.CharField(
+
+        source="room.room_number",
+
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Auditorium
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\auditoriums\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    AuditoriumViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    AuditoriumViewSet,
+    basename="auditoriums"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\auditoriums\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Auditorium
+
+from .serializers import (
+    AuditoriumSerializer
+)
+
+
+class AuditoriumViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        Auditorium.objects
+        .select_related(
+            "school",
+            "room"
+        )
+    )
+
+    serializer_class = (
+        AuditoriumSerializer
+    )
+
+
+# ============================================================
+# FILE: .\buildings\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\buildings\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\buildings\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class Building(
+    SchoolBaseModel
+):
+
+    name = models.CharField(
+        max_length=255
+    )
+
+    code = models.CharField(
+        max_length=50,
+        unique=True
+    )
+
+    description = models.TextField(
+        blank=True
+    )
+
+    number_of_floors = (
+        models.PositiveIntegerField(
+            default=1
+        )
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+
+        db_table = "buildings"
+
+        verbose_name = "Building"
+
+        verbose_name_plural = (
+            "Buildings"
+        )
+
+        ordering = [
+            "name"
+        ]
+
+    def __str__(self):
+
+        return (
+            f"{self.name}"
+        )
+
+
+# ============================================================
+# FILE: .\buildings\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Building
+
+
+class BuildingSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+
+        source="school.name",
+
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Building
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\buildings\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    BuildingViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    BuildingViewSet,
+    basename="buildings"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\buildings\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Building
+
+from .serializers import (
+    BuildingSerializer
+)
+
+
+class BuildingViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        Building.objects
+        .select_related("school")
+    )
+
+    serializer_class = (
+        BuildingSerializer
+    )
+
+
+# ============================================================
+# FILE: .\classrooms\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\classrooms\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from apps.infrastructure.classrooms.models import (
+    Classroom
+)
+
+
+@admin.register(Classroom)
+class ClassroomAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+
+        "classroom_code",
+
+        "room",
+
+        "floor",
+
+        "capacity",
+
+        "smart_classroom",
+
+        "internet_enabled",
+
+        "is_active",
+    )
+
+    list_display_links = (
+
+        "classroom_code",
+    )
+
+    search_fields = (
+
+        "classroom_code",
+
+        "room__room_name",
+
+        "room__room_number",
+    )
+
+    list_filter = (
+
+        "smart_classroom",
+
+        "air_conditioned",
+
+        "projector_available",
+
+        "internet_enabled",
+
+        "is_active",
+    )
+
+    autocomplete_fields = (
+
+        "room",
+
+        "floor",
+    )
+
+    ordering = (
+
+        "classroom_code",
+    )
+
+    list_per_page = 25
+
+    readonly_fields = (
+
+        "created_at",
+
+        "updated_at",
+
+        "created_by",
+
+        "updated_by",
+    )
+
+
+# ============================================================
+# FILE: .\classrooms\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+from apps.infrastructure.rooms.models import (
+    Room
+)
+
+from apps.infrastructure.floors.models import (
+    Floor
+)
+
+
+# ==========================================
+# CLASSROOM MODEL
+# ==========================================
+
+class Classroom(
+    SchoolBaseModel
+):
+
+    # ======================================
+    # ROOM LINK
+    # ======================================
+
+    room = models.OneToOneField(
+
+        Room,
+
+        on_delete=models.CASCADE,
+
+        related_name="classroom"
+    )
+
+    floor = models.ForeignKey(
+
+        Floor,
+
+        on_delete=models.SET_NULL,
+
+        null=True,
+
+        blank=True,
+
+        related_name="classrooms"
+    )
+
+    # ======================================
+    # BASIC INFO
+    # ======================================
+
+    classroom_code = models.CharField(
+
+        max_length=50
+    )
+
+    capacity = models.PositiveIntegerField(
+
+        default=40
+    )
+
+    description = models.TextField(
+
+        blank=True,
+
+        null=True
+    )
+
+    # ======================================
+    # FACILITIES
+    # ======================================
+
+    smart_classroom = models.BooleanField(
+
+        default=False
+    )
+
+    air_conditioned = models.BooleanField(
+
+        default=False
+    )
+
+    projector_available = models.BooleanField(
+
+        default=False
+    )
+
+    whiteboard_available = models.BooleanField(
+
+        default=True
+    )
+
+    internet_enabled = models.BooleanField(
+
+        default=False
+    )
+
+    # ======================================
+    # STRING
+    # ======================================
+
+    def __str__(
+        self
+    ):
+
+        return (
+            f"{self.classroom_code}"
+        )
+
+    # ======================================
+    # META
+    # ======================================
+
+    class Meta:
+
+        db_table = "classrooms"
+
+        verbose_name = (
+            "Classroom"
+        )
+
+        verbose_name_plural = (
+            "Classrooms"
+        )
+
+        ordering = [
+            "classroom_code"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+
+                    "school",
+
+                    "classroom_code"
+                ],
+
+                name=(
+                    "unique_school_classroom_code"
+                )
+            ),
+
+            models.UniqueConstraint(
+
+                fields=[
+
+                    "school",
+
+                    "room"
+                ],
+
+                name=(
+                    "unique_school_classroom_room"
+                )
+            ),
+        ]
+
+        indexes = [
+
+            models.Index(
+                fields=[
+                    "school"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "classroom_code"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "floor"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "is_active"
+                ]
+            ),
+
+            models.Index(
+                fields=[
+                    "is_deleted"
+                ]
+            ),
+        ]
+
+
+# ============================================================
+# FILE: .\classrooms\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from apps.infrastructure.classrooms.models import (
+    Classroom
+)
+
+
+class ClassroomSerializer(
+    serializers.ModelSerializer
+):
+
+    room_name = serializers.CharField(
+        source="room.room_name",
+        read_only=True
+    )
+
+    room_number = serializers.CharField(
+        source="room.room_number",
+        read_only=True
+    )
+
+    floor_name = serializers.CharField(
+        source="floor.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Classroom
+
+        fields = [
+
+            "id",
+
+            "room",
+            "room_name",
+            "room_number",
+
+            "floor",
+            "floor_name",
+
+            "classroom_code",
+
+            "capacity",
+
+            "description",
+
+            "smart_classroom",
+
+            "air_conditioned",
+
+            "projector_available",
+
+            "whiteboard_available",
+
+            "internet_enabled",
+
+            "is_active",
+
+            "created_at",
+            "updated_at",
+        ]
+
+        read_only_fields = [
+
+            "id",
+
+            "created_at",
+
+            "updated_at",
+        ]
+
+
+# ============================================================
+# FILE: .\classrooms\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    ClassroomViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    ClassroomViewSet,
+    basename="classrooms"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\classrooms\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from apps.infrastructure.classrooms.models import (
+    Classroom
+)
+
+from apps.infrastructure.classrooms.serializers import (
+    ClassroomSerializer
+)
+
+
+class ClassroomViewSet(
+    viewsets.ModelViewSet
+):
+
+    serializer_class = (
+        ClassroomSerializer
+    )
+
+    queryset = (
+
+        Classroom.objects
+
+        .select_related(
+            "room",
+            "floor",
+            "school"
+        )
+
+        .filter(
+            is_deleted=False
+        )
+    )
+
+    def get_queryset(
+        self
+    ):
+
+        queryset = (
+            super()
+            .get_queryset()
+        )
+
+        room = (
+            self.request
+            .query_params
+            .get("room")
+        )
+
+        floor = (
+            self.request
+            .query_params
+            .get("floor")
+        )
+
+        if room:
+
+            queryset = queryset.filter(
+                room_id=room
+            )
+
+        if floor:
+
+            queryset = queryset.filter(
+                floor_id=floor
+            )
+
+        return queryset
+
+    def perform_create(
+        self,
+        serializer
+    ):
+
+        serializer.save(
+
+            school=(
+                self.request.school
+            ),
+
+            created_by=(
+                self.request.user
+            ),
+
+            updated_by=(
+                self.request.user
+            )
+        )
+
+    def perform_update(
+        self,
+        serializer
+    ):
+
+        serializer.save(
+
+            updated_by=(
+                self.request.user
+            )
+        )
+
+
+# ============================================================
+# FILE: .\facilities\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\facilities\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\facilities\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class Facility(
+    SchoolBaseModel
+):
+
+    FACILITY_TYPE_CHOICES = [
+
+        ("CCTV", "CCTV"),
+
+        ("WIFI", "WiFi"),
+
+        ("RO_WATER", "RO Water"),
+
+        ("MEDICAL_ROOM", "Medical Room"),
+
+        ("TRANSPORT", "Transport"),
+
+        ("HOSTEL", "Hostel"),
+
+        ("POWER_BACKUP", "Power Backup"),
+
+        ("BIOMETRIC", "Biometric System"),
+
+        ("PA_SYSTEM", "Public Address System"),
+
+        ("OTHER", "Other"),
+    ]
+
+    name = models.CharField(
+        max_length=255
+    )
+
+    facility_type = models.CharField(
+        max_length=30,
+        choices=FACILITY_TYPE_CHOICES
+    )
+
+    description = models.TextField(
+        blank=True
+    )
+
+    available = models.BooleanField(
+        default=True
+    )
+
+    installation_date = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    remarks = models.TextField(
+        blank=True
+    )
+
+    class Meta:
+
+        db_table = "facilities"
+
+        verbose_name = "Facility"
+
+        verbose_name_plural = "Facilities"
+
+        ordering = [
+            "name"
+        ]
+
+    def __str__(self):
+
+        return self.name
+
+
+# ============================================================
+# FILE: .\facilities\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Facility
+
+
+class FacilitySerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Facility
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\facilities\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    FacilityViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    FacilityViewSet,
+    basename="facilities"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\facilities\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Facility
+
+from .serializers import (
+    FacilitySerializer
+)
+
+
+class FacilityViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+        Facility.objects
+        .select_related("school")
+    )
+
+    serializer_class = (
+        FacilitySerializer
+    )
+
+
+# ============================================================
+# FILE: .\floors\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\floors\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\floors\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+from apps.infrastructure.buildings.models import (
+    Building
+)
+
+
+class Floor(
+    SchoolBaseModel
+):
+
+    building = models.ForeignKey(
+
+        Building,
+
+        on_delete=models.CASCADE,
+
+        related_name="floors"
+    )
+
+    name = models.CharField(
+        max_length=100
+    )
+
+    floor_number = models.IntegerField()
+
+    description = models.TextField(
+        blank=True
+    )
+
+    class Meta:
+
+        db_table = "floors"
+
+        verbose_name = "Floor"
+
+        verbose_name_plural = "Floors"
+
+        ordering = [
+            "building",
+            "floor_number"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+
+                fields=[
+                    "building",
+                    "floor_number"
+                ],
+
+                name=(
+                    "unique_floor_per_building"
+                )
+            )
+        ]
+
+    def __str__(self):
+
+        return (
+
+            f"{self.building.name} - "
+
+            f"{self.name}"
+        )
+
+
+# ============================================================
+# FILE: .\floors\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Floor
+
+
+class FloorSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+
+        source="school.name",
+
+        read_only=True
+    )
+
+    building_name = serializers.CharField(
+
+        source="building.name",
+
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Floor
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\floors\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    FloorViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    FloorViewSet,
+    basename="floors"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\floors\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Floor
+
+from .serializers import (
+    FloorSerializer
+)
+
+
+class FloorViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        Floor.objects
+        .select_related(
+            "school",
+            "building"
+        )
+    )
+
+    serializer_class = (
+        FloorSerializer
+    )
+
+
+# ============================================================
+# FILE: .\hostel-facilities\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\hostel-facilities\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\hostel-facilities\models.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\hostel-facilities\serializers.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\hostel-facilities\urls.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\hostel-facilities\views.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\inventories\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\inventories\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\inventories\models.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\inventories\serializers.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\inventories\urls.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\inventories\views.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\laboratories\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\laboratories\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\laboratories\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+from apps.infrastructure.rooms.models import (
+    Room
+)
+
+from apps.staff.profiles.models import (
+    Staff
+)
+
+
+class Laboratory(
+    SchoolBaseModel
+):
+
+    LAB_TYPE_CHOICES = [
+
+        ("PHYSICS", "Physics"),
+
+        ("CHEMISTRY", "Chemistry"),
+
+        ("BIOLOGY", "Biology"),
+
+        ("COMPUTER", "Computer"),
+
+        ("MATHEMATICS", "Mathematics"),
+
+        ("LANGUAGE", "Language"),
+
+        ("ROBOTICS", "Robotics"),
+
+        ("OTHER", "Other"),
+    ]
+
+    room = models.OneToOneField(
+
+        Room,
+
+        on_delete=models.CASCADE,
+
+        related_name="laboratory"
+    )
+
+    lab_type = models.CharField(
+
+        max_length=20,
+
+        choices=LAB_TYPE_CHOICES
+    )
+
+    lab_code = models.CharField(
+
+        max_length=50,
+
+        unique=True
+    )
+
+    incharge = models.ForeignKey(
+
+        Staff,
+
+        on_delete=models.SET_NULL,
+
+        null=True,
+
+        blank=True,
+
+        related_name="laboratories"
+    )
+
+    equipment_count = (
+        models.PositiveIntegerField(
+            default=0
+        )
+    )
+
+    safety_equipment_available = (
+        models.BooleanField(
+            default=True
+        )
+    )
+
+    internet_enabled = (
+        models.BooleanField(
+            default=False
+        )
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+
+        db_table = "laboratories"
+
+        verbose_name = "Laboratory"
+
+        verbose_name_plural = (
+            "Laboratories"
+        )
+
+        ordering = [
+            "lab_code"
+        ]
+
+    def __str__(self):
+
+        return (
+            f"{self.lab_code}"
+        )
+
+
+# ============================================================
+# FILE: .\laboratories\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Laboratory
+
+
+class LaboratorySerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+
+        source="school.name",
+
+        read_only=True
+    )
+
+    room_name = serializers.CharField(
+
+        source="room.room_name",
+
+        read_only=True
+    )
+
+    room_number = serializers.CharField(
+
+        source="room.room_number",
+
+        read_only=True
+    )
+
+    incharge_name = serializers.CharField(
+
+        source="incharge.full_name",
+
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Laboratory
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\laboratories\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    LaboratoryViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    LaboratoryViewSet,
+    basename="laboratories"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\laboratories\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Laboratory
+
+from .serializers import (
+    LaboratorySerializer
+)
+
+
+class LaboratoryViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        Laboratory.objects
+        .select_related(
+            "school",
+            "room",
+            "incharge"
+        )
+    )
+
+    serializer_class = (
+        LaboratorySerializer
+    )
+
+
+# ============================================================
+# FILE: .\libraries\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\libraries\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\libraries\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+from apps.infrastructure.rooms.models import (
+    Room
+)
+
+from apps.staff.profiles.models import (
+    Staff
+)
+
+
+class Library(
+    SchoolBaseModel
+):
+
+    room = models.OneToOneField(
+
+        Room,
+
+        on_delete=models.CASCADE,
+
+        related_name="library"
+    )
+
+    library_code = models.CharField(
+
+        max_length=50,
+
+        unique=True
+    )
+
+    librarian = models.ForeignKey(
+
+        Staff,
+
+        on_delete=models.SET_NULL,
+
+        null=True,
+
+        blank=True,
+
+        related_name="managed_libraries"
+    )
+
+    seating_capacity = (
+        models.PositiveIntegerField(
+            default=0
+        )
+    )
+
+    total_books = (
+        models.PositiveIntegerField(
+            default=0
+        )
+    )
+
+    digital_library = (
+        models.BooleanField(
+            default=False
+        )
+    )
+
+    internet_enabled = (
+        models.BooleanField(
+            default=False
+        )
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+
+        db_table = "libraries"
+
+        verbose_name = "Library"
+
+        verbose_name_plural = (
+            "Libraries"
+        )
+
+        ordering = [
+            "library_code"
+        ]
+
+    def __str__(self):
+
+        return self.library_code
+
+
+# ============================================================
+# FILE: .\libraries\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Library
+
+
+class LibrarySerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+
+        source="school.name",
+
+        read_only=True
+    )
+
+    room_name = serializers.CharField(
+
+        source="room.room_name",
+
+        read_only=True
+    )
+
+    room_number = serializers.CharField(
+
+        source="room.room_number",
+
+        read_only=True
+    )
+
+    librarian_name = serializers.CharField(
+
+        source="librarian.full_name",
+
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Library
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\libraries\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    LibraryViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    LibraryViewSet,
+    basename="libraries"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\libraries\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Library
+
+from .serializers import (
+    LibrarySerializer
+)
+
+
+class LibraryViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        Library.objects
+        .select_related(
+            "school",
+            "room",
+            "librarian"
+        )
+    )
+
+    serializer_class = (
+        LibrarySerializer
+    )
+
+
+# ============================================================
+# FILE: .\maintenance_records\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\maintenance_records\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\maintenance_records\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+from apps.infrastructure.assets.models import (
+    Asset
+)
+
+
+class MaintenanceRecord(
+    SchoolBaseModel
+):
+
+    SERVICE_TYPE_CHOICES = [
+
+        (
+            "PREVENTIVE",
+            "Preventive Maintenance"
+        ),
+
+        (
+            "CORRECTIVE",
+            "Corrective Maintenance"
+        ),
+
+        (
+            "REPAIR",
+            "Repair"
+        ),
+
+        (
+            "INSPECTION",
+            "Inspection"
+        ),
+
+        (
+            "OTHER",
+            "Other"
+        ),
+    ]
+
+    asset = models.ForeignKey(
+
+        Asset,
+
+        on_delete=models.CASCADE,
+
+        related_name="maintenance_records"
+    )
+
+    maintenance_date = models.DateField()
+
+    service_type = models.CharField(
+
+        max_length=20,
+
+        choices=SERVICE_TYPE_CHOICES
+    )
+
+    vendor_name = models.CharField(
+
+        max_length=255,
+
+        blank=True
+    )
+
+    cost = models.DecimalField(
+
+        max_digits=12,
+
+        decimal_places=2,
+
+        blank=True,
+
+        null=True
+    )
+
+    next_due_date = models.DateField(
+
+        blank=True,
+
+        null=True
+    )
+
+    remarks = models.TextField(
+        blank=True
+    )
+
+    class Meta:
+
+        db_table = (
+            "maintenance_records"
+        )
+
+        verbose_name = (
+            "Maintenance Record"
+        )
+
+        verbose_name_plural = (
+            "Maintenance Records"
+        )
+
+        ordering = [
+            "-maintenance_date"
+        ]
+
+    def __str__(self):
+
+        return (
+
+            f"{self.asset.name} - "
+
+            f"{self.maintenance_date}"
+        )
+
+
+# ============================================================
+# FILE: .\maintenance_records\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    MaintenanceRecord
+)
+
+
+class MaintenanceRecordSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+
+        source="school.name",
+
+        read_only=True
+    )
+
+    asset_name = serializers.CharField(
+
+        source="asset.name",
+
+        read_only=True
+    )
+
+    asset_code = serializers.CharField(
+
+        source="asset.asset_code",
+
+        read_only=True
+    )
+
+    class Meta:
+
+        model = MaintenanceRecord
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\maintenance_records\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    MaintenanceRecordViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    MaintenanceRecordViewSet,
+    basename="maintenance-records"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\maintenance_records\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import (
+    MaintenanceRecord
+)
+
+from .serializers import (
+    MaintenanceRecordSerializer
+)
+
+
+class MaintenanceRecordViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+
+        MaintenanceRecord.objects
+        .select_related(
+            "school",
+            "asset"
+        )
+    )
+
+    serializer_class = (
+        MaintenanceRecordSerializer
+    )
+
+
+# ============================================================
+# FILE: .\playgrounds\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\playgrounds\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\playgrounds\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+
+class Playground(
+    SchoolBaseModel
+):
+
+    PLAYGROUND_TYPE_CHOICES = [
+
+        ("CRICKET", "Cricket Ground"),
+
+        ("FOOTBALL", "Football Ground"),
+
+        ("BASKETBALL", "Basketball Court"),
+
+        ("VOLLEYBALL", "Volleyball Court"),
+
+        ("BADMINTON", "Badminton Court"),
+
+        ("ATHLETICS", "Athletics Track"),
+
+        ("MULTIPURPOSE", "Multi Purpose Ground"),
+
+        ("OTHER", "Other"),
+    ]
+
+    name = models.CharField(
+        max_length=255
+    )
+
+    playground_type = models.CharField(
+        max_length=30,
+        choices=PLAYGROUND_TYPE_CHOICES
+    )
+
+    area = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
+
+    capacity = models.PositiveIntegerField(
+        blank=True,
+        null=True
+    )
+
+    covered = models.BooleanField(
+        default=False
+    )
+
+    location = models.CharField(
+        max_length=255,
+        blank=True
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    class Meta:
+
+        db_table = "playgrounds"
+
+        verbose_name = "Playground"
+
+        verbose_name_plural = "Playgrounds"
+
+        ordering = [
+            "name"
+        ]
+
+    def __str__(self):
+
+        return self.name
+
+
+# ============================================================
+# FILE: .\playgrounds\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Playground
+
+
+class PlaygroundSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Playground
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\playgrounds\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    PlaygroundViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    PlaygroundViewSet,
+    basename="playgrounds"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\playgrounds\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Playground
+
+from .serializers import (
+    PlaygroundSerializer
+)
+
+
+class PlaygroundViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+        Playground.objects
+        .select_related("school")
+    )
+
+    serializer_class = (
+        PlaygroundSerializer
+    )
+
+
+# ============================================================
+# FILE: .\rooms\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\rooms\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\rooms\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SchoolBaseModel
+)
+
+from apps.infrastructure.buildings.models import (
+    Building
+)
+
+from apps.infrastructure.floors.models import (
+    Floor
+)
+
+
+class Room(
+    SchoolBaseModel
+):
+
+    ROOM_TYPE_CHOICES = [
+
+        ("CLASSROOM", "Classroom"),
+
+        ("LABORATORY", "Laboratory"),
+
+        ("LIBRARY", "Library"),
+
+        ("OFFICE", "Office"),
+
+        ("STAFF_ROOM", "Staff Room"),
+
+        ("STORE", "Store Room"),
+
+        ("AUDITORIUM", "Auditorium"),
+
+        ("OTHER", "Other"),
+    ]
+
+    building = models.ForeignKey(
+
+        Building,
+
+        on_delete=models.CASCADE,
+
+        related_name="rooms"
+    )
+
+    floor = models.ForeignKey(
+
+        Floor,
+
+        on_delete=models.CASCADE,
+
+        related_name="rooms"
+    )
+
+    room_number = models.CharField(
+        max_length=50
+    )
+
+    room_name = models.CharField(
+        max_length=255
+    )
+
+    room_type = models.CharField(
+        max_length=20,
+        choices=ROOM_TYPE_CHOICES
+    )
+
+    area = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
+
+    capacity = models.PositiveIntegerField(
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+
+        db_table = "rooms"
+
+        ordering = [
+            "building",
+            "floor",
+            "room_number"
+        ]
+
+    def __str__(self):
+
+        return (
+            f"{self.room_number} - "
+            f"{self.room_name}"
+        )
+
+
+# ============================================================
+# FILE: .\rooms\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import Room
+
+
+class RoomSerializer(
+    serializers.ModelSerializer
+):
+
+    school_name = serializers.CharField(
+        source="school.name",
+        read_only=True
+    )
+
+    building_name = serializers.CharField(
+        source="building.name",
+        read_only=True
+    )
+
+    floor_name = serializers.CharField(
+        source="floor.name",
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Room
+
+        fields = "__all__"
+
+
+# ============================================================
+# FILE: .\rooms\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter
+)
+
+from .views import (
+    RoomViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    RoomViewSet,
+    basename="rooms"
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\rooms\views.py
+# ============================================================
+
+from rest_framework.viewsets import (
+    ModelViewSet
+)
+
+from .models import Room
+
+from .serializers import (
+    RoomSerializer
+)
+
+
+class RoomViewSet(
+    ModelViewSet
+):
+
+    queryset = (
+        Room.objects
+        .select_related(
+            "school",
+            "building",
+            "floor"
+        )
+    )
+
+    serializer_class = (
+        RoomSerializer
+    )
+
+
+# ============================================================
+# FILE: .\sports-facilities\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\sports-facilities\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\sports-facilities\models.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\sports-facilities\serializers.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\sports-facilities\urls.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\sports-facilities\views.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\transport-facilities\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\transport-facilities\admin.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\transport-facilities\models.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\transport-facilities\serializers.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\transport-facilities\urls.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\transport-facilities\views.py
+# ============================================================
+
+

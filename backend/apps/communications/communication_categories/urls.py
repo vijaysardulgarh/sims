@@ -7,7 +7,7 @@ from .views import (
 router = DefaultRouter()
 
 router.register(
-    r'communication-categories',
+    r'',
     CommunicationCategoryViewSet,
     basename='communication-category'
 )

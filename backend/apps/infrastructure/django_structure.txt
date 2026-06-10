@@ -1,0 +1,122 @@
+├── .
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── django_structure.txt
+│   ├── export_project.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── assets
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── asset_categories
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── auditoriums
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── buildings
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── classrooms
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── facilities
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── floors
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── hostel-facilities
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── inventories
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── laboratories
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── libraries
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── maintenance_records
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── playgrounds
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── rooms
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── sports-facilities
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── transport-facilities
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py

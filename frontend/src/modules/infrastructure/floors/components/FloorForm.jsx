@@ -10,15 +10,47 @@ const FloorForm = ({
     const [buildings, setBuildings] =
         useState([]);
 
+    const [loadingBuildings, setLoadingBuildings] =
+        useState(false);
+
     useEffect(() => {
 
         loadBuildings();
 
     }, []);
 
+    const floorNames = {
+
+        0: 'Ground Floor',
+
+        1: 'First Floor',
+
+        2: 'Second Floor',
+
+        3: 'Third Floor',
+
+        4: 'Fourth Floor',
+
+        5: 'Fifth Floor',
+
+        6: 'Sixth Floor',
+
+        7: 'Seventh Floor',
+
+        8: 'Eighth Floor',
+
+        9: 'Ninth Floor',
+
+        10: 'Tenth Floor',
+    };
+
     const loadBuildings = async () => {
 
         try {
+
+            setLoadingBuildings(
+                true
+            );
 
             const response =
                 await api.get(
@@ -26,125 +58,276 @@ const FloorForm = ({
                 );
 
             setBuildings(
+
                 response.data.results ||
-                response.data
+
+                response.data ||
+
+                []
             );
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
+        } finally {
+
+            setLoadingBuildings(
+                false
+            );
         }
     };
 
-    return (
-        <>
-            <div className="mb-3">
+    const handleFloorNumberChange = (
+        e
+    ) => {
 
-                <label>
+        const value =
+            e.target.value === ''
+                ? ''
+                : parseInt(
+                    e.target.value,
+                    10
+                );
+
+        setFormData({
+
+            ...formData,
+
+            floor_number:
+                value,
+
+            name:
+                floorNames[
+                    value
+                ] ||
+                formData.name ||
+                '',
+        });
+    };
+
+    return (
+
+        <div className="space-y-6">
+
+            {/* Building */}
+
+            <div>
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Building
+                    <span className="ml-1 text-red-500">
+                        *
+                    </span>
+
                 </label>
 
                 <select
-                    className="form-control"
+                    required
                     value={
-                        formData.building || ''
+                        formData.building ||
+                        ''
                     }
                     onChange={(e) =>
                         setFormData({
+
                             ...formData,
+
                             building:
-                                e.target.value,
+                                e.target
+                                    .value,
                         })
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
                 >
+
                     <option value="">
-                        Select Building
+
+                        {
+                            loadingBuildings
+                                ? 'Loading Buildings...'
+                                : 'Select Building'
+                        }
+
                     </option>
 
                     {buildings.map(
-                        (building) => (
+                        (
+                            building
+                        ) => (
+
                             <option
-                                key={building.id}
-                                value={building.id}
+                                key={
+                                    building.id
+                                }
+                                value={
+                                    building.id
+                                }
                             >
-                                {building.name}
+
+                                {
+                                    building.code
+                                }
+
+                                {' - '}
+
+                                {
+                                    building.name
+                                }
+
                             </option>
                         )
                     )}
+
                 </select>
 
             </div>
 
-            <div className="mb-3">
+            {/* Floor Number */}
 
-                <label>
+            <div>
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
+                    Floor Number
+                    <span className="ml-1 text-red-500">
+                        *
+                    </span>
+
+                </label>
+
+                <input
+                    type="number"
+                    required
+                    min="0"
+                    value={
+                        formData.floor_number ??
+                        ''
+                    }
+                    onChange={
+                        handleFloorNumberChange
+                    }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
+                    placeholder="Enter floor number"
+                />
+
+            </div>
+
+            {/* Floor Name */}
+
+            <div>
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Floor Name
                 </label>
 
                 <input
                     type="text"
-                    className="form-control"
                     value={
-                        formData.name || ''
-                    }
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            name:
-                                e.target.value,
-                        })
-                    }
-                />
-
-            </div>
-
-            <div className="mb-3">
-
-                <label>
-                    Floor Number
-                </label>
-
-                <input
-                    type="number"
-                    className="form-control"
-                    value={
-                        formData.floor_number ||
+                        formData.name ||
                         ''
                     }
                     onChange={(e) =>
                         setFormData({
+
                             ...formData,
-                            floor_number:
-                                e.target.value,
+
+                            name:
+                                e.target
+                                    .value,
                         })
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        bg-gray-50
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
+                    placeholder="Floor Name"
                 />
 
             </div>
 
-            <div className="mb-3">
+            {/* Description */}
 
-                <label>
+            <div>
+
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+
                     Description
                 </label>
 
                 <textarea
-                    className="form-control"
+                    rows={4}
                     value={
                         formData.description ||
                         ''
                     }
                     onChange={(e) =>
                         setFormData({
+
                             ...formData,
+
                             description:
-                                e.target.value,
+                                e.target
+                                    .value,
                         })
                     }
+                    className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-gray-300
+                        px-3
+                        py-2
+                        text-sm
+                        focus:border-blue-500
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-blue-200
+                    "
+                    placeholder="Enter description"
                 />
 
             </div>
-        </>
+
+        </div>
     );
 };
 

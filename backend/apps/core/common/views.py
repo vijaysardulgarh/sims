@@ -1,5 +1,9 @@
-from rest_framework import viewsets
-from rest_framework import filters
+from django.utils import timezone
+
+from rest_framework import (
+    filters,
+    viewsets,
+)
 
 from rest_framework.views import (
     APIView
@@ -7,6 +11,10 @@ from rest_framework.views import (
 
 from rest_framework.permissions import (
     IsAuthenticated
+)
+
+from rest_framework.exceptions import (
+    PermissionDenied
 )
 
 from django_filters.rest_framework import (
@@ -66,8 +74,6 @@ class SchoolFilteredViewSet(
 
         user = self.request.user
 
-        # Super Admin -> See all records
-
         if user.is_superuser:
 
             return queryset.filter(
@@ -102,6 +108,39 @@ class SchoolFilteredViewSet(
         )
 
     # =====================================
+    # OBJECT LEVEL SECURITY
+    # =====================================
+
+    def get_object(self):
+
+        obj = super().get_object()
+
+        if self.request.user.is_superuser:
+
+            return obj
+
+        if (
+
+            hasattr(
+                obj,
+                "school"
+            )
+
+            and
+
+            obj.school
+            !=
+            self.get_school()
+
+        ):
+
+            raise PermissionDenied(
+                "Access denied."
+            )
+
+        return obj
+
+    # =====================================
     # CREATE OBJECT
     # =====================================
 
@@ -112,12 +151,12 @@ class SchoolFilteredViewSet(
 
         user = self.request.user
 
-        # Super Admin
-
         if user.is_superuser:
 
             serializer.save(
+
                 created_by=user,
+
                 updated_by=user,
             )
 
@@ -128,6 +167,7 @@ class SchoolFilteredViewSet(
             school=self.get_school(),
 
             created_by=user,
+
             updated_by=user,
         )
 
@@ -140,9 +180,22 @@ class SchoolFilteredViewSet(
         serializer
     ):
 
+        user = self.request.user
+
+        if user.is_superuser:
+
+            serializer.save(
+
+                updated_by=user
+            )
+
+            return
+
         serializer.save(
 
-            updated_by=self.request.user
+            school=self.get_school(),
+
+            updated_by=user
         )
 
     # =====================================
@@ -156,11 +209,27 @@ class SchoolFilteredViewSet(
 
         instance.is_deleted = True
 
+        instance.deleted_at = (
+            timezone.now()
+        )
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
         instance.updated_by = (
             self.request.user
         )
 
-        instance.save()
+        instance.save(
+            update_fields=[
+                "is_deleted",
+                "deleted_at",
+                "deleted_by",
+                "updated_by",
+                "updated_at",
+            ]
+        )
 
 
 # =========================================

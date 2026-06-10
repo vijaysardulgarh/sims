@@ -34,6 +34,11 @@ class AuditBaseModel(
         auto_now=True
     )
 
+    deleted_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
     # =========================================================================
     # AUDIT USERS
     # =========================================================================
@@ -64,12 +69,28 @@ class AuditBaseModel(
         related_name="+"
     )
 
+    deleted_by = models.ForeignKey(
+
+        settings.AUTH_USER_MODEL,
+
+        on_delete=models.SET_NULL,
+
+        null=True,
+
+        blank=True,
+
+        related_name="+"
+    )
+
     class Meta:
 
         abstract = True
+
+
 # =============================================================================
-# CLUSTER BASE MODEL                    
+# CLUSTER BASE MODEL
 # =============================================================================
+
 class ClusterBaseModel(
     AuditBaseModel
 ):
@@ -92,6 +113,8 @@ class ClusterBaseModel(
     class Meta:
 
         abstract = True
+
+
 # =============================================================================
 # SCHOOL BASE MODEL
 # =============================================================================
@@ -148,6 +171,10 @@ class SessionBaseModel(
         abstract = True
 
 
+# =============================================================================
+# PUBLISHABLE BASE MODEL
+# =============================================================================
+
 class PublishableBaseModel(
     models.Model
 ):
@@ -161,8 +188,27 @@ class PublishableBaseModel(
         blank=True
     )
 
+    published_by = models.ForeignKey(
+
+        settings.AUTH_USER_MODEL,
+
+        on_delete=models.SET_NULL,
+
+        null=True,
+
+        blank=True,
+
+        related_name="+"
+    )
+
     class Meta:
+
         abstract = True
+
+
+# =============================================================================
+# ORDERED BASE MODEL
+# =============================================================================
 
 class OrderedBaseModel(
     models.Model
@@ -173,4 +219,5 @@ class OrderedBaseModel(
     )
 
     class Meta:
-        abstract = True                
+
+        abstract = True
