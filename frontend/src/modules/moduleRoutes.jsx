@@ -23,7 +23,7 @@ import communicationRoutes from "./communication/routes/communicationRoutes";
 // import libraryRoutes from "./library/routes/libraryRoutes";
 import staffRoutes from "./staff/routes/staffRoutes";
 import studentsRoutes from "./students/routes/studentsRoutes";
-// import timetableRoutes from "./timetable/routes/timetableRoutes";
+import timetablesRoutes from "./timetables/routes/timetablesRoutes";
 // import transportRoutes from "./transport/routes/transportRoutes";
 import schoolsRoutes from "./schools/routes/schoolsRoutes.jsx";
 import clusterRoutes from "./cluster/routes/clusterRoutes";
@@ -63,8 +63,8 @@ const moduleRoutes = (
     {libraryRoutes} */}
     {staffRoutes}
     {studentsRoutes}
-    {/* {timetableRoutes}
-    {transportRoutes} */}
+    {timetablesRoutes}
+    {/* {transportRoutes} */}
     {schoolsRoutes}
     {infrastructureRoutes}
     {clusterRoutes}

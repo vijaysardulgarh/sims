@@ -1,0 +1,196 @@
+is above timetable also support drag n drop
+
+No.
+
+The modules we've created so far are only CRUD modules.
+
+They support:
+
+✅ Create Timetable
+✅ Edit Timetable
+✅ Delete Timetable
+✅ Manage Periods
+✅ Manage Bell Schedules
+✅ Manage Rooms
+✅ Manage Resources
+✅ Manage Teachers
+✅ Manage Constraints
+✅ Manage Workloads
+✅ Manage Exam Timetables
+
+But they do NOT yet provide:
+
+❌ Drag & Drop Timetable Grid
+❌ Real-time Conflict Detection
+❌ Auto Timetable Generation
+❌ Teacher Clash Validation
+❌ Room Clash Validation
+❌ Live Save
+❌ Undo / Redo
+❌ Timetable Designer UI
+❌ Multi-user Editing
+❌ Visual Calendar Layout
+For Drag & Drop you need an additional feature
+
+Create a module:
+
+timetable_designer/
+
+Frontend:
+
+timetable-designer/
+
+├── components/
+│   ├── TimetableGrid.jsx
+│   ├── TimetableCell.jsx
+│   ├── SubjectCard.jsx
+│   ├── TeacherCard.jsx
+│   ├── ConflictPanel.jsx
+│   └── ResourcePanel.jsx
+│
+├── pages/
+│   └── TimetableDesignerPage.jsx
+│
+├── services/
+│   └── timetableDesignerService.js
+│
+└── routes/
+    └── timetableDesignerRoutes.jsx
+Example UI
+                MON      TUE      WED      THU      FRI
+
+P1  08:00       Math     Eng      Sci      Math     Hindi
+
+P2  08:45       Eng      Sci      Math     Hindi    SST
+
+P3  09:30       BREAK    BREAK    BREAK    BREAK    BREAK
+
+P4  09:45       Sci      Math     Hindi    SST      Eng
+
+User drags:
+
+Math
+
+from:
+
+Monday P1
+
+to:
+
+Wednesday P2
+
+using:
+
+@dnd-kit/core
+
+or
+
+@hello-pangea/dnd
+Backend APIs Needed
+POST
+/timetables/designer/move-period/
+
+POST
+/timetables/designer/swap-period/
+
+POST
+/timetables/designer/validate/
+
+POST
+/timetables/designer/generate/
+
+POST
+/timetables/designer/publish/
+Conflict Detection
+
+When a drag occurs:
+
+Teacher already busy
+Room occupied
+Lab unavailable
+Workload exceeded
+Subject requirement violated
+
+show:
+
+⚠ Teacher Conflict
+
+Mr Sharma is already teaching
+Class 9-B during Period 3.
+
+using your:
+
+timetable_conflicts
+teacher_availabilities
+teacher_workloads
+room_allocations
+resource_allocations
+subject_constraints
+
+modules.
+
+Auto Timetable Generation
+
+You already created:
+
+teacher_availabilities
+teacher_workloads
+subject_constraints
+subject_requirements
+working_days
+period_definitions
+
+These are exactly the inputs needed for:
+
+Generate Timetable
+
+button.
+
+Algorithm:
+
+Step 1:
+Load Working Days
+
+Step 2:
+Load Period Definitions
+
+Step 3:
+Load Teacher Availability
+
+Step 4:
+Load Subject Requirements
+
+Step 5:
+Load Constraints
+
+Step 6:
+Allocate Subjects
+
+Step 7:
+Allocate Teachers
+
+Step 8:
+Allocate Rooms
+
+Step 9:
+Detect Conflicts
+
+Step 10:
+Create Timetable Entries
+For a 10/10 School ERP
+
+I would add:
+
+timetable_designer
+timetable_templates
+timetable_generator
+timetable_imports
+timetable_exports
+
+Then your timetable module becomes comparable to enterprise systems like:
+
+PowerSchool
+Fedena
+MyClassCampus
+
+with full drag-and-drop timetable management rather than only CRUD administration.
