@@ -1,26 +1,148 @@
+import {
+    useEffect,
+    useState,
+} from "react";
+
+import timetableService
+    from "../../timetables/services/timetableService";
+
+import periodDefinitionService
+    from "../../period_definitions/services/periodDefinitionService";
+
+import subjectService
+    from "../../../academics/subjects/services/subjectService";
+
+import staffService
+    from "../../../staff/staff/services/staffService";
+
 const TimetableEntryForm = ({
     formData,
     setFormData,
 }) => {
 
-    const handleChange = (
-        event
-    ) => {
+    const [
+        timetables,
+        setTimetables,
+    ] = useState([]);
 
-        const {
-            name,
-            value,
-        } = event.target;
+    const [
+        periods,
+        setPeriods,
+    ] = useState([]);
 
-        setFormData({
+    const [
+        subjects,
+        setSubjects,
+    ] = useState([]);
 
-            ...formData,
+    const [
+        teachers,
+        setTeachers,
+    ] = useState([]);
 
-            [name]: value,
+    useEffect(() => {
 
-        });
+        loadDropdowns();
 
-    };
+    }, []);
+
+    const loadDropdowns =
+        async () => {
+
+            try {
+
+                const [
+
+                    timetableResponse,
+
+                    periodResponse,
+
+                    subjectResponse,
+
+                    teacherResponse,
+
+                ] = await Promise.all([
+
+                    timetableService.getAll(),
+
+                    periodDefinitionService.getAll(),
+
+                    subjectService.getSubjects(),
+
+                    staffService.getStaff(),
+
+                ]);
+
+                setTimetables(
+
+                    timetableResponse.data?.results ||
+
+                    timetableResponse.data ||
+
+                    []
+
+                );
+
+                setPeriods(
+
+                    periodResponse.data?.results ||
+
+                    periodResponse.data ||
+
+                    []
+
+                );
+
+                setSubjects(
+
+                    subjectResponse.results ||
+
+                    subjectResponse ||
+
+                    []
+
+                );
+
+                setTeachers(
+
+                    teacherResponse.results ||
+
+                    teacherResponse ||
+
+                    []
+
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Dropdown Load Error:",
+                    error
+                );
+
+            }
+
+        };
+
+    const handleChange =
+        (event) => {
+
+            const {
+                name,
+                value,
+            } = event.target;
+
+            setFormData({
+
+                ...formData,
+
+                [name]: value,
+
+            });
+
+        };
 
     return (
 
@@ -35,19 +157,27 @@ const TimetableEntryForm = ({
 
             <div>
 
-                <label>
+                <label
+                    className="
+                        block
+                        mb-2
+                    "
+                >
                     Timetable
                 </label>
 
-                <input
-                    type="number"
+                <select
+
                     name="timetable"
+
                     value={
-                        formData.timetable || ''
+                        formData.timetable || ""
                     }
+
                     onChange={
                         handleChange
                     }
+
                     className="
                         w-full
                         border
@@ -55,13 +185,43 @@ const TimetableEntryForm = ({
                         px-4
                         py-3
                     "
-                />
+                >
+
+                    <option value="">
+                        Select Timetable
+                    </option>
+
+                    {timetables.map(
+                        timetable => (
+
+                            <option
+                                key={
+                                    timetable.id
+                                }
+                                value={
+                                    timetable.id
+                                }
+                            >
+                                {
+                                    timetable.name
+                                }
+                            </option>
+
+                        )
+                    )}
+
+                </select>
 
             </div>
 
             <div>
 
-                <label>
+                <label
+                    className="
+                        block
+                        mb-2
+                    "
+                >
                     Day
                 </label>
 
@@ -70,7 +230,7 @@ const TimetableEntryForm = ({
                     name="day"
 
                     value={
-                        formData.day || ''
+                        formData.day || ""
                     }
 
                     onChange={
@@ -90,28 +250,32 @@ const TimetableEntryForm = ({
                         Select Day
                     </option>
 
-                    <option value="MONDAY">
+                    <option value="MON">
                         Monday
                     </option>
 
-                    <option value="TUESDAY">
+                    <option value="TUE">
                         Tuesday
                     </option>
 
-                    <option value="WEDNESDAY">
+                    <option value="WED">
                         Wednesday
                     </option>
 
-                    <option value="THURSDAY">
+                    <option value="THU">
                         Thursday
                     </option>
 
-                    <option value="FRIDAY">
+                    <option value="FRI">
                         Friday
                     </option>
 
-                    <option value="SATURDAY">
+                    <option value="SAT">
                         Saturday
+                    </option>
+
+                    <option value="SUN">
+                        Sunday
                     </option>
 
                 </select>
@@ -120,19 +284,27 @@ const TimetableEntryForm = ({
 
             <div>
 
-                <label>
+                <label
+                    className="
+                        block
+                        mb-2
+                    "
+                >
                     Period
                 </label>
 
-                <input
-                    type="number"
+                <select
+
                     name="period"
+
                     value={
-                        formData.period || ''
+                        formData.period || ""
                     }
+
                     onChange={
                         handleChange
                     }
+
                     className="
                         w-full
                         border
@@ -140,77 +312,62 @@ const TimetableEntryForm = ({
                         px-4
                         py-3
                     "
-                />
+                >
+
+                    <option value="">
+                        Select Period
+                    </option>
+
+                    {periods.map(
+                        period => (
+
+                            <option
+                                key={
+                                    period.id
+                                }
+                                value={
+                                    period.id
+                                }
+                            >
+                                {
+                                    period.name ||
+
+                                    period.period_name ||
+
+                                    `Period ${period.id}`
+                                }
+                            </option>
+
+                        )
+                    )}
+
+                </select>
 
             </div>
 
             <div>
 
-                <label>
-                    Class
-                </label>
-
-                <input
-                    type="number"
-                    name="school_class"
-                    value={
-                        formData.school_class || ''
-                    }
-                    onChange={
-                        handleChange
-                    }
+                <label
                     className="
-                        w-full
-                        border
-                        rounded-xl
-                        px-4
-                        py-3
+                        block
+                        mb-2
                     "
-                />
-
-            </div>
-
-            <div>
-
-                <label>
-                    Section
-                </label>
-
-                <input
-                    type="number"
-                    name="section"
-                    value={
-                        formData.section || ''
-                    }
-                    onChange={
-                        handleChange
-                    }
-                    className="
-                        w-full
-                        border
-                        rounded-xl
-                        px-4
-                        py-3
-                    "
-                />
-
-            </div>
-
-            <div>
-
-                <label>
+                >
                     Subject
                 </label>
 
-                <input
-                    type="number"
+                <select
+
                     name="subject"
+
                     value={
-                        formData.subject || ''
+                        formData.subject || ""
                     }
+
                     onChange={
                         handleChange
                     }
+
                     className="
                         w-full
                         border
@@ -218,25 +375,58 @@ const TimetableEntryForm = ({
                         px-4
                         py-3
                     "
-                />
+                >
+
+                    <option value="">
+                        Select Subject
+                    </option>
+
+                    {subjects.map(
+                        subject => (
+
+                            <option
+                                key={
+                                    subject.id
+                                }
+                                value={
+                                    subject.id
+                                }
+                            >
+                                {
+                                    subject.name
+                                }
+                            </option>
+
+                        )
+                    )}
+
+                </select>
 
             </div>
 
             <div>
 
-                <label>
+                <label
+                    className="
+                        block
+                        mb-2
+                    "
+                >
                     Teacher
                 </label>
 
-                <input
-                    type="number"
+                <select
+
                     name="teacher"
+
                     value={
-                        formData.teacher || ''
+                        formData.teacher || ""
                     }
+
                     onChange={
                         handleChange
                     }
+
                     className="
                         w-full
                         border
@@ -244,25 +434,70 @@ const TimetableEntryForm = ({
                         px-4
                         py-3
                     "
-                />
+                >
+
+                    <option value="">
+                        Select Teacher
+                    </option>
+
+                    {teachers.map(
+                        teacher => (
+
+                            <option
+                                key={
+                                    teacher.id
+                                }
+                                value={
+                                    teacher.id
+                                }
+                            >
+                                {
+                                    teacher.full_name ||
+
+                                    teacher.name ||
+
+                                    teacher.employee_name ||
+
+                                    `Staff ${teacher.id}`
+                                }
+                            </option>
+
+                        )
+                    )}
+
+                </select>
 
             </div>
 
-            <div>
+            <div
+                className="
+                    md:col-span-2
+                "
+            >
 
-                <label>
-                    Room
+                <label
+                    className="
+                        block
+                        mb-2
+                    "
+                >
+                    Remarks
                 </label>
 
-                <input
-                    type="number"
-                    name="room"
+                <textarea
+
+                    name="remarks"
+
                     value={
-                        formData.room || ''
+                        formData.remarks || ""
                     }
+
                     onChange={
                         handleChange
                     }
+
+                    rows={4}
+
                     className="
                         w-full
                         border

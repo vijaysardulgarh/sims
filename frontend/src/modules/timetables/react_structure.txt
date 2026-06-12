@@ -1,0 +1,240 @@
+├── .
+│   ├── drag n drop
+│   ├── export_project.py
+│   ├── react_structure.txt
+│   ├── bell_schedules
+│   │   ├── components
+│   │   │   ├── BellScheduleForm.jsx
+│   │   ├── pages
+│   │   │   ├── BellScheduleCreatePage.jsx
+│   │   │   ├── BellScheduleEditPage.jsx
+│   │   │   ├── BellScheduleListPage.jsx
+│   │   ├── routes
+│   │   │   ├── bellScheduleRoutes.jsx
+│   │   ├── services
+│   │   │   ├── bellScheduleService.js
+│   ├── exam_timetables
+│   │   ├── components
+│   │   │   ├── ExamTimetableForm.jsx
+│   │   ├── pages
+│   │   │   ├── ExamTimetableCreatePage.jsx
+│   │   │   ├── ExamTimetableEditPage.jsx
+│   │   │   ├── ExamTimetableListPage.jsx
+│   │   ├── routes
+│   │   │   ├── examTimetableRoutes.jsx
+│   │   ├── services
+│   │   │   ├── examTimetableService.js
+│   ├── exam_timetable_entries
+│   │   ├── components
+│   │   │   ├── ExamTimetableEntryForm.jsx
+│   │   ├── pages
+│   │   │   ├── ExamTimetableEntryCreatePage.jsx
+│   │   │   ├── ExamTimetableEntryEditPage.jsx
+│   │   │   ├── ExamTimetableEntryListPage.jsx
+│   │   ├── routes
+│   │   │   ├── examTimetableEntryRoutes.jsx
+│   │   ├── services
+│   │   │   ├── examTimetableEntryService.js
+│   ├── period_definitions
+│   │   ├── components
+│   │   │   ├── PeriodDefinitionForm.jsx
+│   │   ├── pages
+│   │   │   ├── PeriodDefinitionCreatePage.jsx
+│   │   │   ├── PeriodDefinitionEditPage.jsx
+│   │   │   ├── PeriodDefinitionListPage.jsx
+│   │   ├── routes
+│   │   │   ├── periodDefinitionRoutes.jsx
+│   │   ├── services
+│   │   │   ├── periodDefinitionService.js
+│   ├── resource_allocations
+│   │   ├── components
+│   │   │   ├── ResourceAllocationForm.jsx
+│   │   ├── pages
+│   │   │   ├── ResourceAllocationCreatePage.jsx
+│   │   │   ├── ResourceAllocationEditPage.jsx
+│   │   │   ├── ResourceAllocationListPage.jsx
+│   │   ├── routes
+│   │   │   ├── resourceAllocationRoutes.jsx
+│   │   ├── services
+│   │   │   ├── resourceAllocationService.js
+│   ├── room_allocations
+│   │   ├── components
+│   │   │   ├── RoomAllocationForm.jsx
+│   │   ├── pages
+│   │   │   ├── RoomAllocationCreatePage.jsx
+│   │   │   ├── RoomAllocationEditPage.jsx
+│   │   │   ├── RoomAllocationListPage.jsx
+│   │   ├── routes
+│   │   │   ├── roomAllocationRoutes.jsx
+│   │   ├── services
+│   │   │   ├── roomAllocationService.js
+│   ├── routes
+│   │   ├── timetablesRoutes.jsx
+│   ├── subject_constraints
+│   │   ├── components
+│   │   │   ├── SubjectConstraintForm.jsx
+│   │   ├── pages
+│   │   │   ├── SubjectConstraintCreatePage.jsx
+│   │   │   ├── SubjectConstraintEditPage.jsx
+│   │   │   ├── SubjectConstraintListPage.jsx
+│   │   ├── routes
+│   │   │   ├── subjectConstraintRoutes.jsx
+│   │   ├── services
+│   │   │   ├── subjectConstraintService.js
+│   ├── subject_requirements
+│   │   ├── components
+│   │   │   ├── SubjectRequirementForm.jsx
+│   │   ├── pages
+│   │   │   ├── SubjectRequirementCreatePage.jsx
+│   │   │   ├── SubjectRequirementEditPage.jsx
+│   │   │   ├── SubjectRequirementListPage.jsx
+│   │   ├── routes
+│   │   │   ├── subjectRequirementRoutes.jsx
+│   │   ├── services
+│   │   │   ├── subjectRequirementService.js
+│   ├── substitute_assignments
+│   │   ├── components
+│   │   │   ├── SubstituteAssignmentForm.jsx
+│   │   ├── pages
+│   │   │   ├── SubstituteAssignmentCreatePage.jsx
+│   │   │   ├── SubstituteAssignmentEditPage.jsx
+│   │   │   ├── SubstituteAssignmentListPage.jsx
+│   │   ├── routes
+│   │   │   ├── substituteAssignmentRoutes.jsx
+│   │   ├── services
+│   │   │   ├── substituteAssignmentService.js
+│   ├── teacher_availabilities
+│   │   ├── components
+│   │   │   ├── TeacherAvailabilityForm.jsx
+│   │   ├── pages
+│   │   │   ├── TeacherAvailabilityCreatePage.jsx
+│   │   │   ├── TeacherAvailabilityEditPage.jsx
+│   │   │   ├── TeacherAvailabilityListPage.jsx
+│   │   ├── routes
+│   │   │   ├── teacherAvailabilityRoutes.jsx
+│   │   ├── services
+│   │   │   ├── teacherAvailabilityService.js
+│   ├── teacher_preferences
+│   │   ├── components
+│   │   │   ├── TeacherPreferenceForm.jsx
+│   │   ├── pages
+│   │   │   ├── TeacherPreferenceCreatePage.jsx
+│   │   │   ├── TeacherPreferenceEditPage.jsx
+│   │   │   ├── TeacherPreferenceListPage.jsx
+│   │   ├── routes
+│   │   │   ├── teacherPreferenceRoutes.jsx
+│   │   ├── services
+│   │   │   ├── teacherPreferenceService.js
+│   ├── teacher_workloads
+│   │   ├── components
+│   │   │   ├── TeacherWorkloadForm.jsx
+│   │   ├── pages
+│   │   │   ├── TeacherWorkloadCreatePage.jsx
+│   │   │   ├── TeacherWorkloadEditPage.jsx
+│   │   │   ├── TeacherWorkloadListPage.jsx
+│   │   ├── routes
+│   │   │   ├── teacherWorkloadRoutes.jsx
+│   │   ├── services
+│   │   │   ├── teacherWorkloadService.js
+│   ├── timetables
+│   │   ├── components
+│   │   │   ├── TimetableForm.jsx
+│   │   ├── pages
+│   │   │   ├── TimetableCreatePage.jsx
+│   │   │   ├── TimetableEditPage.jsx
+│   │   │   ├── TimetableListPage.jsx
+│   │   ├── routes
+│   │   │   ├── timetableRoutes.jsx
+│   │   ├── services
+│   │   │   ├── timetableService.js
+│   ├── timetable_approvals
+│   │   ├── components
+│   │   │   ├── TimetableApprovalForm.jsx
+│   │   ├── pages
+│   │   │   ├── TimetableApprovalCreatePage.jsx
+│   │   │   ├── TimetableApprovalEditPage.jsx
+│   │   │   ├── TimetableApprovalListPage.jsx
+│   │   ├── routes
+│   │   │   ├── timetableApprovalRoutes.jsx
+│   │   ├── services
+│   │   │   ├── timetableApprovalService.js
+│   ├── timetable_audit_logs
+│   │   ├── components
+│   │   │   ├── TimetableAuditLogForm.jsx
+│   │   ├── pages
+│   │   │   ├── TimetableAuditLogListPage.jsx
+│   │   ├── routes
+│   │   │   ├── timetableAuditLogRoutes.jsx
+│   │   ├── services
+│   │   │   ├── timetableAuditLogService.js
+│   ├── timetable_conflicts
+│   │   ├── components
+│   │   │   ├── TimetableConflictForm.jsx
+│   │   ├── pages
+│   │   │   ├── TimetableConflictCreatePage.jsx
+│   │   │   ├── TimetableConflictEditPage.jsx
+│   │   │   ├── TimetableConflictListPage.jsx
+│   │   ├── routes
+│   │   │   ├── timetableConflictRoutes.jsx
+│   │   ├── services
+│   │   │   ├── timetableConflictService.js
+│   ├── timetable_designer
+│   │   ├── components
+│   │   │   ├── ConflictPanel.jsx
+│   │   │   ├── RoomPalette.jsx
+│   │   │   ├── SubjectPalette.jsx
+│   │   │   ├── TeacherPalette.jsx
+│   │   │   ├── TimetableCell.jsx
+│   │   │   ├── TimetableGrid.jsx
+│   │   │   ├── TimetableToolbar.jsx
+│   │   ├── pages
+│   │   │   ├── TimetableConflictPage.jsx
+│   │   │   ├── TimetableDesignerPage.jsx
+│   │   ├── routes
+│   │   │   ├── timetableDesignerRoutes.jsx
+│   │   ├── services
+│   │   │   ├── timetableDesignerService.js
+│   ├── timetable_entries
+│   │   ├── components
+│   │   │   ├── TimetableEntryForm.jsx
+│   │   ├── pages
+│   │   │   ├── TimetableEntryCreatePage.jsx
+│   │   │   ├── TimetableEntryEditPage.jsx
+│   │   │   ├── TimetableEntryListPage.jsx
+│   │   ├── routes
+│   │   │   ├── timetableEntryRoutes.jsx
+│   │   ├── services
+│   │   │   ├── timetableEntryService.js
+│   ├── timetable_publications
+│   │   ├── components
+│   │   │   ├── TimetablePublicationForm.jsx
+│   │   ├── pages
+│   │   │   ├── TimetablePublicationCreatePage.jsx
+│   │   │   ├── TimetablePublicationEditPage.jsx
+│   │   │   ├── TimetablePublicationListPage.jsx
+│   │   ├── routes
+│   │   │   ├── timetablePublicationRoutes.jsx
+│   │   ├── services
+│   │   │   ├── timetablePublicationService.js
+│   ├── timetable_versions
+│   │   ├── components
+│   │   │   ├── TimetableVersionForm.jsx
+│   │   ├── pages
+│   │   │   ├── TimetableVersionCreatePage.jsx
+│   │   │   ├── TimetableVersionEditPage.jsx
+│   │   │   ├── TimetableVersionListPage.jsx
+│   │   ├── routes
+│   │   │   ├── timetableVersionRoutes.jsx
+│   │   ├── services
+│   │   │   ├── timetableVersionService.js
+│   ├── working_days
+│   │   ├── components
+│   │   │   ├── WorkingDayForm.jsx
+│   │   ├── pages
+│   │   │   ├── WorkingDayCreatePage.jsx
+│   │   │   ├── WorkingDayEditPage.jsx
+│   │   │   ├── WorkingDayListPage.jsx
+│   │   ├── routes
+│   │   │   ├── workingDayRoutes.jsx
+│   │   ├── services
+│   │   │   ├── workingDayService.js

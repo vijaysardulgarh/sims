@@ -12,7 +12,7 @@ const TimetableEntryListPage = () => {
     const columns = [
 
         {
-            key: 'timetable',
+            key: 'timetable_name',
             label: 'Timetable',
         },
 
@@ -22,33 +22,23 @@ const TimetableEntryListPage = () => {
         },
 
         {
-            key: 'period',
+            key: 'period_name',
             label: 'Period',
         },
 
         {
-            key: 'school_class',
-            label: 'Class',
-        },
-
-        {
-            key: 'section',
-            label: 'Section',
-        },
-
-        {
-            key: 'subject',
+            key: 'subject_name',
             label: 'Subject',
         },
 
         {
-            key: 'teacher',
+            key: 'teacher_name',
             label: 'Teacher',
         },
 
         {
-            key: 'room',
-            label: 'Room',
+            key: 'remarks',
+            label: 'Remarks',
         },
 
     ];

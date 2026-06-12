@@ -1,7 +1,57 @@
+import {
+    useEffect,
+    useState,
+} from "react";
+
+import bellScheduleService
+    from "../../bell_schedules/services/bellScheduleService";
+
 const PeriodDefinitionForm = ({
     formData,
     setFormData,
 }) => {
+
+    const [
+        bellSchedules,
+        setBellSchedules,
+    ] = useState([]);
+
+    useEffect(() => {
+
+        loadBellSchedules();
+
+    }, []);
+
+    const loadBellSchedules =
+        async () => {
+
+            try {
+
+                const response =
+                    await bellScheduleService.getAll();
+
+                setBellSchedules(
+
+                    response.data?.results ||
+
+                    response.data ||
+
+                    []
+
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Failed to load bell schedules",
+                    error
+                );
+
+            }
+
+        };
 
     const handleChange = (
         event
@@ -20,7 +70,7 @@ const PeriodDefinitionForm = ({
 
             [name]:
 
-                type === 'checkbox'
+                type === "checkbox"
 
                     ? checked
 
@@ -44,6 +94,60 @@ const PeriodDefinitionForm = ({
             <div>
 
                 <label>
+                    Bell Schedule
+                </label>
+
+                <select
+
+                    name="bell_schedule"
+
+                    value={
+                        formData.bell_schedule || ""
+                    }
+
+                    onChange={
+                        handleChange
+                    }
+
+                    className="
+                        w-full
+                        border
+                        rounded-xl
+                        px-4
+                        py-3
+                    "
+                >
+
+                    <option value="">
+                        Select Bell Schedule
+                    </option>
+
+                    {bellSchedules.map(
+                        schedule => (
+
+                            <option
+                                key={
+                                    schedule.id
+                                }
+                                value={
+                                    schedule.id
+                                }
+                            >
+                                {
+                                    schedule.name
+                                }
+                            </option>
+
+                        )
+                    )}
+
+                </select>
+
+            </div>
+
+            <div>
+
+                <label>
                     Name
                 </label>
 
@@ -51,7 +155,7 @@ const PeriodDefinitionForm = ({
                     type="text"
                     name="name"
                     value={
-                        formData.name || ''
+                        formData.name || ""
                     }
                     onChange={
                         handleChange
@@ -77,7 +181,33 @@ const PeriodDefinitionForm = ({
                     type="text"
                     name="code"
                     value={
-                        formData.code || ''
+                        formData.code || ""
+                    }
+                    onChange={
+                        handleChange
+                    }
+                    className="
+                        w-full
+                        border
+                        rounded-xl
+                        px-4
+                        py-3
+                    "
+                />
+
+            </div>
+
+            <div>
+
+                <label>
+                    Display Order
+                </label>
+
+                <input
+                    type="number"
+                    name="display_order"
+                    value={
+                        formData.display_order || ""
                     }
                     onChange={
                         handleChange
@@ -103,7 +233,7 @@ const PeriodDefinitionForm = ({
                     type="time"
                     name="start_time"
                     value={
-                        formData.start_time || ''
+                        formData.start_time || ""
                     }
                     onChange={
                         handleChange
@@ -129,7 +259,7 @@ const PeriodDefinitionForm = ({
                     type="time"
                     name="end_time"
                     value={
-                        formData.end_time || ''
+                        formData.end_time || ""
                     }
                     onChange={
                         handleChange
@@ -146,87 +276,6 @@ const PeriodDefinitionForm = ({
             </div>
 
             <div>
-
-                <label>
-                    Period Type
-                </label>
-
-                <select
-
-                    name="period_type"
-
-                    value={
-                        formData.period_type || ''
-                    }
-
-                    onChange={
-                        handleChange
-                    }
-
-                    className="
-                        w-full
-                        border
-                        rounded-xl
-                        px-4
-                        py-3
-                    "
-                >
-
-                    <option value="">
-                        Select
-                    </option>
-
-                    <option value="PERIOD">
-                        Period
-                    </option>
-
-                    <option value="BREAK">
-                        Break
-                    </option>
-
-                    <option value="LUNCH">
-                        Lunch
-                    </option>
-
-                    <option value="ASSEMBLY">
-                        Assembly
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div>
-
-                <label>
-                    Display Order
-                </label>
-
-                <input
-                    type="number"
-                    name="display_order"
-                    value={
-                        formData.display_order || ''
-                    }
-                    onChange={
-                        handleChange
-                    }
-                    className="
-                        w-full
-                        border
-                        rounded-xl
-                        px-4
-                        py-3
-                    "
-                />
-
-            </div>
-
-            <div
-                className="
-                    md:col-span-2
-                "
-            >
 
                 <label
                     className="
@@ -238,18 +287,161 @@ const PeriodDefinitionForm = ({
 
                     <input
                         type="checkbox"
-                        name="is_active"
+                        name="is_instructional"
                         checked={
-                            formData.is_active ?? true
+                            formData.is_instructional ?? true
                         }
                         onChange={
                             handleChange
                         }
                     />
 
-                    Active
+                    Instructional Period
 
                 </label>
+
+            </div>
+
+            <div>
+
+                <label
+                    className="
+                        flex
+                        items-center
+                        gap-3
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        name="is_break"
+                        checked={
+                            formData.is_break ?? false
+                        }
+                        onChange={
+                            handleChange
+                        }
+                    />
+
+                    Break
+
+                </label>
+
+            </div>
+
+            <div>
+
+                <label
+                    className="
+                        flex
+                        items-center
+                        gap-3
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        name="is_lunch"
+                        checked={
+                            formData.is_lunch ?? false
+                        }
+                        onChange={
+                            handleChange
+                        }
+                    />
+
+                    Lunch
+
+                </label>
+
+            </div>
+
+            <div>
+
+                <label
+                    className="
+                        flex
+                        items-center
+                        gap-3
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        name="is_assembly"
+                        checked={
+                            formData.is_assembly ?? false
+                        }
+                        onChange={
+                            handleChange
+                        }
+                    />
+
+                    Assembly
+
+                </label>
+
+            </div>
+
+            <div>
+
+                <label
+                    className="
+                        flex
+                        items-center
+                        gap-3
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        name="is_zero_period"
+                        checked={
+                            formData.is_zero_period ?? false
+                        }
+                        onChange={
+                            handleChange
+                        }
+                    />
+
+                    Zero Period
+
+                </label>
+
+            </div>
+
+            <div
+                className="
+                    md:col-span-2
+                "
+            >
+
+                <label>
+                    Remarks
+                </label>
+
+                <textarea
+
+                    name="remarks"
+
+                    rows={4}
+
+                    value={
+                        formData.remarks || ""
+                    }
+
+                    onChange={
+                        handleChange
+                    }
+
+                    className="
+                        w-full
+                        border
+                        rounded-xl
+                        px-4
+                        py-3
+                    "
+                />
 
             </div>
 

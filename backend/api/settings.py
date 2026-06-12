@@ -96,7 +96,7 @@ INSTALLED_APPS = [
 
     "apps.clusters",
 
-    "apps.exams",
+    "apps.examinations",
     
     "apps.transport",
 

@@ -1,6 +1,10 @@
 const TimetableForm = ({
     formData,
     setFormData,
+    academicSessions = [],
+    bellSchedules = [],
+    classes = [],
+    sections = [],
 }) => {
 
     const handleChange = (
@@ -14,13 +18,33 @@ const TimetableForm = ({
             checked,
         } = event.target;
 
+        if (
+            name ===
+            "school_class"
+        ) {
+
+            setFormData({
+
+                ...formData,
+
+                school_class:
+                    value,
+
+                section: "",
+
+            });
+
+            return;
+
+        }
+
         setFormData({
 
             ...formData,
 
             [name]:
 
-                type === 'checkbox'
+                type === "checkbox"
 
                     ? checked
 
@@ -29,6 +53,22 @@ const TimetableForm = ({
         });
 
     };
+
+    const filteredSections =
+
+        sections.filter(
+            section =>
+
+                String(
+                    section.class_obj
+                )
+
+                ===
+
+                String(
+                    formData.school_class
+                )
+        );
 
     return (
 
@@ -48,19 +88,10 @@ const TimetableForm = ({
                 </label>
 
                 <input
-
                     type="text"
-
                     name="name"
-
-                    value={
-                        formData.name || ''
-                    }
-
-                    onChange={
-                        handleChange
-                    }
-
+                    value={formData.name || ""}
+                    onChange={handleChange}
                     className="
                         w-full
                         border
@@ -68,7 +99,6 @@ const TimetableForm = ({
                         px-4
                         py-3
                     "
-
                 />
 
             </div>
@@ -80,19 +110,10 @@ const TimetableForm = ({
                 </label>
 
                 <input
-
                     type="text"
-
                     name="code"
-
-                    value={
-                        formData.code || ''
-                    }
-
-                    onChange={
-                        handleChange
-                    }
-
+                    value={formData.code || ""}
+                    onChange={handleChange}
                     className="
                         w-full
                         border
@@ -100,7 +121,6 @@ const TimetableForm = ({
                         px-4
                         py-3
                     "
-
                 />
 
             </div>
@@ -111,20 +131,13 @@ const TimetableForm = ({
                     Academic Session
                 </label>
 
-                <input
-
-                    type="number"
-
+                <select
                     name="academic_session"
-
                     value={
-                        formData.academic_session || ''
+                        formData.academic_session
+                        || ""
                     }
-
-                    onChange={
-                        handleChange
-                    }
-
+                    onChange={handleChange}
                     className="
                         w-full
                         border
@@ -132,8 +145,34 @@ const TimetableForm = ({
                         px-4
                         py-3
                     "
+                >
 
-                />
+                    <option value="">
+                        Select Session
+                    </option>
+
+                    {academicSessions.map(
+                        item => (
+
+                            <option
+                                key={item.id}
+                                value={item.id}
+                            >
+
+                                {
+                                    item.name
+                                    ||
+                                    item.title
+                                    ||
+                                    item.session_name
+                                }
+
+                            </option>
+
+                        )
+                    )}
+
+                </select>
 
             </div>
 
@@ -143,20 +182,13 @@ const TimetableForm = ({
                     Bell Schedule
                 </label>
 
-                <input
-
-                    type="number"
-
+                <select
                     name="bell_schedule"
-
                     value={
-                        formData.bell_schedule || ''
+                        formData.bell_schedule
+                        || ""
                     }
-
-                    onChange={
-                        handleChange
-                    }
-
+                    onChange={handleChange}
                     className="
                         w-full
                         border
@@ -164,8 +196,126 @@ const TimetableForm = ({
                         px-4
                         py-3
                     "
+                >
 
-                />
+                    <option value="">
+                        Select Bell Schedule
+                    </option>
+
+                    {bellSchedules.map(
+                        item => (
+
+                            <option
+                                key={item.id}
+                                value={item.id}
+                            >
+
+                                {
+                                    item.name
+                                    ||
+                                    item.title
+                                }
+
+                            </option>
+
+                        )
+                    )}
+
+                </select>
+
+            </div>
+
+            <div>
+
+                <label>
+                    Class
+                </label>
+
+                <select
+                    name="school_class"
+                    value={
+                        formData.school_class
+                        || ""
+                    }
+                    onChange={handleChange}
+                    className="
+                        w-full
+                        border
+                        rounded-xl
+                        px-4
+                        py-3
+                    "
+                >
+
+                    <option value="">
+                        Select Class
+                    </option>
+
+                    {classes.map(
+                        item => (
+
+                            <option
+                                key={item.id}
+                                value={item.id}
+                            >
+
+                                {
+                                    item.name
+                                }
+
+                            </option>
+
+                        )
+                    )}
+
+                </select>
+
+            </div>
+
+            <div>
+
+                <label>
+                    Section
+                </label>
+
+                <select
+                    name="section"
+                    value={
+                        formData.section
+                        || ""
+                    }
+                    onChange={handleChange}
+                    className="
+                        w-full
+                        border
+                        rounded-xl
+                        px-4
+                        py-3
+                    "
+                >
+
+                    <option value="">
+                        Select Section
+                    </option>
+
+                    {filteredSections.map(
+                        item => (
+
+                            <option
+                                key={item.id}
+                                value={item.id}
+                            >
+
+                                {
+                                    item.name
+                                }
+
+                            </option>
+
+                        )
+                    )}
+
+                </select>
 
             </div>
 
@@ -176,19 +326,13 @@ const TimetableForm = ({
                 </label>
 
                 <input
-
                     type="date"
-
                     name="effective_from"
-
                     value={
-                        formData.effective_from || ''
+                        formData.effective_from
+                        || ""
                     }
-
-                    onChange={
-                        handleChange
-                    }
-
+                    onChange={handleChange}
                     className="
                         w-full
                         border
@@ -196,7 +340,6 @@ const TimetableForm = ({
                         px-4
                         py-3
                     "
-
                 />
 
             </div>
@@ -208,19 +351,13 @@ const TimetableForm = ({
                 </label>
 
                 <input
-
                     type="date"
-
                     name="effective_to"
-
                     value={
-                        formData.effective_to || ''
+                        formData.effective_to
+                        || ""
                     }
-
-                    onChange={
-                        handleChange
-                    }
-
+                    onChange={handleChange}
                     className="
                         w-full
                         border
@@ -228,60 +365,7 @@ const TimetableForm = ({
                         px-4
                         py-3
                     "
-
                 />
-
-            </div>
-
-            <div>
-
-                <label>
-                    Status
-                </label>
-
-                <select
-
-                    name="status"
-
-                    value={
-                        formData.status || ''
-                    }
-
-                    onChange={
-                        handleChange
-                    }
-
-                    className="
-                        w-full
-                        border
-                        rounded-xl
-                        px-4
-                        py-3
-                    "
-
-                >
-
-                    <option value="">
-                        Select
-                    </option>
-
-                    <option value="DRAFT">
-                        Draft
-                    </option>
-
-                    <option value="GENERATED">
-                        Generated
-                    </option>
-
-                    <option value="APPROVED">
-                        Approved
-                    </option>
-
-                    <option value="PUBLISHED">
-                        Published
-                    </option>
-
-                </select>
 
             </div>
 
@@ -302,19 +386,13 @@ const TimetableForm = ({
                 >
 
                     <input
-
                         type="checkbox"
-
                         name="is_published"
-
                         checked={
-                            formData.is_published || false
+                            formData.is_published
+                            || false
                         }
-
-                        onChange={
-                            handleChange
-                        }
-
+                        onChange={handleChange}
                     />
 
                     Published
@@ -330,23 +408,17 @@ const TimetableForm = ({
             >
 
                 <label>
-                    Description
+                    Remarks
                 </label>
 
                 <textarea
-
-                    name="description"
-
+                    name="remarks"
                     rows="4"
-
                     value={
-                        formData.description || ''
+                        formData.remarks
+                        || ""
                     }
-
-                    onChange={
-                        handleChange
-                    }
-
+                    onChange={handleChange}
                     className="
                         w-full
                         border
@@ -354,7 +426,6 @@ const TimetableForm = ({
                         px-4
                         py-3
                     "
-
                 />
 
             </div>

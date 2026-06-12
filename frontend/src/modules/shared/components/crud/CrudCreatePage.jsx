@@ -8,24 +8,31 @@ import {
 
 import toast from "react-hot-toast";
 
-import api from "../../../../services/api/axios";
+import api
+    from "../../../../services/api/axios";
 
 const CrudCreatePage = ({
     title,
     endpoint,
     FormComponent,
     redirectPath,
-    successMessage = "Record created successfully.",
+    successMessage =
+        "Record created successfully.",
+    formProps = {},
 }) => {
 
     const navigate =
         useNavigate();
 
-    const [formData, setFormData] =
-        useState({});
+    const [
+        formData,
+        setFormData,
+    ] = useState({});
 
-    const [saving, setSaving] =
-        useState(false);
+    const [
+        saving,
+        setSaving,
+    ] = useState(false);
 
     const handleApiErrors = (
         error
@@ -71,7 +78,9 @@ const CrudCreatePage = ({
     };
 
     const handleSubmit =
-        async (e) => {
+        async (
+            e
+        ) => {
 
             e.preventDefault();
 
@@ -102,11 +111,14 @@ const CrudCreatePage = ({
 
                             if (
 
-                                value !== null &&
+                                value !==
+                                    null &&
 
-                                value !== undefined &&
+                                value !==
+                                    undefined &&
 
-                                value !== ""
+                                value !==
+                                    ""
 
                             ) {
 
@@ -161,7 +173,9 @@ const CrudCreatePage = ({
 
             }
 
-            catch (error) {
+            catch (
+                error
+            ) {
 
                 console.error(
                     error
@@ -277,6 +291,10 @@ const CrudCreatePage = ({
 
                         loading={
                             saving
+                        }
+
+                        {
+                            ...formProps
                         }
 
                     />

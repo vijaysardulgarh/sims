@@ -32,18 +32,33 @@ const PeriodDefinitionListPage = () => {
         },
 
         {
-            key: 'period_type',
-            label: 'Type',
-        },
-
-        {
             key: 'display_order',
             label: 'Order',
         },
 
         {
-            key: 'is_active',
-            label: 'Active',
+            key: 'is_instructional',
+            label: 'Instructional',
+        },
+
+        {
+            key: 'is_break',
+            label: 'Break',
+        },
+
+        {
+            key: 'is_lunch',
+            label: 'Lunch',
+        },
+
+        {
+            key: 'is_assembly',
+            label: 'Assembly',
+        },
+
+        {
+            key: 'is_zero_period',
+            label: 'Zero Period',
         },
 
     ];

@@ -60,12 +60,17 @@ import examTimetableRoutes
 import examTimetableEntryRoutes
     from "../exam_timetable_entries/routes/examTimetableEntryRoutes";
 
+import timetableDesignerRoutes
+    from "../timetable_designer/routes/timetableDesignerRoutes";
+
 const timetablesRoutes = (
 
     <Route path="timetables">
 
         {bellScheduleRoutes}
+
         {examTimetableRoutes}
+
         {examTimetableEntryRoutes}
 
         {workingDayRoutes}
@@ -102,9 +107,7 @@ const timetablesRoutes = (
 
         {timetableAuditLogRoutes}
 
-        
-
-        
+        {timetableDesignerRoutes}
 
     </Route>
 

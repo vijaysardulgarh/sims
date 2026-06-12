@@ -8,141 +8,148 @@ urlpatterns = [
     path(
         "bell-schedules/",
         include(
-            "apps.timetable.bell_schedules.urls"
+            "apps.timetables.bell_schedules.urls"
         )
     ),
 
     path(
         "exam-timetables/",
         include(
-            "apps.timetable.exam_timetables.urls"
+            "apps.timetables.exam_timetables.urls"
         )
     ),
 
     path(
         "exam-timetable-entries/",
         include(
-            "apps.timetable.exam_timetable_entries.urls"
+            "apps.timetables.exam_timetable_entries.urls"
         )
     ),
 
     path(
         "period-definitions/",
         include(
-            "apps.timetable.period_definitions.urls"
+            "apps.timetables.period_definitions.urls"
         )
     ),
 
     path(
         "resource-allocations/",
         include(
-            "apps.timetable.resource_allocations.urls"
+            "apps.timetables.resource_allocations.urls"
         )
     ),
 
     path(
         "room-allocations/",
         include(
-            "apps.timetable.room_allocations.urls"
+            "apps.timetables.room_allocations.urls"
         )
     ),
 
     path(
         "subject-constraints/",
         include(
-            "apps.timetable.subject_constraints.urls"
+            "apps.timetables.subject_constraints.urls"
         )
     ),
 
     path(
         "subject-requirements/",
         include(
-            "apps.timetable.subject_requirements.urls"
+            "apps.timetables.subject_requirements.urls"
         )
     ),
 
     path(
         "substitute-assignments/",
         include(
-            "apps.timetable.substitute_assignments.urls"
+            "apps.timetables.substitute_assignments.urls"
         )
     ),
 
     path(
         "teacher-availabilities/",
         include(
-            "apps.timetable.teacher_availabilities.urls"
+            "apps.timetables.teacher_availabilities.urls"
         )
     ),
 
     path(
         "teacher-preferences/",
         include(
-            "apps.timetable.teacher_preferences.urls"
+            "apps.timetables.teacher_preferences.urls"
         )
     ),
 
     path(
         "teacher-workloads/",
         include(
-            "apps.timetable.teacher_workloads.urls"
+            "apps.timetables.teacher_workloads.urls"
         )
     ),
 
     path(
         "timetables/",
         include(
-            "apps.timetable.timetables.urls"
+            "apps.timetables.timetables.urls"
         )
     ),
 
     path(
         "timetable-approvals/",
         include(
-            "apps.timetable.timetable_approvals.urls"
+            "apps.timetables.timetable_approvals.urls"
         )
     ),
 
     path(
         "timetable-audit-logs/",
         include(
-            "apps.timetable.timetable_audit_logs.urls"
+            "apps.timetables.timetable_audit_logs.urls"
         )
     ),
 
     path(
         "timetable-conflicts/",
         include(
-            "apps.timetable.timetable_conflicts.urls"
+            "apps.timetables.timetable_conflicts.urls"
         )
     ),
 
     path(
         "timetable-entries/",
         include(
-            "apps.timetable.timetable_entries.urls"
+            "apps.timetables.timetable_entries.urls"
         )
     ),
 
     path(
         "timetable-publications/",
         include(
-            "apps.timetable.timetable_publications.urls"
+            "apps.timetables.timetable_publications.urls"
         )
     ),
 
     path(
         "timetable-versions/",
         include(
-            "apps.timetable.timetable_versions.urls"
+            "apps.timetables.timetable_versions.urls"
         )
     ),
 
     path(
         "working-days/",
         include(
-            "apps.timetable.working_days.urls"
+            "apps.timetables.working_days.urls"
         )
     ),
+
+    path(
+    "timetable-designer/",
+    include(
+        "apps.timetables.timetable_designer.urls"
+    )
+),
 
 ]

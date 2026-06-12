@@ -115,4 +115,12 @@ urlpatterns = [
         "api/communications/",
         include("apps.communications.urls")
     ),
+    path(
+        "api/timetables/",
+        include("apps.timetables.urls")
+    ),
+        path(
+        "api/examinations/",
+        include("apps.examinations.urls")
+    )
 ]

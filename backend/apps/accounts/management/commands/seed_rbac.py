@@ -334,6 +334,147 @@ RBAC_CONFIG = {
         ]
     },
 
+
+    # ======================================
+    # TIMETABLES
+    # ======================================
+
+    "timetabl": {
+
+        "path": None,
+
+        "children": [
+
+            {
+                "name": "Working Days",
+                "slug": "working-days",
+                "path": "/dashboard/timetables/working-days",
+            },
+
+            {
+                "name": "Bell Schedules",
+                "slug": "bell-schedules",
+                "path": "/dashboard/timetables/bell-schedules",
+            },
+
+            {
+                "name": "Period Definitions",
+                "slug": "period-definitions",
+                "path": "/dashboard/timetables/period-definitions",
+            },
+
+            {
+                "name": "Teacher Availabilities",
+                "slug": "teacher-availabilities",
+                "path": "/dashboard/timetables/teacher-availabilities",
+            },
+
+            {
+                "name": "Teacher Preferences",
+                "slug": "teacher-preferences",
+                "path": "/dashboard/timetables/teacher-preferences",
+            },
+
+            {
+                "name": "Teacher Workloads",
+                "slug": "teacher-workloads",
+                "path": "/dashboard/timetables/teacher-workloads",
+            },
+
+            {
+                "name": "Subject Requirements",
+                "slug": "subject-requirements",
+                "path": "/dashboard/timetables/subject-requirements",
+            },
+
+            {
+                "name": "Subject Constraints",
+                "slug": "subject-constraints",
+                "path": "/dashboard/timetables/subject-constraints",
+            },
+
+            {
+                "name": "Room Allocations",
+                "slug": "room-allocations",
+                "path": "/dashboard/timetables/room-allocations",
+            },
+
+            {
+                "name": "Resource Allocations",
+                "slug": "resource-allocations",
+                "path": "/dashboard/timetables/resource-allocations",
+            },
+
+            {
+                "name": "Timetables",
+                "slug": "timetables",
+                "path": "/dashboard/timetables/timetables",
+            },
+
+            {
+                "name": "Timetable Entries",
+                "slug": "timetable-entries",
+                "path": "/dashboard/timetables/timetable-entries",
+            },
+
+            {
+                "name": "Timetable Designer",
+                "slug": "timetable-designer",
+                "path": "/dashboard/timetables/timetable-designer",
+            },
+
+            {
+                "name": "Substitute Assignments",
+                "slug": "substitute-assignments",
+                "path": "/dashboard/timetables/substitute-assignments",
+            },
+
+            {
+                "name": "Timetable Versions",
+                "slug": "timetable-versions",
+                "path": "/dashboard/timetables/timetable-versions",
+            },
+
+            {
+                "name": "Timetable Conflicts",
+                "slug": "timetable-conflicts",
+                "path": "/dashboard/timetables/timetable-conflicts",
+            },
+
+            {
+                "name": "Timetable Approvals",
+                "slug": "timetable-approvals",
+                "path": "/dashboard/timetables/timetable-approvals",
+            },
+
+            {
+                "name": "Timetable Publications",
+                "slug": "timetable-publications",
+                "path": "/dashboard/timetables/timetable-publications",
+            },
+
+            {
+                "name": "Timetable Audit Logs",
+                "slug": "timetable-audit-logs",
+                "path": "/dashboard/timetables/timetable-audit-logs",
+            },
+
+            {
+                "name": "Exam Timetables",
+                "slug": "exam-timetables",
+                "path": "/dashboard/timetables/exam-timetables",
+            },
+
+            {
+                "name": "Exam Timetable Entries",
+                "slug": "exam-timetable-entries",
+                "path": "/dashboard/timetables/exam-timetable-entries",
+            },
+
+        ]
+
+    },
+
     # ======================================
     # EXAMS
     # ======================================

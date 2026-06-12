@@ -50,7 +50,9 @@ class SectionViewSet(
         "is_active",
     ]
 
-    def get_queryset(self):
+    def get_queryset(
+        self
+    ):
 
         queryset = (
 
@@ -63,8 +65,27 @@ class SectionViewSet(
                 "medium",
                 "classroom"
             )
+
         )
 
-        return self.filter_queryset_by_school(
-            queryset
+        queryset = (
+            self.filter_queryset_by_school(
+                queryset
+            )
         )
+
+        class_obj = (
+            self.request.query_params.get(
+                "class_obj"
+            )
+        )
+
+        if class_obj:
+
+            queryset = (
+                queryset.filter(
+                    class_obj_id=class_obj
+                )
+            )
+
+        return queryset

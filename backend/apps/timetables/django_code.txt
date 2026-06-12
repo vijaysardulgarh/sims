@@ -1,0 +1,6476 @@
+
+
+# ============================================================
+# FILE: .\django_code.txt
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\django_structure.txt
+# ============================================================
+
+├── .
+│   ├── django_structure.txt
+│   ├── export_project.py
+│   ├── urls.py
+│   ├── bell_schedules
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── exam_timetables
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── exam_timetable_entries
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── period_definitions
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── resource_allocations
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── room_allocations
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── subject_constraints
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── subject_requirements
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── substitute_assignments
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── teacher_availabilities
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── teacher_preferences
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── teacher_workloads
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── timetables
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── timetable_approvals
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── timetable_audit_logs
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── timetable_conflicts
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── timetable_designer
+│   │   ├── __init__.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── timetable_entries
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── timetable_publications
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── timetable_versions
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   ├── working_days
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   ├── views.py
+
+
+
+# ============================================================
+# FILE: .\export_project.py
+# ============================================================
+
+import os
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+PROJECT_ROOT = r"."
+
+STRUCTURE_FILE = "django_structure.txt"
+CODE_FILE = "django_code.txt"
+
+INCLUDE_EXTENSIONS = {
+    ".py",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".env",
+    ".txt",
+}
+
+EXCLUDE_DIRS = {
+    "__pycache__",
+    ".git",
+    ".idea",
+    ".vscode",
+    "venv",
+    "env",
+    "staticfiles",
+    "media",
+    "node_modules",
+    "migrations",
+}
+
+# ============================================================
+# EXPORT STRUCTURE
+# ============================================================
+
+with open(STRUCTURE_FILE, "w", encoding="utf-8") as f:
+
+    for root, dirs, files in os.walk(PROJECT_ROOT):
+
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+
+        level = root.replace(PROJECT_ROOT, "").count(os.sep)
+
+        indent = "│   " * level
+
+        f.write(f"{indent}├── {os.path.basename(root)}\n")
+
+        for file in sorted(files):
+            f.write(f"{indent}│   ├── {file}\n")
+
+# ============================================================
+# EXPORT CODE
+# ============================================================
+
+with open(CODE_FILE, "w", encoding="utf-8") as output:
+
+    for root, dirs, files in os.walk(PROJECT_ROOT):
+
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+
+        for file in sorted(files):
+
+            ext = os.path.splitext(file)[1]
+
+            if ext not in INCLUDE_EXTENSIONS:
+                continue
+
+            filepath = os.path.join(root, file)
+
+            try:
+
+                with open(filepath, "r", encoding="utf-8") as source:
+
+                    output.write("\n\n")
+                    output.write("# ============================================================\n")
+                    output.write(f"# FILE: {filepath}\n")
+                    output.write("# ============================================================\n\n")
+
+                    output.write(source.read())
+                    output.write("\n")
+
+            except Exception as e:
+
+                output.write("\n\n")
+                output.write("# ============================================================\n")
+                output.write(f"# ERROR: {filepath}\n")
+                output.write("# ============================================================\n")
+                output.write(str(e))
+                output.write("\n")
+
+print("Done!")
+print("Generated:")
+print("-", STRUCTURE_FILE)
+print("-", CODE_FILE)
+
+
+# ============================================================
+# FILE: .\urls.py
+# ============================================================
+
+from django.urls import (
+    include,
+    path,
+)
+
+urlpatterns = [
+
+    path(
+        "bell-schedules/",
+        include(
+            "apps.timetables.bell_schedules.urls"
+        )
+    ),
+
+    path(
+        "exam-timetables/",
+        include(
+            "apps.timetables.exam_timetables.urls"
+        )
+    ),
+
+    path(
+        "exam-timetable-entries/",
+        include(
+            "apps.timetables.exam_timetable_entries.urls"
+        )
+    ),
+
+    path(
+        "period-definitions/",
+        include(
+            "apps.timetables.period_definitions.urls"
+        )
+    ),
+
+    path(
+        "resource-allocations/",
+        include(
+            "apps.timetables.resource_allocations.urls"
+        )
+    ),
+
+    path(
+        "room-allocations/",
+        include(
+            "apps.timetables.room_allocations.urls"
+        )
+    ),
+
+    path(
+        "subject-constraints/",
+        include(
+            "apps.timetables.subject_constraints.urls"
+        )
+    ),
+
+    path(
+        "subject-requirements/",
+        include(
+            "apps.timetables.subject_requirements.urls"
+        )
+    ),
+
+    path(
+        "substitute-assignments/",
+        include(
+            "apps.timetables.substitute_assignments.urls"
+        )
+    ),
+
+    path(
+        "teacher-availabilities/",
+        include(
+            "apps.timetables.teacher_availabilities.urls"
+        )
+    ),
+
+    path(
+        "teacher-preferences/",
+        include(
+            "apps.timetables.teacher_preferences.urls"
+        )
+    ),
+
+    path(
+        "teacher-workloads/",
+        include(
+            "apps.timetables.teacher_workloads.urls"
+        )
+    ),
+
+    path(
+        "timetables/",
+        include(
+            "apps.timetables.timetables.urls"
+        )
+    ),
+
+    path(
+        "timetable-approvals/",
+        include(
+            "apps.timetables.timetable_approvals.urls"
+        )
+    ),
+
+    path(
+        "timetable-audit-logs/",
+        include(
+            "apps.timetables.timetable_audit_logs.urls"
+        )
+    ),
+
+    path(
+        "timetable-conflicts/",
+        include(
+            "apps.timetables.timetable_conflicts.urls"
+        )
+    ),
+
+    path(
+        "timetable-entries/",
+        include(
+            "apps.timetables.timetable_entries.urls"
+        )
+    ),
+
+    path(
+        "timetable-publications/",
+        include(
+            "apps.timetables.timetable_publications.urls"
+        )
+    ),
+
+    path(
+        "timetable-versions/",
+        include(
+            "apps.timetables.timetable_versions.urls"
+        )
+    ),
+
+    path(
+        "working-days/",
+        include(
+            "apps.timetables.working_days.urls"
+        )
+    ),
+
+    path(
+    "timetable-designer/",
+    include(
+        "apps.timetables.timetable_designer.urls"
+    )
+),
+
+]
+
+
+# ============================================================
+# FILE: .\bell_schedules\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\bell_schedules\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import BellSchedule
+
+
+@admin.register(
+    BellSchedule
+)
+class BellScheduleAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "name",
+        "code",
+        "school",
+        "academic_session",
+        "is_default",
+        "is_active",
+    )
+
+    search_fields = (
+        "name",
+        "code",
+    )
+
+    list_filter = (
+        "school",
+        "is_default",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\bell_schedules\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+    OrderedBaseModel,
+)
+
+class BellSchedule(
+    SessionBaseModel,
+    OrderedBaseModel,
+):
+
+    name = models.CharField(
+        max_length=100,
+    )
+
+    code = models.CharField(
+        max_length=20,
+    )
+
+    description = models.TextField(
+        blank=True,
+    )
+
+    start_date = models.DateField()
+
+    end_date = models.DateField(
+        null=True,
+        blank=True,
+    )
+
+    is_default = models.BooleanField(
+        default=False,
+    )
+
+    class Meta:
+
+        db_table = "tt_bell_schedules"
+
+        ordering = [
+            "display_order",
+            "name",
+        ]
+
+        unique_together = (
+            (
+                "school",
+                "academic_session",
+                "code",
+            ),
+        )
+
+    def __str__(self):
+
+        return self.name
+
+
+# ============================================================
+# FILE: .\bell_schedules\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import BellSchedule
+
+
+class BellScheduleSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = BellSchedule
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\bell_schedules\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    BellScheduleViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    BellScheduleViewSet,
+    basename="bell-schedules",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\bell_schedules\views.py
+# ============================================================
+
+from rest_framework import filters
+from rest_framework import viewsets
+
+from .models import BellSchedule
+from .serializers import BellScheduleSerializer
+
+
+class BellScheduleViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = BellSchedule.objects.filter(
+        is_deleted=False,
+    )
+
+    serializer_class = BellScheduleSerializer
+
+    search_fields = [
+        "name",
+        "code",
+    ]
+
+    ordering_fields = [
+        "name",
+        "code",
+        "created_at",
+    ]
+
+    ordering = [
+        "display_order",
+        "name",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = self.request.user
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\exam_timetables\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\exam_timetables\admin.py
+# ============================================================
+
+from django.contrib import admin
+from .models import *
+
+admin.site.register(list(globals().values())[0])
+
+
+
+# ============================================================
+# FILE: .\exam_timetables\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+    PublishableBaseModel,
+)
+from apps.examinations.exams.models import Exam
+
+class ExamTimetable(
+    SessionBaseModel,
+    PublishableBaseModel,
+):
+
+    name = models.CharField(
+        max_length=100,
+    )
+
+    code = models.CharField(
+        max_length=20,
+    )
+
+    examination = models.ForeignKey(
+        Exam,
+        on_delete=models.CASCADE,
+        related_name="exam_timetables",
+    )
+
+    description = models.TextField(
+        blank=True,
+    )
+
+    start_date = models.DateField()
+
+    end_date = models.DateField()
+
+    class Meta:
+
+        db_table = "exam_timetables"
+
+        ordering = [
+            "-start_date",
+            "name",
+        ]
+
+        unique_together = (
+            (
+                "school",
+                "academic_session",
+                "code",
+            ),
+        )
+
+    def __str__(self):
+
+        return self.name
+
+
+# ============================================================
+# FILE: .\exam_timetables\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import ExamTimetable
+
+
+class ExamTimetableSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = ExamTimetable
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+            "published_at",
+            "published_by",
+        )
+
+
+# ============================================================
+# FILE: .\exam_timetables\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    ExamTimetableViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    ExamTimetableViewSet,
+    basename="exam-timetables",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\exam_timetables\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    ExamTimetable,
+)
+
+from .serializers import (
+    ExamTimetableSerializer,
+)
+
+
+class ExamTimetableViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = ExamTimetable.objects.filter(
+        is_deleted=False,
+    )
+
+    serializer_class = (
+        ExamTimetableSerializer
+    )
+
+    search_fields = [
+        "name",
+        "code",
+    ]
+
+    ordering_fields = [
+        "name",
+        "start_date",
+        "created_at",
+    ]
+
+    ordering = [
+        "-start_date",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\exam_timetable_entries\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\exam_timetable_entries\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    ExamTimetableEntry,
+)
+
+
+@admin.register(
+    ExamTimetableEntry
+)
+class ExamTimetableEntryAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "subject",
+        "school_class",
+        "section",
+        "exam_date",
+        "start_time",
+        "end_time",
+        "maximum_marks",
+        "invigilator",
+        "is_active",
+    )
+
+    search_fields = (
+        "subject__name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "exam_date",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\exam_timetable_entries\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+
+from apps.staff.profiles.models import (
+    Staff,
+)
+from apps.academics.subjects.models import Subject
+from apps.examinations.exams.models import Exam
+from apps.timetables.exam_timetables.models import ExamTimetable
+class ExamTimetableEntry(
+    SessionBaseModel,
+):
+
+    exam_timetable = models.ForeignKey(
+        ExamTimetable,
+        on_delete=models.CASCADE,
+        related_name="entries",
+    )
+
+    examination = models.ForeignKey(
+        Exam,
+        on_delete=models.CASCADE,
+        related_name="timetable_entries",
+    )
+
+    school_class = models.ForeignKey(
+        "academics.Class",
+        on_delete=models.CASCADE,
+        related_name="exam_timetable_entries",
+    )
+
+    section = models.ForeignKey(
+        "academics.Section",
+        on_delete=models.CASCADE,
+        related_name="exam_timetable_entries",
+        null=True,
+        blank=True,
+    )
+
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name="exam_timetable_entries",
+    )
+
+    exam_date = models.DateField()
+
+    start_time = models.TimeField()
+
+    end_time = models.TimeField()
+
+    duration_minutes = models.PositiveIntegerField(
+        default=180,
+    )
+
+    maximum_marks = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        default=100,
+    )
+
+    passing_marks = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        default=33,
+    )
+
+    room = models.ForeignKey(
+        "infrastructure.Room",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="exam_timetable_entries",
+    )
+
+    invigilator = models.ForeignKey(
+        Staff,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="exam_timetable_invigilations",
+    )
+
+    instructions = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = "exam_timetable_entries"
+
+        ordering = [
+            "exam_date",
+            "start_time",
+        ]
+
+        unique_together = (
+            (
+                "exam_timetable",
+                "school_class",
+                "section",
+                "subject",
+            ),
+        )
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.subject} - "
+            f"{self.exam_date}"
+        )
+
+
+# ============================================================
+# FILE: .\exam_timetable_entries\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    ExamTimetableEntry,
+)
+
+
+class ExamTimetableEntrySerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            ExamTimetableEntry
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\exam_timetable_entries\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    ExamTimetableEntryViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    ExamTimetableEntryViewSet,
+    basename="exam-timetable-entries",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\exam_timetable_entries\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    ExamTimetableEntry,
+)
+
+from .serializers import (
+    ExamTimetableEntrySerializer,
+)
+
+
+class ExamTimetableEntryViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        ExamTimetableEntry.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        ExamTimetableEntrySerializer
+    )
+
+    search_fields = [
+        "subject__name",
+    ]
+
+    ordering_fields = [
+        "exam_date",
+        "start_time",
+        "created_at",
+    ]
+
+    ordering = [
+        "exam_date",
+        "start_time",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\period_definitions\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\period_definitions\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    PeriodDefinition,
+)
+
+
+@admin.register(
+    PeriodDefinition
+)
+class PeriodDefinitionAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "name",
+        "code",
+        "bell_schedule",
+        "start_time",
+        "end_time",
+        "display_order",
+        "is_instructional",
+        "is_break",
+        "is_lunch",
+        "is_assembly",
+        "is_active",
+    )
+
+    search_fields = (
+        "name",
+        "code",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "bell_schedule",
+        "is_break",
+        "is_lunch",
+        "is_assembly",
+        "is_active",
+    )
+
+    ordering = (
+        "display_order",
+        "start_time",
+    )
+
+
+# ============================================================
+# FILE: .\period_definitions\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+    OrderedBaseModel,
+)
+from apps.timetables.bell_schedules.models import BellSchedule
+
+class PeriodDefinition(
+    SessionBaseModel,
+    OrderedBaseModel,
+):
+
+    bell_schedule = models.ForeignKey(
+        BellSchedule,
+        on_delete=models.CASCADE,
+        related_name="period_definitions",
+    )
+
+    name = models.CharField(
+        max_length=100,
+    )
+
+    code = models.CharField(
+        max_length=20,
+    )
+
+    start_time = models.TimeField()
+
+    end_time = models.TimeField()
+
+    is_instructional = models.BooleanField(
+        default=True,
+    )
+
+    is_break = models.BooleanField(
+        default=False,
+    )
+
+    is_lunch = models.BooleanField(
+        default=False,
+    )
+
+    is_assembly = models.BooleanField(
+        default=False,
+    )
+
+    is_zero_period = models.BooleanField(
+        default=False,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = "tt_period_definitions"
+
+        ordering = [
+            "display_order",
+            "start_time",
+        ]
+
+        unique_together = (
+            (
+                "school",
+                "academic_session",
+                "bell_schedule",
+                "code",
+            ),
+        )
+
+    def __str__(self):
+
+        return (
+            f"{self.name} "
+            f"({self.start_time}-{self.end_time})"
+        )
+
+
+# ============================================================
+# FILE: .\period_definitions\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    PeriodDefinition,
+)
+
+
+class PeriodDefinitionSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            PeriodDefinition
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\period_definitions\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    PeriodDefinitionViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    PeriodDefinitionViewSet,
+    basename="period-definitions",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\period_definitions\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    PeriodDefinition,
+)
+
+from .serializers import (
+    PeriodDefinitionSerializer,
+)
+
+
+class PeriodDefinitionViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        PeriodDefinition.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        PeriodDefinitionSerializer
+    )
+
+    search_fields = [
+        "name",
+        "code",
+    ]
+
+    ordering_fields = [
+        "display_order",
+        "start_time",
+        "created_at",
+    ]
+
+    ordering = [
+        "display_order",
+        "start_time",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\resource_allocations\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\resource_allocations\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    ResourceAllocation,
+)
+
+
+@admin.register(
+    ResourceAllocation
+)
+class ResourceAllocationAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "resource",
+        "timetable_entry",
+        "allocated_from",
+        "allocated_to",
+        "is_active",
+    )
+
+    search_fields = (
+        "resource__name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\resource_allocations\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.timetables.timetable_entries.models import TimetableEntry
+from apps.infrastructure.rooms.models import Room
+
+class ResourceAllocation(
+    SessionBaseModel,
+):
+
+    timetable_entry = models.ForeignKey(
+        TimetableEntry,
+        on_delete=models.CASCADE,
+        related_name="resource_allocations",
+    )
+
+    resource = models.ForeignKey(
+        Room,
+        on_delete=models.CASCADE,
+        related_name="resource_allocations",
+    )
+
+    allocated_from = models.DateField(
+        null=True,
+        blank=True,
+    )
+
+    allocated_to = models.DateField(
+        null=True,
+        blank=True,
+    )
+
+    notes = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = "tt_resource_allocations"
+
+        ordering = [
+            "-created_at",
+        ]
+
+        unique_together = (
+            (
+                "timetable_entry",
+                "resource",
+            ),
+        )
+
+    def __str__(self):
+
+        return (
+            f"{self.resource}"
+        )
+
+
+# ============================================================
+# FILE: .\resource_allocations\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    ResourceAllocation,
+)
+
+
+class ResourceAllocationSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            ResourceAllocation
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\resource_allocations\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    ResourceAllocationViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    ResourceAllocationViewSet,
+    basename="resource-allocations",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\resource_allocations\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    ResourceAllocation,
+)
+
+from .serializers import (
+    ResourceAllocationSerializer,
+)
+
+
+class ResourceAllocationViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        ResourceAllocation.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        ResourceAllocationSerializer
+    )
+
+    search_fields = [
+        "resource__name",
+    ]
+
+    ordering_fields = [
+        "created_at",
+    ]
+
+    ordering = [
+        "-created_at",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\room_allocations\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\room_allocations\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    RoomAllocation,
+)
+
+
+@admin.register(
+    RoomAllocation
+)
+class RoomAllocationAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "room",
+        "timetable_entry",
+        "is_active",
+    )
+
+    search_fields = (
+        "room__name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\room_allocations\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+
+from apps.timetables.timetable_entries.models import TimetableEntry
+class RoomAllocation(
+    SessionBaseModel,
+):
+
+    timetable_entry = models.OneToOneField(
+        TimetableEntry,
+        on_delete=models.CASCADE,
+        related_name="room_allocation",
+    )
+
+    room = models.ForeignKey(
+        "infrastructure.Room",
+        on_delete=models.CASCADE,
+        related_name="room_allocations",
+    )
+
+    notes = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = "tt_room_allocations"
+
+        ordering = [
+            "-created_at",
+        ]
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.room}"
+        )
+
+
+# ============================================================
+# FILE: .\room_allocations\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    RoomAllocation,
+)
+
+
+class RoomAllocationSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = RoomAllocation
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\room_allocations\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    RoomAllocationViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    RoomAllocationViewSet,
+    basename="room-allocations",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\room_allocations\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    RoomAllocation,
+)
+
+from .serializers import (
+    RoomAllocationSerializer,
+)
+
+
+class RoomAllocationViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        RoomAllocation.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        RoomAllocationSerializer
+    )
+
+    search_fields = [
+        "room__name",
+    ]
+
+    ordering_fields = [
+        "created_at",
+    ]
+
+    ordering = [
+        "-created_at",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\subject_constraints\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\subject_constraints\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    SubjectConstraint,
+)
+
+
+@admin.register(
+    SubjectConstraint
+)
+class SubjectConstraintAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "subject",
+        "periods_per_week",
+        "max_periods_per_day",
+        "allow_consecutive_periods",
+        "requires_room",
+        "requires_resource",
+        "is_active",
+    )
+
+    search_fields = (
+        "subject__name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "allow_consecutive_periods",
+        "requires_room",
+        "requires_resource",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\subject_constraints\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.academics.subjects.models import Subject
+
+class SubjectConstraint(
+    SessionBaseModel,
+):
+
+    subject = models.OneToOneField(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name="subject_constraint",
+    )
+
+    periods_per_week = models.PositiveIntegerField(
+        default=1,
+    )
+
+    max_periods_per_day = models.PositiveIntegerField(
+        default=1,
+    )
+
+    min_periods_per_day = models.PositiveIntegerField(
+        default=0,
+    )
+
+    allow_consecutive_periods = models.BooleanField(
+        default=False,
+    )
+
+    required_consecutive_periods = models.PositiveIntegerField(
+        default=1,
+    )
+
+    avoid_first_period = models.BooleanField(
+        default=False,
+    )
+
+    avoid_last_period = models.BooleanField(
+        default=False,
+    )
+
+    requires_room = models.BooleanField(
+        default=False,
+    )
+
+    room_type = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+
+    requires_resource = models.BooleanField(
+        default=False,
+    )
+
+    resource_type = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_subject_constraints"
+        )
+
+        ordering = [
+            "subject__name",
+        ]
+
+    def __str__(
+        self,
+    ):
+
+        return str(
+            self.subject
+        )
+
+
+# ============================================================
+# FILE: .\subject_constraints\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    SubjectConstraint,
+)
+
+
+class SubjectConstraintSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            SubjectConstraint
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\subject_constraints\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    SubjectConstraintViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    SubjectConstraintViewSet,
+    basename="subject-constraints",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\subject_constraints\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    SubjectConstraint,
+)
+
+from .serializers import (
+    SubjectConstraintSerializer,
+)
+
+
+class SubjectConstraintViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        SubjectConstraint.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        SubjectConstraintSerializer
+    )
+
+    search_fields = [
+        "subject__name",
+    ]
+
+    ordering_fields = [
+        "created_at",
+    ]
+
+    ordering = [
+        "subject__name",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\subject_requirements\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\subject_requirements\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    SubjectRequirement,
+)
+
+
+@admin.register(
+    SubjectRequirement
+)
+class SubjectRequirementAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "school_class",
+        "section",
+        "subject",
+        "periods_per_week",
+        "periods_per_day",
+        "is_mandatory",
+        "is_active",
+    )
+
+    search_fields = (
+        "subject__name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "school_class",
+        "is_mandatory",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\subject_requirements\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.academics.subjects.models import Subject
+
+class SubjectRequirement(
+    SessionBaseModel,
+):
+
+    school_class = models.ForeignKey(
+        "academics.Class",
+        on_delete=models.CASCADE,
+        related_name="subject_requirements",
+    )
+
+    section = models.ForeignKey(
+        "academics.Section",
+        on_delete=models.CASCADE,
+        related_name="subject_requirements",
+        null=True,
+        blank=True,
+    )
+
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name="subject_requirements",
+    )
+
+    periods_per_week = models.PositiveIntegerField(
+        default=1,
+    )
+
+    periods_per_day = models.PositiveIntegerField(
+        default=1,
+    )
+
+    practical_periods_per_week = models.PositiveIntegerField(
+        default=0,
+    )
+
+    is_mandatory = models.BooleanField(
+        default=True,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_subject_requirements"
+        )
+
+        ordering = [
+            "school_class",
+            "subject",
+        ]
+
+        unique_together = (
+            (
+                "school",
+                "academic_session",
+                "school_class",
+                "section",
+                "subject",
+            ),
+        )
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.school_class} - "
+            f"{self.subject}"
+        )
+
+
+# ============================================================
+# FILE: .\subject_requirements\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    SubjectRequirement,
+)
+
+
+class SubjectRequirementSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            SubjectRequirement
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\subject_requirements\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    SubjectRequirementViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    SubjectRequirementViewSet,
+    basename="subject-requirements",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\subject_requirements\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    SubjectRequirement,
+)
+
+from .serializers import (
+    SubjectRequirementSerializer,
+)
+
+
+class SubjectRequirementViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        SubjectRequirement.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        SubjectRequirementSerializer
+    )
+
+    search_fields = [
+        "subject__name",
+    ]
+
+    ordering_fields = [
+        "created_at",
+        "periods_per_week",
+    ]
+
+    ordering = [
+        "school_class",
+        "subject",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\substitute_assignments\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\substitute_assignments\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    SubstituteAssignment,
+)
+
+
+@admin.register(
+    SubstituteAssignment
+)
+class SubstituteAssignmentAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "substitution_date",
+        "original_teacher",
+        "substitute_teacher",
+        "timetable_entry",
+        "is_active",
+    )
+
+    search_fields = (
+        "original_teacher__first_name",
+        "substitute_teacher__first_name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "substitution_date",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\substitute_assignments\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+
+from apps.staff.profiles.models import (
+    Staff,
+)
+from apps.timetables.timetable_entries.models import TimetableEntry
+class SubstituteAssignment(
+    SessionBaseModel,
+):
+
+    timetable_entry = models.ForeignKey(
+        TimetableEntry,
+        on_delete=models.CASCADE,
+        related_name="substitute_assignments",
+    )
+
+    original_teacher = models.ForeignKey(
+        Staff,
+        on_delete=models.CASCADE,
+        related_name="original_substitutions",
+    )
+
+    substitute_teacher = models.ForeignKey(
+        Staff,
+        on_delete=models.CASCADE,
+        related_name="assigned_substitutions",
+    )
+
+    substitution_date = models.DateField()
+
+    reason = models.TextField(
+        blank=True,
+    )
+
+    notes = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_substitute_assignments"
+        )
+
+        ordering = [
+            "-substitution_date",
+        ]
+
+        unique_together = (
+            (
+                "timetable_entry",
+                "substitution_date",
+            ),
+        )
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.original_teacher} → "
+            f"{self.substitute_teacher}"
+        )
+
+
+# ============================================================
+# FILE: .\substitute_assignments\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    SubstituteAssignment,
+)
+
+
+class SubstituteAssignmentSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            SubstituteAssignment
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\substitute_assignments\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    SubstituteAssignmentViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    SubstituteAssignmentViewSet,
+    basename="substitute-assignments",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\substitute_assignments\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    SubstituteAssignment,
+)
+
+from .serializers import (
+    SubstituteAssignmentSerializer,
+)
+
+
+class SubstituteAssignmentViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        SubstituteAssignment.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        SubstituteAssignmentSerializer
+    )
+
+    search_fields = [
+        "original_teacher__first_name",
+        "substitute_teacher__first_name",
+    ]
+
+    ordering_fields = [
+        "substitution_date",
+        "created_at",
+    ]
+
+    ordering = [
+        "-substitution_date",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\teacher_availabilities\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\teacher_availabilities\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    TeacherAvailability,
+)
+
+
+@admin.register(
+    TeacherAvailability
+)
+class TeacherAvailabilityAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "teacher",
+        "day",
+        "period",
+        "is_available",
+        "is_active",
+    )
+
+    search_fields = (
+        "teacher__first_name",
+        "teacher__last_name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "day",
+        "is_available",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\teacher_availabilities\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.staff.profiles.models import Staff
+from apps.timetables.period_definitions.models import PeriodDefinition
+
+class TeacherAvailability(
+    SessionBaseModel,
+):
+
+    DAY_CHOICES = (
+        ("MON", "Monday"),
+        ("TUE", "Tuesday"),
+        ("WED", "Wednesday"),
+        ("THU", "Thursday"),
+        ("FRI", "Friday"),
+        ("SAT", "Saturday"),
+        ("SUN", "Sunday"),
+    )
+
+    teacher = models.ForeignKey(
+        Staff,
+        on_delete=models.CASCADE,
+        related_name="teacher_availabilities",
+    )
+
+    day = models.CharField(
+        max_length=3,
+        choices=DAY_CHOICES,
+    )
+
+    period = models.ForeignKey(
+        PeriodDefinition,
+        on_delete=models.CASCADE,
+        related_name="teacher_availabilities",
+    )
+
+    is_available = models.BooleanField(
+        default=True,
+    )
+
+    reason = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_teacher_availabilities"
+        )
+
+        ordering = [
+            "teacher",
+            "day",
+            "period",
+        ]
+
+        unique_together = (
+            (
+                "school",
+                "academic_session",
+                "teacher",
+                "day",
+                "period",
+            ),
+        )
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.teacher} - "
+            f"{self.day} - "
+            f"{self.period}"
+        )
+
+
+# ============================================================
+# FILE: .\teacher_availabilities\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    TeacherAvailability,
+)
+
+
+class TeacherAvailabilitySerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            TeacherAvailability
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\teacher_availabilities\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TeacherAvailabilityViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TeacherAvailabilityViewSet,
+    basename="teacher-availabilities",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\teacher_availabilities\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    TeacherAvailability,
+)
+
+from .serializers import (
+    TeacherAvailabilitySerializer,
+)
+
+
+class TeacherAvailabilityViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        TeacherAvailability.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TeacherAvailabilitySerializer
+    )
+
+    search_fields = [
+        "teacher__first_name",
+        "teacher__last_name",
+    ]
+
+    ordering_fields = [
+        "day",
+        "created_at",
+    ]
+
+    ordering = [
+        "teacher",
+        "day",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\teacher_preferences\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\teacher_preferences\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    TeacherPreference,
+)
+
+
+@admin.register(
+    TeacherPreference
+)
+class TeacherPreferenceAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "teacher",
+        "max_periods_per_day",
+        "max_periods_per_week",
+        "prefer_consecutive_periods",
+        "avoid_gaps_between_classes",
+        "is_active",
+    )
+
+    search_fields = (
+        "teacher__first_name",
+        "teacher__last_name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "prefer_first_period",
+        "avoid_first_period",
+        "prefer_last_period",
+        "avoid_last_period",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\teacher_preferences\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.staff.profiles.models import (
+    Staff,
+)
+
+class TeacherPreference(
+    SessionBaseModel,
+):
+
+    teacher = models.OneToOneField(
+        Staff,
+        on_delete=models.CASCADE,
+        related_name="teacher_preference",
+    )
+
+    prefer_first_period = models.BooleanField(
+        default=False,
+    )
+
+    avoid_first_period = models.BooleanField(
+        default=False,
+    )
+
+    prefer_last_period = models.BooleanField(
+        default=False,
+    )
+
+    avoid_last_period = models.BooleanField(
+        default=False,
+    )
+
+    prefer_consecutive_periods = models.BooleanField(
+        default=False,
+    )
+
+    avoid_gaps_between_classes = models.BooleanField(
+        default=False,
+    )
+
+    max_periods_per_day = models.PositiveIntegerField(
+        default=6,
+    )
+
+    max_periods_per_week = models.PositiveIntegerField(
+        default=36,
+    )
+
+    preferred_free_day = models.CharField(
+        max_length=3,
+        choices=(
+            ("MON", "Monday"),
+            ("TUE", "Tuesday"),
+            ("WED", "Wednesday"),
+            ("THU", "Thursday"),
+            ("FRI", "Friday"),
+            ("SAT", "Saturday"),
+            ("SUN", "Sunday"),
+        ),
+        blank=True,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_teacher_preferences"
+        )
+
+        ordering = [
+            "teacher",
+        ]
+
+    def __str__(
+        self,
+    ):
+
+        return str(
+            self.teacher
+        )
+
+
+# ============================================================
+# FILE: .\teacher_preferences\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    TeacherPreference,
+)
+
+
+class TeacherPreferenceSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            TeacherPreference
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\teacher_preferences\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TeacherPreferenceViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TeacherPreferenceViewSet,
+    basename="teacher-preferences",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\teacher_preferences\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    TeacherPreference,
+)
+
+from .serializers import (
+    TeacherPreferenceSerializer,
+)
+
+
+class TeacherPreferenceViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        TeacherPreference.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TeacherPreferenceSerializer
+    )
+
+    search_fields = [
+        "teacher__first_name",
+        "teacher__last_name",
+    ]
+
+    ordering_fields = [
+        "created_at",
+    ]
+
+    ordering = [
+        "teacher",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\teacher_workloads\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\teacher_workloads\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    TeacherWorkload,
+)
+
+
+@admin.register(
+    TeacherWorkload
+)
+class TeacherWorkloadAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "teacher",
+        "max_periods_per_day",
+        "max_periods_per_week",
+        "max_consecutive_periods",
+        "allow_overtime",
+        "is_active",
+    )
+
+    search_fields = (
+        "teacher__first_name",
+        "teacher__last_name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "allow_overtime",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\teacher_workloads\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.staff.profiles.models import (
+    Staff,
+)
+
+class TeacherWorkload(
+    SessionBaseModel,
+):
+
+    teacher = models.OneToOneField(
+        Staff,
+        on_delete=models.CASCADE,
+        related_name="teacher_workload",
+    )
+
+    max_periods_per_day = models.PositiveIntegerField(
+        default=6,
+    )
+
+    min_periods_per_day = models.PositiveIntegerField(
+        default=0,
+    )
+
+    max_periods_per_week = models.PositiveIntegerField(
+        default=36,
+    )
+
+    min_periods_per_week = models.PositiveIntegerField(
+        default=0,
+    )
+
+    max_consecutive_periods = models.PositiveIntegerField(
+        default=3,
+    )
+
+    allow_overtime = models.BooleanField(
+        default=False,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_teacher_workloads"
+        )
+
+        ordering = [
+            "teacher",
+        ]
+
+    def __str__(
+        self,
+    ):
+
+        return str(
+            self.teacher
+        )
+
+
+# ============================================================
+# FILE: .\teacher_workloads\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    TeacherWorkload,
+)
+
+
+class TeacherWorkloadSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            TeacherWorkload
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\teacher_workloads\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TeacherWorkloadViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TeacherWorkloadViewSet,
+    basename="teacher-workloads",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\teacher_workloads\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    TeacherWorkload,
+)
+
+from .serializers import (
+    TeacherWorkloadSerializer,
+)
+
+
+class TeacherWorkloadViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        TeacherWorkload.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TeacherWorkloadSerializer
+    )
+
+    search_fields = [
+        "teacher__first_name",
+        "teacher__last_name",
+    ]
+
+    ordering_fields = [
+        "created_at",
+    ]
+
+    ordering = [
+        "teacher",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\timetables\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\timetables\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    Timetable,
+)
+
+
+@admin.register(
+    Timetable
+)
+class TimetableAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "name",
+        "code",
+        "school_class",
+        "section",
+        "bell_schedule",
+        "effective_from",
+        "effective_to",
+        "is_published",
+        "is_active",
+    )
+
+    search_fields = (
+        "name",
+        "code",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "is_published",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\timetables\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+    PublishableBaseModel,
+)
+from apps.timetables.bell_schedules.models import BellSchedule
+
+class Timetable(
+    SessionBaseModel,
+    PublishableBaseModel,
+):
+
+    name = models.CharField(
+        max_length=100,
+    )
+
+    code = models.CharField(
+        max_length=20,
+    )
+
+    school_class = models.ForeignKey(
+        "academics.Class",
+        on_delete=models.CASCADE,
+        related_name="timetables",
+    )
+
+    section = models.ForeignKey(
+        "academics.Section",
+        on_delete=models.CASCADE,
+        related_name="timetables",
+        null=True,
+        blank=True,
+    )
+
+    bell_schedule = models.ForeignKey(
+        BellSchedule,
+        on_delete=models.PROTECT,
+        related_name="timetables",
+    )
+
+    effective_from = models.DateField()
+
+    effective_to = models.DateField(
+        null=True,
+        blank=True,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_timetables"
+        )
+
+        ordering = [
+            "school_class",
+            "section",
+        ]
+
+        unique_together = (
+            (
+                "school",
+                "academic_session",
+                "school_class",
+                "section",
+                "code",
+            ),
+        )
+
+    def __str__(
+        self,
+    ):
+
+        if self.section:
+
+            return (
+                f"{self.school_class} - "
+                f"{self.section}"
+            )
+
+        return str(
+            self.school_class
+        )
+
+
+# ============================================================
+# FILE: .\timetables\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    Timetable,
+)
+
+
+class TimetableSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = Timetable
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+            "published_at",
+            "published_by",
+        )
+
+
+# ============================================================
+# FILE: .\timetables\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TimetableViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TimetableViewSet,
+    basename="timetables",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\timetables\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    Timetable,
+)
+
+from .serializers import (
+    TimetableSerializer,
+)
+
+
+class TimetableViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        Timetable.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TimetableSerializer
+    )
+
+    search_fields = [
+        "name",
+        "code",
+    ]
+
+    ordering_fields = [
+        "created_at",
+        "effective_from",
+    ]
+
+    ordering = [
+        "school_class",
+        "section",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\timetable_approvals\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\timetable_approvals\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    TimetableApproval,
+)
+
+
+@admin.register(
+    TimetableApproval
+)
+class TimetableApprovalAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "timetable",
+        "status",
+        "approved_by",
+        "approved_at",
+        "is_active",
+    )
+
+    search_fields = (
+        "status",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "status",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\timetable_approvals\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.staff.profiles.models import (
+    Staff,
+)
+
+class TimetableApproval(
+    SessionBaseModel,
+):
+
+    STATUS_CHOICES = (
+        ("DRAFT", "Draft"),
+        ("SUBMITTED", "Submitted"),
+        ("UNDER_REVIEW", "Under Review"),
+        ("APPROVED", "Approved"),
+        ("REJECTED", "Rejected"),
+    )
+
+    timetable = models.ForeignKey(
+        "timetables.Timetable",
+        on_delete=models.CASCADE,
+        related_name="approvals",
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="DRAFT",
+    )
+
+    approved_by = models.ForeignKey(
+        Staff,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="approved_timetables",
+    )
+
+    approved_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_timetable_approvals"
+        )
+
+        ordering = [
+            "-created_at",
+        ]
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.timetable} - "
+            f"{self.status}"
+        )
+
+
+# ============================================================
+# FILE: .\timetable_approvals\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    TimetableApproval,
+)
+
+
+class TimetableApprovalSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            TimetableApproval
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\timetable_approvals\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TimetableApprovalViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TimetableApprovalViewSet,
+    basename="timetable-approvals",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\timetable_approvals\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    TimetableApproval,
+)
+
+from .serializers import (
+    TimetableApprovalSerializer,
+)
+
+
+class TimetableApprovalViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        TimetableApproval.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TimetableApprovalSerializer
+    )
+
+    search_fields = [
+        "status",
+    ]
+
+    ordering_fields = [
+        "created_at",
+        "approved_at",
+    ]
+
+    ordering = [
+        "-created_at",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\timetable_audit_logs\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\timetable_audit_logs\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    TimetableAuditLog,
+)
+
+
+@admin.register(
+    TimetableAuditLog
+)
+class TimetableAuditLogAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "timetable",
+        "action",
+        "field_name",
+        "created_by",
+        "created_at",
+    )
+
+    search_fields = (
+        "action",
+        "field_name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "action",
+        "created_at",
+    )
+
+    readonly_fields = (
+        "timetable",
+        "timetable_entry",
+        "action",
+        "field_name",
+        "old_value",
+        "new_value",
+        "remarks",
+        "created_by",
+        "created_at",
+    )
+
+    def has_add_permission(
+        self,
+        request,
+    ):
+        return False
+
+    def has_delete_permission(
+        self,
+        request,
+        obj=None,
+    ):
+        return False
+
+
+# ============================================================
+# FILE: .\timetable_audit_logs\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.timetables.timetable_entries.models import TimetableEntry
+
+class TimetableAuditLog(
+    SessionBaseModel,
+):
+
+    ACTION_CHOICES = (
+        ("CREATE", "Create"),
+        ("UPDATE", "Update"),
+        ("DELETE", "Delete"),
+        ("APPROVE", "Approve"),
+        ("PUBLISH", "Publish"),
+        ("UNPUBLISH", "Unpublish"),
+        ("SUBSTITUTE", "Substitute"),
+    )
+
+    timetable = models.ForeignKey(
+        "timetables.Timetable",
+        on_delete=models.CASCADE,
+        related_name="audit_logs",
+    )
+
+    timetable_entry = models.ForeignKey(
+        TimetableEntry,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="audit_logs",
+    )
+
+    action = models.CharField(
+        max_length=20,
+        choices=ACTION_CHOICES,
+    )
+
+    field_name = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+
+    old_value = models.TextField(
+        blank=True,
+    )
+
+    new_value = models.TextField(
+        blank=True,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_timetable_audit_logs"
+        )
+
+        ordering = [
+            "-created_at",
+        ]
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.timetable} - "
+            f"{self.action}"
+        )
+
+
+# ============================================================
+# FILE: .\timetable_audit_logs\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    TimetableAuditLog,
+)
+
+
+class TimetableAuditLogSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            TimetableAuditLog
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\timetable_audit_logs\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TimetableAuditLogViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TimetableAuditLogViewSet,
+    basename="timetable-audit-logs",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\timetable_audit_logs\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    TimetableAuditLog,
+)
+
+from .serializers import (
+    TimetableAuditLogSerializer,
+)
+
+
+class TimetableAuditLogViewSet(
+    viewsets.ReadOnlyModelViewSet
+):
+
+    queryset = (
+        TimetableAuditLog.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TimetableAuditLogSerializer
+    )
+
+    search_fields = [
+        "action",
+        "field_name",
+    ]
+
+    ordering_fields = [
+        "created_at",
+    ]
+
+    ordering = [
+        "-created_at",
+    ]
+
+
+# ============================================================
+# FILE: .\timetable_conflicts\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\timetable_conflicts\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    TimetableConflict,
+)
+
+
+@admin.register(
+    TimetableConflict
+)
+class TimetableConflictAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "conflict_type",
+        "title",
+        "timetable",
+        "is_resolved",
+        "created_at",
+    )
+
+    search_fields = (
+        "title",
+        "description",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "conflict_type",
+        "is_resolved",
+    )
+
+    readonly_fields = (
+        "timetable",
+        "timetable_entry",
+        "conflict_type",
+        "title",
+        "description",
+        "created_at",
+    )
+
+    def has_add_permission(
+        self,
+        request,
+    ):
+        return False
+
+    def has_delete_permission(
+        self,
+        request,
+        obj=None,
+    ):
+        return False
+
+
+# ============================================================
+# FILE: .\timetable_conflicts\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+
+from apps.staff.profiles.models import (
+    Staff,
+)
+from apps.timetables.timetable_entries.models import TimetableEntry
+
+class TimetableConflict(
+    SessionBaseModel,
+):
+
+    CONFLICT_TYPES = (
+        (
+            "TEACHER_CONFLICT",
+            "Teacher Conflict",
+        ),
+        (
+            "ROOM_CONFLICT",
+            "Room Conflict",
+        ),
+        (
+            "RESOURCE_CONFLICT",
+            "Resource Conflict",
+        ),
+        (
+            "WORKLOAD_CONFLICT",
+            "Workload Conflict",
+        ),
+        (
+            "AVAILABILITY_CONFLICT",
+            "Availability Conflict",
+        ),
+        (
+            "SUBJECT_CONSTRAINT",
+            "Subject Constraint",
+        ),
+        (
+            "SUBJECT_REQUIREMENT",
+            "Subject Requirement",
+        ),
+        (
+            "TIMING_CONFLICT",
+            "Timing Conflict",
+        ),
+        (
+            "OTHER",
+            "Other",
+        ),
+    )
+
+    timetable = models.ForeignKey(
+        "timetables.Timetable",
+        on_delete=models.CASCADE,
+        related_name="conflicts",
+    )
+
+    timetable_entry = models.ForeignKey(
+        TimetableEntry,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="conflicts",
+    )
+
+    conflict_type = models.CharField(
+        max_length=50,
+        choices=CONFLICT_TYPES,
+    )
+
+    title = models.CharField(
+        max_length=255,
+    )
+
+    description = models.TextField()
+
+    is_resolved = models.BooleanField(
+        default=False,
+    )
+
+    resolved_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    resolved_by = models.ForeignKey(
+        Staff,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="resolved_timetable_conflicts",
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_timetable_conflicts"
+        )
+
+        ordering = [
+            "-created_at",
+        ]
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.conflict_type} - "
+            f"{self.title}"
+        )
+
+
+# ============================================================
+# FILE: .\timetable_conflicts\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    TimetableConflict,
+)
+
+
+class TimetableConflictSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            TimetableConflict
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\timetable_conflicts\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TimetableConflictViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TimetableConflictViewSet,
+    basename="timetable-conflicts",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\timetable_conflicts\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    TimetableConflict,
+)
+
+from .serializers import (
+    TimetableConflictSerializer,
+)
+
+
+class TimetableConflictViewSet(
+    viewsets.ReadOnlyModelViewSet
+):
+
+    queryset = (
+        TimetableConflict.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TimetableConflictSerializer
+    )
+
+    search_fields = [
+        "title",
+        "description",
+    ]
+
+    ordering_fields = [
+        "created_at",
+        "is_resolved",
+    ]
+
+    ordering = [
+        "-created_at",
+    ]
+
+
+# ============================================================
+# FILE: .\timetable_designer\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\timetable_designer\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from apps.timetables.timetable_entries.models import (
+    TimetableEntry
+)
+
+
+# =============================================================================
+# GENERATE TIMETABLE
+# =============================================================================
+
+class GenerateTimetableSerializer(
+    serializers.Serializer
+):
+
+    timetable = serializers.IntegerField()
+
+
+# =============================================================================
+# MOVE ENTRY
+# =============================================================================
+
+class MoveEntrySerializer(
+    serializers.Serializer
+):
+
+    entry_id = serializers.IntegerField()
+
+    day = serializers.CharField()
+
+    period = serializers.IntegerField()
+
+
+# =============================================================================
+# COPY DAY
+# =============================================================================
+
+class CopyDaySerializer(
+    serializers.Serializer
+):
+
+    timetable = serializers.IntegerField()
+
+    source_day = serializers.CharField()
+
+    target_day = serializers.CharField()
+
+
+# =============================================================================
+# COPY WEEK
+# =============================================================================
+
+class CopyWeekSerializer(
+    serializers.Serializer
+):
+
+    timetable = serializers.IntegerField()
+
+
+# =============================================================================
+# PUBLISH TIMETABLE
+# =============================================================================
+
+class PublishTimetableSerializer(
+    serializers.Serializer
+):
+
+    timetable = serializers.IntegerField()
+
+
+# =============================================================================
+# COMPARE VERSION
+# =============================================================================
+
+class CompareVersionSerializer(
+    serializers.Serializer
+):
+
+    source_version = serializers.IntegerField()
+
+    target_version = serializers.IntegerField()
+
+
+# =============================================================================
+# ASSIGN SUBJECT
+# =============================================================================
+
+class AssignSubjectSerializer(
+    serializers.Serializer
+):
+
+    entry_id = serializers.IntegerField()
+
+    subject_id = serializers.IntegerField()
+
+
+# =============================================================================
+# ASSIGN TEACHER
+# =============================================================================
+
+class AssignTeacherSerializer(
+    serializers.Serializer
+):
+
+    entry_id = serializers.IntegerField()
+
+    teacher_id = serializers.IntegerField()
+
+
+# =============================================================================
+# ASSIGN ROOM
+# =============================================================================
+
+class AssignRoomSerializer(
+    serializers.Serializer
+):
+
+    entry_id = serializers.IntegerField()
+
+    room_id = serializers.IntegerField()
+
+
+# =============================================================================
+# TIMETABLE GRID
+# =============================================================================
+
+class TimetableGridSerializer(
+    serializers.ModelSerializer
+):
+
+    subject_name = serializers.SerializerMethodField()
+
+    teacher_name = serializers.SerializerMethodField()
+
+    room_name = serializers.SerializerMethodField()
+
+    period_number = serializers.SerializerMethodField()
+
+    period_name = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = TimetableEntry
+
+        fields = [
+
+            "id",
+
+            "timetable",
+
+            "day",
+
+            "period",
+
+            "period_number",
+
+            "period_name",
+
+            "subject",
+
+            "subject_name",
+
+            "teacher",
+
+            "teacher_name",
+
+            "room",
+
+            "room_name",
+
+            "remarks",
+
+        ]
+
+    def get_subject_name(
+        self,
+        obj
+    ):
+
+        return str(
+            obj.subject
+        ) if obj.subject else ""
+
+    def get_teacher_name(
+        self,
+        obj
+    ):
+
+        return str(
+            obj.teacher
+        ) if obj.teacher else ""
+
+    def get_room_name(
+        self,
+        obj
+    ):
+
+        return str(
+            obj.room
+        ) if obj.room else ""
+
+    def get_period_number(
+        self,
+        obj
+    ):
+
+        if not obj.period:
+
+            return None
+
+        return getattr(
+            obj.period,
+            "display_order",
+            None
+        )
+
+    def get_period_name(
+        self,
+        obj
+    ):
+
+        if not obj.period:
+
+            return ""
+
+        return str(
+            obj.period
+        )
+
+
+# ============================================================
+# FILE: .\timetable_designer\urls.py
+# ============================================================
+
+from django.urls import path
+
+from .views import (
+
+    GenerateTimetableView,
+    MoveEntryView,
+    CopyDayView,
+    CopyWeekView,
+    PublishTimetableView,
+    ConflictCheckView,
+    TeacherView,
+    RoomView,
+    ClassView,
+    CompareVersionView,
+
+    TimetableGridView,
+    AssignSubjectView,
+    AssignTeacherView,
+    AssignRoomView,
+
+)
+
+urlpatterns = [
+
+    path(
+        "generate/",
+        GenerateTimetableView.as_view()
+    ),
+
+    path(
+        "move-entry/",
+        MoveEntryView.as_view()
+    ),
+
+    path(
+        "copy-day/",
+        CopyDayView.as_view()
+    ),
+
+    path(
+        "copy-week/",
+        CopyWeekView.as_view()
+    ),
+
+    path(
+        "publish/",
+        PublishTimetableView.as_view()
+    ),
+
+    path(
+        "conflicts/",
+        ConflictCheckView.as_view()
+    ),
+
+    path(
+        "teacher-view/<int:teacher_id>/",
+        TeacherView.as_view()
+    ),
+
+    path(
+        "room-view/<int:room_id>/",
+        RoomView.as_view()
+    ),
+
+    path(
+        "class-view/<int:class_id>/",
+        ClassView.as_view()
+    ),
+
+    path(
+        "compare/",
+        CompareVersionView.as_view()
+    ),
+
+    # =====================================================
+    # TIMETABLE DESIGNER
+    # =====================================================
+
+    path(
+        "grid/<int:timetable_id>/",
+        TimetableGridView.as_view()
+    ),
+
+    path(
+        "assign-subject/",
+        AssignSubjectView.as_view()
+    ),
+
+    path(
+        "assign-teacher/",
+        AssignTeacherView.as_view()
+    ),
+
+    path(
+        "assign-room/",
+        AssignRoomView.as_view()
+    ),
+
+]
+
+
+# ============================================================
+# FILE: .\timetable_designer\views.py
+# ============================================================
+
+from rest_framework import status
+
+from rest_framework.views import APIView
+
+from rest_framework.response import Response
+
+from apps.timetables.timetables.models import (
+    Timetable
+)
+
+from apps.timetables.timetable_entries.models import (
+    TimetableEntry
+)
+
+from .serializers import (
+    GenerateTimetableSerializer,
+    MoveEntrySerializer,
+    CopyDaySerializer,
+    CopyWeekSerializer,
+    PublishTimetableSerializer,
+    CompareVersionSerializer
+)
+
+
+class GenerateTimetableView(
+    APIView
+):
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = (
+            GenerateTimetableSerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        timetable_id = (
+            serializer.validated_data[
+                "timetable"
+            ]
+        )
+
+        timetable = (
+            Timetable.objects.get(
+                id=timetable_id
+            )
+        )
+
+        return Response(
+
+            {
+                "success": True,
+                "message":
+                    "Timetable generated successfully."
+            },
+
+            status=
+            status.HTTP_200_OK
+
+        )
+
+
+class MoveEntryView(
+    APIView
+):
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = (
+            MoveEntrySerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        data = (
+            serializer.validated_data
+        )
+
+        entry = (
+            TimetableEntry.objects.get(
+                id=data["entry_id"]
+            )
+        )
+
+        entry.day = (
+            data["day"]
+        )
+
+        entry.period_id = (
+            data["period"]
+        )
+
+        entry.save()
+
+        return Response(
+
+            {
+                "success": True
+            }
+
+        )
+
+
+class CopyDayView(
+    APIView
+):
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = (
+            CopyDaySerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        data = (
+            serializer.validated_data
+        )
+
+        source_entries = (
+
+            TimetableEntry.objects.filter(
+
+                timetable_id=
+                data["timetable"],
+
+                day=
+                data["source_day"]
+
+            )
+
+        )
+
+        for entry in source_entries:
+
+            entry.pk = None
+
+            entry.day = (
+                data["target_day"]
+            )
+
+            entry.save()
+
+        return Response(
+
+            {
+                "success": True
+            }
+
+        )
+
+
+class CopyWeekView(
+    APIView
+):
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = (
+            CopyWeekSerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        return Response(
+
+            {
+                "success": True,
+                "message":
+                    "Week copied successfully."
+            }
+
+        )
+
+
+class PublishTimetableView(
+    APIView
+):
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = (
+            PublishTimetableSerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        timetable = (
+            Timetable.objects.get(
+                id=
+                serializer.validated_data[
+                    "timetable"
+                ]
+            )
+        )
+
+        timetable.is_published = True
+
+        timetable.save()
+
+        return Response(
+
+            {
+                "success": True
+            }
+
+        )
+
+
+class ConflictCheckView(
+    APIView
+):
+
+    def get(
+        self,
+        request
+    ):
+
+        conflicts = []
+
+        return Response(
+            conflicts
+        )
+
+
+class TeacherView(
+    APIView
+):
+
+    def get(
+        self,
+        request,
+        teacher_id
+    ):
+
+        entries = (
+
+            TimetableEntry.objects.filter(
+                teacher_id=
+                teacher_id
+            )
+
+        )
+
+        data = [
+
+            {
+
+                "id":
+                    entry.id,
+
+                "day":
+                    entry.day,
+
+                "period":
+                    entry.period_id,
+
+            }
+
+            for entry in entries
+
+        ]
+
+        return Response(
+            data
+        )
+
+
+class RoomView(
+    APIView
+):
+
+    def get(
+        self,
+        request,
+        room_id
+    ):
+
+        entries = (
+
+            TimetableEntry.objects.filter(
+                room_id=
+                room_id
+            )
+
+        )
+
+        data = [
+
+            {
+
+                "id":
+                    entry.id,
+
+                "day":
+                    entry.day,
+
+                "period":
+                    entry.period_id,
+
+            }
+
+            for entry in entries
+
+        ]
+
+        return Response(
+            data
+        )
+
+
+class ClassView(
+    APIView
+):
+
+    def get(
+        self,
+        request,
+        class_id
+    ):
+
+        entries = (
+
+            TimetableEntry.objects.filter(
+                school_class_id=
+                class_id
+            )
+
+        )
+
+        data = [
+
+            {
+
+                "id":
+                    entry.id,
+
+                "day":
+                    entry.day,
+
+                "period":
+                    entry.period_id,
+
+            }
+
+            for entry in entries
+
+        ]
+
+        return Response(
+            data
+        )
+
+
+class CompareVersionView(
+    APIView
+):
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = (
+            CompareVersionSerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        return Response(
+
+            {
+                "differences": []
+            }
+
+        )
+
+class TimetableGridView(
+    APIView
+):
+
+    def get(
+        self,
+        request,
+        timetable_id
+    ):
+
+        queryset = (
+
+            TimetableEntry.objects
+
+            .filter(
+                timetable_id=timetable_id
+            )
+
+            .select_related(
+                "subject",
+                "teacher",
+                "room",
+                "period"
+            )
+
+        )
+
+        serializer = (
+
+            TimetableGridSerializer(
+                queryset,
+                many=True
+            )
+
+        )
+
+        return Response(
+            serializer.data
+        )
+
+class AssignSubjectView(
+    APIView
+):
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = (
+            AssignSubjectSerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        data = (
+            serializer.validated_data
+        )
+
+        entry = (
+            TimetableEntry.objects.get(
+                id=data["entry_id"]
+            )
+        )
+
+        entry.subject_id = (
+            data["subject_id"]
+        )
+
+        entry.save()
+
+        return Response(
+
+            {
+                "success": True
+            }
+
+        )
+
+class AssignTeacherView(
+    APIView
+):
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = (
+            AssignTeacherSerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        data = (
+            serializer.validated_data
+        )
+
+        entry = (
+            TimetableEntry.objects.get(
+                id=data["entry_id"]
+            )
+        )
+
+        entry.teacher_id = (
+            data["teacher_id"]
+        )
+
+        entry.save()
+
+        return Response(
+
+            {
+                "success": True
+            }
+
+        )
+
+class AssignRoomView(
+    APIView
+):
+
+    def post(
+        self,
+        request
+    ):
+
+        serializer = (
+            AssignRoomSerializer(
+                data=request.data
+            )
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        data = (
+            serializer.validated_data
+        )
+
+        entry = (
+            TimetableEntry.objects.get(
+                id=data["entry_id"]
+            )
+        )
+
+        entry.room_id = (
+            data["room_id"]
+        )
+
+        entry.save()
+
+        return Response(
+
+            {
+                "success": True
+            }
+
+        )                                
+
+
+# ============================================================
+# FILE: .\timetable_entries\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\timetable_entries\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    TimetableEntry,
+)
+
+
+@admin.register(
+    TimetableEntry
+)
+class TimetableEntryAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "timetable",
+        "day",
+        "period",
+        "subject",
+        "teacher",
+        "is_active",
+    )
+
+    search_fields = (
+        "subject__name",
+        "teacher__first_name",
+        "teacher__last_name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "day",
+        "subject",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\timetable_entries\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.staff.profiles.models import (
+    Staff,
+)
+from apps.academics.subjects.models import Subject
+from apps.timetables.period_definitions.models import PeriodDefinition
+
+class TimetableEntry(
+    SessionBaseModel,
+):
+
+    DAY_CHOICES = (
+        ("MON", "Monday"),
+        ("TUE", "Tuesday"),
+        ("WED", "Wednesday"),
+        ("THU", "Thursday"),
+        ("FRI", "Friday"),
+        ("SAT", "Saturday"),
+        ("SUN", "Sunday"),
+    )
+
+    timetable = models.ForeignKey(
+        "timetables.Timetable",
+        on_delete=models.CASCADE,
+        related_name="entries",
+    )
+
+    day = models.CharField(
+        max_length=3,
+        choices=DAY_CHOICES,
+    )
+
+    period = models.ForeignKey(
+        PeriodDefinition,
+        on_delete=models.PROTECT,
+        related_name="timetable_entries",
+    )
+
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.PROTECT,
+        related_name="timetable_entries",
+    )
+
+    teacher = models.ForeignKey(
+        Staff,
+        on_delete=models.PROTECT,
+        related_name="timetable_entries",
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_timetable_entries"
+        )
+
+        ordering = [
+            "day",
+            "period",
+        ]
+
+        unique_together = (
+            (
+                "timetable",
+                "day",
+                "period",
+            ),
+        )
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.day} - "
+            f"{self.period} - "
+            f"{self.subject}"
+        )
+
+
+# ============================================================
+# FILE: .\timetable_entries\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    TimetableEntry,
+)
+
+
+class TimetableEntrySerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            TimetableEntry
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\timetable_entries\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TimetableEntryViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TimetableEntryViewSet,
+    basename="timetable-entries",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\timetable_entries\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    TimetableEntry,
+)
+
+from .serializers import (
+    TimetableEntrySerializer,
+)
+
+
+class TimetableEntryViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        TimetableEntry.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TimetableEntrySerializer
+    )
+
+    search_fields = [
+        "subject__name",
+        "teacher__first_name",
+        "teacher__last_name",
+    ]
+
+    ordering_fields = [
+        "day",
+        "created_at",
+    ]
+
+    ordering = [
+        "day",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\timetable_publications\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\timetable_publications\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    TimetablePublication,
+)
+
+
+@admin.register(
+    TimetablePublication
+)
+class TimetablePublicationAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "timetable",
+        "status",
+        "published_by",
+        "published_at",
+        "is_active",
+    )
+
+    search_fields = (
+        "status",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "status",
+        "is_active",
+    )
+
+
+# ============================================================
+# FILE: .\timetable_publications\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+from apps.staff.profiles.models import Staff
+
+class TimetablePublication(
+    SessionBaseModel,
+):
+
+    STATUS_CHOICES = (
+        ("DRAFT", "Draft"),
+        ("PUBLISHED", "Published"),
+        ("UNPUBLISHED", "Unpublished"),
+    )
+
+    timetable = models.ForeignKey(
+        "timetables.Timetable",
+        on_delete=models.CASCADE,
+        related_name="publications",
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="DRAFT",
+    )
+
+    publication_notes = models.TextField(
+        blank=True,
+    )
+
+    published_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    published_by = models.ForeignKey(
+        Staff,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="published_timetables",
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_timetable_publications"
+        )
+
+        ordering = [
+            "-created_at",
+        ]
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.timetable} - "
+            f"{self.status}"
+        )
+
+
+# ============================================================
+# FILE: .\timetable_publications\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+from .models import *
+
+class DefaultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = list(globals().values())[0]
+        fields = '__all__'
+from rest_framework import serializers
+
+from .models import (
+    TimetablePublication,
+)
+
+
+class TimetablePublicationSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            TimetablePublication
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\timetable_publications\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TimetablePublicationViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TimetablePublicationViewSet,
+    basename="timetable-publications",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\timetable_publications\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    TimetablePublication,
+)
+
+from .serializers import (
+    TimetablePublicationSerializer,
+)
+
+
+class TimetablePublicationViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        TimetablePublication.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TimetablePublicationSerializer
+    )
+
+    search_fields = [
+        "status",
+    ]
+
+    ordering_fields = [
+        "created_at",
+        "published_at",
+    ]
+
+    ordering = [
+        "-created_at",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\timetable_versions\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\timetable_versions\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    TimetableVersion,
+)
+
+
+@admin.register(
+    TimetableVersion
+)
+class TimetableVersionAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "timetable",
+        "version_number",
+        "version_name",
+        "is_current",
+        "created_at",
+    )
+
+    search_fields = (
+        "version_name",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "is_current",
+    )
+
+
+# ============================================================
+# FILE: .\timetable_versions\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+)
+
+
+class TimetableVersion(
+    SessionBaseModel,
+):
+
+    timetable = models.ForeignKey(
+        "timetables.Timetable",
+        on_delete=models.CASCADE,
+        related_name="versions",
+    )
+
+    version_number = models.PositiveIntegerField()
+
+    version_name = models.CharField(
+        max_length=100,
+    )
+
+    description = models.TextField(
+        blank=True,
+    )
+
+    snapshot_data = models.JSONField(
+        default=dict,
+        blank=True,
+    )
+
+    is_current = models.BooleanField(
+        default=False,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_timetable_versions"
+        )
+
+        ordering = [
+            "-version_number",
+        ]
+
+        unique_together = (
+            (
+                "timetable",
+                "version_number",
+            ),
+        )
+
+    def __str__(
+        self,
+    ):
+
+        return (
+            f"{self.timetable} "
+            f"V{self.version_number}"
+        )
+
+
+# ============================================================
+# FILE: .\timetable_versions\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    TimetableVersion,
+)
+
+
+class TimetableVersionSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            TimetableVersion
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\timetable_versions\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    TimetableVersionViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    TimetableVersionViewSet,
+    basename="timetable-versions",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\timetable_versions\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    TimetableVersion,
+)
+
+from .serializers import (
+    TimetableVersionSerializer,
+)
+
+
+class TimetableVersionViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        TimetableVersion.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        TimetableVersionSerializer
+    )
+
+    search_fields = [
+        "version_name",
+    ]
+
+    ordering_fields = [
+        "version_number",
+        "created_at",
+    ]
+
+    ordering = [
+        "-version_number",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()
+
+
+# ============================================================
+# FILE: .\working_days\__init__.py
+# ============================================================
+
+
+
+
+# ============================================================
+# FILE: .\working_days\admin.py
+# ============================================================
+
+from django.contrib import admin
+
+from .models import (
+    WorkingDay,
+)
+
+
+@admin.register(
+    WorkingDay
+)
+class WorkingDayAdmin(
+    admin.ModelAdmin
+):
+
+    list_display = (
+        "day_code",
+        "display_order",
+        "is_working_day",
+        "is_half_day",
+        "is_active",
+    )
+
+    search_fields = (
+        "day_code",
+    )
+
+    list_filter = (
+        "school",
+        "academic_session",
+        "is_working_day",
+        "is_half_day",
+        "is_active",
+    )
+
+    ordering = (
+        "display_order",
+    )
+
+
+# ============================================================
+# FILE: .\working_days\models.py
+# ============================================================
+
+from django.db import models
+
+from apps.core.common.base.models import (
+    SessionBaseModel,
+    OrderedBaseModel,
+)
+
+
+class WorkingDay(
+    SessionBaseModel,
+    OrderedBaseModel,
+):
+
+    DAY_CHOICES = (
+        ("MON", "Monday"),
+        ("TUE", "Tuesday"),
+        ("WED", "Wednesday"),
+        ("THU", "Thursday"),
+        ("FRI", "Friday"),
+        ("SAT", "Saturday"),
+        ("SUN", "Sunday"),
+    )
+
+    day_code = models.CharField(
+        max_length=3,
+        choices=DAY_CHOICES,
+    )
+
+    is_working_day = models.BooleanField(
+        default=True,
+    )
+
+    is_half_day = models.BooleanField(
+        default=False,
+    )
+
+    remarks = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+
+        db_table = (
+            "tt_working_days"
+        )
+
+        ordering = [
+            "display_order",
+        ]
+
+        unique_together = (
+            (
+                "school",
+                "academic_session",
+                "day_code",
+            ),
+        )
+
+    def __str__(
+        self,
+    ):
+
+        return self.get_day_code_display()
+
+
+# ============================================================
+# FILE: .\working_days\serializers.py
+# ============================================================
+
+from rest_framework import serializers
+
+from .models import (
+    WorkingDay,
+)
+
+
+class WorkingDaySerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = (
+            WorkingDay
+        )
+
+        fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "created_by",
+            "updated_by",
+            "deleted_at",
+            "deleted_by",
+        )
+
+
+# ============================================================
+# FILE: .\working_days\urls.py
+# ============================================================
+
+from rest_framework.routers import (
+    DefaultRouter,
+)
+
+from .views import (
+    WorkingDayViewSet,
+)
+
+router = DefaultRouter()
+
+router.register(
+    "",
+    WorkingDayViewSet,
+    basename="working-days",
+)
+
+urlpatterns = router.urls
+
+
+# ============================================================
+# FILE: .\working_days\views.py
+# ============================================================
+
+from rest_framework import viewsets
+
+from .models import (
+    WorkingDay,
+)
+
+from .serializers import (
+    WorkingDaySerializer,
+)
+
+
+class WorkingDayViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = (
+        WorkingDay.objects.filter(
+            is_deleted=False,
+        )
+    )
+
+    serializer_class = (
+        WorkingDaySerializer
+    )
+
+    search_fields = [
+        "day_code",
+    ]
+
+    ordering_fields = [
+        "display_order",
+        "created_at",
+    ]
+
+    ordering = [
+        "display_order",
+    ]
+
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+        )
+
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
+    def perform_destroy(
+        self,
+        instance,
+    ):
+
+        instance.is_deleted = True
+
+        instance.deleted_by = (
+            self.request.user
+        )
+
+        instance.save()

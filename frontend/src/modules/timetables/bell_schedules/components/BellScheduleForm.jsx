@@ -14,15 +14,19 @@ const BellScheduleForm = ({
             checked,
         } = event.target;
 
-        setFormData(
-            {
-                ...formData,
-                [name]:
-                    type === 'checkbox'
-                        ? checked
-                        : value,
-            }
-        );
+        setFormData({
+
+            ...formData,
+
+            [name]:
+
+                type === "checkbox"
+
+                    ? checked
+
+                    : value,
+
+        });
 
     };
 
@@ -57,7 +61,7 @@ const BellScheduleForm = ({
                     name="name"
 
                     value={
-                        formData.name || ''
+                        formData.name || ""
                     }
 
                     onChange={
@@ -71,6 +75,8 @@ const BellScheduleForm = ({
                         px-4
                         py-3
                     "
+
+                    required
 
                 />
 
@@ -96,12 +102,55 @@ const BellScheduleForm = ({
                     name="code"
 
                     value={
-                        formData.code || ''
+                        formData.code || ""
                     }
 
                     onChange={
                         handleChange
                     }
+
+                    className="
+                        w-full
+                        border
+                        rounded-xl
+                        px-4
+                        py-3
+                    "
+
+                    required
+
+                />
+
+            </div>
+
+            <div>
+
+                <label
+                    className="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                    "
+                >
+                    Display Order
+                </label>
+
+                <input
+
+                    type="number"
+
+                    name="display_order"
+
+                    value={
+                        formData.display_order || ""
+                    }
+
+                    onChange={
+                        handleChange
+                    }
+
+                    min="1"
 
                     className="
                         w-full
@@ -135,7 +184,7 @@ const BellScheduleForm = ({
                     name="start_date"
 
                     value={
-                        formData.start_date || ''
+                        formData.start_date || ""
                     }
 
                     onChange={
@@ -149,6 +198,8 @@ const BellScheduleForm = ({
                         px-4
                         py-3
                     "
+
+                    required
 
                 />
 
@@ -174,7 +225,7 @@ const BellScheduleForm = ({
                     name="end_date"
 
                     value={
-                        formData.end_date || ''
+                        formData.end_date || ""
                     }
 
                     onChange={
@@ -214,10 +265,10 @@ const BellScheduleForm = ({
 
                     name="description"
 
-                    rows="4"
+                    rows={4}
 
                     value={
-                        formData.description || ''
+                        formData.description || ""
                     }
 
                     onChange={
