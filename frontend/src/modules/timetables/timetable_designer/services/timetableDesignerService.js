@@ -5,22 +5,22 @@ export const GENERATE_ENDPOINT =
     '/timetables/timetable-designer/generate/';
 
 export const MOVE_ENDPOINT =
-    '/timetables/timetable-designer/move-entry/';
+    '/timetables/timetable-designer/movement/';
 
-export const CONFLICTS_ENDPOINT =
-    '/timetables/timetable-designer/conflicts/';
+export const ASSIGN_SUBJECT_ENDPOINT =
+    '/timetables/timetable-designer/assignments/subject/';
+
+export const ASSIGN_TEACHER_ENDPOINT =
+    '/timetables/timetable-designer/assignments/teacher/';
+
+export const ASSIGN_ROOM_ENDPOINT =
+    '/timetables/timetable-designer/assignments/room/';
 
 export const GRID_ENDPOINT =
     '/timetables/timetable-designer/grid/';
 
-export const ASSIGN_SUBJECT_ENDPOINT =
-    '/timetables/timetable-designer/assign-subject/';
-
-export const ASSIGN_TEACHER_ENDPOINT =
-    '/timetables/timetable-designer/assign-teacher/';
-
-export const ASSIGN_ROOM_ENDPOINT =
-    '/timetables/timetable-designer/assign-room/';
+export const CONFLICTS_ENDPOINT =
+    '/timetables/timetable-designer/conflicts/';
 
 const timetableDesignerService = {
 
