@@ -172,6 +172,8 @@ class TimetableGridSerializer(
 
         ]
 
+        read_only_fields = fields
+
     def get_subject_name(
         self,
         obj
@@ -194,6 +196,13 @@ class TimetableGridSerializer(
         self,
         obj
     ):
+
+        if not hasattr(
+            obj,
+            "room"
+        ):
+
+            return ""
 
         return str(
             obj.room

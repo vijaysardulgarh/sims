@@ -9,6 +9,14 @@ from apps.staff.profiles.models import (
 from apps.academics.subjects.models import Subject
 from apps.timetables.period_definitions.models import PeriodDefinition
 
+from apps.timetables.timetables.models import (
+    Timetable,
+)
+
+from apps.infrastructure.rooms.models import (
+    Room
+)
+
 class TimetableEntry(
     SessionBaseModel,
 ):
@@ -24,7 +32,7 @@ class TimetableEntry(
     )
 
     timetable = models.ForeignKey(
-        "timetables.Timetable",
+        Timetable,
         on_delete=models.CASCADE,
         related_name="entries",
     )
@@ -44,12 +52,24 @@ class TimetableEntry(
         Subject,
         on_delete=models.PROTECT,
         related_name="timetable_entries",
+        null=True,
+        blank=True,
     )
 
     teacher = models.ForeignKey(
         Staff,
         on_delete=models.PROTECT,
         related_name="timetable_entries",
+        null=True,
+        blank=True,
+    )
+
+    room = models.ForeignKey(
+        Room,
+        on_delete=models.PROTECT,
+        related_name="timetable_entries",
+        null=True,
+        blank=True,
     )
 
     remarks = models.TextField(

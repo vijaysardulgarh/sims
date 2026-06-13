@@ -1,47 +1,98 @@
 import TimetableCell
     from './TimetableCell';
 
+import DroppableCell
+    from './DroppableCell';
+
 const TimetableGrid = ({
     entries = [],
 }) => {
 
     const days = [
 
-        'MONDAY',
-        'TUESDAY',
-        'WEDNESDAY',
-        'THURSDAY',
-        'FRIDAY',
-        'SATURDAY',
+        {
+            code: 'MON',
+            label: 'Monday',
+        },
+
+        {
+            code: 'TUE',
+            label: 'Tuesday',
+        },
+
+        {
+            code: 'WED',
+            label: 'Wednesday',
+        },
+
+        {
+            code: 'THU',
+            label: 'Thursday',
+        },
+
+        {
+            code: 'FRI',
+            label: 'Friday',
+        },
+
+        {
+            code: 'SAT',
+            label: 'Saturday',
+        },
 
     ];
 
     const periods = [
 
-        1, 2, 3, 4, 5, 6, 7, 8,
+        ...new Set(
 
-    ];
+            entries.map(
+                entry => entry.period_number
+            )
+
+        ),
+
+    ].sort(
+        (
+            a,
+            b
+        ) => a - b
+    );
 
     return (
 
         <div
             className="
                 overflow-auto
+                rounded-lg
+                border
+                bg-white
             "
         >
 
             <table
                 className="
                     min-w-full
-                    border
+                    border-collapse
                 "
             >
 
                 <thead>
 
-                    <tr>
+                    <tr
+                        className="
+                            bg-gray-100
+                        "
+                    >
 
-                        <th>
+                        <th
+                            className="
+                                border
+                                p-3
+                                text-center
+                                font-semibold
+                            "
+                        >
                             Period
                         </th>
 
@@ -51,9 +102,17 @@ const TimetableGrid = ({
                                 day => (
 
                                     <th
-                                        key={day}
+                                        key={day.code}
+                                        className="
+                                            border
+                                            p-3
+                                            text-center
+                                            font-semibold
+                                        "
                                     >
-                                        {day}
+
+                                        {day.label}
+
                                     </th>
 
                                 )
@@ -69,57 +128,119 @@ const TimetableGrid = ({
 
                     {
 
-                        periods.map(
-                            period => (
+                        periods.length > 0
 
-                                <tr
-                                    key={period}
-                                >
+                            ?
 
-                                    <td>
-                                        {period}
-                                    </td>
+                            periods.map(
+                                period => (
 
-                                    {
+                                    <tr
+                                        key={period}
+                                    >
 
-                                        days.map(
-                                            day => {
+                                        <td
+                                            className="
+                                                border
+                                                p-3
+                                                text-center
+                                                font-semibold
+                                                bg-gray-50
+                                            "
+                                        >
 
-                                                const entry =
+                                            {period}
 
-                                                    entries.find(
+                                        </td>
 
-                                                        item =>
+                                        {
 
-                                                            item.day === day &&
+                                            days.map(
+                                                day => {
 
-                                                            item.period === period
+                                                    const entry =
+
+                                                        entries.find(
+
+                                                            item =>
+
+                                                                item.day === day.code &&
+
+                                                                item.period_number === period
+
+                                                        );
+
+                                                    const cellId =
+
+                                                        `cell-${day.code}-${period}`;
+
+                                                    return (
+
+                                                        <td
+                                                            key={cellId}
+                                                            className="
+                                                                border
+                                                                p-2
+                                                                min-w-[180px]
+                                                                h-[90px]
+                                                                align-top
+                                                            "
+                                                        >
+
+                                                            <DroppableCell
+
+                                                                id={
+                                                                    cellId
+                                                                }
+
+                                                                entryId={
+                                                                    entry?.id
+                                                                }
+
+                                                            >
+
+                                                                <TimetableCell
+                                                                    entry={entry}
+                                                                />
+
+                                                            </DroppableCell>
+
+                                                        </td>
 
                                                     );
 
-                                                return (
+                                                }
+                                            )
 
-                                                    <td
-                                                        key={`${day}-${period}`}
-                                                    >
+                                        }
 
-                                                        <TimetableCell
-                                                            entry={entry}
-                                                        />
+                                    </tr>
 
-                                                    </td>
+                                )
+                            )
 
-                                                );
+                            :
 
-                                            }
-                                        )
+                            (
 
-                                    }
+                                <tr>
+
+                                    <td
+                                        colSpan={7}
+                                        className="
+                                            p-6
+                                            text-center
+                                            text-gray-500
+                                        "
+                                    >
+
+                                        No timetable entries found
+
+                                    </td>
 
                                 </tr>
 
                             )
-                        )
 
                     }
 

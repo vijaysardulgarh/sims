@@ -10,14 +10,17 @@ export const MOVE_ENDPOINT =
 export const CONFLICTS_ENDPOINT =
     '/timetables/timetable-designer/conflicts/';
 
-export const TEACHER_VIEW_ENDPOINT =
-    '/timetables/timetable-designer/teacher-view/';
+export const GRID_ENDPOINT =
+    '/timetables/timetable-designer/grid/';
 
-export const ROOM_VIEW_ENDPOINT =
-    '/timetables/timetable-designer/room-view/';
+export const ASSIGN_SUBJECT_ENDPOINT =
+    '/timetables/timetable-designer/assign-subject/';
 
-export const CLASS_VIEW_ENDPOINT =
-    '/timetables/timetable-designer/class-view/';
+export const ASSIGN_TEACHER_ENDPOINT =
+    '/timetables/timetable-designer/assign-teacher/';
+
+export const ASSIGN_ROOM_ENDPOINT =
+    '/timetables/timetable-designer/assign-room/';
 
 const timetableDesignerService = {
 
@@ -27,7 +30,8 @@ const timetableDesignerService = {
         api.post(
             GENERATE_ENDPOINT,
             {
-                timetable: timetableId,
+                timetable:
+                    timetableId,
             }
         ),
 
@@ -42,6 +46,37 @@ const timetableDesignerService = {
     getConflicts: () =>
         api.get(
             CONFLICTS_ENDPOINT
+        ),
+
+    getGrid: (
+        timetableId
+    ) =>
+        api.get(
+            `${GRID_ENDPOINT}${timetableId}/`
+        ),
+
+    assignSubject: (
+        payload
+    ) =>
+        api.post(
+            ASSIGN_SUBJECT_ENDPOINT,
+            payload
+        ),
+
+    assignTeacher: (
+        payload
+    ) =>
+        api.post(
+            ASSIGN_TEACHER_ENDPOINT,
+            payload
+        ),
+
+    assignRoom: (
+        payload
+    ) =>
+        api.post(
+            ASSIGN_ROOM_ENDPOINT,
+            payload
         ),
 
 };

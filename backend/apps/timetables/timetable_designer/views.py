@@ -4,6 +4,10 @@ from rest_framework.views import APIView
 
 from rest_framework.response import Response
 
+from apps.timetables.period_definitions.models import (
+    PeriodDefinition
+)
+
 from apps.timetables.timetables.models import (
     Timetable
 )
@@ -12,19 +16,48 @@ from apps.timetables.timetable_entries.models import (
     TimetableEntry
 )
 
+from rest_framework.permissions import (
+    AllowAny,
+)
+
+from .services.timetable_move_service import (
+    TimetableMoveService,
+)
+
+from django.db import transaction
+
 from .serializers import (
+
     GenerateTimetableSerializer,
     MoveEntrySerializer,
     CopyDaySerializer,
     CopyWeekSerializer,
     PublishTimetableSerializer,
-    CompareVersionSerializer
+    CompareVersionSerializer,
+
+    TimetableGridSerializer,
+
+    AssignSubjectSerializer,
+    AssignTeacherSerializer,
+    AssignRoomSerializer,
+
 )
 
 
 class GenerateTimetableView(
     APIView
 ):
+
+    DAYS = [
+
+        "MON",
+        "TUE",
+        "WED",
+        "THU",
+        "FRI",
+        "SAT",
+
+    ]
 
     def post(
         self,
@@ -53,12 +86,85 @@ class GenerateTimetableView(
             )
         )
 
+        periods = (
+
+            PeriodDefinition.objects.filter(
+
+                # school=
+                # timetable.school,
+
+                # academic_session=
+                # timetable.academic_session,
+
+                is_active=True,
+
+            )
+
+            .order_by(
+                "display_order"
+            )
+
+        )
+
+        created_count = 0
+
+        for day in self.DAYS:
+
+            for period in periods:
+
+                print(
+                    "PERIOD COUNT:",
+                    periods.count()
+                )
+
+                print(
+                    day,
+                    period.id
+                )
+
+                _, created = (
+
+                    TimetableEntry.objects.get_or_create(
+
+                        timetable=
+                        timetable,
+
+                        day=
+                        day,
+
+                        period=
+                        period,
+
+                        defaults={
+
+                            "remarks": "",
+
+                        }
+
+                    )
+
+                )
+
+                if created:
+
+                    created_count += 1
+
         return Response(
 
             {
                 "success": True,
+
+                "created_entries":
+                    created_count,
+
+                "total_entries":
+                    TimetableEntry.objects.filter(
+                        timetable=timetable
+                    ).count(),
+
                 "message":
                     "Timetable generated successfully."
+
             },
 
             status=
@@ -71,6 +177,7 @@ class MoveEntryView(
     APIView
 ):
 
+    @transaction.atomic
     def post(
         self,
         request
@@ -90,28 +197,77 @@ class MoveEntryView(
             serializer.validated_data
         )
 
-        entry = (
+        source_entry = (
+
             TimetableEntry.objects.get(
                 id=data["entry_id"]
             )
+
         )
 
-        entry.day = (
+        target_period = (
+
+            PeriodDefinition.objects.get(
+                display_order=data["period"]
+            )
+
+        )
+
+        target_entry = (
+
+            TimetableEntry.objects.filter(
+
+                timetable=
+                source_entry.timetable,
+
+                day=
+                data["day"],
+
+                period=
+                target_period,
+
+            ).first()
+
+        )
+
+        if target_entry:
+
+            source_day = (
+                source_entry.day
+            )
+
+            source_period = (
+                source_entry.period
+            )
+
+            # temporary move
+            source_entry.day = "SUN"
+            source_entry.save()
+
+            target_entry.day = (
+                source_day
+            )
+
+            target_entry.period = (
+                source_period
+            )
+
+            target_entry.save()
+
+        source_entry.day = (
             data["day"]
         )
 
-        entry.period_id = (
-            data["period"]
+        source_entry.period = (
+            target_period
         )
 
-        entry.save()
+        source_entry.save()
 
         return Response(
-
             {
                 "success": True
             }
-
         )
 
 
@@ -414,10 +570,17 @@ class CompareVersionView(
 
         )
 
+
+from rest_framework.permissions import (
+    AllowAny,
+)
 class TimetableGridView(
     APIView
 ):
 
+    permission_classes = [
+        AllowAny
+    ]
     def get(
         self,
         request,
@@ -435,7 +598,6 @@ class TimetableGridView(
             .select_related(
                 "subject",
                 "teacher",
-                "room",
                 "period"
             )
 
