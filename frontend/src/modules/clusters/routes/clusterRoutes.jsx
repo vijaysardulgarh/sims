@@ -1,5 +1,3 @@
-// src/modules/clusters/routes/clusterRoutes.jsx
-
 import { Route } from "react-router-dom";
 
 import ClustersListPage from "../pages/ClustersListPage";
@@ -32,6 +30,7 @@ const clusterRoutes = (
         />
 
     </Route>
+
 );
 
 export default clusterRoutes;

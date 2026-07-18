@@ -36,3 +36,12 @@ class AboutSchool(
         verbose_name_plural = (
             "About Schools"
         )
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=["school"],
+                name="unique_about_school_per_school"
+            )
+
+        ]

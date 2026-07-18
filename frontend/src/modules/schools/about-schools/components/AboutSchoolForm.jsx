@@ -5,21 +5,20 @@ const AboutSchoolForm = ({
     onSubmit,
 }) => {
 
-    const [formData, setFormData] =
-        useState({
+    const [formData, setFormData] = useState({
 
-            school:
-                initialData.school || "",
+        school:
+            initialData.school || "",
 
-            history:
-                initialData.history || "",
+        history:
+            initialData.history || "",
 
-            vision:
-                initialData.vision || "",
+        vision:
+            initialData.vision || "",
 
-            mission:
-                initialData.mission || "",
-        });
+        mission:
+            initialData.mission || "",
+    });
 
     const handleChange = (e) => {
 
@@ -41,12 +40,17 @@ const AboutSchoolForm = ({
 
     return (
 
-        <form onSubmit={handleSubmit}>
+        <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
+        >
 
             <div>
 
-                <label>
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+
                     School ID
+
                 </label>
 
                 <input
@@ -54,55 +58,78 @@ const AboutSchoolForm = ({
                     name="school"
                     value={formData.school}
                     onChange={handleChange}
+                    required
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
 
             </div>
 
             <div>
 
-                <label>
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+
                     History
+
                 </label>
 
                 <textarea
                     name="history"
+                    rows={6}
                     value={formData.history}
                     onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
 
             </div>
 
             <div>
 
-                <label>
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+
                     Vision
+
                 </label>
 
                 <textarea
                     name="vision"
+                    rows={5}
                     value={formData.vision}
                     onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
 
             </div>
 
             <div>
 
-                <label>
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+
                     Mission
+
                 </label>
 
                 <textarea
                     name="mission"
+                    rows={5}
                     value={formData.mission}
                     onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
 
             </div>
 
-            <button type="submit">
-                Save
-            </button>
+            <div className="flex justify-end">
+
+                <button
+                    type="submit"
+                    className="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700"
+                >
+
+                    Save
+
+                </button>
+
+            </div>
 
         </form>
     );

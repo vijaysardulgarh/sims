@@ -26,7 +26,7 @@ import studentsRoutes from "./students/routes/studentsRoutes";
 import timetablesRoutes from "./timetables/routes/timetablesRoutes";
 // import transportRoutes from "./transport/routes/transportRoutes";
 import schoolsRoutes from "./schools/routes/schoolsRoutes.jsx";
-import clusterRoutes from "./cluster/routes/clusterRoutes";
+import clusterRoutes from "./clusters/routes/clusterRoutes";
 import associationModuleRoutes from "./associations/routes/associationModuleRoutes";
 import infrastructureRoutes from "./infrastructure/routes/infrastructureRoutes.jsx";
 

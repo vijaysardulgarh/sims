@@ -686,9 +686,9 @@ RBAC_CONFIG = {
         "children": [
 
             {
-                "name": "About School",
-                "slug": "about-school",
-                "path": "/dashboard/schools/about-school",
+                "name": "About Schools",
+                "slug": "about-schools",
+                "path": "/dashboard/schools/about-schools",
             },
 
             {

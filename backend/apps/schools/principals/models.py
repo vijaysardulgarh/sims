@@ -1,40 +1,38 @@
 from django.db import models
 
 from apps.core.common.base.models import (
-    SchoolBaseModel
+    SchoolBaseModel,
 )
 
 
-class Principal(
-    SchoolBaseModel
-):
+class Principal(SchoolBaseModel):
 
     name = models.CharField(
-        max_length=255
+        max_length=255,
     )
 
     photo = models.ImageField(
         upload_to="principals/",
         blank=True,
-        null=True
+        null=True,
     )
 
     qualification = models.CharField(
         max_length=255,
-        blank=True
+        blank=True,
     )
 
     message = models.TextField(
-        blank=True
+        blank=True,
     )
 
     joining_date = models.DateField(
         blank=True,
-        null=True
+        null=True,
     )
 
     display_order = models.PositiveIntegerField(
-        default=0
+        default=0,
     )
 
     class Meta:
@@ -42,22 +40,19 @@ class Principal(
         db_table = "principals"
 
         verbose_name = "Principal"
-
         verbose_name_plural = "Principals"
 
         ordering = [
             "display_order",
-            "name"
+            "name",
         ]
 
         constraints = [
-
             models.UniqueConstraint(
                 fields=["school"],
-                name="unique_principal_per_school"
-            )
+                name="unique_principal_per_school",
+            ),
         ]
 
     def __str__(self):
-
-        return self.name
+        return f"{self.name} ({self.school})"

@@ -34,6 +34,7 @@ class StaffViewSet(viewsets.ModelViewSet):
             "school",
             "post_type",
             "subject",
+            "user",
         )
         .filter(
             is_deleted=False
@@ -46,11 +47,8 @@ class StaffViewSet(viewsets.ModelViewSet):
     # ============================================
 
     filter_backends = [
-
         DjangoFilterBackend,
-
         filters.SearchFilter,
-
         filters.OrderingFilter,
     ]
 
@@ -66,6 +64,14 @@ class StaffViewSet(viewsets.ModelViewSet):
 
         "father_name",
 
+        "mother_name",
+
+        "spouse_name",
+
+        "designation",
+
+        "qualification",
+
         "email",
 
         "mobile_number",
@@ -73,6 +79,10 @@ class StaffViewSet(viewsets.ModelViewSet):
         "aadhar_number",
 
         "school__name",
+
+        "post_type__name",
+
+        "subject__name",
     ]
 
     # ============================================
@@ -85,15 +95,23 @@ class StaffViewSet(viewsets.ModelViewSet):
 
         "post_type",
 
+        "subject",
+
+        "designation",
+
         "staff_role",
 
         "employment_type",
 
+        "status",
+
         "gender",
 
-        "subject",
-
         "is_active",
+
+        "is_class_teacher",
+
+        "is_house_incharge",
     ]
 
     # ============================================
@@ -108,7 +126,15 @@ class StaffViewSet(viewsets.ModelViewSet):
 
         "joining_date",
 
+        "retirement_date",
+
         "priority",
+
+        "designation",
+
+        "status",
+
+        "teaching_experience_years",
     ]
 
     ordering = [
@@ -123,4 +149,4 @@ class StaffViewSet(viewsets.ModelViewSet):
 
         instance.is_deleted = True
 
-        instance.save()
+        instance.save(update_fields=["is_deleted"])

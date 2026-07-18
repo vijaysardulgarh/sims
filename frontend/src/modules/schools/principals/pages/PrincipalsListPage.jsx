@@ -1,88 +1,48 @@
-import { useEffect, useState } from "react";
-
-import principalService from "../services/principalService";
+import CrudListPage from "@/modules/shared/components/crud/CrudListPage";
 
 const PrincipalsListPage = () => {
 
-    const [principals, setPrincipals] =
-        useState([]);
+    const columns = [
 
-    useEffect(() => {
+        {
+            key: "id",
+            label: "ID",
+        },
 
-        fetchPrincipals();
+        {
+            key: "school_name",
+            label: "School",
+        },
 
-    }, []);
+        {
+            key: "name",
+            label: "Name",
+        },
 
-    const fetchPrincipals = async () => {
+        {
+            key: "qualification",
+            label: "Qualification",
+        },
 
-        const response =
-            await principalService.getPrincipals();
+        {
+            key: "joining_date",
+            label: "Joining Date",
+        },
 
-        setPrincipals(
-            response.data.results ||
-            response.data
-        );
-    };
+    ];
 
     return (
 
-        <div>
+        <CrudListPage
+            title="Principals"
+            endpoint="/schools/principals/"
+            columns={columns}
+            addPath="/dashboard/schools/principals/add"
+            editPath="/dashboard/schools/principals/edit"
+        />
 
-            <h2>
-                Principals
-            </h2>
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>School</th>
-
-                        <th>Name</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {principals.map(
-                        (principal) => (
-
-                            <tr
-                                key={principal.id}
-                            >
-
-                                <td>
-                                    {principal.id}
-                                </td>
-
-                                <td>
-                                    {
-                                        principal.school_name
-                                    }
-                                </td>
-
-                                <td>
-                                    {
-                                        principal.name
-                                    }
-                                </td>
-
-                            </tr>
-                        )
-                    )}
-
-                </tbody>
-
-            </table>
-
-        </div>
     );
+
 };
 
 export default PrincipalsListPage;

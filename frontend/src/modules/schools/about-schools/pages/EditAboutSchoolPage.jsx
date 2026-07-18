@@ -8,9 +8,12 @@ import {
     useParams
 } from "react-router-dom";
 
+import toast from "react-hot-toast";
+
 import AboutSchoolForm from "../components/AboutSchoolForm";
 
 import aboutSchoolService from "../services/aboutSchoolService";
+
 
 const EditAboutSchoolPage = () => {
 
@@ -22,6 +25,9 @@ const EditAboutSchoolPage = () => {
     const [record, setRecord] =
         useState(null);
 
+    const [loading, setLoading] =
+        useState(true);
+
     useEffect(() => {
 
         fetchRecord();
@@ -31,30 +37,64 @@ const EditAboutSchoolPage = () => {
     const fetchRecord =
         async () => {
 
-            const response =
-                await aboutSchoolService
-                    .getAboutSchool(id);
+            try {
 
-            setRecord(
-                response.data
-            );
+                const response =
+                    await aboutSchoolService
+                        .getAboutSchool(id);
+
+                setRecord(
+                    response.data
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                toast.error(
+                    "Failed to load About School."
+                );
+
+                navigate(
+                    "/dashboard/schools/about-schools"
+                );
+
+            } finally {
+
+                setLoading(false);
+            }
         };
 
     const handleSubmit =
         async (data) => {
 
-            await aboutSchoolService
-                .updateAboutSchool(
-                    id,
-                    data
+            try {
+
+                await aboutSchoolService
+                    .updateAboutSchool(
+                        id,
+                        data
+                    );
+
+                toast.success(
+                    "About School updated successfully."
                 );
 
-            navigate(
-                "/dashboard/schools/about-schools"
-            );
+                navigate(
+                    "/dashboard/schools/about-schools"
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                toast.error(
+                    "Failed to update About School."
+                );
+            }
         };
 
-    if (!record)
+    if (loading)
         return <p>Loading...</p>;
 
     return (

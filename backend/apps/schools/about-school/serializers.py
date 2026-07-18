@@ -9,7 +9,7 @@ class AboutSchoolSerializer(
 
     school_name = serializers.CharField(
         source="school.name",
-        read_only=True
+        read_only=True,
     )
 
     class Meta:
@@ -17,3 +17,9 @@ class AboutSchoolSerializer(
         model = AboutSchool
 
         fields = "__all__"
+
+        read_only_fields = (
+            "created_at",
+            "updated_at",
+            "school_name",
+        )

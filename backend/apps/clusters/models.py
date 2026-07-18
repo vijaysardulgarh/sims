@@ -1,63 +1,85 @@
 from django.db import models
-
 from django.db.models import Q
 
-from apps.core.common.base.models import (
-    AuditBaseModel
-)
-
-from apps.core.utils.slug import (
-    generate_unique_slug
-)
-# ==========================================
-# CLUSTER LOGO PATH
-# ==========================================
-
-def cluster_logo_path(
-    instance,
-    filename
-):
-
-    slug = (
-        instance.slug
-        or "unassigned"
-    )
-
-    return (
-        f"clusters/{slug}/logo/{filename}"
-    )
+from apps.core.common.base.models import AuditBaseModel
+from apps.core.utils.slug import generate_unique_slug
 
 
-# ==========================================
-# CLUSTER MODEL
-# ==========================================
-
-class Cluster(
-    AuditBaseModel
-):
+class Cluster(AuditBaseModel):
 
     # ======================================
-    # BASIC INFO
+    # BASIC INFORMATION
     # ======================================
 
     name = models.CharField(
         max_length=255,
-        db_index=True
+        unique=True,
+        help_text="Cluster Name",
     )
 
     code = models.CharField(
         max_length=50,
-        unique=True
+        unique=True,
+        help_text="Unique Cluster Code",
     )
 
     slug = models.SlugField(
+        max_length=255,
         unique=True,
-        blank=True
+        blank=True,
     )
 
     description = models.TextField(
         blank=True,
-        null=True
+        help_text="Brief description of the cluster",
+    )
+
+    # ======================================
+    # CRC INFORMATION
+    # ======================================
+
+    crc_name = models.CharField(
+        max_length=255,
+        help_text="CRC Coordinator/Incharge Name",
+    )
+
+    crc_designation = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="CRC Coordinator Designation",
+    )
+
+    crc_phone = models.CharField(
+        max_length=20,
+        blank=True,
+        help_text="CRC Mobile Number",
+    )
+
+    crc_email = models.EmailField(
+        blank=True,
+        null=True,
+        help_text="CRC Email Address",
+    )
+
+    # ======================================
+    # OFFICE CONTACT INFORMATION
+    # ======================================
+
+    email = models.EmailField(
+        blank=True,
+        null=True,
+        help_text="Official Cluster Email",
+    )
+
+    phone = models.CharField(
+        max_length=20,
+        blank=True,
+        help_text="Official Cluster Contact Number",
+    )
+
+    address = models.TextField(
+        blank=True,
+        help_text="Cluster Office Address",
     )
 
     # ======================================
@@ -65,115 +87,38 @@ class Cluster(
     # ======================================
 
     is_active = models.BooleanField(
-        default=True
-    )
-
-    # ======================================
-    # MEDIA
-    # ======================================
-
-    logo = models.ImageField(
-        upload_to=cluster_logo_path,
-        blank=True,
-        null=True
-    )
-
-    # ======================================
-    # CONTACT
-    # ======================================
-
-    email = models.EmailField(
-        blank=True,
-        null=True
-    )
-
-    phone = models.CharField(
-        max_length=20,
-        blank=True,
-        null=True
-    )
-
-    address = models.TextField(
-        blank=True,
-        null=True
-    )
-
-    # ======================================
-    # REGION
-    # ======================================
-
-    timezone = models.CharField(
-        max_length=100,
-        default="Asia/Kolkata"
-    )
-
-    currency = models.CharField(
-        max_length=20,
-        default="INR"
-    )
-
-    # ======================================
-    # GPS
-    # ======================================
-
-    latitude = models.DecimalField(
-        max_digits=9,
-        decimal_places=6,
-        blank=True,
-        null=True
-    )
-
-    longitude = models.DecimalField(
-        max_digits=9,
-        decimal_places=6,
-        blank=True,
-        null=True
-    )
-
-    geo_radius_meters = (
-        models.PositiveIntegerField(
-            default=100,
-            help_text=(
-                "Geofence radius in meters"
-            )
-        )
+        default=True,
     )
 
     # ======================================
     # SAVE
     # ======================================
 
-    def save(
-        self,
-        *args,
-        **kwargs
-    ):
+    def save(self, *args, **kwargs):
+
+        self.name = self.name.strip()
+        self.code = self.code.strip().upper()
+
+        if self.crc_name:
+            self.crc_name = self.crc_name.strip()
+
+        if self.crc_designation:
+            self.crc_designation = self.crc_designation.strip()
 
         if not self.slug:
-
-            self.slug = (
-                generate_unique_slug(
-                    Cluster,
-                    self.name
-                )
+            self.slug = generate_unique_slug(
+                Cluster,
+                self.name,
             )
 
-        self.full_clean()
-
-        super().save(
-            *args,
-            **kwargs
-        )
+        super().save(*args, **kwargs)
 
     # ======================================
-    # STRING
+    # STRING REPRESENTATION
     # ======================================
 
-    def __str__(
-        self
-    ):
-
-        return self.name
+    def __str__(self):
+        return f"{self.code} - {self.name}"
 
     # ======================================
     # META
@@ -181,57 +126,35 @@ class Cluster(
 
     class Meta:
 
+        db_table = "clusters"
+
         verbose_name = "Cluster"
 
         verbose_name_plural = "Clusters"
 
         ordering = [
-            "name"
+            "name",
         ]
 
         constraints = [
 
             models.UniqueConstraint(
-
-                models.functions.Lower(
-                    "name"
-                ),
-
-                name=(
-                    "unique_cluster_name_case_insensitive"
-                )
+                fields=["email"],
+                condition=Q(email__isnull=False),
+                name="unique_cluster_email_if_present",
             ),
 
             models.UniqueConstraint(
-
-                fields=["email"],
-
-                condition=Q(
-                    email__isnull=False
-                ),
-
-                name=(
-                    "unique_cluster_email_if_present"
-                )
+                fields=["crc_email"],
+                condition=Q(crc_email__isnull=False),
+                name="unique_crc_email_if_present",
             ),
+
         ]
 
         indexes = [
 
-            models.Index(
-                fields=["name"]
-            ),
+            models.Index(fields=["is_active"]),
+            models.Index(fields=["is_deleted"]),
 
-            models.Index(
-                fields=["code"]
-            ),
-
-            models.Index(
-                fields=["is_active"]
-            ),
-
-            models.Index(
-                fields=["is_deleted"]
-            ),
         ]
-

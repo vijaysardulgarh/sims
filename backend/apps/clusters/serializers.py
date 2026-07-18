@@ -11,8 +11,6 @@ class ClusterSerializer(
     serializers.ModelSerializer
 ):
 
-    logo_url = serializers.SerializerMethodField()
-
     class Meta:
 
         model = Cluster
@@ -21,66 +19,51 @@ class ClusterSerializer(
 
             "id",
 
+            # ======================================
+            # BASIC INFORMATION
+            # ======================================
+
             "name",
-
             "code",
-
             "slug",
-
             "description",
+
+            # ======================================
+            # CRC INFORMATION
+            # ======================================
+
+            "crc_name",
+            "crc_designation",
+            "crc_phone",
+            "crc_email",
+
+            # ======================================
+            # OFFICE CONTACT INFORMATION
+            # ======================================
+
+            "email",
+            "phone",
+            "address",
+
+            # ======================================
+            # STATUS
+            # ======================================
 
             "is_active",
 
-            "logo",
-
-            "logo_url",
-
-            "email",
-
-            "phone",
-
-            "address",
-
-            "timezone",
-
-            "currency",
-
-            "latitude",
-
-            "longitude",
-
-            "geo_radius_meters",
+            # ======================================
+            # AUDIT
+            # ======================================
 
             "created_at",
-
             "updated_at",
+
         ]
 
         read_only_fields = [
 
             "slug",
-
             "created_at",
-
             "updated_at",
+
         ]
-
-    def get_logo_url(
-        self,
-        obj
-    ):
-
-        request = self.context.get(
-            "request"
-        )
-
-        if (
-            obj.logo and
-            request
-        ):
-
-            return request.build_absolute_uri(
-                obj.logo.url
-            )
-
-        return None

@@ -1,81 +1,38 @@
-import {
-    useEffect,
-    useState
-} from "react";
-
-import aboutSchoolService from "../services/aboutSchoolService";
+import CrudListPage from "@/modules/shared/components/crud/CrudListPage";
 
 const AboutSchoolListPage = () => {
 
-    const [records, setRecords] =
-        useState([]);
-
-    useEffect(() => {
-
-        fetchRecords();
-
-    }, []);
-
-    const fetchRecords =
-        async () => {
-
-            const response =
-                await aboutSchoolService
-                    .getAboutSchools();
-
-            setRecords(
-                response.data.results ||
-                response.data
-            );
-        };
+    const columns = [
+        {
+            key: "id",
+            label: "ID",
+        },
+        {
+            key: "school_name",
+            label: "School",
+        },
+        {
+            key: "history",
+            label: "History",
+        },
+        {
+            key: "vision",
+            label: "Vision",
+        },
+        {
+            key: "mission",
+            label: "Mission",
+        },
+    ];
 
     return (
-
-        <div>
-
-            <h2>
-                About Schools
-            </h2>
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>ID</th>
-                        <th>School</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {records.map(
-                        (record) => (
-
-                            <tr
-                                key={record.id}
-                            >
-
-                                <td>
-                                    {record.id}
-                                </td>
-
-                                <td>
-                                    {
-                                        record.school_name
-                                    }
-                                </td>
-
-                            </tr>
-                        )
-                    )}
-
-                </tbody>
-
-            </table>
-
-        </div>
+        <CrudListPage
+            title="About Schools"
+            endpoint="/schools/about-schools/"
+            columns={columns}
+            addPath="/dashboard/schools/about-schools/add"
+            editPath="/dashboard/schools/about-schools/edit"
+        />
     );
 };
 

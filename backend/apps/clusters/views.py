@@ -3,26 +3,14 @@
 # =============================================================================
 
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
-from rest_framework.permissions import (
-    IsAuthenticated
-)
-
-from rest_framework.response import (
-    Response
-)
-
-from apps.clusters.models import (
-    Cluster
-)
-
-from apps.clusters.serializers import (
-    ClusterSerializer
-)
+from apps.clusters.models import Cluster
+from apps.clusters.serializers import ClusterSerializer
 
 
 # =============================================================================
-# CLUSTER LIST CREATE
+# CLUSTER LIST / CREATE
 # =============================================================================
 
 class ClusterListCreateAPIView(
@@ -30,25 +18,32 @@ class ClusterListCreateAPIView(
 ):
 
     permission_classes = [
-        IsAuthenticated
+        IsAuthenticated,
     ]
 
-    serializer_class = (
-        ClusterSerializer
-    )
+    serializer_class = ClusterSerializer
 
     queryset = (
-
-        Cluster.objects.filter(
-            is_deleted=False
+        Cluster.objects
+        .filter(
+            is_deleted=False,
         )
-
         .order_by("name")
     )
 
+    def perform_create(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            created_by=self.request.user,
+            updated_by=self.request.user,
+        )
+
 
 # =============================================================================
-# CLUSTER DETAIL
+# CLUSTER DETAIL / UPDATE / DELETE
 # =============================================================================
 
 class ClusterRetrieveUpdateDestroyAPIView(
@@ -56,28 +51,41 @@ class ClusterRetrieveUpdateDestroyAPIView(
 ):
 
     permission_classes = [
-        IsAuthenticated
+        IsAuthenticated,
     ]
 
-    serializer_class = (
-        ClusterSerializer
-    )
+    serializer_class = ClusterSerializer
 
     queryset = (
-
-        Cluster.objects.filter(
-            is_deleted=False
+        Cluster.objects
+        .filter(
+            is_deleted=False,
         )
     )
 
+    def perform_update(
+        self,
+        serializer,
+    ):
+
+        serializer.save(
+            updated_by=self.request.user,
+        )
+
     def perform_destroy(
         self,
-        instance
+        instance,
     ):
 
         instance.is_deleted = True
-
-        instance.save()
+        instance.updated_by = self.request.user
+        instance.save(
+            update_fields=[
+                "is_deleted",
+                "updated_by",
+                "updated_at",
+            ]
+        )
 
 
 # =============================================================================
@@ -89,21 +97,16 @@ class ActiveClusterListAPIView(
 ):
 
     permission_classes = [
-        IsAuthenticated
+        IsAuthenticated,
     ]
 
-    serializer_class = (
-        ClusterSerializer
-    )
+    serializer_class = ClusterSerializer
 
     queryset = (
-
-        Cluster.objects.filter(
-
+        Cluster.objects
+        .filter(
             is_active=True,
-
-            is_deleted=False
+            is_deleted=False,
         )
-
         .order_by("name")
     )

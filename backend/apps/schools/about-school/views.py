@@ -13,11 +13,14 @@ class AboutSchoolViewSet(
     ModelViewSet
 ):
 
-    queryset = (
-        AboutSchool.objects
-        .select_related("school")
-    )
-
     serializer_class = (
         AboutSchoolSerializer
     )
+
+    def get_queryset(self):
+
+        return (
+            AboutSchool.objects
+            .select_related("school")
+            .order_by("school__name")
+        )
