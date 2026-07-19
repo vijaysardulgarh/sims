@@ -11,16 +11,20 @@ class SanctionedPostSerializer(
 
     school_name = serializers.CharField(
         source="school.name",
-        read_only=True
+        read_only=True,
     )
 
     post_type_name = serializers.CharField(
         source="post_type.name",
-        read_only=True
+        read_only=True,
     )
 
-    subject_name = (
-        serializers.SerializerMethodField()
+    regular_vacancy = serializers.IntegerField(
+        read_only=True,
+    )
+
+    net_vacancy = serializers.IntegerField(
+        read_only=True,
     )
 
     class Meta:
@@ -37,22 +41,22 @@ class SanctionedPostSerializer(
             "post_type",
             "post_type_name",
 
-            "designation",
+            "sanctioned_posts",
 
-            "subject",
-            "subject_name",
+            "regular_working",
+            "regular_vacancy",
 
-            "total_posts",
+            "guest_working",
+
+            "hkrnl_working",
+
+            "net_vacancy",
         ]
 
-    def get_subject_name(
-        self,
-        obj
-    ):
+        read_only_fields = [
 
-        return (
-
-            obj.subject.name
-
-            if obj.subject else ""
-        )
+            "school_name",
+            "post_type_name",
+            "regular_vacancy",
+            "net_vacancy",
+        ]

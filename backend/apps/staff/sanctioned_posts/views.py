@@ -45,8 +45,6 @@ class SanctionedPostViewSet(
             "school",
 
             "post_type",
-
-            "subject",
         )
 
         .filter(
@@ -67,8 +65,6 @@ class SanctionedPostViewSet(
         "school",
 
         "post_type",
-
-        "subject",
     ]
 
     # ============================================
@@ -77,13 +73,9 @@ class SanctionedPostViewSet(
 
     search_fields = [
 
-        "designation",
-
         "school__name",
 
         "post_type__name",
-
-        "subject__name",
     ]
 
     # ============================================
@@ -92,7 +84,15 @@ class SanctionedPostViewSet(
 
     ordering_fields = [
 
-        "total_posts",
+        "post_type__name",
+
+        "sanctioned_posts",
+
+        "regular_working",
+
+        "guest_working",
+
+        "hkrnl_working",
     ]
 
     ordering = [

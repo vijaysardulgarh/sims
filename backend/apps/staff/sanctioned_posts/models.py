@@ -1,9 +1,8 @@
 from django.db import models
 
 from apps.staff.post_type.models import PostType
-
-from apps.academics.subjects.models import Subject
 from apps.core.common.base.models import SchoolBaseModel
+
 
 class SanctionedPost(SchoolBaseModel):
 
@@ -11,38 +10,76 @@ class SanctionedPost(SchoolBaseModel):
         PostType,
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
-    )
-
-    designation = models.CharField(
-        max_length=50,
         blank=True,
-        null=True
+        related_name="sanctioned_posts",
     )
 
-    subject = models.ForeignKey(
-        Subject,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
+    sanctioned_posts = models.PositiveIntegerField(
+        default=0,
     )
 
-    total_posts = models.PositiveIntegerField(default=0)
+    regular_working = models.PositiveIntegerField(
+        default=0,
+    )
 
-    def __str__(self):
-        return f"{self.school} - {self.post_type}"
+    guest_working = models.PositiveIntegerField(
+        default=0,
+    )
+
+    hkrnl_working = models.PositiveIntegerField(
+        default=0,
+    )
 
     class Meta:
 
-        constraints = [
+        ordering = [
+            "post_type__name",
+        ]
 
+        indexes = [
+            models.Index(
+                fields=[
+                    "school",
+                    "post_type",
+                ]
+            ),
+        ]
+
+        constraints = [
             models.UniqueConstraint(
                 fields=[
                     "school",
                     "post_type",
-                    "designation",
-                    "subject"
                 ],
-                name="unique_sanctioned_post"
-            )
+                name="unique_sanctioned_post_per_school",
+            ),
         ]
+
+    @property
+    def regular_vacancy(self):
+        """
+        Sanctioned - Regular Working
+        """
+        return max(
+            0,
+            self.sanctioned_posts -
+            self.regular_working,
+        )
+
+    @property
+    def net_vacancy(self):
+        """
+        Sanctioned - Regular Working
+        - Guest Working
+        - HKRNL Working
+        """
+        return max(
+            0,
+            self.sanctioned_posts
+            - self.regular_working
+            - self.guest_working
+            - self.hkrnl_working,
+        )
+
+    def __str__(self):
+        return str(self.post_type)

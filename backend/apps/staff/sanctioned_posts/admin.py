@@ -10,14 +10,17 @@ class SanctionedPostAdmin(admin.ModelAdmin):
         "id",
         "school",
         "post_type",
-        "designation",
-        "subject",
-        "total_posts",
+        "sanctioned_posts",
+        "regular_working",
+        "regular_vacancy",
+        "guest_working",
+        "hkrnl_working",
+        "net_vacancy",
     )
 
     search_fields = (
-        "designation",
         "school__name",
+        "post_type__name",
     )
 
     list_filter = (
@@ -27,7 +30,7 @@ class SanctionedPostAdmin(admin.ModelAdmin):
 
     ordering = (
         "school",
-        "designation",
+        "post_type__name",
     )
 
     list_per_page = 25
