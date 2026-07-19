@@ -24,10 +24,6 @@ class StaffSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
-    # ============================================
-    # META
-    # ============================================
-
     class Meta:
 
         model = Staff
@@ -58,24 +54,20 @@ class StaffSerializer(serializers.ModelSerializer):
             # EMPLOYMENT
             "post_type",
             "post_type_name",
-            "designation",
             "staff_role",
             "employment_type",
+            "designation",
             "status",
 
+            # SUBJECT
             "subject",
             "subject_name",
 
+            # QUALIFICATION
             "qualification",
+
+            # EXPERIENCE
             "teaching_experience_years",
-
-            "priority",
-
-            "min_periods_per_week",
-            "max_periods_per_week",
-
-            "is_class_teacher",
-            "is_house_incharge",
 
             # CONTACT
             "mobile_number",
@@ -85,7 +77,9 @@ class StaffSerializer(serializers.ModelSerializer):
             # ADDRESS
             "address",
             "city",
+            "district",
             "state",
+            "country",
             "pin_code",
 
             # DATES
@@ -98,7 +92,7 @@ class StaffSerializer(serializers.ModelSerializer):
             "category",
             "bio",
 
-            # FLAGS
+            # STATUS
             "is_active",
             "is_deleted",
 
@@ -120,28 +114,37 @@ class StaffSerializer(serializers.ModelSerializer):
 
         joining_date = attrs.get(
             "joining_date",
-            getattr(self.instance, "joining_date", None)
+            getattr(self.instance, "joining_date", None),
         )
 
         current_joining_date = attrs.get(
             "current_joining_date",
-            getattr(self.instance, "current_joining_date", None)
+            getattr(self.instance, "current_joining_date", None),
         )
 
         retirement_date = attrs.get(
             "retirement_date",
-            getattr(self.instance, "retirement_date", None)
+            getattr(self.instance, "retirement_date", None),
         )
 
-        min_periods = attrs.get(
-            "min_periods_per_week",
-            getattr(self.instance, "min_periods_per_week", 0)
+        mobile_number = attrs.get(
+            "mobile_number",
+            getattr(self.instance, "mobile_number", ""),
         )
 
-        max_periods = attrs.get(
-            "max_periods_per_week",
-            getattr(self.instance, "max_periods_per_week", 0)
+        aadhar_number = attrs.get(
+            "aadhar_number",
+            getattr(self.instance, "aadhar_number", ""),
         )
+
+        pin_code = attrs.get(
+            "pin_code",
+            getattr(self.instance, "pin_code", ""),
+        )
+
+        # ========================================
+        # DATE VALIDATION
+        # ========================================
 
         if (
             joining_date
@@ -167,12 +170,55 @@ class StaffSerializer(serializers.ModelSerializer):
                 }
             )
 
-        if min_periods > max_periods:
-            raise serializers.ValidationError(
-                {
-                    "min_periods_per_week":
-                    "Minimum periods cannot exceed maximum periods."
-                }
-            )
+        # ========================================
+        # MOBILE VALIDATION
+        # ========================================
+
+        if mobile_number:
+
+            if (
+                not mobile_number.isdigit()
+                or len(mobile_number) != 10
+            ):
+                raise serializers.ValidationError(
+                    {
+                        "mobile_number":
+                        "Enter a valid 10-digit mobile number."
+                    }
+                )
+
+        # ========================================
+        # AADHAAR VALIDATION
+        # ========================================
+
+        if aadhar_number:
+
+            if (
+                not aadhar_number.isdigit()
+                or len(aadhar_number) != 12
+            ):
+                raise serializers.ValidationError(
+                    {
+                        "aadhar_number":
+                        "Aadhaar number must contain exactly 12 digits."
+                    }
+                )
+
+        # ========================================
+        # PIN CODE VALIDATION
+        # ========================================
+
+        if pin_code:
+
+            if (
+                not pin_code.isdigit()
+                or len(pin_code) != 6
+            ):
+                raise serializers.ValidationError(
+                    {
+                        "pin_code":
+                        "PIN code must contain exactly 6 digits."
+                    }
+                )
 
         return attrs

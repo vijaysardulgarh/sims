@@ -1,24 +1,52 @@
 from django.db.models import Count
 
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from apps.students.profiles.models import Student
 from apps.staff.class_incharge.models import ClassIncharge
 
+from .serializers import ClassInchargeSerializer
+
+
+# ==========================================================
+# CRUD API
+# ==========================================================
+
+class ClassInchargeViewSet(viewsets.ModelViewSet):
+
+    queryset = (
+        ClassIncharge.objects
+        .select_related(
+            "section",
+            "section__class_obj",
+            "section__stream",
+            "section__medium",
+            "staff",
+        )
+        .order_by(
+            "section__class_obj__display_order",
+            "section__name",
+        )
+    )
+
+    serializer_class = ClassInchargeSerializer
+
+
+# ==========================================================
+# REPORT API
+# ==========================================================
 
 class ClassInchargeReportAPIView(APIView):
 
     def get(self, request):
 
-        # ============================================
-        # STUDENT STRENGTH
-        # ============================================
-
-        student_counts = (
-            Student.objects.values(
+        student_strength = (
+            Student.objects
+            .values(
                 "student_class",
-                "section"
+                "section",
             )
             .annotate(
                 strength=Count("srn")
@@ -26,91 +54,99 @@ class ClassInchargeReportAPIView(APIView):
         )
 
         strength_lookup = {
-
             (
-                s["student_class"],
-                s["section"]
-            ): s["strength"]
-
-            for s in student_counts
+                item["student_class"],
+                item["section"],
+            ): item["strength"]
+            for item in student_strength
         }
-
-        # ============================================
-        # ACTIVE INCHARGES
-        # ============================================
 
         incharges = (
             ClassIncharge.objects
             .filter(active=True)
             .select_related(
+                "section",
                 "section__class_obj",
                 "section__stream",
                 "section__medium",
-                "staff"
+                "staff",
+            )
+            .order_by(
+                "section__class_obj__display_order",
+                "section__name",
             )
         )
 
-        data = []
+        results = []
 
-        # ============================================
-        # RESPONSE DATA
-        # ============================================
+        for obj in incharges:
 
-        for incharge in incharges:
+            section = obj.section
+            teacher = obj.staff
 
-            sec = incharge.section
-            staff = incharge.staff
-
-            key = (
-                sec.class_obj_id,
-                sec.id
+            strength = strength_lookup.get(
+                (
+                    section.class_obj_id,
+                    section.id,
+                ),
+                0,
             )
 
-            strength = strength_lookup.get(key, 0)
+            results.append({
 
-            data.append({
-
-                "id": incharge.id,
+                "id": obj.id,
 
                 "class": (
-                    sec.class_obj.name
-                    if sec.class_obj else ""
+                    section.class_obj.name
+                    if section.class_obj else ""
                 ),
 
-                "section": sec.name,
+                "section": section.name,
 
                 "stream": (
-                    sec.stream.name
-                    if sec.stream else ""
+                    section.stream.name
+                    if section.stream else ""
                 ),
 
                 "sub_stream": (
-                    sec.sub_stream or ""
+                    section.sub_stream or ""
                 ),
 
                 "medium": (
-                    sec.medium.name
-                    if sec.medium else ""
+                    section.medium.name
+                    if section.medium else ""
                 ),
 
-                "teacher": staff.name,
+                "teacher_id": teacher.id,
+
+                "employee_id": teacher.employee_id,
+
+                "teacher_name": teacher.name,
+
+                "designation": teacher.designation,
+
+                "mobile_number": teacher.mobile_number,
+
+                "email": teacher.email,
 
                 "contact": (
-                    staff.mobile_number
-                    or staff.email
+                    teacher.mobile_number
+                    or teacher.email
                     or ""
                 ),
 
                 "student_strength": strength,
 
-                "effective_from":
-                    incharge.effective_from,
+                "assigned_date": obj.assigned_date,
 
-                "effective_to":
-                    incharge.effective_to,
+                "effective_from": obj.effective_from,
 
-                "active":
-                    incharge.active,
+                "effective_to": obj.effective_to,
+
+                "remarks": obj.remarks,
+
+                "active": obj.active,
+
             })
 
-        return Response(data)
+        return Response(results)

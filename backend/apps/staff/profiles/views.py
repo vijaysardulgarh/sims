@@ -78,11 +78,22 @@ class StaffViewSet(viewsets.ModelViewSet):
 
         "aadhar_number",
 
+        "city",
+
+        "district",
+
+        "state",
+
+        "country",
+
+        "pin_code",
+
         "school__name",
 
         "post_type__name",
 
         "subject__name",
+
     ]
 
     # ============================================
@@ -97,21 +108,26 @@ class StaffViewSet(viewsets.ModelViewSet):
 
         "subject",
 
-        "designation",
-
         "staff_role",
 
         "employment_type",
+
+        "designation",
 
         "status",
 
         "gender",
 
+        "city",
+
+        "district",
+
+        "state",
+
+        "country",
+
         "is_active",
 
-        "is_class_teacher",
-
-        "is_house_incharge",
     ]
 
     # ============================================
@@ -124,17 +140,26 @@ class StaffViewSet(viewsets.ModelViewSet):
 
         "name",
 
+        "designation",
+
+        "city",
+
+        "district",
+
+        "state",
+
         "joining_date",
+
+        "current_joining_date",
 
         "retirement_date",
 
-        "priority",
-
-        "designation",
-
-        "status",
-
         "teaching_experience_years",
+
+        "created_at",
+
+        "updated_at",
+
     ]
 
     ordering = [

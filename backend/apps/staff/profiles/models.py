@@ -124,6 +124,47 @@ class Staff(SchoolBaseModel):
         blank=True
     )
 
+
+    # ============================================
+    # DESIGNATION
+    # ============================================
+
+    designation = models.CharField(
+        max_length=100,
+        blank=True,
+        db_index=True,
+        help_text="Official designation of the staff member."
+    )
+
+    # ============================================
+    # STAFF STATUS
+    # ============================================
+
+    class StaffStatus(models.TextChoices):
+
+        ACTIVE = "Active", "Active"
+
+        ON_LEAVE = "On Leave", "On Leave"
+
+        SUSPENDED = "Suspended", "Suspended"
+
+        RETIRED = "Retired", "Retired"
+
+        RESIGNED = "Resigned", "Resigned"
+
+        TRANSFERRED = "Transferred", "Transferred"
+
+    status = models.CharField(
+        max_length=20,
+        choices=StaffStatus.choices,
+        default=StaffStatus.ACTIVE,
+        db_index=True,
+    )
+
+    # ============================================
+    # SUBJECT
+    # ============================================
+
     subject = models.ForeignKey(
         "academics.Subject",
         on_delete=models.SET_NULL,
@@ -131,18 +172,23 @@ class Staff(SchoolBaseModel):
         blank=True
     )
 
+    # ============================================
+    # QUALIFICATION
+    # ============================================
+
     qualification = models.CharField(
         max_length=255,
         blank=True
     )
 
-    priority = models.PositiveIntegerField(
-        default=1
+    # ============================================
+    # EXPERIENCE
+    # ============================================
+
+    teaching_experience_years = models.PositiveIntegerField(
+        default=0
     )
 
-    max_periods_per_week = models.PositiveIntegerField(
-        default=40
-    )
 
     # ============================================
     # IDENTITY & CONTACT
@@ -184,6 +230,44 @@ class Staff(SchoolBaseModel):
     retirement_date = models.DateField(
         null=True,
         blank=True
+    )
+
+    # ============================================
+    # ADDRESS INFORMATION
+    # ============================================
+
+    address = models.TextField(
+        blank=True,
+        help_text="House number, street, locality, etc."
+    )
+
+    city = models.CharField(
+        max_length=100,
+        blank=True,
+        db_index=True
+    )
+
+    district = models.CharField(
+        max_length=100,
+        blank=True,
+        db_index=True
+    )
+
+    state = models.CharField(
+        max_length=100,
+        blank=True,
+        db_index=True
+    )
+
+    country = models.CharField(
+        max_length=100,
+        default="India"
+    )
+
+    pin_code = models.CharField(
+        max_length=10,
+        blank=True,
+        db_index=True
     )
 
     # ============================================
