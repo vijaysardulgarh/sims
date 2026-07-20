@@ -6,83 +6,43 @@
 import api from "../../../../services/api/axios";
 
 // ============================================
-// GET ALL
+// GET ATTENDANCE BY DATE
 // ============================================
 
-const getTeacherAttendance =
-  async () => {
+const getTeacherAttendance = async (date) => {
 
-  const response =
-    await api.get(
-      "/staff/teacher-attendance/"
-    );
+  const response = await api.get(
+
+    "/staff/teacher-attendance/",
+
+    {
+      params: {
+        date,
+      },
+    }
+
+  );
 
   return response.data;
+
 };
 
 // ============================================
-// GET SINGLE
+// SAVE BULK ATTENDANCE
 // ============================================
 
-const getTeacherAttendanceById =
-  async (id) => {
+const saveTeacherAttendance = async (data) => {
 
-  const response =
-    await api.get(
-      `/staff/teacher-attendance/${id}/`
-    );
+  const response = await api.post(
 
-  return response.data;
-};
+    "/staff/teacher-attendance/",
 
-// ============================================
-// CREATE
-// ============================================
-
-const createTeacherAttendance =
-  async (data) => {
-
-  const response =
-    await api.post(
-      "/staff/teacher-attendance/",
-      data
-    );
-
-  return response.data;
-};
-
-// ============================================
-// UPDATE
-// ============================================
-
-const updateTeacherAttendance =
-  async (
-    id,
     data
-  ) => {
 
-  const response =
-    await api.put(
-      `/staff/teacher-attendance/${id}/`,
-      data
-    );
+  );
 
   return response.data;
-};
 
-// ============================================
-// DELETE
-// ============================================
-
-const deleteTeacherAttendance =
-  async (id) => {
-
-  const response =
-    await api.delete(
-      `/staff/teacher-attendance/${id}/`
-    );
-
-  return response.data;
 };
 
 // ============================================
@@ -93,13 +53,8 @@ const teacherAttendanceService = {
 
   getTeacherAttendance,
 
-  getTeacherAttendanceById,
+  saveTeacherAttendance,
 
-  createTeacherAttendance,
-
-  updateTeacherAttendance,
-
-  deleteTeacherAttendance,
 };
 
 export default teacherAttendanceService;

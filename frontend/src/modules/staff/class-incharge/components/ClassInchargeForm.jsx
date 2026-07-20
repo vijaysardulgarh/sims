@@ -3,392 +3,413 @@
 // File: ClassInchargeForm.jsx
 // ============================================
 
-import {
-  useEffect,
-  useState
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import classService from "../../../academics/classes/services/classService";
 import sectionService from "../../../academics/sections/services/sectionService";
 import staffService from "../../staff/services/staffService";
 
 const ClassInchargeForm = ({
-
-  initialData = {},
-
-  onSubmit,
-
-  loading = false,
-
+    initialData = {},
+    onSubmit,
+    loading = false,
 }) => {
 
-  // ============================================
-  // STATES
-  // ============================================
+    const [classes, setClasses] = useState([]);
+    const [sections, setSections] = useState([]);
+    const [teachers, setTeachers] = useState([]);
 
-  const [classes, setClasses] =
-    useState([]);
-
-  const [sections, setSections] =
-    useState([]);
-
-  const [staff, setStaff] =
-    useState([]);
-
-  const [formData, setFormData] =
-    useState({
-
-      student_class: "",
-
-      section: "",
-
-      staff: "",
+    const [formData, setFormData] = useState({
+        student_class: "",
+        section: "",
+        staff: "",
+        effective_from: "",
+        effective_to: "",
+        active: true,
+        remarks: "",
     });
 
-  // ============================================
-  // FETCH DATA
-  // ============================================
+    // ============================================
+    // LOAD DATA
+    // ============================================
 
-  useEffect(() => {
+    useEffect(() => {
+        loadData();
+    }, []);
 
-    fetchData();
+    const loadData = async () => {
 
-  }, []);
+        try {
 
-  const fetchData = async () => {
+            const [
+                classResponse,
+                sectionResponse,
+                staffResponse,
+            ] = await Promise.all([
+                classService.getClasses(),
+                sectionService.getSections(),
+                staffService.getStaff(),
+            ]);
 
-    try {
+            const classList = Array.isArray(classResponse)
+                ? classResponse
+                : classResponse.results || [];
 
-      const [
+            const sectionList = Array.isArray(sectionResponse)
+                ? sectionResponse
+                : sectionResponse.results || [];
 
-        classResponse,
+            const staffList = Array.isArray(staffResponse)
+                ? staffResponse
+                : staffResponse.results || [];
 
-        sectionResponse,
+            setClasses(classList);
 
-        staffResponse,
+            setSections(sectionList);
 
-      ] = await Promise.all([
+            setTeachers(
+                staffList.filter(
+                    (item) =>
+                        item.staff_role === "Teaching" &&
+                        item.is_active
+                )
+            );
 
-        classService.getClasses(),
+        } catch (error) {
 
-        sectionService.getSections(),
+            console.error(error);
 
-        staffService.getStaff(),
-      ]);
+        }
 
-      setClasses(
+    };
 
-        Array.isArray(classResponse)
+    // ============================================
+    // PREFILL
+    // ============================================
 
-          ? classResponse
+    useEffect(() => {
 
-          : classResponse.results || []
-      );
+        if (!initialData?.id) return;
 
-      setSections(
+        const selectedSection = sections.find(
+            (s) => s.id === initialData.section
+        );
 
-        Array.isArray(sectionResponse)
+        setFormData({
 
-          ? sectionResponse
+            student_class:
+                selectedSection?.class_obj?.id ||
+                selectedSection?.class_obj ||
+                "",
 
-          : sectionResponse.results || []
-      );
+            section: initialData.section || "",
 
-      setStaff(
+            staff: initialData.staff || "",
 
-        Array.isArray(staffResponse)
+            effective_from:
+                initialData.effective_from || "",
 
-          ? staffResponse
+            effective_to:
+                initialData.effective_to || "",
 
-          : staffResponse.results || []
-      );
+            active:
+                initialData.active ?? true,
 
-    } catch (error) {
+            remarks:
+                initialData.remarks || "",
 
-      console.log(error);
-    }
-  };
+        });
 
-  // ============================================
-  // PREFILL
-  // ============================================
+    }, [initialData, sections]);
 
-  useEffect(() => {
+    // ============================================
+    // FILTERED SECTIONS
+    // ============================================
 
-    if (
-      initialData &&
-      Object.keys(initialData).length > 0
-    ) {
+    const filteredSections = useMemo(() => {
 
-      setFormData({
+        return sections.filter((item) =>
 
-        student_class:
-          initialData.student_class || "",
+            String(
+                item.class_obj?.id ||
+                item.class_obj
+            ) ===
+            String(formData.student_class)
 
-        section:
-          initialData.section || "",
+        );
 
-        staff:
-          initialData.staff || "",
-      });
-    }
+    }, [sections, formData.student_class]);
 
-  }, [initialData]);
+    // ============================================
+    // CHANGE
+    // ============================================
 
-  // ============================================
-  // FILTERED SECTIONS
-  // ============================================
+    const handleChange = (e) => {
 
-  const filteredSections =
-    sections.filter((section) =>
+        const { name, value, type, checked } = e.target;
 
-      String(
-        section.student_class?.id ||
+        if (name === "student_class") {
 
-        section.student_class ||
+            setFormData((prev) => ({
+                ...prev,
+                student_class: value,
+                section: "",
+            }));
 
-        section.sec_class?.id ||
+            return;
 
-        section.sec_class
-      )
+        }
 
-      ===
+        setFormData((prev) => ({
+            ...prev,
+            [name]:
+                type === "checkbox"
+                    ? checked
+                    : value,
+        }));
 
-      String(formData.student_class)
+    };
+
+    // ============================================
+    // SUBMIT
+    // ============================================
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+        if (!formData.section) {
+
+            alert("Please select section.");
+
+            return;
+
+        }
+
+        if (!formData.staff) {
+
+            alert("Please select teacher.");
+
+            return;
+
+        }
+
+        if (
+            formData.effective_to &&
+            formData.effective_to <
+            formData.effective_from
+        ) {
+
+            alert(
+                "Effective To must be after Effective From."
+            );
+
+            return;
+
+        }
+
+        onSubmit(formData);
+
+    };
+
+    return (
+
+        <form
+            onSubmit={handleSubmit}
+            className="bg-white rounded-xl shadow p-6 space-y-6"
+        >
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* Class */}
+
+                <div>
+
+                    <label className="block mb-2 font-medium">
+                        Class
+                    </label>
+
+                    <select
+                        name="student_class"
+                        value={formData.student_class}
+                        onChange={handleChange}
+                        required
+                        className="w-full border rounded-lg px-4 py-3"
+                    >
+
+                        <option value="">
+                            Select Class
+                        </option>
+
+                        {classes.map((item) => (
+
+                            <option
+                                key={item.id}
+                                value={item.id}
+                            >
+                                {item.name}
+                            </option>
+
+                        ))}
+
+                    </select>
+
+                </div>
+
+                {/* Section */}
+
+                <div>
+
+                    <label className="block mb-2 font-medium">
+                        Section
+                    </label>
+
+                    <select
+                        name="section"
+                        value={formData.section}
+                        onChange={handleChange}
+                        required
+                        className="w-full border rounded-lg px-4 py-3"
+                    >
+
+                        <option value="">
+                            Select Section
+                        </option>
+
+                        {filteredSections.map((item) => (
+
+                            <option
+                                key={item.id}
+                                value={item.id}
+                            >
+                                {item.name}
+                            </option>
+
+                        ))}
+
+                    </select>
+
+                </div>
+
+                {/* Teacher */}
+
+                <div>
+
+                    <label className="block mb-2 font-medium">
+                        Teacher
+                    </label>
+
+                    <select
+                        name="staff"
+                        value={formData.staff}
+                        onChange={handleChange}
+                        required
+                        className="w-full border rounded-lg px-4 py-3"
+                    >
+
+                        <option value="">
+                            Select Teacher
+                        </option>
+
+                        {teachers.map((item) => (
+
+                            <option
+                                key={item.id}
+                                value={item.id}
+                            >
+                                {item.employee_id} - {item.name}
+                            </option>
+
+                        ))}
+
+                    </select>
+
+                </div>
+
+                {/* Effective From */}
+
+                <div>
+
+                    <label className="block mb-2 font-medium">
+                        Effective From
+                    </label>
+
+                    <input
+                        type="date"
+                        name="effective_from"
+                        value={formData.effective_from}
+                        onChange={handleChange}
+                        required
+                        className="w-full border rounded-lg px-4 py-3"
+                    />
+
+                </div>
+
+                {/* Effective To */}
+
+                <div>
+
+                    <label className="block mb-2 font-medium">
+                        Effective To
+                    </label>
+
+                    <input
+                        type="date"
+                        name="effective_to"
+                        value={formData.effective_to}
+                        onChange={handleChange}
+                        className="w-full border rounded-lg px-4 py-3"
+                    />
+
+                </div>
+
+            </div>
+
+            {/* Remarks */}
+
+            <div>
+
+                <label className="block mb-2 font-medium">
+                    Remarks
+                </label>
+
+                <textarea
+                    name="remarks"
+                    value={formData.remarks}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full border rounded-lg px-4 py-3"
+                />
+
+            </div>
+
+            {/* Active */}
+
+            <label className="flex items-center gap-3">
+
+                <input
+                    type="checkbox"
+                    name="active"
+                    checked={formData.active}
+                    onChange={handleChange}
+                />
+
+                Active Assignment
+
+            </label>
+
+            {/* Submit */}
+
+            <button
+                type="submit"
+                disabled={loading}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg"
+            >
+                {loading ? "Saving..." : "Save Class Incharge"}
+            </button>
+
+        </form>
     );
-
-  // ============================================
-  // HANDLE CHANGE
-  // ============================================
-
-  const handleChange = (e) => {
-
-    const { name, value } = e.target;
-
-    setFormData({
-
-      ...formData,
-
-      [name]: value,
-    });
-  };
-
-  // ============================================
-  // SUBMIT
-  // ============================================
-
-  const handleSubmit = (e) => {
-
-    e.preventDefault();
-
-    onSubmit(formData);
-  };
-
-  return (
-
-    <form
-      onSubmit={handleSubmit}
-      className="
-        bg-white
-        rounded-2xl
-        shadow
-        p-6
-        space-y-6
-      "
-    >
-
-      {/* CLASS */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Class
-        </label>
-
-        <select
-
-          name="student_class"
-
-          value={formData.student_class}
-
-          onChange={handleChange}
-
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
-
-          required
-        >
-
-          <option value="">
-            Select Class
-          </option>
-
-          {
-
-            classes.map((item) => (
-
-              <option
-                key={item.id}
-                value={item.id}
-              >
-
-                {item.name}
-
-              </option>
-            ))
-          }
-
-        </select>
-
-      </div>
-
-      {/* SECTION */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Section
-        </label>
-
-        <select
-
-          name="section"
-
-          value={formData.section}
-
-          onChange={handleChange}
-
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
-
-          required
-        >
-
-          <option value="">
-            Select Section
-          </option>
-
-          {
-
-            filteredSections.map((item) => (
-
-              <option
-                key={item.id}
-                value={item.id}
-              >
-
-                {item.name}
-
-              </option>
-            ))
-          }
-
-        </select>
-
-      </div>
-
-      {/* STAFF */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Staff
-        </label>
-
-        <select
-
-          name="staff"
-
-          value={formData.staff}
-
-          onChange={handleChange}
-
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
-
-          required
-        >
-
-          <option value="">
-            Select Staff
-          </option>
-
-          {
-
-            staff.map((item) => (
-
-              <option
-                key={item.id}
-                value={item.id}
-              >
-
-                {item.first_name}
-                {" "}
-                {item.last_name}
-
-              </option>
-            ))
-          }
-
-        </select>
-
-      </div>
-
-      {/* BUTTON */}
-
-      <button
-
-        type="submit"
-
-        disabled={loading}
-
-        className="
-          bg-blue-600
-          hover:bg-blue-700
-          text-white
-          px-6
-          py-3
-          rounded-xl
-        "
-      >
-
-        {loading
-
-          ? "Saving..."
-
-          : "Save Class Incharge"}
-
-      </button>
-
-    </form>
-  );
 };
 
 export default ClassInchargeForm;

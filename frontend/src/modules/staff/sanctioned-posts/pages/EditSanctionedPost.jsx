@@ -5,21 +5,21 @@
 
 import {
   useEffect,
-  useState
+  useState,
 } from "react";
 
 import {
   useNavigate,
-  useParams
+  useParams,
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
 import SanctionedPostForm
-from "../components/SanctionedPostForm";
+  from "../components/SanctionedPostForm";
 
 import sanctionedPostService
-from "../services/sanctionedPostService";
+  from "../services/sanctionedPostService";
 
 const EditSanctionedPost = () => {
 
@@ -48,6 +48,8 @@ const EditSanctionedPost = () => {
 
     try {
 
+      setLoading(true);
+
       const response =
         await sanctionedPostService.getSanctionedPost(
           id
@@ -57,14 +59,18 @@ const EditSanctionedPost = () => {
 
     } catch (error) {
 
+      console.error(error);
+
       toast.error(
-        "Failed to load data"
+        "Failed to load sanctioned post."
       );
 
     } finally {
 
       setLoading(false);
+
     }
+
   };
 
   // ============================================
@@ -88,7 +94,7 @@ const EditSanctionedPost = () => {
       );
 
       toast.success(
-        "Updated Successfully"
+        "Sanctioned Post Updated Successfully"
       );
 
       navigate(
@@ -97,17 +103,24 @@ const EditSanctionedPost = () => {
 
     } catch (error) {
 
+      console.error(error);
+
       toast.error(
-        "Update Failed"
+        "Failed to update sanctioned post."
       );
 
     } finally {
 
       setLoading(false);
+
     }
+
   };
 
-  if (loading && !initialData.id) {
+  if (
+    loading &&
+    !initialData.id
+  ) {
 
     return (
 
@@ -116,18 +129,22 @@ const EditSanctionedPost = () => {
         Loading...
 
       </div>
+
     );
+
   }
 
   return (
 
     <div className="space-y-6">
 
-      <h1 className="
-        text-3xl
-        font-bold
-        text-gray-800
-      ">
+      <h1
+        className="
+          text-3xl
+          font-bold
+          text-gray-800
+        "
+      >
 
         Edit Sanctioned Post
 
@@ -144,7 +161,9 @@ const EditSanctionedPost = () => {
       />
 
     </div>
+
   );
+
 };
 
 export default EditSanctionedPost;

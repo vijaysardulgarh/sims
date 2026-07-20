@@ -1,61 +1,86 @@
 // src/modules/clusters/components/ClusterForm.jsx
 
-import { useState } from "react";
+import {
+    useEffect,
+    useState,
+} from "react";
 
 const ClusterForm = ({
     initialData = {},
     onSubmit,
-    loading,
+    loading = false,
 }) => {
 
     const [formData, setFormData] = useState({
 
-        // =====================================
-        // BASIC INFORMATION
-        // =====================================
+        // Basic Information
+        name: "",
+        code: "",
+        description: "",
 
-        name: initialData.name || "",
+        // CRC Information
+        crc_name: "",
+        crc_designation: "",
+        crc_phone: "",
+        crc_email: "",
 
-        code: initialData.code || "",
+        // Office Contact
+        email: "",
+        phone: "",
+        address: "",
 
-        description: initialData.description || "",
-
-        // =====================================
-        // CRC INFORMATION
-        // =====================================
-
-        crc_name: initialData.crc_name || "",
-
-        crc_designation:
-            initialData.crc_designation || "",
-
-        crc_phone:
-            initialData.crc_phone || "",
-
-        crc_email:
-            initialData.crc_email || "",
-
-        // =====================================
-        // OFFICE CONTACT
-        // =====================================
-
-        email: initialData.email || "",
-
-        phone: initialData.phone || "",
-
-        address: initialData.address || "",
-
-        // =====================================
-        // STATUS
-        // =====================================
-
-        is_active:
-            initialData.is_active ?? true,
+        // Status
+        is_active: true,
 
     });
 
     // =====================================
-    // HANDLE CHANGE
+    // Populate form when editing
+    // =====================================
+
+    useEffect(() => {
+
+        if (!initialData || Object.keys(initialData).length === 0) {
+            return;
+        }
+
+        setFormData({
+
+            name: initialData.name || "",
+
+            code: initialData.code || "",
+
+            description: initialData.description || "",
+
+            crc_name: initialData.crc_name || "",
+
+            crc_designation:
+                initialData.crc_designation || "",
+
+            crc_phone:
+                initialData.crc_phone || "",
+
+            crc_email:
+                initialData.crc_email || "",
+
+            email:
+                initialData.email || "",
+
+            phone:
+                initialData.phone || "",
+
+            address:
+                initialData.address || "",
+
+            is_active:
+                initialData.is_active ?? true,
+
+        });
+
+    }, [initialData]);
+
+    // =====================================
+    // Handle Change
     // =====================================
 
     const handleChange = (e) => {
@@ -77,10 +102,11 @@ const ClusterForm = ({
                     : value,
 
         }));
+
     };
 
     // =====================================
-    // SUBMIT
+    // Submit
     // =====================================
 
     const handleSubmit = (e) => {
@@ -88,123 +114,152 @@ const ClusterForm = ({
         e.preventDefault();
 
         onSubmit(formData);
+
     };
 
     return (
 
         <form
             onSubmit={handleSubmit}
-            className="space-y-4"
+            className="space-y-6"
         >
 
-            {/* ===================================== */}
-            {/* BASIC INFORMATION */}
-            {/* ===================================== */}
+            {/* Basic Information */}
 
-            <input
-                type="text"
-                name="name"
-                placeholder="Cluster Name"
-                value={formData.name}
-                onChange={handleChange}
-                className="border rounded p-2 w-full"
-                required
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-            <input
-                type="text"
-                name="code"
-                placeholder="Cluster Code"
-                value={formData.code}
-                onChange={handleChange}
-                className="border rounded p-2 w-full"
-                required
-            />
+                <div>
+                    <label className="block mb-1 font-medium">
+                        Cluster Name
+                    </label>
 
-            <textarea
-                name="description"
-                placeholder="Description"
-                value={formData.description}
-                onChange={handleChange}
-                className="border rounded p-2 w-full"
-                rows={3}
-            />
+                    <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="w-full border rounded-lg p-2"
+                        required
+                    />
+                </div>
 
-            {/* ===================================== */}
-            {/* CRC INFORMATION */}
-            {/* ===================================== */}
+                <div>
+                    <label className="block mb-1 font-medium">
+                        Cluster Code
+                    </label>
 
-            <input
-                type="text"
-                name="crc_name"
-                placeholder="CRC Name"
-                value={formData.crc_name}
-                onChange={handleChange}
-                className="border rounded p-2 w-full"
-                required
-            />
+                    <input
+                        type="text"
+                        name="code"
+                        value={formData.code}
+                        onChange={handleChange}
+                        className="w-full border rounded-lg p-2"
+                        required
+                    />
+                </div>
 
-            <input
-                type="text"
-                name="crc_designation"
-                placeholder="CRC Designation"
-                value={formData.crc_designation}
-                onChange={handleChange}
-                className="border rounded p-2 w-full"
-            />
+            </div>
 
-            <input
-                type="text"
-                name="crc_phone"
-                placeholder="CRC Phone"
-                value={formData.crc_phone}
-                onChange={handleChange}
-                className="border rounded p-2 w-full"
-            />
+            <div>
 
-            <input
-                type="email"
-                name="crc_email"
-                placeholder="CRC Email"
-                value={formData.crc_email}
-                onChange={handleChange}
-                className="border rounded p-2 w-full"
-            />
+                <label className="block mb-1 font-medium">
+                    Description
+                </label>
 
-            {/* ===================================== */}
-            {/* OFFICE CONTACT */}
-            {/* ===================================== */}
+                <textarea
+                    name="description"
+                    rows="3"
+                    value={formData.description}
+                    onChange={handleChange}
+                    className="w-full border rounded-lg p-2"
+                />
 
-            <input
-                type="email"
-                name="email"
-                placeholder="Office Email"
-                value={formData.email}
-                onChange={handleChange}
-                className="border rounded p-2 w-full"
-            />
+            </div>
 
-            <input
-                type="text"
-                name="phone"
-                placeholder="Office Phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="border rounded p-2 w-full"
-            />
+            {/* CRC Information */}
+
+            <h3 className="text-lg font-semibold border-b pb-2">
+                CRC Information
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <input
+                    type="text"
+                    name="crc_name"
+                    placeholder="CRC Name"
+                    value={formData.crc_name}
+                    onChange={handleChange}
+                    className="border rounded-lg p-2"
+                />
+
+                <input
+                    type="text"
+                    name="crc_designation"
+                    placeholder="CRC Designation"
+                    value={formData.crc_designation}
+                    onChange={handleChange}
+                    className="border rounded-lg p-2"
+                />
+
+                <input
+                    type="text"
+                    name="crc_phone"
+                    placeholder="CRC Phone"
+                    value={formData.crc_phone}
+                    onChange={handleChange}
+                    className="border rounded-lg p-2"
+                />
+
+                <input
+                    type="email"
+                    name="crc_email"
+                    placeholder="CRC Email"
+                    value={formData.crc_email}
+                    onChange={handleChange}
+                    className="border rounded-lg p-2"
+                />
+
+            </div>
+
+            {/* Office Contact */}
+
+            <h3 className="text-lg font-semibold border-b pb-2">
+                Office Contact
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Office Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="border rounded-lg p-2"
+                />
+
+                <input
+                    type="text"
+                    name="phone"
+                    placeholder="Office Phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="border rounded-lg p-2"
+                />
+
+            </div>
 
             <textarea
                 name="address"
                 placeholder="Office Address"
+                rows="3"
                 value={formData.address}
                 onChange={handleChange}
-                className="border rounded p-2 w-full"
-                rows={3}
+                className="w-full border rounded-lg p-2"
             />
 
-            {/* ===================================== */}
-            {/* STATUS */}
-            {/* ===================================== */}
+            {/* Status */}
 
             <label className="flex items-center gap-2">
 
@@ -219,23 +274,28 @@ const ClusterForm = ({
 
             </label>
 
-            {/* ===================================== */}
-            {/* SUBMIT */}
-            {/* ===================================== */}
+            {/* Buttons */}
 
-            <button
-                type="submit"
-                disabled={loading}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded"
-            >
+            <div className="flex justify-end">
 
-                {loading ? "Saving..." : "Save Cluster"}
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                >
 
-            </button>
+                    {loading
+                        ? "Saving..."
+                        : "Save Cluster"}
+
+                </button>
+
+            </div>
 
         </form>
 
     );
+
 };
 
 export default ClusterForm;

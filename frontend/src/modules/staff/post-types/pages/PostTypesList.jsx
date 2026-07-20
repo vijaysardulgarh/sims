@@ -5,11 +5,11 @@
 
 import {
   useEffect,
-  useState
+  useState,
 } from "react";
 
 import {
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -44,16 +44,13 @@ const PostTypesList = () => {
   const [search, setSearch] =
     useState("");
 
-  const [currentPage,
-    setCurrentPage] =
+  const [currentPage, setCurrentPage] =
     useState(1);
 
-  const [isModalOpen,
-    setIsModalOpen] =
+  const [isModalOpen, setIsModalOpen] =
     useState(false);
 
-  const [selectedId,
-    setSelectedId] =
+  const [selectedId, setSelectedId] =
     useState(null);
 
   const itemsPerPage = 20;
@@ -72,16 +69,15 @@ const PostTypesList = () => {
         await postTypeService.getPostTypes();
 
       const data =
-
         Array.isArray(response)
-
           ? response
-
           : response.results || [];
 
       setPostTypes(data);
 
     } catch (error) {
+
+      console.error(error);
 
       toast.error(
         "Failed to load post types"
@@ -90,7 +86,9 @@ const PostTypesList = () => {
     } finally {
 
       setLoading(false);
+
     }
+
   };
 
   useEffect(() => {
@@ -107,22 +105,24 @@ const PostTypesList = () => {
 
     try {
 
-      await postTypeService.deletePostType(
-        id
-      );
+      await postTypeService.deletePostType(id);
 
       toast.success(
-        "Deleted Successfully"
+        "Post Type deleted successfully."
       );
 
       fetchPostTypes();
 
     } catch (error) {
 
+      console.error(error);
+
       toast.error(
-        "Delete Failed"
+        "Delete failed."
       );
+
     }
+
   };
 
   // ============================================
@@ -130,14 +130,26 @@ const PostTypesList = () => {
   // ============================================
 
   const filteredData =
-    postTypes.filter((item) =>
+    postTypes.filter((item) => {
 
-      item.name
-        ?.toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
-    );
+      const keyword =
+        search.toLowerCase();
+
+      return (
+
+        item.name
+          ?.toLowerCase()
+          .includes(keyword)
+
+        ||
+
+        item.description
+          ?.toLowerCase()
+          .includes(keyword)
+
+      );
+
+    });
 
   // ============================================
   // PAGINATION
@@ -157,10 +169,11 @@ const PostTypesList = () => {
 
       currentPage *
       itemsPerPage
+
     );
 
   // ============================================
-  // COLUMNS
+  // TABLE COLUMNS
   // ============================================
 
   const columns = [
@@ -168,11 +181,6 @@ const PostTypesList = () => {
     {
       key: "name",
       label: "Post Type",
-    },
-
-    {
-      key: "code",
-      label: "Code",
     },
 
     {
@@ -184,6 +192,7 @@ const PostTypesList = () => {
       key: "actions",
       label: "Actions",
     },
+
   ];
 
   // ============================================
@@ -194,6 +203,9 @@ const PostTypesList = () => {
     paginatedData.map((item) => ({
 
       ...item,
+
+      description:
+        item.description || "-",
 
       actions: (
 
@@ -210,10 +222,18 @@ const PostTypesList = () => {
             setSelectedId(item.id);
 
             setIsModalOpen(true);
+
           }}
+
         />
+
       ),
+
     }));
+
+  // ============================================
+  // LOADING
+  // ============================================
 
   if (loading) {
 
@@ -224,8 +244,14 @@ const PostTypesList = () => {
         Loading post types...
 
       </div>
+
     );
+
   }
+
+  // ============================================
+  // UI
+  // ============================================
 
   return (
 
@@ -244,6 +270,7 @@ const PostTypesList = () => {
             "/dashboard/staff/post-types/add"
           )
         }
+
       />
 
       <SearchBox
@@ -255,11 +282,15 @@ const PostTypesList = () => {
         onChange={(e) =>
           setSearch(e.target.value)
         }
+
       />
 
       <DataTable
+
         columns={columns}
+
         data={tableData}
+
       />
 
       <Pagination
@@ -269,6 +300,7 @@ const PostTypesList = () => {
         totalPages={totalPages}
 
         onPageChange={setCurrentPage}
+
       />
 
       <ConfirmModal
@@ -279,21 +311,30 @@ const PostTypesList = () => {
 
         message="Are you sure you want to delete this post type?"
 
-        onCancel={() =>
-          setIsModalOpen(false)
-        }
+        onCancel={() => {
+
+          setSelectedId(null);
+
+          setIsModalOpen(false);
+
+        }}
 
         onConfirm={() => {
 
           handleDelete(selectedId);
 
+          setSelectedId(null);
+
           setIsModalOpen(false);
 
         }}
+
       />
 
     </div>
+
   );
+
 };
 
 export default PostTypesList;

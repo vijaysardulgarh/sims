@@ -5,11 +5,11 @@
 
 import {
   useEffect,
-  useState
+  useState,
 } from "react";
 
 import {
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -82,7 +82,9 @@ const SanctionedPostsList = () => {
     } finally {
 
       setLoading(false);
+
     }
+
   };
 
   useEffect(() => {
@@ -114,7 +116,9 @@ const SanctionedPostsList = () => {
       toast.error(
         "Delete Failed"
       );
+
     }
+
   };
 
   // ============================================
@@ -129,6 +133,7 @@ const SanctionedPostsList = () => {
         .includes(
           search.toLowerCase()
         )
+
     );
 
   // ============================================
@@ -149,6 +154,7 @@ const SanctionedPostsList = () => {
 
       currentPage *
       itemsPerPage
+
     );
 
   // ============================================
@@ -163,24 +169,40 @@ const SanctionedPostsList = () => {
     },
 
     {
-      key: "sanctioned_count",
+      key: "sanctioned_posts",
       label: "Sanctioned",
     },
 
     {
-      key: "filled_count",
-      label: "Filled",
+      key: "regular_working",
+      label: "Regular Working",
     },
 
     {
-      key: "remarks",
-      label: "Remarks",
+      key: "regular_vacancy",
+      label: "Regular Vacancy",
+    },
+
+    {
+      key: "guest_working",
+      label: "Guest Working",
+    },
+
+    {
+      key: "hkrnl_working",
+      label: "HKRNL Working",
+    },
+
+    {
+      key: "net_vacancy",
+      label: "Net Vacancy",
     },
 
     {
       key: "actions",
       label: "Actions",
     },
+
   ];
 
   // ============================================
@@ -207,9 +229,13 @@ const SanctionedPostsList = () => {
             setSelectedId(item.id);
 
             setIsModalOpen(true);
+
           }}
+
         />
+
       ),
+
     }));
 
   if (loading) {
@@ -221,7 +247,9 @@ const SanctionedPostsList = () => {
         Loading sanctioned posts...
 
       </div>
+
     );
+
   }
 
   return (
@@ -241,6 +269,7 @@ const SanctionedPostsList = () => {
             "/dashboard/staff/sanctioned-posts/add"
           )
         }
+
       />
 
       <SearchBox
@@ -252,11 +281,15 @@ const SanctionedPostsList = () => {
         onChange={(e) =>
           setSearch(e.target.value)
         }
+
       />
 
       <DataTable
+
         columns={columns}
+
         data={tableData}
+
       />
 
       <Pagination
@@ -266,6 +299,7 @@ const SanctionedPostsList = () => {
         totalPages={totalPages}
 
         onPageChange={setCurrentPage}
+
       />
 
       <ConfirmModal
@@ -287,10 +321,13 @@ const SanctionedPostsList = () => {
           setIsModalOpen(false);
 
         }}
+
       />
 
     </div>
+
   );
+
 };
 
 export default SanctionedPostsList;

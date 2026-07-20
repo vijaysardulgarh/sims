@@ -3,6 +3,7 @@
 // ============================================
 
 import { useEffect, useState } from "react";
+// Adjust these imports based on your actual file structure
 import postTypeService from "../../post-types/services/postTypeService";
 import subjectService from "../../../academics/subjects/services/subjectService";
 
@@ -34,11 +35,6 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
     subject: "",
     qualification: "",
     teaching_experience_years: 0,
-    priority: 1,
-    min_periods_per_week: 20,
-    max_periods_per_week: 40,
-    is_class_teacher: false,
-    is_house_incharge: false,
 
     // CONTACT
     mobile_number: "",
@@ -48,7 +44,9 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
     // ADDRESS
     address: "",
     city: "",
+    district: "",
     state: "",
+    country: "India", // Default from model
     pin_code: "",
 
     // DATES
@@ -92,17 +90,14 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
         subject: initialData.subject || "",
         qualification: initialData.qualification || "",
         teaching_experience_years: initialData.teaching_experience_years || 0,
-        priority: initialData.priority || 1,
-        min_periods_per_week: initialData.min_periods_per_week || 20,
-        max_periods_per_week: initialData.max_periods_per_week || 40,
-        is_class_teacher: initialData.is_class_teacher ?? false,
-        is_house_incharge: initialData.is_house_incharge ?? false,
         mobile_number: initialData.mobile_number || "",
         email: initialData.email || "",
         aadhar_number: initialData.aadhar_number || "",
         address: initialData.address || "",
         city: initialData.city || "",
+        district: initialData.district || "",
         state: initialData.state || "",
+        country: initialData.country || "India",
         pin_code: initialData.pin_code || "",
         date_of_birth: initialData.date_of_birth || "",
         joining_date: initialData.joining_date || "",
@@ -172,24 +167,15 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
       return;
     }
 
-    // Exact Django Mobile Regex (10 digits starting with 6-9)
-    if (formData.mobile_number && !/^[6-9]\d{9}$/.test(formData.mobile_number)) {
-      alert("Enter a valid 10-digit Indian mobile number starting with 6-9.");
+    // Mobile Validation (10 digits)
+    if (formData.mobile_number && !/^\d{10}$/.test(formData.mobile_number)) {
+      alert("Enter a valid 10-digit mobile number.");
       return;
     }
 
-    // Exact Django Aadhaar Regex
+    // Aadhaar Validation (12 digits)
     if (formData.aadhar_number && !/^\d{12}$/.test(formData.aadhar_number)) {
       alert("Aadhaar number must contain exactly 12 digits.");
-      return;
-    }
-
-    // Workload Constraints
-    if (
-      formData.staff_role === "Teaching" &&
-      Number(formData.min_periods_per_week) > Number(formData.max_periods_per_week)
-    ) {
-      alert("Minimum periods cannot be greater than Maximum periods.");
       return;
     }
 
@@ -212,10 +198,19 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
       return;
     }
 
+    if (
+      formData.date_of_birth && 
+      formData.joining_date && 
+      formData.joining_date <= formData.date_of_birth
+    ) {
+      alert("Joining date cannot be on or before date of birth.");
+      return;
+    }
+
     // Prepare FormData for Submission
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
+      if (value !== null && value !== undefined && value !== "") {
         data.append(key, value);
       }
     });
@@ -242,6 +237,7 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
             value={formData.employee_id}
             onChange={handleChange}
             className={inputClass}
+            required
           />
           <input
             name="name"
@@ -333,6 +329,7 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
               </option>
             ))}
           </select>
+          
           <input
             name="designation"
             placeholder="Designation"
@@ -340,6 +337,7 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
             onChange={handleChange}
             className={inputClass}
           />
+          
           <select
             name="staff_role"
             value={formData.staff_role}
@@ -351,6 +349,7 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
             <option value="Admin">Admin</option>
             <option value="Support">Support</option>
           </select>
+          
           <select
             name="employment_type"
             value={formData.employment_type}
@@ -363,33 +362,26 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
             <option value="Guest">Guest</option>
             <option value="Part Time">Part Time</option>
           </select>
+          
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
             className={inputClass}
           >
+            {/* Options matched exactly to Django TextChoices */}
             <option value="Active">Active</option>
-            <option value="Transferred">Transferred</option>
+            <option value="On Leave">On Leave</option>
+            <option value="Suspended">Suspended</option>
             <option value="Retired">Retired</option>
             <option value="Resigned">Resigned</option>
-            <option value="Deputed">Deputed</option>
-            <option value="CCL Leave">CCL Leave</option>
+            <option value="Transferred">Transferred</option>
           </select>
           
           <input
             name="qualification"
             placeholder="Qualification"
             value={formData.qualification}
-            onChange={handleChange}
-            className={inputClass}
-          />
-          
-          <input
-            type="number"
-            name="priority"
-            placeholder="Priority"
-            value={formData.priority}
             onChange={handleChange}
             className={inputClass}
           />
@@ -413,28 +405,10 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
 
               <input
                 type="number"
-                step="0.5"
+                min="0"
                 name="teaching_experience_years"
                 placeholder="Teaching Experience (Years)"
                 value={formData.teaching_experience_years}
-                onChange={handleChange}
-                className={inputClass}
-              />
-              
-              <input
-                type="number"
-                name="min_periods_per_week"
-                placeholder="Min Periods / Week"
-                value={formData.min_periods_per_week}
-                onChange={handleChange}
-                className={inputClass}
-              />
-              
-              <input
-                type="number"
-                name="max_periods_per_week"
-                placeholder="Max Periods / Week"
-                value={formData.max_periods_per_week}
                 onChange={handleChange}
                 className={inputClass}
               />
@@ -462,7 +436,7 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
                 target: {
                   name: "mobile_number",
                   type: "text",
-                  value: e.target.value.replace(/\D/g, ""), // Sanitize to numbers only
+                  value: e.target.value.replace(/\D/g, ""), 
                 },
               })
             }
@@ -491,7 +465,7 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
                 target: {
                   name: "aadhar_number",
                   type: "text",
-                  value: e.target.value.replace(/\D/g, ""), // Sanitize to numbers only
+                  value: e.target.value.replace(/\D/g, ""), 
                 },
               })
             }
@@ -508,33 +482,51 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <textarea
             name="address"
-            placeholder="Address"
+            placeholder="Address (House number, street, etc.)"
             value={formData.address}
             onChange={handleChange}
-            rows={4}
+            rows={5}
             className={inputClass}
           />
-          <div className="space-y-6">
-            <input
-              name="city"
-              placeholder="City"
-              value={formData.city}
-              onChange={handleChange}
-              className={inputClass}
-            />
-            <input
-              name="state"
-              placeholder="State"
-              value={formData.state}
-              onChange={handleChange}
-              className={inputClass}
-            />
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                name="city"
+                placeholder="City"
+                value={formData.city}
+                onChange={handleChange}
+                className={inputClass}
+              />
+              <input
+                name="district"
+                placeholder="District"
+                value={formData.district}
+                onChange={handleChange}
+                className={inputClass}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                name="state"
+                placeholder="State"
+                value={formData.state}
+                onChange={handleChange}
+                className={inputClass}
+              />
+              <input
+                name="country"
+                placeholder="Country"
+                value={formData.country}
+                onChange={handleChange}
+                className={inputClass}
+              />
+            </div>
             <input
               name="pin_code"
               placeholder="PIN Code"
               value={formData.pin_code}
               onChange={handleChange}
-              maxLength={6}
+              maxLength={10}
               className={inputClass}
             />
           </div>
@@ -606,7 +598,7 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
           <textarea
             name="bio"
             placeholder="Bio"
-            rows={5}
+            rows={4}
             value={formData.bio}
             onChange={handleChange}
             className={inputClass}
@@ -618,28 +610,8 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
           FLAGS / SETTINGS
       ============================================ */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">Additional Settings</h2>
+        <h2 className="text-xl font-semibold mb-4">System Settings</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <label className="flex items-center gap-3 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              name="is_class_teacher"
-              checked={formData.is_class_teacher}
-              onChange={handleChange}
-              className="w-5 h-5 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span>Class Teacher</span>
-          </label>
-          <label className="flex items-center gap-3 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              name="is_house_incharge"
-              checked={formData.is_house_incharge}
-              onChange={handleChange}
-              className="w-5 h-5 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span>House Incharge</span>
-          </label>
           <label className="flex items-center gap-3 cursor-pointer select-none">
             <input
               type="checkbox"
@@ -648,7 +620,7 @@ const StaffForm = ({ initialData = {}, onSubmit, loading = false }) => {
               onChange={handleChange}
               className="w-5 h-5 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
-            <span>Active</span>
+            <span className="font-medium text-gray-700">Profile Active</span>
           </label>
         </div>
       </div>

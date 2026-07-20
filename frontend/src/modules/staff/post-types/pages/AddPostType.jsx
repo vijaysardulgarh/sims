@@ -4,24 +4,29 @@
 // ============================================
 
 import {
-  useState
+  useState,
 } from "react";
 
 import {
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
-import PostTypeForm
-from "../components/PostTypeForm";
-
-import postTypeService
-from "../services/postTypeService";
+import PostTypeForm from "../components/PostTypeForm";
+import postTypeService from "../services/postTypeService";
 
 const AddPostType = () => {
 
+  // ============================================
+  // NAVIGATION
+  // ============================================
+
   const navigate = useNavigate();
+
+  // ============================================
+  // STATE
+  // ============================================
 
   const [loading, setLoading] =
     useState(false);
@@ -39,13 +44,11 @@ const AddPostType = () => {
       setLoading(true);
 
       await postTypeService.createPostType(
-
         formData
-
       );
 
       toast.success(
-        "Post Type Added Successfully"
+        "Post Type added successfully."
       );
 
       navigate(
@@ -54,24 +57,38 @@ const AddPostType = () => {
 
     } catch (error) {
 
-      console.log(error);
+      console.error(error);
 
-      toast.error(
+      if (error.response?.data) {
 
-        error.response?.data
-
-          ? JSON.stringify(
-              error.response.data
+        const errors =
+          Object.entries(error.response.data)
+            .map(([field, messages]) =>
+              `${field}: ${Array.isArray(messages) ? messages.join(", ") : messages}`
             )
+            .join("\n");
 
-          : "Failed to add post type"
-      );
+        toast.error(errors);
+
+      } else {
+
+        toast.error(
+          "Failed to add post type."
+        );
+
+      }
 
     } finally {
 
       setLoading(false);
+
     }
+
   };
+
+  // ============================================
+  // UI
+  // ============================================
 
   return (
 
@@ -79,22 +96,26 @@ const AddPostType = () => {
 
       <div>
 
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-800
-        ">
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-gray-800
+          "
+        >
 
           Add Post Type
 
         </h1>
 
-        <p className="
-          text-gray-500
-          mt-1
-        ">
+        <p
+          className="
+            text-gray-500
+            mt-1
+          "
+        >
 
-          Create new staff post type
+          Create a new staff post type.
 
         </p>
 
@@ -109,7 +130,9 @@ const AddPostType = () => {
       />
 
     </div>
+
   );
+
 };
 
 export default AddPostType;

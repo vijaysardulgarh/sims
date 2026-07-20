@@ -5,7 +5,7 @@
 
 import {
   useEffect,
-  useState
+  useState,
 } from "react";
 
 const PostTypeForm = ({
@@ -27,8 +27,6 @@ const PostTypeForm = ({
 
       name: "",
 
-      code: "",
-
       description: "",
     });
 
@@ -48,12 +46,10 @@ const PostTypeForm = ({
         name:
           initialData.name || "",
 
-        code:
-          initialData.code || "",
-
         description:
           initialData.description || "",
       });
+
     }
 
   }, [initialData]);
@@ -71,7 +67,9 @@ const PostTypeForm = ({
       ...formData,
 
       [name]: value,
+
     });
+
   };
 
   // ============================================
@@ -83,6 +81,7 @@ const PostTypeForm = ({
     e.preventDefault();
 
     onSubmit(formData);
+
   };
 
   return (
@@ -98,16 +97,20 @@ const PostTypeForm = ({
       "
     >
 
-      {/* NAME */}
+      {/* POST TYPE NAME */}
 
       <div>
 
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
+        <label
+          className="
+            block
+            mb-2
+            font-medium
+          "
+        >
+
           Post Type Name
+
         </label>
 
         <input
@@ -131,41 +134,7 @@ const PostTypeForm = ({
           "
 
           required
-        />
 
-      </div>
-
-      {/* CODE */}
-
-      <div>
-
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
-          Code
-        </label>
-
-        <input
-
-          type="text"
-
-          name="code"
-
-          value={formData.code}
-
-          onChange={handleChange}
-
-          placeholder="Enter code"
-
-          className="
-            w-full
-            border
-            rounded-xl
-            px-4
-            py-3
-          "
         />
 
       </div>
@@ -174,12 +143,16 @@ const PostTypeForm = ({
 
       <div>
 
-        <label className="
-          block
-          mb-2
-          font-medium
-        ">
+        <label
+          className="
+            block
+            mb-2
+            font-medium
+          "
+        >
+
           Description
+
         </label>
 
         <textarea
@@ -201,11 +174,12 @@ const PostTypeForm = ({
             px-4
             py-3
           "
+
         />
 
       </div>
 
-      {/* BUTTON */}
+      {/* SAVE BUTTON */}
 
       <button
 
@@ -220,19 +194,27 @@ const PostTypeForm = ({
           px-6
           py-3
           rounded-xl
+          disabled:opacity-50
         "
+
       >
 
-        {loading
+        {
 
-          ? "Saving..."
+          loading
 
-          : "Save Post Type"}
+            ? "Saving..."
+
+            : "Save Post Type"
+
+        }
 
       </button>
 
     </form>
+
   );
+
 };
 
 export default PostTypeForm;

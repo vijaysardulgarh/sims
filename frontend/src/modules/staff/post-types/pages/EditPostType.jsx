@@ -5,18 +5,17 @@
 
 import {
   useEffect,
-  useState
+  useState,
 } from "react";
 
 import {
   useNavigate,
-  useParams
+  useParams,
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
 import PostTypeForm from "../components/PostTypeForm";
-
 import postTypeService from "../services/postTypeService";
 
 const EditPostType = () => {
@@ -40,43 +39,44 @@ const EditPostType = () => {
   const [loading, setLoading] =
     useState(true);
 
-  const [initialData,
-    setInitialData] =
+  const [initialData, setInitialData] =
     useState({});
 
   // ============================================
-  // FETCH
+  // FETCH POST TYPE
   // ============================================
 
   useEffect(() => {
 
     fetchPostType();
 
-  }, []);
+  }, [id]);
 
   const fetchPostType = async () => {
 
     try {
 
+      setLoading(true);
+
       const response =
-        await postTypeService.getPostType(
-          id
-        );
+        await postTypeService.getPostType(id);
 
       setInitialData(response);
 
     } catch (error) {
 
-      console.log(error);
+      console.error(error);
 
       toast.error(
-        "Failed to load post type"
+        "Failed to load post type."
       );
 
     } finally {
 
       setLoading(false);
+
     }
+
   };
 
   // ============================================
@@ -100,7 +100,7 @@ const EditPostType = () => {
       );
 
       toast.success(
-        "Post Type Updated Successfully"
+        "Post Type updated successfully."
       );
 
       navigate(
@@ -109,16 +109,18 @@ const EditPostType = () => {
 
     } catch (error) {
 
-      console.log(error);
+      console.error(error);
 
       toast.error(
-        "Failed to update post type"
+        "Failed to update post type."
       );
 
     } finally {
 
       setLoading(false);
+
     }
+
   };
 
   // ============================================
@@ -134,8 +136,14 @@ const EditPostType = () => {
         Loading...
 
       </div>
+
     );
+
   }
+
+  // ============================================
+  // UI
+  // ============================================
 
   return (
 
@@ -143,20 +151,24 @@ const EditPostType = () => {
 
       <div>
 
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-800
-        ">
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-gray-800
+          "
+        >
 
           Edit Post Type
 
         </h1>
 
-        <p className="
-          text-gray-500
-          mt-1
-        ">
+        <p
+          className="
+            text-gray-500
+            mt-1
+          "
+        >
 
           Update post type details
 
@@ -175,7 +187,9 @@ const EditPostType = () => {
       />
 
     </div>
+
   );
+
 };
 
 export default EditPostType;

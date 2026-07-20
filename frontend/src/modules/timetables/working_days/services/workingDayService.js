@@ -1,61 +1,33 @@
-import api
-    from '../../../../services/api/axios';
+import api from "../../../../services/api/axios";
 
 export const ENDPOINT =
-    '/timetables/working-days/';
+    "/timetables/working-days/";
 
 export const LIST_PATH =
-    '/dashboard/timetables/working-days';
-
-export const ADD_PATH =
-    '/dashboard/timetables/working-days/add';
-
-export const EDIT_PATH =
-    '/dashboard/timetables/working-days/edit';
+    "/dashboard/timetables/working-days";
 
 const workingDayService = {
 
     endpoint: ENDPOINT,
 
-    getAll: (
-        params = {}
-    ) =>
+    /**
+     * Get all working days
+     */
+    getAll: (params = {}) =>
         api.get(
             ENDPOINT,
             {
                 params,
-            }
+            },
         ),
 
-    getById: (
-        id
-    ) =>
-        api.get(
-            `${ENDPOINT}${id}/`
-        ),
-
-    create: (
-        data
-    ) =>
+    /**
+     * Save all working days
+     */
+    save: (data) =>
         api.post(
-            ENDPOINT,
-            data
-        ),
-
-    update: (
-        id,
-        data
-    ) =>
-        api.put(
-            `${ENDPOINT}${id}/`,
-            data
-        ),
-
-    delete: (
-        id
-    ) =>
-        api.delete(
-            `${ENDPOINT}${id}/`
+            `${ENDPOINT}save/`,
+            data,
         ),
 
 };

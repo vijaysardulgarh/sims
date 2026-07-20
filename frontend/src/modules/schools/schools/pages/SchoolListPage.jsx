@@ -1,10 +1,10 @@
 import {
-  useEffect,
-  useState
+    useEffect,
+    useState,
 } from "react";
 
 import {
-  useNavigate
+    useNavigate,
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -19,284 +19,222 @@ import ConfirmModal from "@/modules/shared/components/dialogs/ConfirmModal";
 
 const SchoolsListPage = () => {
 
-  const navigate =
-    useNavigate();
+    const navigate = useNavigate();
 
-  const [schools, setSchools] =
-    useState([]);
+    const [schools, setSchools] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+    const [loading, setLoading] = useState(true);
 
-  const [currentPage, setCurrentPage] =
-    useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
 
-  const [selectedId, setSelectedId] =
-    useState(null);
+    const [selectedId, setSelectedId] = useState(null);
 
-  const [isModalOpen, setIsModalOpen] =
-    useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const itemsPerPage = 20;
+    const itemsPerPage = 20;
 
-  // ============================================
-  // FETCH SCHOOLS
-  // ============================================
+    useEffect(() => {
 
-  const fetchSchools = async () => {
+        fetchSchools();
 
-    try {
+    }, []);
 
-      setLoading(true);
+    const fetchSchools = async () => {
 
-      const response =
-        await schoolService.getSchools();
+        try {
 
-      setSchools(
+            setLoading(true);
 
-        response?.data?.results ||
+            const response =
+                await schoolService.getSchools();
 
-        response?.data ||
+            setSchools(
+                response?.data?.results ||
+                response?.data ||
+                []
+            );
 
-        []
+        }
 
-      );
+        catch (error) {
 
-    }
+            console.error(error);
 
-    catch (error) {
+            toast.error("Failed to load schools");
 
-      console.error(error);
+        }
 
-      toast.error(
-        "Failed to load schools"
-      );
+        finally {
 
-    }
+            setLoading(false);
 
-    finally {
+        }
 
-      setLoading(false);
+    };
 
-    }
+    const handleDelete = async (id) => {
 
-  };
+        try {
 
-  useEffect(() => {
+            await schoolService.deleteSchool(id);
 
-    fetchSchools();
+            toast.success("School deleted successfully");
 
-  }, []);
+            fetchSchools();
 
-  // ============================================
-  // DELETE
-  // ============================================
+        }
 
-  const handleDelete = async (id) => {
+        catch (error) {
 
-    try {
+            console.error(error);
 
-      await schoolService.deleteSchool(
-        id
-      );
+            toast.error("Delete failed");
 
-      toast.success(
-        "School deleted successfully"
-      );
+        }
 
-      fetchSchools();
+    };
 
-    }
-
-    catch (error) {
-
-      console.error(error);
-
-      toast.error(
-        "Delete failed"
-      );
-
-    }
-
-  };
-
-  // ============================================
-  // PAGINATION
-  // ============================================
-
-  const totalPages = Math.ceil(
-
-    schools.length /
-    itemsPerPage
-
-  );
-
-  const paginatedSchools =
-
-    schools.slice(
-
-      (currentPage - 1) *
-      itemsPerPage,
-
-      currentPage *
-      itemsPerPage
-
+    const totalPages = Math.ceil(
+        schools.length / itemsPerPage
     );
 
-  // ============================================
-  // TABLE COLUMNS
-  // ============================================
+    const paginatedSchools =
+        schools.slice(
+            (currentPage - 1) * itemsPerPage,
+            currentPage * itemsPerPage
+        );
 
-  const columns = [
+    const columns = [
 
-    {
-      key: "name",
-      label: "School Name",
-    },
+        {
+            key: "name",
+            label: "School Name",
+        },
 
-    {
-      key: "code",
-      label: "Code",
-    },
+        {
+            key: "code",
+            label: "School Code",
+        },
 
-    {
-      key: "actions",
-      label: "Actions",
-    },
+        {
+            key: "email",
+            label: "Email",
+        },
 
-  ];
+        {
+            key: "actions",
+            label: "Actions",
+        },
 
-  // ============================================
-  // TABLE DATA
-  // ============================================
+    ];
 
-  const tableData =
+    const tableData = paginatedSchools.map(
+        (school) => ({
 
-    paginatedSchools.map(
-      (school) => ({
+            ...school,
 
-        ...school,
+            actions: (
 
-        actions: (
+                <ActionButtons
 
-          <ActionButtons
+                    onEdit={() =>
+                        navigate(
+                            `/dashboard/schools/schools/edit/${school.id}`
+                        )
+                    }
 
-            onEdit={() =>
-              navigate(
-                `/dashboard/schools/edit/${school.id}`
-              )
-            }
+                    onDelete={() => {
 
-            onDelete={() => {
+                        setSelectedId(school.id);
 
-              setSelectedId(
-                school.id
-              );
+                        setIsModalOpen(true);
 
-              setIsModalOpen(
-                true
-              );
+                    }}
 
-            }}
+                />
 
-          />
+            ),
 
-        ),
-
-      })
+        })
     );
 
-  if (loading) {
+    if (loading) {
+
+        return (
+            <div className="p-6">
+                Loading schools...
+            </div>
+        );
+
+    }
 
     return (
 
-      <div className="p-6">
+        <div className="space-y-6 p-6">
 
-        Loading schools...
+            <CrudHeader
 
-      </div>
+                title="Schools"
+
+                description="Manage all schools"
+
+                addLabel="Add School"
+
+                onAdd={() =>
+                    navigate(
+                        "/dashboard/schools/schools/add"
+                    )
+                }
+
+            />
+
+            <DataTable
+
+                columns={columns}
+
+                data={tableData}
+
+                currentPage={currentPage}
+
+                itemsPerPage={itemsPerPage}
+
+            />
+
+            <Pagination
+
+                currentPage={currentPage}
+
+                totalPages={totalPages}
+
+                onPageChange={setCurrentPage}
+
+            />
+
+            <ConfirmModal
+
+                isOpen={isModalOpen}
+
+                title="Delete School"
+
+                message="Are you sure you want to delete this school?"
+
+                onCancel={() =>
+                    setIsModalOpen(false)
+                }
+
+                onConfirm={() => {
+
+                    handleDelete(selectedId);
+
+                    setIsModalOpen(false);
+
+                }}
+
+            />
+
+        </div>
 
     );
-
-  }
-
-  return (
-
-    <div className="space-y-6">
-
-      <CrudHeader
-
-        title="Schools"
-
-        description="Manage schools"
-
-        addLabel="Add School"
-
-        onAdd={() =>
-          navigate(
-            "/dashboard/schools/add"
-          )
-        }
-
-      />
-
-      <DataTable
-
-        columns={columns}
-
-        data={tableData}
-
-        currentPage={currentPage}
-
-        itemsPerPage={itemsPerPage}
-
-      />
-
-      <Pagination
-
-        currentPage={currentPage}
-
-        totalPages={totalPages}
-
-        onPageChange={
-          setCurrentPage
-        }
-
-      />
-
-      <ConfirmModal
-
-        isOpen={
-          isModalOpen
-        }
-
-        title="Delete School"
-
-        message="Are you sure you want to delete this school?"
-
-        onCancel={() =>
-          setIsModalOpen(
-            false
-          )
-        }
-
-        onConfirm={() => {
-
-          handleDelete(
-            selectedId
-          );
-
-          setIsModalOpen(
-            false
-          );
-
-        }}
-
-      />
-
-    </div>
-
-  );
 
 };
 

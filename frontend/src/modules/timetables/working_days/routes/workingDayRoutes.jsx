@@ -1,15 +1,6 @@
-import {
-    Route,
-} from "react-router-dom";
+import { Route } from "react-router-dom";
 
-import WorkingDayListPage
-    from "../pages/WorkingDayListPage";
-
-import WorkingDayCreatePage
-    from "../pages/WorkingDayCreatePage";
-
-import WorkingDayEditPage
-    from "../pages/WorkingDayEditPage";
+import WorkingDaysPage from "../pages/WorkingDaysPage";
 
 const workingDayRoutes = (
 
@@ -17,23 +8,7 @@ const workingDayRoutes = (
 
         <Route
             index
-            element={
-                <WorkingDayListPage />
-            }
-        />
-
-        <Route
-            path="add"
-            element={
-                <WorkingDayCreatePage />
-            }
-        />
-
-        <Route
-            path="edit/:id"
-            element={
-                <WorkingDayEditPage />
-            }
+            element={<WorkingDaysPage />}
         />
 
     </Route>

@@ -5,10 +5,11 @@
 
 import {
   useEffect,
-  useState
+  useState,
 } from "react";
 
 import postTypeService from "../../post-types/services/postTypeService";
+
 const SanctionedPostForm = ({
 
   initialData = {},
@@ -27,16 +28,19 @@ const SanctionedPostForm = ({
     setPostTypes] =
     useState([]);
 
-  const [formData, setFormData] =
+  const [formData,
+    setFormData] =
     useState({
 
       post_type: "",
 
-      sanctioned_count: "",
+      sanctioned_posts: "",
 
-      filled_count: "",
+      regular_working: "",
 
-      remarks: "",
+      guest_working: "",
+
+      hkrnl_working: "",
     });
 
   // ============================================
@@ -63,12 +67,15 @@ const SanctionedPostForm = ({
           ? response
 
           : response.results || []
+
       );
 
     } catch (error) {
 
-      console.log(error);
+      console.error(error);
+
     }
+
   };
 
   // ============================================
@@ -87,15 +94,20 @@ const SanctionedPostForm = ({
         post_type:
           initialData.post_type || "",
 
-        sanctioned_count:
-          initialData.sanctioned_count || "",
+        sanctioned_posts:
+          initialData.sanctioned_posts || "",
 
-        filled_count:
-          initialData.filled_count || "",
+        regular_working:
+          initialData.regular_working || "",
 
-        remarks:
-          initialData.remarks || "",
+        guest_working:
+          initialData.guest_working || "",
+
+        hkrnl_working:
+          initialData.hkrnl_working || "",
+
       });
+
     }
 
   }, [initialData]);
@@ -113,8 +125,41 @@ const SanctionedPostForm = ({
       ...formData,
 
       [name]: value,
+
     });
+
   };
+
+  // ============================================
+  // CALCULATIONS
+  // ============================================
+
+  const sanctioned =
+    Number(formData.sanctioned_posts) || 0;
+
+  const regular =
+    Number(formData.regular_working) || 0;
+
+  const guest =
+    Number(formData.guest_working) || 0;
+
+  const hkrnl =
+    Number(formData.hkrnl_working) || 0;
+
+  const regularVacancy =
+    Math.max(
+      0,
+      sanctioned - regular
+    );
+
+  const netVacancy =
+    Math.max(
+      0,
+      sanctioned -
+      regular -
+      guest -
+      hkrnl
+    );
 
   // ============================================
   // SUBMIT
@@ -125,6 +170,7 @@ const SanctionedPostForm = ({
     e.preventDefault();
 
     onSubmit(formData);
+
   };
 
   return (
@@ -187,14 +233,16 @@ const SanctionedPostForm = ({
                 {item.name}
 
               </option>
+
             ))
+
           }
 
         </select>
 
       </div>
 
-      {/* SANCTIONED */}
+      {/* SANCTIONED POSTS */}
 
       <div>
 
@@ -203,18 +251,20 @@ const SanctionedPostForm = ({
           mb-2
           font-medium
         ">
-          Sanctioned Count
+          Sanctioned Posts
         </label>
 
         <input
 
           type="number"
 
-          name="sanctioned_count"
+          name="sanctioned_posts"
 
-          value={formData.sanctioned_count}
+          value={formData.sanctioned_posts}
 
           onChange={handleChange}
+
+          min="0"
 
           className="
             w-full
@@ -229,7 +279,7 @@ const SanctionedPostForm = ({
 
       </div>
 
-      {/* FILLED */}
+      {/* REGULAR WORKING */}
 
       <div>
 
@@ -238,18 +288,20 @@ const SanctionedPostForm = ({
           mb-2
           font-medium
         ">
-          Filled Count
+          Regular Working
         </label>
 
         <input
 
           type="number"
 
-          name="filled_count"
+          name="regular_working"
 
-          value={formData.filled_count}
+          value={formData.regular_working}
 
           onChange={handleChange}
+
+          min="0"
 
           className="
             w-full
@@ -258,11 +310,13 @@ const SanctionedPostForm = ({
             px-4
             py-3
           "
+
+          required
         />
 
       </div>
 
-      {/* REMARKS */}
+      {/* REGULAR VACANCY */}
 
       <div>
 
@@ -271,18 +325,53 @@ const SanctionedPostForm = ({
           mb-2
           font-medium
         ">
-          Remarks
+          Regular Vacancy
         </label>
 
-        <textarea
+        <input
 
-          name="remarks"
+          type="number"
 
-          value={formData.remarks}
+          value={regularVacancy}
+
+          readOnly
+
+          className="
+            w-full
+            border
+            rounded-xl
+            px-4
+            py-3
+            bg-gray-100
+            cursor-not-allowed
+          "
+        />
+
+      </div>
+
+      {/* GUEST WORKING */}
+
+      <div>
+
+        <label className="
+          block
+          mb-2
+          font-medium
+        ">
+          Guest Working
+        </label>
+
+        <input
+
+          type="number"
+
+          name="guest_working"
+
+          value={formData.guest_working}
 
           onChange={handleChange}
 
-          rows="4"
+          min="0"
 
           className="
             w-full
@@ -295,7 +384,75 @@ const SanctionedPostForm = ({
 
       </div>
 
-      {/* BUTTON */}
+      {/* HKRNL WORKING */}
+
+      <div>
+
+        <label className="
+          block
+          mb-2
+          font-medium
+        ">
+          HKRNL Working
+        </label>
+
+        <input
+
+          type="number"
+
+          name="hkrnl_working"
+
+          value={formData.hkrnl_working}
+
+          onChange={handleChange}
+
+          min="0"
+
+          className="
+            w-full
+            border
+            rounded-xl
+            px-4
+            py-3
+          "
+        />
+
+      </div>
+
+      {/* NET VACANCY */}
+
+      <div>
+
+        <label className="
+          block
+          mb-2
+          font-medium
+        ">
+          Net Vacancy
+        </label>
+
+        <input
+
+          type="number"
+
+          value={netVacancy}
+
+          readOnly
+
+          className="
+            w-full
+            border
+            rounded-xl
+            px-4
+            py-3
+            bg-gray-100
+            cursor-not-allowed
+          "
+        />
+
+      </div>
+
+      {/* SAVE BUTTON */}
 
       <button
 
@@ -310,19 +467,26 @@ const SanctionedPostForm = ({
           px-6
           py-3
           rounded-xl
+          disabled:opacity-50
         "
       >
 
-        {loading
+        {
 
-          ? "Saving..."
+          loading
 
-          : "Save Sanctioned Post"}
+            ? "Saving..."
+
+            : "Save Sanctioned Post"
+
+        }
 
       </button>
 
     </form>
+
   );
+
 };
 
 export default SanctionedPostForm;

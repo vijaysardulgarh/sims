@@ -1,33 +1,14 @@
 import { Route } from "react-router-dom";
 
-import TeacherAttendanceList from "../pages/TeacherAttendanceList";
-
-import AddTeacherAttendance from "../pages/AddTeacherAttendance";
-
-import EditTeacherAttendance from "../pages/EditTeacherAttendance";
-
+import TeacherAttendancePage from "../pages/TeacherAttendancePage";
 
 const teacherAttendanceRoutes = (
-
-    <Route path="teacher-attendance">
-
-        <Route
-            index
-            element={<TeacherAttendanceList />}
-        />
-
-        <Route
-            path="add"
-            element={<AddTeacherAttendance />}
-        />
-
-        <Route
-            path="edit/:id"
-            element={<EditTeacherAttendance />}
-        />
-
-    </Route>
-
+  <Route path="teacher-attendance">
+    <Route
+      index
+      element={<TeacherAttendancePage />}
+    />
+  </Route>
 );
 
 export default teacherAttendanceRoutes;

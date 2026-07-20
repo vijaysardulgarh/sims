@@ -1,17 +1,20 @@
-from rest_framework.routers import (
-    DefaultRouter,
-)
+from django.urls import path
 
 from .views import (
-    WorkingDayViewSet,
+    WorkingDayListView,
+    WorkingDayBulkUpdateView,
 )
 
-router = DefaultRouter()
+urlpatterns = [
+    path(
+        "",
+        WorkingDayListView.as_view(),
+        name="working-day-list",
+    ),
 
-router.register(
-    "",
-    WorkingDayViewSet,
-    basename="working-days",
-)
-
-urlpatterns = router.urls
+    path(
+        "save/",
+        WorkingDayBulkUpdateView.as_view(),
+        name="working-day-save",
+    ),
+]

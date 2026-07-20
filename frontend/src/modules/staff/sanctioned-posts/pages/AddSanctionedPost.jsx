@@ -4,11 +4,11 @@
 // ============================================
 
 import {
-  useState
+  useState,
 } from "react";
 
 import {
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -33,9 +33,7 @@ const AddSanctionedPost = () => {
       setLoading(true);
 
       await sanctionedPostService.createSanctionedPost(
-
         formData
-
       );
 
       toast.success(
@@ -48,7 +46,7 @@ const AddSanctionedPost = () => {
 
     } catch (error) {
 
-      console.log(error);
+      console.error(error);
 
       toast.error(
         "Failed to add sanctioned post"
@@ -57,7 +55,9 @@ const AddSanctionedPost = () => {
     } finally {
 
       setLoading(false);
+
     }
+
   };
 
   return (
@@ -66,11 +66,13 @@ const AddSanctionedPost = () => {
 
       <div>
 
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-800
-        ">
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-gray-800
+          "
+        >
 
           Add Sanctioned Post
 
@@ -87,7 +89,9 @@ const AddSanctionedPost = () => {
       />
 
     </div>
+
   );
+
 };
 
 export default AddSanctionedPost;

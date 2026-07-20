@@ -1,6 +1,5 @@
 // ============================================
 // ADD STAFF
-// File: AddStaff.jsx
 // ============================================
 
 import { useState } from "react";
@@ -13,101 +12,99 @@ import staffService from "../services/staffService";
 
 const AddStaff = () => {
 
-  // ============================================
-  // NAVIGATION
-  // ============================================
+    // ============================================
+    // NAVIGATION
+    // ============================================
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  // ============================================
-  // STATE
-  // ============================================
+    // ============================================
+    // STATE
+    // ============================================
 
-  const [loading, setLoading] =
-    useState(false);
+    const [loading, setLoading] = useState(false);
 
-  // ============================================
-  // SUBMIT
-  // ============================================
+    // ============================================
+    // SUBMIT
+    // ============================================
 
-  const handleSubmit = async (
-    formData
-  ) => {
+    const handleSubmit = async (formData) => {
 
-    try {
+        try {
 
-      setLoading(true);
+            setLoading(true);
 
-      await staffService.createStaff(
-        formData
-      );
+            await staffService.createStaff(formData);
 
-      toast.success(
-        "Staff added successfully"
-      );
+            toast.success("Staff added successfully.");
 
-      navigate(
-        "/dashboard/staff/staff-profiles"
-      );
+            navigate("/dashboard/staff/staff-profiles");
 
-    } catch (error) {
+        } catch (error) {
 
-      console.error(error);
+            console.error(error);
 
-      toast.error(
+            const errors = error?.response?.data;
 
-        error.response?.data
+            if (typeof errors === "object" && errors !== null) {
 
-          ? JSON.stringify(
-              error.response.data
-            )
+                Object.entries(errors).forEach(([field, messages]) => {
 
-          : "Failed to add staff"
-      );
+                    toast.error(
+                        `${field}: ${
+                            Array.isArray(messages)
+                                ? messages.join(", ")
+                                : messages
+                        }`
+                    );
 
-    } finally {
+                });
 
-      setLoading(false);
-    }
-  };
+            } else {
 
-  // ============================================
-  // UI
-  // ============================================
+                toast.error(
+                    "Failed to add staff."
+                );
 
-  return (
+            }
 
-    <div className="space-y-6">
+        } finally {
 
-      <div>
+            setLoading(false);
 
-        <h1 className="
-          text-3xl
-          font-bold
-          text-gray-800
-        ">
-          Add Staff
-        </h1>
+        }
 
-        <p className="
-          text-gray-500
-          mt-1
-        ">
-          Create a new staff record
-        </p>
+    };
 
-      </div>
+    // ============================================
+    // UI
+    // ============================================
 
-      <StaffForm
+    return (
 
-        onSubmit={handleSubmit}
+        <div className="space-y-6">
 
-        loading={loading}
+            <div>
 
-      />
+                <h1 className="text-3xl font-bold text-gray-800">
+                    Add Staff
+                </h1>
 
-    </div>
-  );
+                <p className="mt-1 text-gray-500">
+                    Create a new staff record.
+                </p>
+
+            </div>
+
+            <StaffForm
+                onSubmit={handleSubmit}
+                loading={loading}
+            />
+
+        </div>
+
+    );
+
 };
 
 export default AddStaff;

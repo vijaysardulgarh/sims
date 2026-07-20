@@ -25,7 +25,7 @@ const clusterRoutes = (
         />
 
         <Route
-            path=":id/edit"
+            path="edit/:id"
             element={<ClusterEditPage />}
         />
 
