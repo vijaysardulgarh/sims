@@ -1,68 +1,93 @@
-from rest_framework import viewsets
+from django.db import transaction
 
-from .models import (
-    TeacherWorkload,
-)
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .serializers import (
-    TeacherWorkloadSerializer,
-)
+from apps.staff.profiles.models import Staff
+
+from .models import TeacherWorkload
+from .serializers import TeacherWorkloadSerializer
 
 
-class TeacherWorkloadViewSet(
-    viewsets.ModelViewSet
-):
+class TeacherWorkloadListView(APIView):
 
-    queryset = (
-        TeacherWorkload.objects.filter(
-            is_deleted=False,
-        )
-    )
+    def get(self, request):
 
-    serializer_class = (
-        TeacherWorkloadSerializer
-    )
-
-    search_fields = [
-        "teacher__first_name",
-        "teacher__last_name",
-    ]
-
-    ordering_fields = [
-        "created_at",
-    ]
-
-    ordering = [
-        "teacher",
-    ]
-
-    def perform_create(
-        self,
-        serializer,
-    ):
-
-        serializer.save(
-            created_by=self.request.user,
+        teachers = (
+            Staff.objects.filter(
+                is_deleted=False,
+            )
+            .order_by("name")
         )
 
-    def perform_update(
-        self,
-        serializer,
-    ):
+        data = []
 
-        serializer.save(
-            updated_by=self.request.user,
+        for teacher in teachers:
+
+            workload = (
+                TeacherWorkload.objects.filter(
+                    teacher=teacher,
+                    is_deleted=False,
+                )
+                .first()
+            )
+
+            if workload:
+
+                data.append(
+                    TeacherWorkloadSerializer(
+                        workload
+                    ).data
+                )
+
+            else:
+
+                data.append(
+                    {
+                        "id": None,
+                        "teacher": teacher.id,
+                        "teacher_name": teacher.name,
+                        "employee_id": teacher.employee_id,
+                        "max_periods_per_day": 6,
+                        "min_periods_per_day": 0,
+                        "max_periods_per_week": 36,
+                        "min_periods_per_week": 0,
+                        "max_consecutive_periods": 3,
+                    }
+                )
+
+        return Response(data)
+
+
+class TeacherWorkloadBulkSaveView(APIView):
+
+    @transaction.atomic
+    def post(self, request):
+
+        for row in request.data:
+
+            workload, created = (
+                TeacherWorkload.objects.update_or_create(
+                    teacher_id=row["teacher"],
+                    defaults={
+                        "max_periods_per_day": row["max_periods_per_day"],
+                        "min_periods_per_day": row["min_periods_per_day"],
+                        "max_periods_per_week": row["max_periods_per_week"],
+                        "min_periods_per_week": row["min_periods_per_week"],
+                        "max_consecutive_periods": row["max_consecutive_periods"],
+                        "updated_by": request.user,
+                    },
+                )
+            )
+
+            if created:
+                workload.created_by = request.user
+                workload.save(update_fields=["created_by"])
+
+        return Response(
+            {
+                "message": "Teacher workloads saved successfully."
+            },
+            status=status.HTTP_200_OK,
         )
-
-    def perform_destroy(
-        self,
-        instance,
-    ):
-
-        instance.is_deleted = True
-
-        instance.deleted_by = (
-            self.request.user
-        )
-
-        instance.save()

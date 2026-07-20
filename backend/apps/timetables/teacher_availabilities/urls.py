@@ -1,17 +1,26 @@
-from rest_framework.routers import (
-    DefaultRouter,
-)
+from django.urls import path
 
 from .views import (
-    TeacherAvailabilityViewSet,
+    TeacherAvailabilityTeacherListView,
+    TeacherAvailabilityBulkMatrixView,
+    TeacherAvailabilityBulkSaveView,
 )
 
-router = DefaultRouter()
+urlpatterns = [
 
-router.register(
-    "",
-    TeacherAvailabilityViewSet,
-    basename="teacher-availabilities",
-)
+    path(
+        "teachers/",
+        TeacherAvailabilityTeacherListView.as_view(),
+    ),
 
-urlpatterns = router.urls
+    path(
+        "bulk-matrix/",
+        TeacherAvailabilityBulkMatrixView.as_view(),
+    ),
+
+    path(
+        "bulk-save/",
+        TeacherAvailabilityBulkSaveView.as_view(),
+    ),
+
+]

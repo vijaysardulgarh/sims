@@ -1,17 +1,19 @@
-from rest_framework.routers import (
-    DefaultRouter,
-)
+from django.urls import path
 
 from .views import (
-    TeacherWorkloadViewSet,
+    TeacherWorkloadListView,
+    TeacherWorkloadBulkSaveView,
 )
 
-router = DefaultRouter()
-
-router.register(
-    "",
-    TeacherWorkloadViewSet,
-    basename="teacher-workloads",
-)
-
-urlpatterns = router.urls
+urlpatterns = [
+    path(
+        "",
+        TeacherWorkloadListView.as_view(),
+        name="teacher-workload-list",
+    ),
+    path(
+        "save/",
+        TeacherWorkloadBulkSaveView.as_view(),
+        name="teacher-workload-bulk-save",
+    ),
+]

@@ -1,17 +1,10 @@
-import api
-    from '../../../../services/api/axios';
+import api from "../../../../services/api/axios";
 
 export const ENDPOINT =
-    '/timetables/teacher-preferences/';
+    "/timetables/teacher-preferences/";
 
 export const LIST_PATH =
-    '/dashboard/timetables/teacher-preferences';
-
-export const ADD_PATH =
-    '/dashboard/timetables/teacher-preferences/add';
-
-export const EDIT_PATH =
-    '/dashboard/timetables/teacher-preferences/edit';
+    "/dashboard/timetables/teacher-preferences";
 
 const teacherPreferenceService = {
 
@@ -27,35 +20,12 @@ const teacherPreferenceService = {
             }
         ),
 
-    getById: (
-        id
-    ) =>
-        api.get(
-            `${ENDPOINT}${id}/`
-        ),
-
-    create: (
+    saveAll: (
         data
     ) =>
         api.post(
-            ENDPOINT,
+            `${ENDPOINT}save/`,
             data
-        ),
-
-    update: (
-        id,
-        data
-    ) =>
-        api.put(
-            `${ENDPOINT}${id}/`,
-            data
-        ),
-
-    delete: (
-        id
-    ) =>
-        api.delete(
-            `${ENDPOINT}${id}/`
         ),
 
 };

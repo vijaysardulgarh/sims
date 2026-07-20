@@ -1,15 +1,7 @@
-import {
-    Route,
-} from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import TeacherAvailabilityListPage
     from "../pages/TeacherAvailabilityListPage";
-
-import TeacherAvailabilityCreatePage
-    from "../pages/TeacherAvailabilityCreatePage";
-
-import TeacherAvailabilityEditPage
-    from "../pages/TeacherAvailabilityEditPage";
 
 const teacherAvailabilityRoutes = (
 
@@ -19,20 +11,6 @@ const teacherAvailabilityRoutes = (
             index
             element={
                 <TeacherAvailabilityListPage />
-            }
-        />
-
-        <Route
-            path="add"
-            element={
-                <TeacherAvailabilityCreatePage />
-            }
-        />
-
-        <Route
-            path="edit/:id"
-            element={
-                <TeacherAvailabilityEditPage />
             }
         />
 

@@ -1,17 +1,13 @@
-import api
-    from '../../../../services/api/axios';
+import api from "../../../../services/api/axios";
 
 export const ENDPOINT =
-    '/timetables/teacher-workloads/';
+    "/timetables/teacher-workloads/";
+
+export const SAVE_ENDPOINT =
+    "/timetables/teacher-workloads/save/";
 
 export const LIST_PATH =
-    '/dashboard/timetables/teacher-workloads';
-
-export const ADD_PATH =
-    '/dashboard/timetables/teacher-workloads/add';
-
-export const EDIT_PATH =
-    '/dashboard/timetables/teacher-workloads/edit';
+    "/dashboard/timetables/teacher-workloads";
 
 const teacherWorkloadService = {
 
@@ -27,35 +23,12 @@ const teacherWorkloadService = {
             }
         ),
 
-    getById: (
-        id
-    ) =>
-        api.get(
-            `${ENDPOINT}${id}/`
-        ),
-
-    create: (
+    saveAll: (
         data
     ) =>
         api.post(
-            ENDPOINT,
+            SAVE_ENDPOINT,
             data
-        ),
-
-    update: (
-        id,
-        data
-    ) =>
-        api.put(
-            `${ENDPOINT}${id}/`,
-            data
-        ),
-
-    delete: (
-        id
-    ) =>
-        api.delete(
-            `${ENDPOINT}${id}/`
         ),
 
 };

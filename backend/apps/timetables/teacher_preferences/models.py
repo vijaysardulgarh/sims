@@ -1,15 +1,15 @@
 from django.db import models
 
-from apps.core.common.base.models import (
-    SessionBaseModel,
-)
-from apps.staff.profiles.models import (
-    Staff,
-)
+from apps.core.common.base.models import SessionBaseModel
+from apps.staff.profiles.models import Staff
 
-class TeacherPreference(
-    SessionBaseModel,
-):
+
+class TeacherPreference(SessionBaseModel):
+
+    SHIFT_CHOICES = (
+        ("MORNING", "Morning"),
+        ("AFTERNOON", "Afternoon"),
+    )
 
     teacher = models.OneToOneField(
         Staff,
@@ -17,70 +17,58 @@ class TeacherPreference(
         related_name="teacher_preference",
     )
 
+    # Period Preferences
     prefer_first_period = models.BooleanField(
         default=False,
+        help_text="Prefer teaching in the first period.",
     )
 
     avoid_first_period = models.BooleanField(
         default=False,
+        help_text="Avoid teaching in the first period.",
     )
 
     prefer_last_period = models.BooleanField(
         default=False,
+        help_text="Prefer teaching in the last period.",
     )
 
     avoid_last_period = models.BooleanField(
         default=False,
+        help_text="Avoid teaching in the last period.",
     )
 
-    prefer_consecutive_periods = models.BooleanField(
-        default=False,
+    # Shift Preference
+    preferred_shift = models.CharField(
+        max_length=10,
+        choices=SHIFT_CHOICES,
+        blank=True,
+        help_text="Preferred teaching session.",
     )
 
+    # Gap Preference
     avoid_gaps_between_classes = models.BooleanField(
         default=False,
+        help_text="Try to avoid idle periods between classes.",
     )
 
-    max_periods_per_day = models.PositiveIntegerField(
-        default=6,
-    )
-
-    max_periods_per_week = models.PositiveIntegerField(
-        default=36,
-    )
-
-    preferred_free_day = models.CharField(
-        max_length=3,
-        choices=(
-            ("MON", "Monday"),
-            ("TUE", "Tuesday"),
-            ("WED", "Wednesday"),
-            ("THU", "Thursday"),
-            ("FRI", "Friday"),
-            ("SAT", "Saturday"),
-            ("SUN", "Sunday"),
-        ),
-        blank=True,
-    )
-
-    remarks = models.TextField(
-        blank=True,
+    maximum_free_gaps = models.PositiveSmallIntegerField(
+        default=0,
+        help_text="Maximum free periods allowed between teaching periods in a day.",
     )
 
     class Meta:
 
-        db_table = (
-            "tt_teacher_preferences"
-        )
+        db_table = "tt_teacher_preferences"
+
+        verbose_name = "Teacher Preference"
+
+        verbose_name_plural = "Teacher Preferences"
 
         ordering = [
-            "teacher",
+            "teacher__name",
         ]
 
-    def __str__(
-        self,
-    ):
+    def __str__(self):
 
-        return str(
-            self.teacher
-        )
+        return self.teacher.name

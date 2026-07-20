@@ -1,68 +1,70 @@
-from rest_framework import viewsets
+from django.db import transaction
 
-from .models import (
-    TeacherPreference,
-)
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .serializers import (
-    TeacherPreferenceSerializer,
-)
+from apps.staff.profiles.models import Staff
+
+from .models import TeacherPreference
+from .serializers import TeacherPreferenceSerializer
 
 
-class TeacherPreferenceViewSet(
-    viewsets.ModelViewSet
-):
+class TeacherPreferenceListView(APIView):
 
-    queryset = (
-        TeacherPreference.objects.filter(
+    def get(self, request):
+
+        teachers = Staff.objects.filter(
             is_deleted=False,
-        )
-    )
+        ).order_by("name")
 
-    serializer_class = (
-        TeacherPreferenceSerializer
-    )
+        data = []
 
-    search_fields = [
-        "teacher__first_name",
-        "teacher__last_name",
-    ]
+        for teacher in teachers:
 
-    ordering_fields = [
-        "created_at",
-    ]
+            preference, _ = TeacherPreference.objects.get_or_create(
+                teacher=teacher,
+                defaults={
+                    "created_by": request.user,
+                },
+            )
 
-    ordering = [
-        "teacher",
-    ]
+            data.append(
+                TeacherPreferenceSerializer(preference).data
+            )
 
-    def perform_create(
-        self,
-        serializer,
-    ):
+        return Response(data)
 
-        serializer.save(
-            created_by=self.request.user,
-        )
 
-    def perform_update(
-        self,
-        serializer,
-    ):
+class TeacherPreferenceBulkSaveView(APIView):
 
-        serializer.save(
-            updated_by=self.request.user,
+    @transaction.atomic
+    def post(self, request):
+
+        serializer = TeacherPreferenceSerializer(
+            data=request.data,
+            many=True,
         )
 
-    def perform_destroy(
-        self,
-        instance,
-    ):
-
-        instance.is_deleted = True
-
-        instance.deleted_by = (
-            self.request.user
+        serializer.is_valid(
+            raise_exception=True,
         )
 
-        instance.save()
+        for item in serializer.validated_data:
+
+            teacher = item.pop("teacher")
+
+            TeacherPreference.objects.update_or_create(
+                teacher=teacher,
+                defaults={
+                    **item,
+                    "updated_by": request.user,
+                },
+            )
+
+        return Response(
+            {
+                "detail": "Teacher preferences saved successfully."
+            },
+            status=status.HTTP_200_OK,
+        )

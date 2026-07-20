@@ -1,27 +1,21 @@
 from rest_framework import serializers
 
-from .models import (
-    TeacherAvailability,
-)
+from apps.staff.profiles.models import Staff
 
 
-class TeacherAvailabilitySerializer(
-    serializers.ModelSerializer
-):
+class TeacherAvailabilityTeacherSerializer(serializers.ModelSerializer):
+
+    teacher_name = serializers.CharField(
+        source="name",
+        read_only=True,
+    )
 
     class Meta:
 
-        model = (
-            TeacherAvailability
-        )
+        model = Staff
 
-        fields = "__all__"
-
-        read_only_fields = (
-            "created_at",
-            "updated_at",
-            "created_by",
-            "updated_by",
-            "deleted_at",
-            "deleted_by",
-        )
+        fields = [
+            "id",
+            "employee_id",
+            "teacher_name",
+        ]

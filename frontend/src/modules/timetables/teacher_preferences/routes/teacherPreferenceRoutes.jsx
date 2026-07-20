@@ -5,12 +5,6 @@ import {
 import TeacherPreferenceListPage
     from "../pages/TeacherPreferenceListPage";
 
-import TeacherPreferenceCreatePage
-    from "../pages/TeacherPreferenceCreatePage";
-
-import TeacherPreferenceEditPage
-    from "../pages/TeacherPreferenceEditPage";
-
 const teacherPreferenceRoutes = (
 
     <Route path="teacher-preferences">
@@ -19,20 +13,6 @@ const teacherPreferenceRoutes = (
             index
             element={
                 <TeacherPreferenceListPage />
-            }
-        />
-
-        <Route
-            path="add"
-            element={
-                <TeacherPreferenceCreatePage />
-            }
-        />
-
-        <Route
-            path="edit/:id"
-            element={
-                <TeacherPreferenceEditPage />
             }
         />
 

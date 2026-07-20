@@ -1,17 +1,19 @@
-from rest_framework.routers import (
-    DefaultRouter,
-)
+from django.urls import path
 
 from .views import (
-    TeacherPreferenceViewSet,
+    TeacherPreferenceListView,
+    TeacherPreferenceBulkSaveView,
 )
 
-router = DefaultRouter()
-
-router.register(
-    "",
-    TeacherPreferenceViewSet,
-    basename="teacher-preferences",
-)
-
-urlpatterns = router.urls
+urlpatterns = [
+    path(
+        "",
+        TeacherPreferenceListView.as_view(),
+        name="teacher-preference-list",
+    ),
+    path(
+        "save/",
+        TeacherPreferenceBulkSaveView.as_view(),
+        name="teacher-preference-bulk-save",
+    ),
+]

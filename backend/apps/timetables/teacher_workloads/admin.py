@@ -1,34 +1,38 @@
 from django.contrib import admin
 
-from .models import (
-    TeacherWorkload,
-)
+from .models import TeacherWorkload
 
 
-@admin.register(
-    TeacherWorkload
-)
-class TeacherWorkloadAdmin(
-    admin.ModelAdmin
-):
+@admin.register(TeacherWorkload)
+class TeacherWorkloadAdmin(admin.ModelAdmin):
 
     list_display = (
         "teacher",
         "max_periods_per_day",
+        "min_periods_per_day",
         "max_periods_per_week",
+        "min_periods_per_week",
         "max_consecutive_periods",
-        "allow_overtime",
+        "school",
+        "academic_session",
         "is_active",
     )
 
     search_fields = (
-        "teacher__first_name",
-        "teacher__last_name",
+        "teacher__name",
+        "teacher__employee_id",
     )
 
     list_filter = (
         "school",
         "academic_session",
-        "allow_overtime",
         "is_active",
+    )
+
+    ordering = (
+        "teacher__name",
+    )
+
+    autocomplete_fields = (
+        "teacher",
     )
