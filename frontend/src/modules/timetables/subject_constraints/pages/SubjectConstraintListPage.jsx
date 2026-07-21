@@ -3,13 +3,22 @@ import CrudListPage
 
 import {
     ENDPOINT,
-    ADD_PATH,
-    EDIT_PATH,
 } from '../services/subjectConstraintService';
+
 
 const SubjectConstraintListPage = () => {
 
     const columns = [
+
+        {
+            key: 'school_class',
+            label: 'Class',
+        },
+
+        {
+            key: 'section',
+            label: 'Section',
+        },
 
         {
             key: 'subject',
@@ -17,23 +26,74 @@ const SubjectConstraintListPage = () => {
         },
 
         {
-            key: 'constraint_type',
-            label: 'Constraint Type',
+            key: 'theory_periods_per_week',
+            label: 'Theory/Wk',
         },
 
         {
-            key: 'value',
-            label: 'Value',
+            key: 'lab_periods_per_week',
+            label: 'Lab/Wk',
         },
 
         {
-            key: 'is_mandatory',
-            label: 'Mandatory',
+            key: 'total_periods_per_week',
+            label: 'Total/Wk',
+        },
+
+        {
+            key: 'is_compulsory',
+            label: 'Compulsory',
+            type: 'boolean',
+        },
+
+        {
+            key: 'priority',
+            label: 'Priority',
+        },
+
+        {
+            key: 'max_periods_per_day',
+            label: 'Max/Day',
+        },
+
+        {
+            key: 'allow_consecutive_periods',
+            label: 'Consecutive',
+            type: 'boolean',
+        },
+
+        {
+            key: 'required_consecutive_periods',
+            label: 'Req. Consecutive',
+        },
+
+        {
+            key: 'spread_across_week',
+            label: 'Spread Week',
+            type: 'boolean',
+        },
+
+        {
+            key: 'avoid_first_period',
+            label: 'Avoid First',
+            type: 'boolean',
+        },
+
+        {
+            key: 'avoid_last_period',
+            label: 'Avoid Last',
+            type: 'boolean',
+        },
+
+        {
+            key: 'preferred_time_slot',
+            label: 'Time Slot',
         },
 
         {
             key: 'is_active',
             label: 'Active',
+            type: 'boolean',
         },
 
     ];
@@ -48,9 +108,17 @@ const SubjectConstraintListPage = () => {
 
             columns={columns}
 
-            addPath={ADD_PATH}
+            editable={true}
 
-            editPath={EDIT_PATH}
+            allowAddRow={true}
+
+            allowDelete={true}
+
+            allowBulkSave={true}
+
+            allowImport={true}
+
+            allowExport={true}
 
         />
 

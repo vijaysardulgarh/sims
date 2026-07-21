@@ -1,63 +1,32 @@
-import api
-    from '../../../../services/api/axios';
+import api from '../../../../services/api/axios';
 
-export const ENDPOINT =
-    '/timetables/subject-requirements/';
+export const ENDPOINT = '/timetables/subject-requirements/';
 
-export const LIST_PATH =
-    '/dashboard/timetables/subject-requirements';
-
-export const ADD_PATH =
-    '/dashboard/timetables/subject-requirements/add';
-
-export const EDIT_PATH =
-    '/dashboard/timetables/subject-requirements/edit';
+export const LIST_PATH = '/dashboard/timetables/subject-requirements';
 
 const subjectRequirementService = {
+  endpoint: ENDPOINT,
 
-    endpoint: ENDPOINT,
+  getAll: (params = {}) => 
+    api.get(ENDPOINT, { params }),
 
-    getAll: (
-        params = {}
-    ) =>
-        api.get(
-            ENDPOINT,
-            {
-                params,
-            }
-        ),
+  bulkSave: (rows) => 
+    api.post(`${ENDPOINT}bulk-save/`, rows),
 
-    getById: (
-        id
-    ) =>
-        api.get(
-            `${ENDPOINT}${id}/`
-        ),
+  refresh: (params = {}) => 
+    api.get(ENDPOINT, { params }),
 
-    create: (
-        data
-    ) =>
-        api.post(
-            ENDPOINT,
-            data
-        ),
+  exportExcel: () =>
+    api.get(`${ENDPOINT}export/`, {
+      responseType: "blob",
+    }),
 
-    update: (
-        id,
-        data
-    ) =>
-        api.put(
-            `${ENDPOINT}${id}/`,
-            data
-        ),
-
-    delete: (
-        id
-    ) =>
-        api.delete(
-            `${ENDPOINT}${id}/`
-        ),
-
+  importExcel: (formData) =>
+    api.post(`${ENDPOINT}import/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
 };
 
 export default subjectRequirementService;

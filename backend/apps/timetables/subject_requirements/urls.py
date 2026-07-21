@@ -1,17 +1,19 @@
-from rest_framework.routers import (
-    DefaultRouter,
-)
+from django.urls import path
 
 from .views import (
-    SubjectRequirementViewSet,
+    SubjectRequirementListView,
+    SubjectRequirementBulkSaveView,
 )
 
-router = DefaultRouter()
-
-router.register(
-    "",
-    SubjectRequirementViewSet,
-    basename="subject-requirements",
-)
-
-urlpatterns = router.urls
+urlpatterns = [
+    path(
+        "",
+        SubjectRequirementListView.as_view(),
+        name="subject-requirement-list",
+    ),
+    path(
+        "bulk-save/",
+        SubjectRequirementBulkSaveView.as_view(),
+        name="subject-requirement-bulk-save",
+    ),
+]

@@ -1,38 +1,53 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from apps.core.common.base.models import (
     SessionBaseModel,
 )
-from apps.academics.subjects.models import Subject
+from apps.timetables.subject_requirements.models import (
+    SubjectRequirement,
+)
+
 
 class SubjectConstraint(
     SessionBaseModel,
 ):
 
-    subject = models.OneToOneField(
-        Subject,
+    TIME_SLOT_CHOICES = [
+
+        ("ANY", "Any"),
+
+        ("MORNING", "Morning"),
+
+        ("AFTERNOON", "Afternoon"),
+
+    ]
+
+    subject_requirement = models.OneToOneField(
+        SubjectRequirement,
         on_delete=models.CASCADE,
         related_name="subject_constraint",
     )
 
-    periods_per_week = models.PositiveIntegerField(
-        default=1,
+    priority = models.PositiveSmallIntegerField(
+        default=5,
+        help_text="Lower value indicates higher scheduling priority.",
     )
 
-    max_periods_per_day = models.PositiveIntegerField(
+    max_periods_per_day = models.PositiveSmallIntegerField(
         default=1,
-    )
-
-    min_periods_per_day = models.PositiveIntegerField(
-        default=0,
     )
 
     allow_consecutive_periods = models.BooleanField(
         default=False,
     )
 
-    required_consecutive_periods = models.PositiveIntegerField(
+    required_consecutive_periods = models.PositiveSmallIntegerField(
         default=1,
+    )
+
+    spread_across_week = models.BooleanField(
+        default=True,
     )
 
     avoid_first_period = models.BooleanField(
@@ -43,27 +58,31 @@ class SubjectConstraint(
         default=False,
     )
 
-    requires_room = models.BooleanField(
-        default=False,
-    )
-
-    room_type = models.CharField(
-        max_length=100,
-        blank=True,
-    )
-
-    requires_resource = models.BooleanField(
-        default=False,
-    )
-
-    resource_type = models.CharField(
-        max_length=100,
-        blank=True,
+    preferred_time_slot = models.CharField(
+        max_length=10,
+        choices=TIME_SLOT_CHOICES,
+        default="ANY",
     )
 
     remarks = models.TextField(
         blank=True,
     )
+
+    def clean(self):
+
+        super().clean()
+
+        if (
+            self.required_consecutive_periods > 1
+            and not self.allow_consecutive_periods
+        ):
+
+            raise ValidationError(
+                {
+                    "required_consecutive_periods":
+                    "Required consecutive periods greater than 1 require 'Allow Consecutive Periods' to be enabled."
+                }
+            )
 
     class Meta:
 
@@ -71,14 +90,38 @@ class SubjectConstraint(
             "tt_subject_constraints"
         )
 
+        verbose_name = (
+            "Subject Constraint"
+        )
+
+        verbose_name_plural = (
+            "Subject Constraints"
+        )
+
         ordering = [
-            "subject__name",
+
+            "subject_requirement__school_class__display_order",
+
+            "subject_requirement__subject__name",
+
         ]
 
-    def __str__(
+    def save(
         self,
+        *args,
+        **kwargs,
     ):
 
-        return str(
-            self.subject
+        self.full_clean()
+
+        super().save(
+            *args,
+            **kwargs,
+        )
+
+    def __str__(self):
+
+        return (
+            f"{self.subject_requirement.school_class} - "
+            f"{self.subject_requirement.subject}"
         )

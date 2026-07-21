@@ -1,17 +1,22 @@
-from rest_framework.routers import (
-    DefaultRouter,
-)
+from django.urls import path
 
 from .views import (
-    SubjectConstraintViewSet,
+    SubjectConstraintListView,
+    SubjectConstraintBulkSaveView,
 )
 
-router = DefaultRouter()
+urlpatterns = [
 
-router.register(
-    "",
-    SubjectConstraintViewSet,
-    basename="subject-constraints",
-)
+    path(
+        "",
+        SubjectConstraintListView.as_view(),
+        name="subject-constraint-list",
+    ),
 
-urlpatterns = router.urls
+    path(
+        "bulk-save/",
+        SubjectConstraintBulkSaveView.as_view(),
+        name="subject-constraint-bulk-save",
+    ),
+
+]

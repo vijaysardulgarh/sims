@@ -1,15 +1,14 @@
-from django.db import transaction
-
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.db import transaction
 
 from apps.staff.profiles.models import Staff
 from apps.timetables.period_definitions.models import PeriodDefinition
 
 from .models import TeacherAvailability
 from .serializers import TeacherAvailabilityTeacherSerializer
-
+from apps.academics.sessions.models import AcademicSession
 
 # ==========================================================
 # TEACHER LIST
@@ -67,7 +66,7 @@ class TeacherAvailabilityBulkMatrixView(APIView):
             is_active=True,
             is_deleted=False,
         ).order_by(
-            "display_order",   # ✅ Correct field
+            "display_order",
         )
 
         existing = TeacherAvailability.objects.filter(
@@ -80,6 +79,7 @@ class TeacherAvailabilityBulkMatrixView(APIView):
             for item in existing
         }
 
+        # Included Sunday to match your frontend model
         days = [
             "MON",
             "TUE",
@@ -87,16 +87,14 @@ class TeacherAvailabilityBulkMatrixView(APIView):
             "THU",
             "FRI",
             "SAT",
+            "SUN", 
         ]
 
         matrix = {}
 
         for day in days:
-
             matrix[day] = {}
-
             for period in periods:
-
                 matrix[day][period.id] = availability_map.get(
                     (day, period.id),
                     True,
@@ -113,7 +111,7 @@ class TeacherAvailabilityBulkSaveView(APIView):
 
     @transaction.atomic
     def post(self, request):
-
+        
         teacher_id = request.data.get("teacher")
         availability = request.data.get("availability", [])
 
@@ -135,24 +133,38 @@ class TeacherAvailabilityBulkSaveView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
+        # 1. Fetch the currently active academic session
+        current_session = AcademicSession.objects.filter(is_current=True).first()
+        
+        if not current_session:
+            return Response(
+                {"detail": "No active academic session found in the system."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        availability_instances = []
+        
         for row in availability:
+            availability_instances.append(
+                TeacherAvailability(
+                    school=teacher.school,
+                    academic_session=current_session,  # 2. Replaced teacher.academic_session
+                    teacher=teacher,
+                    day=row["day"],
+                    period_id=row["period"],
+                    is_available=row["is_available"]
+                )
+            )
 
-            TeacherAvailability.objects.update_or_create(
-
-                school=teacher.school,
-                academic_session=teacher.academic_session,
-                teacher=teacher,
-                day=row["day"],
-                period_id=row["period"],
-
-                defaults={
-                    "is_available": row["is_available"],
-                },
+        if availability_instances:
+            TeacherAvailability.objects.bulk_create(
+                availability_instances,
+                update_conflicts=True,
+                unique_fields=['school', 'academic_session', 'teacher', 'day', 'period'],
+                update_fields=['is_available']
             )
 
         return Response(
-            {
-                "message": "Availability saved successfully.",
-            },
+            {"message": "Availability saved successfully."},
             status=status.HTTP_200_OK,
         )

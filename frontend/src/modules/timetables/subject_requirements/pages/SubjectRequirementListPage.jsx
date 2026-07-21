@@ -3,42 +3,86 @@ import CrudListPage
 
 import {
     ENDPOINT,
-    ADD_PATH,
-    EDIT_PATH,
 } from '../services/subjectRequirementService';
+
 
 const SubjectRequirementListPage = () => {
 
     const columns = [
 
         {
-            key: 'subject',
-            label: 'Subject',
-        },
-
-        {
-            key: 'school_class',
+            key: 'school_class_name',
             label: 'Class',
+            editable: false,
         },
 
         {
-            key: 'periods_per_week',
-            label: 'Periods/Week',
+            key: 'section_name',
+            label: 'Section',
+            editable: false,
         },
 
         {
-            key: 'minimum_periods_per_day',
-            label: 'Min/Day',
+            key: 'stream_name',
+            label: 'Stream',
+            editable: false,
         },
 
         {
-            key: 'maximum_periods_per_day',
-            label: 'Max/Day',
+            key: 'sub_stream',
+            label: 'Sub Stream',
+        },
+
+        {
+            key: 'subject_name',
+            label: 'Subject',
+            editable: false,
+        },
+
+        {
+            key: 'theory_periods_per_week',
+            label: 'Theory/Wk',
+        },
+
+        {
+            key: 'lab_periods_per_week',
+            label: 'Lab/Wk',
+        },
+
+        {
+            key: 'total_periods_per_week',
+            label: 'Total/Wk',
+            editable: false,
+        },
+
+        {
+            key: 'requires_lab',
+            label: 'Lab',
+            type: 'boolean',
+            editable: false,
+        },
+
+        {
+            key: 'is_compulsory',
+            label: 'Compulsory',
+            type: 'boolean',
+        },
+
+        {
+            key: 'is_shared',
+            label: 'Shared',
+            type: 'boolean',
+        },
+
+        {
+            key: 'remarks',
+            label: 'Remarks',
         },
 
         {
             key: 'is_active',
             label: 'Active',
+            type: 'boolean',
         },
 
     ];
@@ -53,9 +97,17 @@ const SubjectRequirementListPage = () => {
 
             columns={columns}
 
-            addPath={ADD_PATH}
+            editable={true}
 
-            editPath={EDIT_PATH}
+            allowAddRow={true}
+
+            allowDelete={true}
+
+            allowBulkSave={true}
+
+            allowImport={true}
+
+            allowExport={true}
 
         />
 
