@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-
+from apps.academics.classes.models import Class      
+from apps.academics.sections.models import Section
 from apps.core.common.base.models import SessionBaseModel
 from apps.academics.subjects.models import Subject
 from apps.academics.streams.models import Stream
@@ -8,12 +9,12 @@ from apps.academics.streams.models import Stream
 
 class SubjectRequirement(SessionBaseModel):
     school_class = models.ForeignKey(
-        "academics.Class",
+        Class,
         on_delete=models.CASCADE,
         related_name="subject_requirements",
     )
     section = models.ForeignKey(
-        "academics.Section",
+        Section,
         on_delete=models.CASCADE,
         related_name="subject_requirements",
         null=True,

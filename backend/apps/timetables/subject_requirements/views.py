@@ -1,3 +1,4 @@
+# --- IMPORTS ---
 from django.db import transaction
 from rest_framework import status
 from rest_framework.generics import ListAPIView
@@ -6,8 +7,10 @@ from rest_framework.views import APIView
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
+# Ensure these match your actual app structure
 from .models import SubjectRequirement
 from .serializers import SubjectRequirementSerializer
+# ---------------
 
 class SubjectRequirementListView(ListAPIView):
     serializer_class = SubjectRequirementSerializer
@@ -28,10 +31,11 @@ class SubjectRequirementListView(ListAPIView):
         "subject__name",
     ]
     
+    # 1. FIXED: Removed display_order references, using __name instead
     ordering_fields = [
-        "school_class__display_order",
-        "stream__display_order",
-        "subject__display_order",
+        "school_class__name",
+        "stream__name",
+        "subject__name",
         "theory_periods_per_week",
         "lab_periods_per_week",
     ]
@@ -45,9 +49,10 @@ class SubjectRequirementListView(ListAPIView):
             "subject",
             "section",
         ).order_by(
-            "school_class__display_order",
-            "stream__display_order",
-            "subject__display_order",
+            # 2. FIXED: Removed display_order references, using __name instead
+            "school_class__name",
+            "stream__name",
+            "subject__name",
         )
 
 

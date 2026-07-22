@@ -53,6 +53,15 @@ class TeacherPreferenceSerializer(
             "deleted_by",
         )
 
+        # ----------------------------------------------------
+        # THIS IS THE FIX: Bypass the unique constraint check
+        # ----------------------------------------------------
+        extra_kwargs = {
+            "teacher": {
+                "validators": []
+            }
+        }
+
     def validate(self, attrs):
 
         maximum_free_gaps = attrs.get(
