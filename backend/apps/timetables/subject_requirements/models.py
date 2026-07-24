@@ -13,13 +13,7 @@ class SubjectRequirement(SessionBaseModel):
         on_delete=models.CASCADE,
         related_name="subject_requirements",
     )
-    section = models.ForeignKey(
-        Section,
-        on_delete=models.CASCADE,
-        related_name="subject_requirements",
-        null=True,
-        blank=True,
-    )
+
     stream = models.ForeignKey(
         Stream,
         on_delete=models.SET_NULL,

@@ -1,33 +1,40 @@
-import api from '../../../../services/api/axios';
+import axios from 'axios';
 
-export const ENDPOINT =
-    '/timetables/subject-constraints/';
+const API_BASE_URL = 'http://127.0.0.1:8000'; 
 
-export const LIST_PATH =
-    '/dashboard/timetables/subject-constraints';
+const apiClient = axios.create({
+    baseURL: API_BASE_URL,
+});
 
-const subjectConstraintService = {
+apiClient.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('access') || localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
-    endpoint: ENDPOINT,
+export const SubjectConstraintService = {
+    getClasses: () => apiClient.get('/api/academics/classes/'),
+    getStreams: () => apiClient.get('/api/academics/streams/'),
+    getSubjects: () => apiClient.get('/api/academics/subjects/'), // Added here to avoid import conflicts
+    
+    getRequirements: (classId, streamId) => {
+        let url = `/api/timetables/subject-requirements/bulk_assign/?school_class=${classId}`;
+        if (streamId) url += `&stream=${streamId}`;
+        return apiClient.get(url);
+    },
 
-    getAll: (
-        params = {},
-    ) =>
-        api.get(
-            ENDPOINT,
-            {
-                params,
-            },
-        ),
+    getConstraints: (classId, streamId) => {
+        let url = `/api/timetables/subject-constraints/bulk_assign/?school_class=${classId}`;
+        if (streamId) url += `&stream=${streamId}`;
+        return apiClient.get(url);
+    },
 
-    bulkSave: (
-        data,
-    ) =>
-        api.post(
-            `${ENDPOINT}bulk-save/`,
-            data,
-        ),
-
+    saveConstraints: (payload) => {
+        return apiClient.post('/api/timetables/subject-constraints/bulk_assign/', payload);
+    }
 };
-
-export default subjectConstraintService;

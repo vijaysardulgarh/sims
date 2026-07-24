@@ -1,32 +1,36 @@
-import api from '../../../../services/api/axios';
+import axios from 'axios';
 
-export const ENDPOINT = '/timetables/subject-requirements/';
+const API_BASE_URL = 'http://127.0.0.1:8000'; 
 
-export const LIST_PATH = '/dashboard/timetables/subject-requirements';
+const apiClient = axios.create({
+    baseURL: API_BASE_URL,
+});
 
-const subjectRequirementService = {
-  endpoint: ENDPOINT,
+apiClient.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('access') || localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
-  getAll: (params = {}) => 
-    api.get(ENDPOINT, { params }),
+export const SubjectRequirementService = {
+    // Classes, Streams, and Subjects remain under academics
+    getClasses: () => apiClient.get('/api/academics/classes/'),
+    getStreams: () => apiClient.get('/api/academics/streams/'),
+    getSubjects: () => apiClient.get('/api/academics/subjects/'),
 
-  bulkSave: (rows) => 
-    api.post(`${ENDPOINT}bulk-save/`, rows),
+    // Subject requirements are routed under timetables based on your urls.py
+    getRequirements: (classId, streamId) => {
+        let url = `/api/timetables/subject-requirements/bulk_assign/?school_class=${classId}`;
+        if (streamId) url += `&stream=${streamId}`;
+        return apiClient.get(url);
+    },
 
-  refresh: (params = {}) => 
-    api.get(ENDPOINT, { params }),
-
-  exportExcel: () =>
-    api.get(`${ENDPOINT}export/`, {
-      responseType: "blob",
-    }),
-
-  importExcel: (formData) =>
-    api.post(`${ENDPOINT}import/`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }),
+    saveRequirements: (payload) => {
+        return apiClient.post('/api/timetables/subject-requirements/bulk_assign/', payload);
+    }
 };
-
-export default subjectRequirementService;

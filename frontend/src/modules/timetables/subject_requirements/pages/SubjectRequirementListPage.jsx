@@ -1,9 +1,7 @@
 import CrudListPage
     from '../../../shared/components/crud/CrudListPage';
 
-import {
-    ENDPOINT,
-} from '../services/subjectRequirementService';
+import { SubjectRequirementService } from "../services/subjectRequirementService";
 
 
 const SubjectRequirementListPage = () => {
